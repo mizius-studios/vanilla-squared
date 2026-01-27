@@ -25,6 +25,16 @@ import net.minecraft.core.registries.Registries;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Tasks for AxeMixin:
+    - I can access ToolMaterial
+    - DmgReduction amt shld scale w. the material(better material -> more dmg shielded(max = 50%)), with gold axes breaking instantly but reducting 100% of all incoming dmg!
+    - Block Delay shld slightly scale w. the material(better material -> longer delay(max = normal delay) | similar to the spear in concept)
+    - Cooldown shld scale a lot w. the material(better material -> longer shield break cooldown(max = normal delay) | similar to the spear in concept)
+    - Scale the weapon dmg attribute, idk if this needs to be done in here, but we cant have stone, copper, iron and diamond all have the same dmg
+    - Lower Reach(by like 3/4 of a block decreased) this shldnt increase/decrease with tool material, although gold shld have 5 block reach
+ */
+
 @Debug(export = true)
 @Mixin(Item.Properties.class)
 public abstract class AxeMixin {
@@ -39,6 +49,7 @@ public abstract class AxeMixin {
 
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
     public void init(ToolMaterial toolMaterial, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
+
         SoundEvent sound = SoundEvents.ANVIL_LAND;
         Holder<SoundEvent> SHIELD_HIT = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound);
         cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks( 0.3F,1.0F,
