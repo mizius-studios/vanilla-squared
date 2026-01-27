@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.Tool;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -50,11 +51,56 @@ public abstract class AxeMixin {
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
     public void init(ToolMaterial toolMaterial, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
 
+    String material = toolMaterial.toString();
+    float blockDelay = 0.0F;
+    float shieldBreakCooldown = 0.0F; // default 1.0
+    float damageReduction = 1.0F; // 100% = 1.0
+    float duraDMG = 1.0F; // 1.0 = 1dmg point
+    switch (material) {
+        case "WOOD":
+            blockDelay = 0.0F;
+            shieldBreakCooldown = 0.0F;
+            damageReduction = 1.0F;
+            duraDMG = 1.0F;
+            break;
+        case "STONE":
+            blockDelay = 0.0F;
+            shieldBreakCooldown = 0.0F;
+            damageReduction = 1.0F;
+            duraDMG = 1.0F;
+            break;
+        case "COPPER":
+            blockDelay = 0.0F;
+            shieldBreakCooldown = 0.0F;
+            damageReduction = 1.0F;
+            duraDMG = 1.0F;
+            break;
+        case "IRON":
+            blockDelay = 0.0F;
+            shieldBreakCooldown = 0.0F;
+            damageReduction = 1.0F;
+            duraDMG = 1.0F;
+            break;
+        case "DIAMOND":
+            blockDelay = 0.0F;
+            shieldBreakCooldown = 0.0F;
+            damageReduction = 1.0F;
+            duraDMG = 1.0F;
+            break;
+        case "NETHERITE":
+            blockDelay = 0.0F;
+            shieldBreakCooldown = 0.0F;
+            damageReduction = 1.0F;
+            duraDMG = 1.0F;
+            break;
+
+    } // I didn't have time to test the switch statement just yet!
+
         SoundEvent sound = SoundEvents.ANVIL_LAND;
         Holder<SoundEvent> SHIELD_HIT = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound);
-        cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks( 0.3F,1.0F,
-                        List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 0.5F)),
-                        new BlocksAttacks.ItemDamageFunction(1.0F, 1.0F, 1.0F),
+        cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks( blockDelay,shieldBreakCooldown,
+                        List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, damageReduction)),
+                        new BlocksAttacks.ItemDamageFunction(duraDMG, 1.0F, 1.0F),
                         Optional.of(DamageTypeTags.BYPASSES_SHIELD),
                         Optional.of(SHIELD_HIT),
                         Optional.of(SoundEvents.ITEM_BREAK)
