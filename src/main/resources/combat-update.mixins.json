@@ -3,7 +3,7 @@
 	"package": "blob.combatupdate.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+      "AxeMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
