@@ -1,7 +1,13 @@
 package blob.combatupdate;
 
+import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +19,16 @@ public class CombatUpdate implements ModInitializer {
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	private int healPlayer(ServerPlayer player, CommandSourceStack context) {
+		if (player != null) {
+			player.setHealth(player.getMaxHealth()); // Sets health to max
+			player.getFoodData().eat(20, 1.0f); // Optional: Feeds the player
+			context.sendSuccess(() -> Component.literal("Healed"), false);
+			return 1;
+		}
+		return 0;
+	}
+
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
@@ -21,5 +37,8 @@ public class CombatUpdate implements ModInitializer {
 		TestItem.initialize();
 
 		LOGGER.info("Loaded 1 Blob Mods");
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+			dispatcher.register(Commands.literal("heal").executes(context -> healPlayer(context.getSource().getPlayer(), context.getSource())));
+		});
 	}
 }
