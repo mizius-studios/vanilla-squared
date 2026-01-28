@@ -48,13 +48,13 @@ public abstract class AxeMixin {
     );
     @Unique // Variables common to all weapons
     private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of( // blob.combatupdate.util.data.GeneralWeapon;
-            ToolMaterial.WOOD, new GeneralWeapon(5.0d, -3.2d,-1.25d,75),
-            ToolMaterial.STONE, new GeneralWeapon(6.0d, -3.4d, -1.25d, 150),
-            ToolMaterial.COPPER, new GeneralWeapon(6.0d, -3.0d, -1.25d, 200),
-            ToolMaterial.IRON, new GeneralWeapon(7.0d, -3.0d, -1.25d, 250),
-            ToolMaterial.GOLD, new GeneralWeapon(6.0d, -2.9d, -1.0d, 100),
-            ToolMaterial.DIAMOND, new GeneralWeapon(8.0d, -3.0d, -1.25d, 1550),
-            ToolMaterial.NETHERITE, new GeneralWeapon(9.0d, -3.0d, -1.25d, 2069)
+            ToolMaterial.WOOD, new GeneralWeapon(5.0d, -3.2d,-1.0d,75),
+            ToolMaterial.STONE, new GeneralWeapon(6.0d, -3.4d, -1.0d, 150),
+            ToolMaterial.COPPER, new GeneralWeapon(6.0d, -3.0d, -1.0d, 200),
+            ToolMaterial.IRON, new GeneralWeapon(7.0d, -3.0d, -1.0d, 250),
+            ToolMaterial.GOLD, new GeneralWeapon(6.0d, -2.9d, -0.5d, 100),
+            ToolMaterial.DIAMOND, new GeneralWeapon(8.0d, -3.0d, -1.0d, 1550),
+            ToolMaterial.NETHERITE, new GeneralWeapon(9.0d, -3.0d, -1.0d, 2069)
     );
     @Unique // Variables for the Shield Component
     private static final Map<ToolMaterial, BlockComponent> AXE = Map.of( // blob.combatupdate.util.data.BlockComponent;
