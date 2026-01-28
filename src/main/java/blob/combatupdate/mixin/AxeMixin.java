@@ -8,9 +8,13 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +32,6 @@ import static blob.combatupdate.CombatUpdate.MOD_ID;
 
 /*
     Tasks for AxeMixin:
-    - Scale the weapon dmg attribute, idk if this needs to be done in here, but we cant have stone, copper, iron and diamond all have the same dmg
     - Lower Reach(by like 3/4 of a block decreased) this shldnt increase/decrease with tool material, although gold shld have 5 block reach
  */
 
@@ -45,13 +48,13 @@ public abstract class AxeMixin {
     );
     @Unique
     private static final Map<ToolMaterial, Axe> AXE = Map.of(
-            ToolMaterial.WOOD, new Axe(0.1F, 0.25F, 0.25F,2.0F, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
-            ToolMaterial.STONE, new Axe(0.4F, 0.4F, 0.25F,1.0F, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
-            ToolMaterial.COPPER, new Axe(0.5F, 0.5F, 0.35F,2.0F, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
-            ToolMaterial.IRON, new Axe(0.85F, 0.65F, 0.5F,2.0F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
-            ToolMaterial.DIAMOND, new Axe(0.95F, 0.75F, 0.65F,1.0F, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
-            ToolMaterial.GOLD, new Axe(0F, 0F, 1.0F,0.5F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
-            ToolMaterial.NETHERITE, new Axe(1.0F, 0.8F, 0.8F,1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
+            ToolMaterial.WOOD, new Axe(0.1F, 0.25F, 0.25F,2.0F, 5.0d, -3.2d, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
+            ToolMaterial.STONE, new Axe(0.4F, 0.4F, 0.25F,1.0F, 6.0d, -3.4d, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
+            ToolMaterial.COPPER, new Axe(0.5F, 0.5F, 0.35F,2.0F, 6.0d, -3.0d, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
+            ToolMaterial.IRON, new Axe(0.85F, 0.65F, 0.5F,2.0F, 7.0d, -3.0d, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
+            ToolMaterial.DIAMOND, new Axe(0.95F, 0.75F, 0.65F,1.0F, 8.0d, -3.0d, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
+            ToolMaterial.GOLD, new Axe(0F, 0F, 1.0F,0.5F, 6.0d, -2.9d, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
+            ToolMaterial.NETHERITE, new Axe(1.0F, 0.8F, 0.8F,1.0F, 9.0d, -3.0d, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
     );
 
 
@@ -64,16 +67,21 @@ public abstract class AxeMixin {
     float shieldBreakCooldown = s.shieldBreakCooldown(); // default 1.0
     float damageReduction = s.damageReduction(); // 100% = 1.0
     float duraDMG = s.duraDamage(); // 1.0 = 1dmg point
+        double attackDMG = s.attackDamage();
+        double attackSpeed = s.attackSpeed();
+        double attackReach = 0.0d;
         SoundEvent blockSound = s.blockSound();
         SoundEvent breakSound = s.breakSound();
         Holder<SoundEvent> BLOCK_SOUND = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(blockSound);
         Holder<SoundEvent> BREAK_SOUND = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(breakSound);
         cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks( blockDelay,shieldBreakCooldown,
                         List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, damageReduction)),
-                        new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, duraDMG),
+                        new BlocksAttacks.ItemDamageFunction(1.0F, 1.0F, duraDMG),
                         Optional.of(DamageTypeTags.BYPASSES_SHIELD),
                         Optional.of(BLOCK_SOUND),
                         Optional.of(BREAK_SOUND)
-                )));
+                )).attributes(ItemAttributeModifiers.builder()
+                    .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attackDMG, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                    .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE),EquipmentSlotGroup.MAINHAND).build()));
     }
 }

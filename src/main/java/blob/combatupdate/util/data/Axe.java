@@ -8,8 +8,10 @@ public record Axe(
         float shieldBreakCooldown,
         float damageReduction,
         float duraDamage,
+        double attackDamage,
+        double attackSpeed,
         SoundEvent blockSound,
         SoundEvent breakSound
 ) {
-    public static final Axe DEFAULT = new Axe(0F, 0F, 0F, 1F, SoundEvents.ANVIL_LAND, SoundEvents.ANVIL_BREAK);
+    public static final Axe DEFAULT = new Axe(0F, 0F, 0F, 1F, 1.0d, 1.0d, SoundEvents.ANVIL_LAND, SoundEvents.ANVIL_BREAK);
 }
