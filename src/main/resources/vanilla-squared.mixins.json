@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "blob.vanillasquared.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+        "AxeMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

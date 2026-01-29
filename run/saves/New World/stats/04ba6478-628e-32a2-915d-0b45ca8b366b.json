@@ -1,0 +1,32 @@
+{
+  "stats": {
+    "minecraft:killed": {
+      "minecraft:mannequin": 14
+    },
+    "minecraft:used": {
+      "minecraft:red_wool": 3,
+      "minecraft:sand": 9,
+      "minecraft:golden_axe": 1,
+      "minecraft:netherite_sword": 60,
+      "minecraft:netherite_axe": 44,
+      "minecraft:netherite_spear": 15
+    },
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 25744,
+      "minecraft:walk_one_cm": 10229,
+      "minecraft:leave_game": 1,
+      "minecraft:mob_kills": 14,
+      "minecraft:play_time": 25744,
+      "minecraft:damage_dealt": 2950,
+      "minecraft:jump": 84,
+      "minecraft:time_since_death": 25744,
+      "minecraft:sprint_one_cm": 4136,
+      "minecraft:total_world_time": 25780,
+      "minecraft:fly_one_cm": 7271,
+      "minecraft:crouch_one_cm": 130,
+      "minecraft:sneak_time": 343,
+      "minecraft:damage_dealt_resisted": 6372
+    }
+  },
+  "DataVersion": 4671
+}

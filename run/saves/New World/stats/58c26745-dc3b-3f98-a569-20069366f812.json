@@ -1,0 +1,55 @@
+{
+  "stats": {
+    "minecraft:killed": {
+      "minecraft:zombie": 5,
+      "minecraft:mannequin": 1,
+      "minecraft:turtle": 1,
+      "minecraft:zoglin": 3
+    },
+    "minecraft:used": {
+      "minecraft:stone_axe": 21,
+      "minecraft:iron_axe": 21,
+      "minecraft:sand": 1,
+      "minecraft:golden_axe": 5,
+      "minecraft:wooden_axe": 10,
+      "minecraft:diamond_axe": 16,
+      "minecraft:netherite_sword": 1,
+      "minecraft:command_block": 1,
+      "minecraft:netherite_axe": 27,
+      "minecraft:copper_axe": 29
+    },
+    "minecraft:dropped": {
+      "minecraft:netherite_sword": 1
+    },
+    "minecraft:custom": {
+      "minecraft:damage_blocked_by_shield": 1766,
+      "minecraft:time_since_rest": 10586,
+      "minecraft:walk_one_cm": 14648,
+      "minecraft:leave_game": 1,
+      "minecraft:mob_kills": 10,
+      "minecraft:walk_under_water_one_cm": 2618,
+      "minecraft:damage_taken": 3712,
+      "minecraft:damage_dealt": 2492,
+      "minecraft:play_time": 10586,
+      "minecraft:jump": 142,
+      "minecraft:time_since_death": 10586,
+      "minecraft:drop": 1,
+      "minecraft:sprint_one_cm": 11542,
+      "minecraft:fall_one_cm": 8107,
+      "minecraft:swim_one_cm": 821,
+      "minecraft:total_world_time": 10924,
+      "minecraft:fly_one_cm": 23372,
+      "minecraft:walk_on_water_one_cm": 393,
+      "minecraft:sneak_time": 112
+    },
+    "minecraft:mined": {
+      "minecraft:sand": 1
+    },
+    "minecraft:picked_up": {
+      "minecraft:sand": 1,
+      "minecraft:netherite_sword": 1,
+      "minecraft:rotten_flesh": 4
+    }
+  },
+  "DataVersion": 4671
+}

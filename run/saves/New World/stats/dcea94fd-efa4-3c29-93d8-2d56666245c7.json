@@ -1,0 +1,36 @@
+{
+  "stats": {
+    "minecraft:broken": {
+      "minecraft:golden_axe": 1
+    },
+    "minecraft:custom": {
+      "minecraft:damage_blocked_by_shield": 1223,
+      "minecraft:time_since_rest": 2558,
+      "minecraft:walk_one_cm": 3376,
+      "minecraft:leave_game": 2,
+      "minecraft:mob_kills": 1,
+      "minecraft:damage_taken": 2574,
+      "minecraft:play_time": 2558,
+      "minecraft:damage_dealt": 90,
+      "minecraft:jump": 38,
+      "minecraft:time_since_death": 2558,
+      "minecraft:sprint_one_cm": 1818,
+      "minecraft:fall_one_cm": 2817,
+      "minecraft:total_world_time": 2584,
+      "minecraft:fly_one_cm": 7527
+    },
+    "minecraft:killed": {
+      "minecraft:vindicator": 1
+    },
+    "minecraft:used": {
+      "minecraft:stone_axe": 4,
+      "minecraft:iron_axe": 4,
+      "minecraft:golden_axe": 6,
+      "minecraft:wooden_axe": 4,
+      "minecraft:diamond_axe": 4,
+      "minecraft:netherite_axe": 2,
+      "minecraft:copper_axe": 3
+    }
+  },
+  "DataVersion": 4671
+}

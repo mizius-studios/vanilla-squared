@@ -1,0 +1,33 @@
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 8741,
+      "minecraft:walk_one_cm": 14196,
+      "minecraft:leave_game": 1,
+      "minecraft:walk_under_water_one_cm": 165,
+      "minecraft:damage_taken": 660,
+      "minecraft:play_time": 8741,
+      "minecraft:damage_dealt": 0,
+      "minecraft:jump": 204,
+      "minecraft:time_since_death": 8741,
+      "minecraft:sprint_one_cm": 12983,
+      "minecraft:fall_one_cm": 5608,
+      "minecraft:total_world_time": 8805,
+      "minecraft:fly_one_cm": 71473,
+      "minecraft:walk_on_water_one_cm": 827,
+      "minecraft:crouch_one_cm": 2,
+      "minecraft:sneak_time": 93,
+      "minecraft:damage_dealt_resisted": 1305
+    },
+    "minecraft:used": {
+      "minecraft:stone_axe": 1,
+      "minecraft:iron_axe": 2,
+      "minecraft:golden_axe": 3,
+      "minecraft:wooden_axe": 6,
+      "minecraft:trident": 6,
+      "minecraft:netherite_sword": 1,
+      "minecraft:copper_axe": 4
+    }
+  },
+  "DataVersion": 4671
+}

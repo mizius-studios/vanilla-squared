@@ -1,34 +1,34 @@
 {
 	"schemaVersion": 1,
-	"id": "combat-update",
+	"id": "vanilla-squared",
 	"version": "${version}",
-	"name": "Combat Update",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Vanilla Squared",
+	"description": "This Mod overhauls outdated systems!",
 	"authors": [
 		"Me!"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/PainterFlow/combatupdate",
+		"issues": "https://discord.gg/m9s5xrb4WN"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/combat-update/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"blob.combatupdate.CombatUpdate"
+			"blob.vanillasquared.VanillaSquared"
 		],
 		"client": [
-			"blob.combatupdate.CombatUpdateClient"
+			"blob.vanillasquared.VanillaSquaredClient"
 		],
 		"fabric-datagen": [
-			"blob.combatupdate.CombatUpdateDataGenerator"
+			"blob.vanillasquared.VanillaSquaredDataGenerator"
 		]
 	},
 	"mixins": [
-		"combat-update.mixins.json",
+		"vanilla-squared.mixins.json",
 		{
-			"config": "combat-update.client.mixins.json",
+			"config": "vanilla-squared.client.mixins.json",
 			"environment": "client"
 		}
 	],
