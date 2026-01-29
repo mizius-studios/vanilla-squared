@@ -1,10 +1,3 @@
-/data get entity 2d882bcd-f9cc-49b8-94eb-cd1d7b890da8 Health
-/data get entity 875b5522-ae2d-45d6-bbcd-f3e60b4e78d0 Health
-/enchant @s minecraft:wind_burst 1
-/give @s minecraft:iron_sword[minecraft:enchantments={wind_burst:1}]
-/enchant @s minecraft:wind_burst 3
-/summon minecraft:mannequin
-/enchant @s minecraft:wind_burst 1
 /enchant @s minecraft:density 5
 /summon minecraft:mannequin
 /data get entity 573eeffe-3350-43ab-82c7-e6b88e6ab23b Health
@@ -48,3 +41,10 @@
 /execute as @e[type=minecraft:pillager] run say hi
 /effect give @s minecraft:night_vision infinite 255 true
 /effect give @e minecraft:glowing 10 255 true
+/execute as @e[type=minecraft:mannequin] run say hi
+/tp @s @n
+/tp @s @n[type=mannequin]
+/summon minecraft:zombie
+/give @s mace
+/enchant @s minecraft:wind_burst 3
+/summon minecraft:vindicator
