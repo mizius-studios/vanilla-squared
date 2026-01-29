@@ -1,0 +1,47 @@
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:damage_resisted": 2330,
+      "minecraft:time_since_rest": 51568,
+      "minecraft:walk_one_cm": 18506,
+      "minecraft:leave_game": 1,
+      "minecraft:mob_kills": 14,
+      "minecraft:damage_taken": 364,
+      "minecraft:damage_dealt": 11940,
+      "minecraft:play_time": 51568,
+      "minecraft:damage_absorbed": 40,
+      "minecraft:jump": 272,
+      "minecraft:time_since_death": 51568,
+      "minecraft:damage_dealt_absorbed": 2300,
+      "minecraft:drop": 1,
+      "minecraft:sprint_one_cm": 14002,
+      "minecraft:fall_one_cm": 76076,
+      "minecraft:total_world_time": 56473,
+      "minecraft:fly_one_cm": 43907,
+      "minecraft:sneak_time": 23
+    },
+    "minecraft:dropped": {
+      "minecraft:totem_of_undying": 99
+    },
+    "minecraft:picked_up": {
+      "minecraft:totem_of_undying": 99
+    },
+    "minecraft:killed": {
+      "minecraft:mannequin": 12,
+      "minecraft:polar_bear": 1,
+      "minecraft:cat": 1
+    },
+    "minecraft:broken": {
+      "minecraft:fishing_rod": 1
+    },
+    "minecraft:used": {
+      "minecraft:golden_apple": 4,
+      "minecraft:wind_charge": 64,
+      "minecraft:oak_planks": 54,
+      "minecraft:iron_sword": 8,
+      "minecraft:mace": 76,
+      "minecraft:fishing_rod": 256
+    }
+  },
+  "DataVersion": 4671
+}

@@ -1,0 +1,48 @@
+{
+  "stats": {
+    "minecraft:custom": {
+      "minecraft:time_since_rest": 19,
+      "minecraft:walk_one_cm": 9329,
+      "minecraft:leave_game": 1,
+      "minecraft:mob_kills": 6,
+      "minecraft:damage_taken": 99,
+      "minecraft:damage_dealt": 961,
+      "minecraft:play_time": 8904,
+      "minecraft:jump": 80,
+      "minecraft:time_since_death": 8904,
+      "minecraft:sprint_one_cm": 8898,
+      "minecraft:sleep_in_bed": 1,
+      "minecraft:fall_one_cm": 775,
+      "minecraft:total_world_time": 8967,
+      "minecraft:fly_one_cm": 20022,
+      "minecraft:interact_with_anvil": 1,
+      "minecraft:sneak_time": 13,
+      "minecraft:enchant_item": 4,
+      "minecraft:damage_dealt_resisted": 80
+    },
+    "minecraft:used": {
+      "minecraft:bookshelf": 16,
+      "minecraft:cooked_mutton": 1,
+      "minecraft:netherite_sword": 11,
+      "minecraft:anvil": 1,
+      "minecraft:enchanting_table": 1,
+      "minecraft:netherite_axe": 4,
+      "minecraft:fishing_rod": 28
+    },
+    "minecraft:mined": {
+      "minecraft:short_grass": 2
+    },
+    "minecraft:picked_up": {
+      "minecraft:cooked_mutton": 2,
+      "minecraft:white_wool": 1,
+      "minecraft:emerald": 2
+    },
+    "minecraft:killed": {
+      "minecraft:zombie": 1,
+      "minecraft:mannequin": 2,
+      "minecraft:sheep": 1,
+      "minecraft:vindicator": 2
+    }
+  },
+  "DataVersion": 4671
+}
