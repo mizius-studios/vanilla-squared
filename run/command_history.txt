@@ -1,16 +1,3 @@
-/enchant @s minecraft:fire_aspect 2
-/summon cat
-/enchant @s minecraft:sharpness 5
-/give @s minecraft:iron_sword
-/summon minecraft:mannequin
-/give @s minecraft:iron_sword
-/enchant @s minecraft:sharpness 255
-/give @s minecraft:iron_sword[minecraft:enchantments={sharpness:255}]
-/summon minecraft:mannequin
-/give @s minecraft:netherite_sword
-/summon minecraft:mannequin
-/data get entity 2d882bcd-f9cc-49b8-94eb-cd1d7b890da8 Health
-/summon minecraft:mannequin
 /data get entity 2d882bcd-f9cc-49b8-94eb-cd1d7b890da8 Health
 /data get entity 875b5522-ae2d-45d6-bbcd-f3e60b4e78d0 Health
 /enchant @s minecraft:wind_burst 1
@@ -48,3 +35,16 @@
 /enchant @s minecraft:knockback 2
 /give @s minecraft:golden_sword[minecraft:enchantments={knockback:255}
 /give @s minecraft:golden_sword[minecraft:enchantments={knockback:255}]
+/give @s minecraft:wind_charge 64
+/summon minecraft:zombie
+/effect clear
+/effect give @s minecraft:bad_omen 1 4 true
+/summon pig
+/execute as @e[type=minecraft:pillager] run say hi
+/give @s mace
+/enchant @s minecraft:wind_burst
+/enchant @s minecraft:fire_aspect 1
+/enchant @s minecraft:sharpness 3
+/execute as @e[type=minecraft:pillager] run say hi
+/effect give @s minecraft:night_vision infinite 255 true
+/effect give @e minecraft:glowing 10 255 true
