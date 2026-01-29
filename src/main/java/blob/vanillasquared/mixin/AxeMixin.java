@@ -1,7 +1,7 @@
-package blob.combatupdate.mixin;
+package blob.vanillasquared.mixin;
 
-import blob.combatupdate.util.data.BlockComponent;
-import blob.combatupdate.util.data.GeneralWeapon;
+import blob.vanillasquared.util.data.BlockComponent;
+import blob.vanillasquared.util.data.GeneralWeapon;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -47,7 +47,7 @@ public abstract class AxeMixin {
             float d
     );
     @Unique // Variables common to all weapons
-    private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of( // blob.combatupdate.util.data.GeneralWeapon;
+    private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of( // blob.vanillasquared.util.data.GeneralWeapon;
             ToolMaterial.WOOD, new GeneralWeapon(5.0d, -3.2d,-0.5d,75),
             ToolMaterial.STONE, new GeneralWeapon(6.0d, -3.4d, -0.5d, 150),
             ToolMaterial.COPPER, new GeneralWeapon(6.0d, -3.0d, -0.5d, 200),
@@ -57,7 +57,7 @@ public abstract class AxeMixin {
             ToolMaterial.NETHERITE, new GeneralWeapon(9.0d, -3.0d, -0.5d, 2069)
     );
     @Unique // Variables for the Shield Component
-    private static final Map<ToolMaterial, BlockComponent> AXE = Map.of( // blob.combatupdate.util.data.BlockComponent;
+    private static final Map<ToolMaterial, BlockComponent> AXE = Map.of( // blob.vanillasquared.util.data.BlockComponent;
             ToolMaterial.WOOD, new BlockComponent(0.1F, 0.25F, 0.25F,2.0F, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
             ToolMaterial.STONE, new BlockComponent(0.4F, 0.4F, 0.25F,1.0F, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
             ToolMaterial.COPPER, new BlockComponent(0.5F, 0.5F, 0.35F,2.0F, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
@@ -67,9 +67,9 @@ public abstract class AxeMixin {
             ToolMaterial.NETHERITE, new BlockComponent(1.0F, 0.8F, 0.8F,1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
     );
     @Unique // Attribute Modifier Identifier
-    private static final Identifier ATTRIBUTE_IDENTIFIER_REACH = Identifier.fromNamespaceAndPath("combatupdate", "axe_reach");
+    private static final Identifier ATTRIBUTE_IDENTIFIER_REACH = Identifier.fromNamespaceAndPath("vanillasquared", "axe_reach");
     @Unique // Attribute Modifier Identifier - for text specifically!
-    private static final Identifier DUMMY = Identifier.fromNamespaceAndPath("combatupdate", "dummy");
+    private static final Identifier DUMMY = Identifier.fromNamespaceAndPath("vanillasquared", "dummy");
 
 
     // !Inject Starts

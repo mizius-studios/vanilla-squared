@@ -1,4 +1,4 @@
-package blob.combatupdate;
+package blob.vanillasquared;
 
 import java.util.function.Function;
 
@@ -14,7 +14,7 @@ import net.minecraft.world.item.Item;
 public class TestItem {
 	public static <GenericItem extends Item> GenericItem register(String name, Function<Item.Properties, GenericItem> itemFactory, Item.Properties settings) {
 		// Create the item key.
-		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(CombatUpdate.MOD_ID, name));
+		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, name));
 
 		// Create the item instance.
 		GenericItem item = itemFactory.apply(settings.setId(itemKey));

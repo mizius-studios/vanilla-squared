@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "blob.combatupdate.mixin",
+	"package": "blob.vanillasquared.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
         "AxeMixin"

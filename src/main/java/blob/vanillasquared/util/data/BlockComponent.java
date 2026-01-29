@@ -1,4 +1,4 @@
-package blob.combatupdate.util.data;
+package blob.vanillasquared.util.data;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;

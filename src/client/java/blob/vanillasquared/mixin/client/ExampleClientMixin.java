@@ -1,4 +1,4 @@
-package blob.combatupdate.mixin.client;
+package blob.vanillasquared.mixin.client;
 
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;

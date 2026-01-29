@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "blob.combatupdate.mixin.client",
+	"package": "blob.vanillasquared.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
 		"ExampleClientMixin"

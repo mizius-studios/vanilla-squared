@@ -1,6 +1,5 @@
-package blob.combatupdate;
+package blob.vanillasquared;
 
-import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -11,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CombatUpdate implements ModInitializer {
+public class VanillaSquared implements ModInitializer {
 	public static final String MOD_ID = "combat-update";
 
 	// This logger is used to write text to the console and the log file.

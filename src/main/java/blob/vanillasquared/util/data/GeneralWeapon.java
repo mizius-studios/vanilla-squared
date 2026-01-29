@@ -1,4 +1,4 @@
-package blob.combatupdate.util.data;
+package blob.vanillasquared.util.data;
 
 public record GeneralWeapon(
         double attackDamage,
