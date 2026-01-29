@@ -1,11 +1,11 @@
 {
 	"schemaVersion": 1,
 	"id": "vanilla-squared",
-	"version": "${version}",
-	"name": "Vanilla Squared",
+	"version": "i25.1-DEVELOPMENT.1",
+	"name": "Vanilla²",
 	"description": "This Mod overhauls outdated systems!",
 	"authors": [
-		"Me!"
+		"@PainterFlow11"
 	],
 	"contact": {
 		"sources": "https://github.com/PainterFlow/combatupdate",

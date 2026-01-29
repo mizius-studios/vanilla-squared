@@ -1,4 +1,3 @@
-/enchant @s minecraft:efficiency 25
 /enchant @s minecraft:efficiency 5
 /effect clear
 /summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b}
@@ -48,3 +47,4 @@
 /item replace entity @s armor.chest with combat-update:test1
 /enchant @s minecraft:lunge 3
 /heal
+/give @s combat-update:test1
