@@ -39,13 +39,7 @@ import java.util.Optional;
 public abstract class AxeMixin {
 
     @Shadow // Obtaining access to the this keyword because its required for this.tool(only non-static paths)
-    public abstract Item.Properties tool(
-            ToolMaterial material,
-            net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> tag,
-            float f,
-            float g,
-            float d
-    );
+    public abstract Item.Properties tool(ToolMaterial material, net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> tag, float f, float g, float d);
     @Unique // Variables common to all weapons
     private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of( // blob.vanillasquared.util.data.GeneralWeapon;
             ToolMaterial.WOOD, new GeneralWeapon(5.0d, -3.2d,-0.5d,75),

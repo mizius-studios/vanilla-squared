@@ -1,50 +1,50 @@
-/enchant @s minecraft:efficiency 5
-/effect clear
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b}
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,Invulnerable:1b}
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b}
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b,OnGround:1b}
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b,OnGround:1}
-/attribute 09b8052c-993a-4c9d-b9c4-f40c6dff4b14 minecraft:attack_knockback base set 99999999
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b,OnGround:1}
-/attribute 09b8052c-993a-4c9d-b9c4-f40c6dff4b14 minecraft:attack_knockback base set 0
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b,OnGround:1}
-/attribute @n[type=minecraft:mannequin] minecraft:attack_knockback base set 0
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b,OnGround:1}
-/attribute @n[type=minecraft:mannequin] minecraft:attack_knockback base set -1
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b,NoGravity:1b,OnGround:1}
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b}
-/attribute @n[type=minecraft:mannequin] minecraft:attack_knockback base set -1
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b}
-/attribute @n[type=minecraft:mannequin] minecraft:knockback_resistance base set -1
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b}
-/attribute @n[type=minecraft:mannequin] minecraft:knockback_resistance base set 0
-/summon minecraft:mannequin -35.50 66.00 133.50 {NoAI:1b}
-/attribute @n[type=minecraft:mannequin] minecraft:knockback_resistance base set 99999999
-/effect give 9492a835-c29e-480e-b0bb-b3a36c8c3205 minecraft:resistance infinite 255 true
-/tp -35.49 66.00 136.57
-/give @s minecraft:red_wool
-/tp -35.48 66.00 140.39
-/tp -35.49 66.00 136.57
-/attribute @s minecraft:entity_interaction_range base get
-/attribute @s minecraft:entity_interaction_range ge
-/attribute @s minecraft:entity_interaction_range get
-/effect give @s minecraft:health_boost infinite 9 true
-/heal
-/summon minecraft:zoglin
-/heal
-/kill 968d1d22-5e03-498e-8b49-1e780871ae62
+/enchant @s minecraft:fire_aspect 2
+/summon cat
+/enchant @s minecraft:sharpness 5
+/give @s minecraft:iron_sword
+/summon minecraft:mannequin
+/give @s minecraft:iron_sword
+/enchant @s minecraft:sharpness 255
+/give @s minecraft:iron_sword[minecraft:enchantments={sharpness:255}]
+/summon minecraft:mannequin
+/give @s minecraft:netherite_sword
+/summon minecraft:mannequin
+/data get entity 2d882bcd-f9cc-49b8-94eb-cd1d7b890da8 Health
+/summon minecraft:mannequin
+/data get entity 2d882bcd-f9cc-49b8-94eb-cd1d7b890da8 Health
+/data get entity 875b5522-ae2d-45d6-bbcd-f3e60b4e78d0 Health
+/enchant @s minecraft:wind_burst 1
+/give @s minecraft:iron_sword[minecraft:enchantments={wind_burst:1}]
+/enchant @s minecraft:wind_burst 3
+/summon minecraft:mannequin
+/enchant @s minecraft:wind_burst 1
+/enchant @s minecraft:density 5
+/summon minecraft:mannequin
+/data get entity 573eeffe-3350-43ab-82c7-e6b88e6ab23b Health
+/give @s minecraft:fishing_rod
+/summon minecraft:mannequin
+/effect give b48114a6-1eb1-40f8-9a07-26658c78b745 minecraft:health_boost infinite 255 true
+/data modify entity b48114a6-1eb1-40f8-9a07-26658c78b745 Health set value 99999F
+/data get entity 573eeffe-3350-43ab-82c7-e6b88e6ab23b Health
+/data get entity b48114a6-1eb1-40f8-9a07-26658c78b745 Health
+/give @s minecraft:totem_of_undying[minecraft:max_stack_size=99] 99
+/item replace entity b48114a6-1eb1-40f8-9a07-26658c78b745 weapon.mainhand from entity Player125 weapon.mainhand
+/item replace entity b48114a6-1eb1-40f8-9a07-26658c78b745 weapon.offhand from entity Player125 weapon.mainhand
+/give @s minecraft:wind_charge 64
+/give @s minecraft:fishing_rod[minecraft:unbreakable={}]
+/effect give @s minecraft:resistance infinite 255 true
+/tp b48114a6-1eb1-40f8-9a07-26658c78b745 @s
 /summon minecraft:zombie
-/effect give
-/effect give 9db2590b-9247-4861-9bb9-be612319afea minecraft:resistance infinite 255 true
-/heal
-/item replace entity 9db2590b-9247-4861-9bb9-be612319afea
-/item replace entity 9db2590b-9247-4861-9bb9-be612319afea weapon.mainhand with minecraft:wooden_axe
-/heal
-/item replace entity @s armor.head with combat-update:test1
-/item replace entity @s armor.chest with combat-update:test1
-/item replace entity @s armor.feet with combat-update:test1
-/item replace entity @s armor.chest with combat-update:test1
-/enchant @s minecraft:lunge 3
-/heal
-/give @s combat-update:test1
+/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.body
+/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.chest with minecraft:netherite_chestplate
+/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.legs with minecraft:netherite_chestplate
+/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.legs with minecraft:netherite_leggings
+/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.feet with minecraft:netherite_boots
+/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.head with minecraft:netherite_helmet
+/summon minecraft:zombie -184.80 70.00 1622.50 {Brain: {memories: {}}, HurtByTimestamp: 0, IsBaby: 0b, Invulnerable: 0b}
+/data get entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c Health
+/give @s mace[minecraft:enchantments={breach:4}]
+/data get entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c Health
+/enchant @s minecraft:knockback 2
+/give @s minecraft:golden_sword[minecraft:enchantments={knockback:255}
+/give @s minecraft:golden_sword[minecraft:enchantments={knockback:255}]

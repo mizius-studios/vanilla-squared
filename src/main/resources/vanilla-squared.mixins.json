@@ -3,7 +3,8 @@
 	"package": "blob.vanillasquared.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-        "AxeMixin"
+        "AxeMixin",
+		"FishingRodHookMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

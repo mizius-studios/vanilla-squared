@@ -1,0 +1,6 @@
+{
+  "message_id": "%s was Fished to death",
+  "scaling": "never",
+  "exhaustion": 0.1,
+  "effects": "hurt"
+}
