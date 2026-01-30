@@ -1,0 +1,28 @@
+{
+  "stats": {
+    "minecraft:used": {
+      "minecraft:shield": 15,
+      "minecraft:netherite_axe": 25,
+      "minecraft:fishing_rod": 191
+    },
+    "minecraft:custom": {
+      "minecraft:damage_blocked_by_shield": 276,
+      "minecraft:time_since_rest": 1,
+      "minecraft:total_world_time": 5536,
+      "minecraft:leave_game": 3,
+      "minecraft:damage_taken": 594,
+      "minecraft:play_time": 5237,
+      "minecraft:deaths": 2,
+      "minecraft:time_since_death": 1
+    },
+    "minecraft:killed_by": {
+      "minecraft:player": 1
+    },
+    "minecraft:picked_up": {
+      "minecraft:netherite_axe": 1,
+      "minecraft:sculk_catalyst": 1,
+      "minecraft:fishing_rod": 3
+    }
+  },
+  "DataVersion": 4671
+}

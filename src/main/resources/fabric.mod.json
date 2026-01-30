@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "vanilla-squared",
-	"version": "i25.1-DEVELOPMENT.1",
+	"version": "1.0.0",
 	"name": "Vanilla²",
 	"description": "This Mod overhauls outdated systems!",
 	"authors": [
@@ -36,6 +36,29 @@
 		"fabricloader": ">=0.18.4",
 		"minecraft": "~1.21.11",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"ducky-updater-lib": "*"
+	},
+	"custom": {
+		"carpet": {
+			"modrinthId": "TQTTVgYE",
+			"type": "release",
+			"featured": false
+		},
+		"carpet-tis-addition": {
+			"modrinthId": "jE0SjGuf",
+			"type": "release",
+			"featured": false
+		},
+		"carpet-ams-addition": {
+			"modrinthId": "q4fx1eTg",
+			"type": "release",
+			"featured": false
+		},
+		"carpet-org-addition": {
+			"modrinthId": "L0bOPIqR",
+			"type": "release",
+			"featured": false
+		}
 	}
 }

@@ -1,50 +1,50 @@
-/enchant @s minecraft:density 5
-/summon minecraft:mannequin
-/data get entity 573eeffe-3350-43ab-82c7-e6b88e6ab23b Health
-/give @s minecraft:fishing_rod
-/summon minecraft:mannequin
-/effect give b48114a6-1eb1-40f8-9a07-26658c78b745 minecraft:health_boost infinite 255 true
-/data modify entity b48114a6-1eb1-40f8-9a07-26658c78b745 Health set value 99999F
-/data get entity 573eeffe-3350-43ab-82c7-e6b88e6ab23b Health
-/data get entity b48114a6-1eb1-40f8-9a07-26658c78b745 Health
-/give @s minecraft:totem_of_undying[minecraft:max_stack_size=99] 99
-/item replace entity b48114a6-1eb1-40f8-9a07-26658c78b745 weapon.mainhand from entity Player125 weapon.mainhand
-/item replace entity b48114a6-1eb1-40f8-9a07-26658c78b745 weapon.offhand from entity Player125 weapon.mainhand
-/give @s minecraft:wind_charge 64
+/item replace entity 98b7a77b-cd65-4f72-ad91-a6c399f1921e weapon.mainhand from entity @s weapon.mainhand
+/player Test1 use continuous
+/player Test1 use once
+/player Test1 use continuous
+/item replace entity 98b7a77b-cd65-4f72-ad91-a6c399f1921e weapon.offhand from entity @s weapon.mainhand
+/item replace entity 98b7a77b-cd65-4f72-ad91-a6c399f1921e weapon.mainhand from entity @s weapon.offhand
+/enchant @s minecraft:wind_burst 1
 /give @s minecraft:fishing_rod[minecraft:unbreakable={}]
-/effect give @s minecraft:resistance infinite 255 true
-/tp b48114a6-1eb1-40f8-9a07-26658c78b745 @s
+/effect give @s minecraft:resistance infinite 4 true
+/summon warden
+/effect give @s minecraft:saturation infinite 255 true
+/give @s minecraft:wind_charge 169
+/enchant @s minecraft:density 5
+/summon warden
+/player test2 spawn
+/give Test2 minecraft:shield
+/player Test2 use continuous
+/give @s stone_axe
+/give Test2 minecraft:shield
+/player test2 spawn
+/player Test2 use continuous
+/clear Test2
+/give Player333 minecraft:fishing_rod
+/give @a minecraft:fishing_rod
+/item replace entity Test2 weapon.offhand with stone_axew
+/item replace entity Test2 weapon.offhand with stone_axe
+/enchant @s minecraft:fire_aspect
 /summon minecraft:zombie
-/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.body
-/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.chest with minecraft:netherite_chestplate
-/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.legs with minecraft:netherite_chestplate
-/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.legs with minecraft:netherite_leggings
-/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.feet with minecraft:netherite_boots
-/item replace entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c armor.head with minecraft:netherite_helmet
-/summon minecraft:zombie -184.80 70.00 1622.50 {Brain: {memories: {}}, HurtByTimestamp: 0, IsBaby: 0b, Invulnerable: 0b}
-/data get entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c Health
-/give @s mace[minecraft:enchantments={breach:4}]
-/data get entity e249874c-fe1e-4463-a9e6-4ffe1697cd2c Health
-/enchant @s minecraft:knockback 2
-/give @s minecraft:golden_sword[minecraft:enchantments={knockback:255}
-/give @s minecraft:golden_sword[minecraft:enchantments={knockback:255}]
-/give @s minecraft:wind_charge 64
-/summon minecraft:zombie
-/effect clear
-/effect give @s minecraft:bad_omen 1 4 true
-/summon pig
-/execute as @e[type=minecraft:pillager] run say hi
-/give @s mace
-/enchant @s minecraft:wind_burst
-/enchant @s minecraft:fire_aspect 1
-/enchant @s minecraft:sharpness 3
-/execute as @e[type=minecraft:pillager] run say hi
-/effect give @s minecraft:night_vision infinite 255 true
-/effect give @e minecraft:glowing 10 255 true
-/execute as @e[type=minecraft:mannequin] run say hi
-/tp @s @n
-/tp @s @n[type=mannequin]
-/summon minecraft:zombie
-/give @s mace
-/enchant @s minecraft:wind_burst 3
+/give @s minecraft:villager_spawn_egg
+/execute at @e[type=minecraft:villager] run summon minecraft:villager
+/player TestAMOGUS spawn
+/give TestAMOGUS shield
+/player TestAMOGUS use continuous
+/effect give TestAMOGUS minecraft:saturation infinite 255 true
+/effect give TestAMOGUS minecraft:resistance infinite 255 true
 /summon minecraft:vindicator
+/give @s gold_axe
+/give @s golden_axe
+/summon minecraft:villager
+/summon warden
+/enchant @s minecraft:fire_aspect 255
+/give @s iron_axe
+/give @s mace
+/enchant @s minecraft:wind_burst 2
+/give @s minecraft:golden_sword
+/enchant @s minecraft:knockback 255
+/summon warden
+/enchant @s minecraft:wind_burst 255
+/summon warden
+/tp @s @n[type=warden]

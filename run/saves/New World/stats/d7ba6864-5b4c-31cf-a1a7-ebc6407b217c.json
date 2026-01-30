@@ -1,0 +1,20 @@
+{
+  "stats": {
+    "minecraft:used": {
+      "minecraft:shield": 34
+    },
+    "minecraft:custom": {
+      "minecraft:damage_resisted": 889,
+      "minecraft:damage_blocked_by_shield": 395,
+      "minecraft:time_since_rest": 32446,
+      "minecraft:total_world_time": 32741,
+      "minecraft:leave_game": 1,
+      "minecraft:play_time": 32446,
+      "minecraft:time_since_death": 32446
+    },
+    "minecraft:picked_up": {
+      "minecraft:spruce_sapling": 1
+    }
+  },
+  "DataVersion": 4671
+}

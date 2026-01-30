@@ -1,0 +1,47 @@
+{
+  "stats": {
+    "minecraft:used": {
+      "minecraft:diamond_axe": 5,
+      "minecraft:wind_charge": 1,
+      "minecraft:shield": 16,
+      "minecraft:mace": 36,
+      "minecraft:fishing_rod": 107
+    },
+    "minecraft:broken": {
+      "minecraft:fishing_rod": 1
+    },
+    "minecraft:custom": {
+      "minecraft:damage_resisted": 13910,
+      "minecraft:damage_blocked_by_shield": 40,
+      "minecraft:time_since_rest": 36836,
+      "minecraft:walk_one_cm": 14075,
+      "minecraft:leave_game": 1,
+      "minecraft:mob_kills": 3,
+      "minecraft:damage_taken": 25,
+      "minecraft:damage_dealt": 5800,
+      "minecraft:play_time": 36836,
+      "minecraft:jump": 53,
+      "minecraft:time_since_death": 36836,
+      "minecraft:sprint_one_cm": 3705,
+      "minecraft:fall_one_cm": 17276,
+      "minecraft:total_world_time": 38080,
+      "minecraft:fly_one_cm": 24439,
+      "minecraft:crouch_one_cm": 153,
+      "minecraft:sneak_time": 49,
+      "minecraft:player_kills": 1
+    },
+    "minecraft:killed": {
+      "minecraft:skeleton": 2,
+      "minecraft:warden": 1,
+      "minecraft:player": 1
+    },
+    "minecraft:picked_up": {
+      "minecraft:diamond_axe": 1,
+      "minecraft:sculk_catalyst": 1,
+      "minecraft:shield": 1,
+      "minecraft:arrow": 1,
+      "minecraft:bone": 2
+    }
+  },
+  "DataVersion": 4671
+}
