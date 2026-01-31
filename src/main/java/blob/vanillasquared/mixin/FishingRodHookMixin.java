@@ -146,9 +146,7 @@ public abstract class FishingRodHookMixin extends Projectile {
         }
 
         // <- Shield Break ->
-        if (living instanceof Player playerTarget
-                && weapon.getItem() instanceof AxeItem
-                && playerTarget.isBlocking()) {
+        if (living instanceof Player playerTarget && weapon.getItem() instanceof AxeItem && playerTarget.isBlocking()) {
 
             ItemStack using = playerTarget.getUseItem();
 
@@ -157,8 +155,9 @@ public abstract class FishingRodHookMixin extends Projectile {
                 EquipmentSlot slot = playerTarget.getUsedItemHand().asEquipmentSlot();
 
                 // damage shield exactly like vanilla
-                playerTarget.getCooldowns().addCooldown(using, 100);
                 using.hurtAndBreak(5, playerTarget, slot);
+                playerTarget.getCooldowns().addCooldown(using, 100);
+                playerTarget.stopUsingItem();
 
                 serverLevel.playSound(
                         null,

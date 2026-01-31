@@ -4,7 +4,8 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
         "AxeMixin",
-		"FishingRodHookMixin"
+		"FishingRodHookMixin",
+		"PlayerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

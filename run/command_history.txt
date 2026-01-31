@@ -1,50 +1,50 @@
-/item replace entity 98b7a77b-cd65-4f72-ad91-a6c399f1921e weapon.mainhand from entity @s weapon.mainhand
-/player Test1 use continuous
-/player Test1 use once
-/player Test1 use continuous
-/item replace entity 98b7a77b-cd65-4f72-ad91-a6c399f1921e weapon.offhand from entity @s weapon.mainhand
-/item replace entity 98b7a77b-cd65-4f72-ad91-a6c399f1921e weapon.mainhand from entity @s weapon.offhand
-/enchant @s minecraft:wind_burst 1
-/give @s minecraft:fishing_rod[minecraft:unbreakable={}]
-/effect give @s minecraft:resistance infinite 4 true
-/summon warden
-/effect give @s minecraft:saturation infinite 255 true
-/give @s minecraft:wind_charge 169
-/enchant @s minecraft:density 5
-/summon warden
-/player test2 spawn
-/give Test2 minecraft:shield
-/player Test2 use continuous
-/give @s stone_axe
-/give Test2 minecraft:shield
-/player test2 spawn
-/player Test2 use continuous
-/clear Test2
-/give Player333 minecraft:fishing_rod
-/give @a minecraft:fishing_rod
-/item replace entity Test2 weapon.offhand with stone_axew
-/item replace entity Test2 weapon.offhand with stone_axe
-/enchant @s minecraft:fire_aspect
-/summon minecraft:zombie
-/give @s minecraft:villager_spawn_egg
-/execute at @e[type=minecraft:villager] run summon minecraft:villager
-/player TestAMOGUS spawn
-/give TestAMOGUS shield
-/player TestAMOGUS use continuous
-/effect give TestAMOGUS minecraft:saturation infinite 255 true
-/effect give TestAMOGUS minecraft:resistance infinite 255 true
-/summon minecraft:vindicator
-/give @s gold_axe
-/give @s golden_axe
-/summon minecraft:villager
-/summon warden
-/enchant @s minecraft:fire_aspect 255
-/give @s iron_axe
+/player jeb_ use continuous
+/give jeb_ minecraft:totem_of_undying[minecraft:max_stack_size=99] 99
+/enchant @s minecraft:unbreaking 255\
+/enchant @s minecraft:unbreaking 255
+/item replace entity jeb_ armor.body with minecraft:diamond_chestplate[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
+/item replace entity jeb_ armor.chest with minecraft:diamond_chestplate[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
+/item replace entity jeb_ armor.chest with minecraft:diamond_leggings[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
+/item replace entity jeb_ armor.legs with minecraft:diamond_leggings[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
+/item replace entity jeb_ armor.head with minecraft:diamond_helmet[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
+/item replace entity jeb_ armor.feet with minecraft:diamond_boots[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
+/clear jeb_
+/give jeb_ minecraft:totem_of_undying[minecraft:max_stack_size=99] 99
+/attribute jeb_ minecraft:armor base get
+/attribute jeb_ minecraft:armor base set 20.0
+/attribute @s\ minecraft:armor base set 20.0
+/attribute @s minecraft:armor base set 20.0
+/attribute @s minecraft:armor base set 19.0
+/attribute @s minecraft:armor base set 20.0
+/tp jeb_ @s
+/give @s stick[minecraft:blocks_attacks={}]
+/give @s minecraft:diamond_sword[minecraft:blocks_attacks={}]
+/give @s shield
+/carpet creativeNoClip true
+/carpet setDefault creativeNoClip true
+/give @s minecraft:ender_pearl
+/carpet useItemCooldownDisabled true
+/carpet blowUpEverything true
+/carpet blowUpEverything
+/give @s tnt
+/execute at @e run summon tnt
+/execute at @s run summon tnt
+/give @s minecraft:repeating_command_block
+/execute at Player374 run summon tnt
+/carpet superSecretSetting
+/carpet superSecretSetting true
+/carpet setDefault superSecretSetting true
+/gamerule block_drops false
+/tick freeze
+/carpet tickCommandCarpetfied true
+/carpet setDefault tickCommandCarpetfied true
+/carpet carpetAlwaysSetDefault true
+/tick freeze
 /give @s mace
-/enchant @s minecraft:wind_burst 2
-/give @s minecraft:golden_sword
-/enchant @s minecraft:knockback 255
-/summon warden
-/enchant @s minecraft:wind_burst 255
-/summon warden
-/tp @s @n[type=warden]
+/give @s mace[minecraft:unbreakable={}]
+/effect give @e minecraft:glowing 20 255
+/killMe
+/effect give @e minecraft:glowing 20 255
+/give @s minecraft:fishing_rod
+/give @s shield
+/give @s minecraft:diamond_axe
