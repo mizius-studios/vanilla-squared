@@ -8,41 +8,47 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FishingRodItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
-public abstract class PlayerMixin extends LivingEntity {
+public abstract class PlayerMixin {
 
-    protected PlayerMixin(EntityType<? extends LivingEntity> type, Level level) {
-        super(type, level);
-    }
-
-    @Inject(method = "interactOn", at = @At("HEAD"), cancellable = true)
-    private void vsq$rodPriority(Entity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-
-        if (hand != InteractionHand.MAIN_HAND) return;
+    @Inject(method = "useItem", at = @At("HEAD"), cancellable = true)
+    private void vsq$prioritizeRod(Level level,
+                                   InteractionHand hand,
+                                   CallbackInfoReturnable<InteractionResult> cir) {
 
         Player player = (Player)(Object)this;
 
         ItemStack main = player.getMainHandItem();
         ItemStack off  = player.getOffhandItem();
 
-        // offhand rod present
-        if (!(off.getItem() instanceof FishingRodItem)) return;
+        boolean mainBlocks = main.has(DataComponents.BLOCKS_ATTACKS);
+        boolean offRod    = off.getItem() instanceof FishingRodItem;
 
-        // mainhand blocks (shield component)
-        if (main.has(DataComponents.BLOCKS_ATTACKS)) {
+        // If main would block but offhand is rod → force rod instead
+        if (hand == InteractionHand.MAIN_HAND && mainBlocks && offRod) {
 
-            // PASS = skip mainhand entirely → offhand gets used
-            cir.setReturnValue(InteractionResult.PASS);
+            InteractionResult result =
+                    off.use(level, player, InteractionHand.OFF_HAND);
+
+            cir.setReturnValue(result);
         }
     }
 }
+
+
+
+
+
 
 
 
