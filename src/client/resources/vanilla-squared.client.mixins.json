@@ -3,7 +3,8 @@
 	"package": "blob.vanillasquared.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+		"ExampleClientMixin",
+		"PlayerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
