@@ -1,9 +1,3 @@
-/item replace entity jeb_ armor.feet with minecraft:diamond_boots[minecraft:enchantments={protection:4},minecraft:unbreakable={}]
-/clear jeb_
-/give jeb_ minecraft:totem_of_undying[minecraft:max_stack_size=99] 99
-/attribute jeb_ minecraft:armor base get
-/attribute jeb_ minecraft:armor base set 20.0
-/attribute @s\ minecraft:armor base set 20.0
 /attribute @s minecraft:armor base set 20.0
 /attribute @s minecraft:armor base set 19.0
 /attribute @s minecraft:armor base set 20.0
@@ -48,3 +42,9 @@
 /give @s arrow
 /give @s stick[minecraft:blocks_attacks={}]
 /summon minecraft:zoglin
+/give @s stick[minecraft:blocks_attacks={}]
+/player Test1 spawn
+/give Test1 minecraft:shield
+/player Test1 use continuous
+/effect clear 98b7a77b-cd65-4f72-ad91-a6c399f1921e
+/kill 98b7a77b-cd65-4f72-ad91-a6c399f1921e

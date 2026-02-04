@@ -1,25 +1,25 @@
 {
   "stats": {
-    "minecraft:picked_up": {
-      "minecraft:shield": 1
-    },
     "minecraft:killed_by": {
       "minecraft:player": 15
     },
     "minecraft:custom": {
-      "minecraft:damage_resisted": 2489,
-      "minecraft:damage_blocked_by_shield": 450,
-      "minecraft:time_since_rest": 1165,
-      "minecraft:total_world_time": 46138,
-      "minecraft:leave_game": 17,
-      "minecraft:damage_taken": 15998,
-      "minecraft:play_time": 46070,
+      "minecraft:damage_resisted": 5248,
+      "minecraft:damage_blocked_by_shield": 1028,
+      "minecraft:time_since_rest": 2443,
+      "minecraft:total_world_time": 47416,
+      "minecraft:leave_game": 18,
+      "minecraft:damage_taken": 16161,
+      "minecraft:play_time": 47348,
       "minecraft:deaths": 15,
-      "minecraft:time_since_death": 1165
+      "minecraft:time_since_death": 2443
+    },
+    "minecraft:picked_up": {
+      "minecraft:shield": 1
     },
     "minecraft:used": {
       "minecraft:diamond_axe": 32,
-      "minecraft:shield": 27,
+      "minecraft:shield": 37,
       "minecraft:fishing_rod": 36
     }
   },
