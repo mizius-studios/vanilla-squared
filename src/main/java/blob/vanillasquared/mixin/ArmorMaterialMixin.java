@@ -32,7 +32,7 @@ public class ArmorMaterialMixin {
 
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceNetheriteChestplateArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
-        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.CHESTPLATE) {
+        if (!ArmorMaterials.NETHERITE.equals(this) || armorType != ArmorType.CHESTPLATE) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class ArmorMaterialMixin {
 
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceNetheriteLeggingsArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
-        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.LEGGINGS) {
+        if (!ArmorMaterials.NETHERITE.equals(this) || armorType != ArmorType.LEGGINGS) {
             return;
         }
 
@@ -62,7 +62,7 @@ public class ArmorMaterialMixin {
 
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceNetheriteBootsArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
-        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.BOOTS) {
+        if (!ArmorMaterials.NETHERITE.equals(this) || armorType != ArmorType.BOOTS) {
             return;
         }
 
@@ -77,7 +77,7 @@ public class ArmorMaterialMixin {
 
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceNetheriteHelmetArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
-        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.HELMET) {
+        if (!ArmorMaterials.NETHERITE.equals(this) || armorType != ArmorType.HELMET) {
             return;
         }
 
