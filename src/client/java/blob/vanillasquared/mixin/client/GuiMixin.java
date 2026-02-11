@@ -42,18 +42,34 @@ public abstract class GuiMixin {
         int firstRowY = top - (lines - 1) * lineHeight - 10;
         int slots = rows * 10;
 
-        for (int i = 0; i < slots; i++) {
-            int x = left + i % 10 * 8;
-            int y = firstRowY - i / 10 * 10;
-            int armorPoint = i * 2 + 1;
+        // Start compressing armor rows only after the 4th row.
+        int compactAfterRows = 4;
+        // Vanilla-like dynamic stacking: spacing shrinks as row count grows, clamped to a readable minimum.
+        int rowSpacing = rows > compactAfterRows
+                ? Math.max(3, 10 - (rows - compactAfterRows))
+                : 10;
 
-            if (armorPoint < armorValue) {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_FULL_SPRITE, x, y, 9, 9);
-            } else if (armorPoint == armorValue) {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_HALF_SPRITE, x, y, 9, 9);
-            } else {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_EMPTY_SPRITE, x, y, 9, 9);
+        // Render from top row to bottom row so lower rows appear in front when rows overlap.
+        for (int row = rows - 1; row >= 0; row--) {
+            int y = firstRowY - row * rowSpacing;
+
+            for (int col = 0; col < 10; col++) {
+                int slot = row * 10 + col;
+                int x = left + col * 8;
+                int armorPoint = slot * 2 + 1;
+
+                if (armorPoint < armorValue) {
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_FULL_SPRITE, x, y, 9, 9);
+                } else if (armorPoint == armorValue) {
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_HALF_SPRITE, x, y, 9, 9);
+                } else {
+                    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, ARMOR_EMPTY_SPRITE, x, y, 9, 9);
+                }
             }
         }
     }
 }
+
+
+
+
