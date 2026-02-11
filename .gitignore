@@ -37,15 +37,7 @@ replay_*.log
 
 # instance
 
-run/logs/
-run/.fabric/
-run/options.txt
-run
-run/saves/
-run/usercache.json
-run/debug-profile.json
-run/startlog.txt
-run/command_history.txt
+run/
 
 # bytecode
 
