@@ -27,6 +27,97 @@ public class ItemsMixin {
             case "netherite_chestplate": {
                 properties.durability(1);
             }
+            case "netherite_leggings": {
+                properties.durability(1);
+            }
+            case "netherite_boots": {
+                properties.durability(1);
+            }
+            case "netherite_helmet": {
+                properties.durability(1);
+            }
+
+            case "diamond_chestplate":  {
+                properties.durability(1);
+            }
+            case "diamond_leggings": {
+                properties.durability(1);
+            }
+            case "diamond_boots": {
+                properties.durability(1);
+            }
+            case "diamond_helmet": {
+                properties.durability(1);
+            }
+
+            case "iron_chestplate":  {
+                properties.durability(1);
+            }
+            case "iron_leggings": {
+                properties.durability(1);
+            }
+            case "iron_boots": {
+                properties.durability(1);
+            }
+            case "iron_helmet": {
+                properties.durability(1);
+            }
+
+            case "golden_chestplate":  {
+                properties.durability(1);
+            }
+            case "golden_leggings": {
+                properties.durability(1);
+            }
+            case "golden_boots": {
+                properties.durability(1);
+            }
+            case "golden_helmet": {
+                properties.durability(1);
+            }
+
+            case "chainmail_chestplate":  {
+                properties.durability(1);
+            }
+            case "chainmail_leggings": {
+                properties.durability(1);
+            }
+            case "chainmail_boots": {
+                properties.durability(1);
+            }
+            case "chainmail_helmet": {
+                properties.durability(1);
+            }
+
+            case "copper_chestplate":  {
+                properties.durability(1);
+            }
+            case "copper_leggings": {
+                properties.durability(1);
+            }
+            case "copper_boots": {
+                properties.durability(1);
+            }
+            case "copper_helmet": {
+                properties.durability(1);
+            }
+
+            case "leather_chestplate":  {
+                properties.durability(1);
+            }
+            case "leather_leggings": {
+                properties.durability(1);
+            }
+            case "leather_boots": {
+                properties.durability(1);
+            }
+            case "leather_helmet": {
+                properties.durability(1);
+            }
+
+            case "turtle_helmet":  {
+                properties.durability(1);
+            }
         }
     }
 }
