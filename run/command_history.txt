@@ -1,7 +1,3 @@
-/place structure minecraft:village_desert
-/gamemode creative
-/place structure minecraft:end_city
-/place template fabric-gametest-api-v1:empty
 /place template minecraft:end_city/ship
 /gamemode survival
 /attribute @s minecraft:max_health base set 20
@@ -48,3 +44,7 @@
 /data modify entity @s Health set value 1024.0F
 /data get entity @s equipment.mainhand
 /data get entity @s equipment.offhand
+/summon minecraft:zoglin
+/gamemode survival
+/gamemode creative
+/give Player583 minecraft:netherite_chestplate
