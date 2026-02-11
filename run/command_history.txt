@@ -1,50 +1,50 @@
-/carpet useItemCooldownDisabled true
-/carpet blowUpEverything true
-/carpet blowUpEverything
-/give @s tnt
-/execute at @e run summon tnt
-/execute at @s run summon tnt
-/give @s minecraft:repeating_command_block
-/execute at Player374 run summon tnt
-/carpet superSecretSetting
-/carpet superSecretSetting true
-/carpet setDefault superSecretSetting true
-/gamerule block_drops false
-/tick freeze
-/carpet tickCommandCarpetfied true
-/carpet setDefault tickCommandCarpetfied true
-/carpet carpetAlwaysSetDefault true
-/tick freeze
-/give @s mace
-/give @s mace[minecraft:unbreakable={}]
-/effect give @e minecraft:glowing 20 255
-/killMe
-/effect give @e minecraft:glowing 20 255
-/give @s minecraft:fishing_rod
-/give @s shield
-/give @s minecraft:diamond_axe
-/enchant @s minecraft:wind_burst
-/player Test1 spawn
-/effect give 98b7a77b-cd65-4f72-ad91-a6c399f1921e minecraft:resistance infinite 255 true
-/give @s minecraft:diamond_sword
-/enchant @s minecraft:fire_aspect
-/enchant @s minecraft:knockback 5
-/give @s arrow
-/give @s stick[minecraft:blocks_attacks={}]
-/summon minecraft:zoglin
-/give @s stick[minecraft:blocks_attacks={}]
-/player Test1 spawn
-/give Test1 minecraft:shield
-/player Test1 use continuous
-/effect clear 98b7a77b-cd65-4f72-ad91-a6c399f1921e
-/kill 98b7a77b-cd65-4f72-ad91-a6c399f1921e
-/attribute @s minecraft:armor base get
-/attribute @s minecraft:armor base reset
 /attribute @s minecraft:armor base set 1024
-/damage @s 5 minecraft:arrow
+/summon minecraft:warden
+/attribute @s minecraft:armor base set 0
+/kill @e[type=minecraft:warden ]
+/attribute @s minecraft:max_health base set 40
+/attribute @s minecraft:max_health base set 80
+/attribute @s minecraft:max_health base set 10000
+/attribute @s minecraft:armor base set 1024
+/attribute Player794 minecraft:max_health base reset
+/place structure minecraft:village_desert
+/gamemode creative
+/place structure minecraft:end_city
+/place template fabric-gametest-api-v1:empty
+/place template minecraft:end_city/ship
+/gamemode survival
+/attribute @s minecraft:max_health base set 20
+/attribute @s minecraft:max_health base set 40
+/attribute @s minecraft:max_health base set 60
+/attribute @s minecraft:max_health base set 80
+/attribute @s minecraft:max_health base set 100
+/attribute @s minecraft:max_health base set 120
+/attribute @s minecraft:max_health base set 140
+/effect give Player802 minecraft:regeneration infinite 255 true
+/attribute Player802 minecraft:armor base set 30
+/attribute Player802 minecraft:armor base set 1000
+/attribute @s minecraft:armor base set 1024
+/attribute @s minecraft:armor base set 0
+/give Player853 minecraft:diamond_block 64
+/give Player853 minecraft:diamond_block 1248
+/attribute @s minecraft:armor base set 1024
+/attribute @s minecraft:armor base set 500
+/attribute @s minecraft:armor base set 300
+/attribute @s minecraft:armor base set 200
+/attribute @s minecraft:armor base set 12
 /attribute @s minecraft:armor base set 20
-/damage @s 5 minecraft:arrow
-/attribute @s minecraft:armor base set 1024
-/attribute @s minecraft:armor_toughness base set 1024
-/damage @s 5 minecraft:arrow
-/damage @s 10 minecraft:arrow
+/attribute @s minecraft:armor base set 30
+/attribute @s minecraft:armor base set 40
+/attribute @s minecraft:armor base set 50
+/attribute @s minecraft:armor base set 60
+/attribute @s minecraft:armor base set 70
+/attribute @s minecraft:armor base set 80
+/attribute @s minecraft:armor base set 100
+/attribute @s minecraft:armor base set 120
+/attribute @s minecraft:armor base set 130
+/attribute @s minecraft:armor base set 140
+/attribute @s minecraft:armor base set 160
+/attribute @s minecraft:armor base set 180
+/attribute @s minecraft:armor base set 20
+/attribute @s minecraft:armor base set 19
+/attribute @s minecraft:armor base set 18
