@@ -5,7 +5,7 @@
 	"mixins": [
 		"ArmorMaterialMixin",
 		"AxeMixin",
-		"BlobItems",
+		"ItemsMixin",
 		"CombatRulesMixin",
 		"FishingRodHookMixin",
 		"RangedAttributeMixin"
