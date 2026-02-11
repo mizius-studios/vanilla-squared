@@ -1,13 +1,3 @@
-/attribute @s minecraft:armor base set 20.0
-/attribute @s minecraft:armor base set 19.0
-/attribute @s minecraft:armor base set 20.0
-/tp jeb_ @s
-/give @s stick[minecraft:blocks_attacks={}]
-/give @s minecraft:diamond_sword[minecraft:blocks_attacks={}]
-/give @s shield
-/carpet creativeNoClip true
-/carpet setDefault creativeNoClip true
-/give @s minecraft:ender_pearl
 /carpet useItemCooldownDisabled true
 /carpet blowUpEverything true
 /carpet blowUpEverything
@@ -48,3 +38,13 @@
 /player Test1 use continuous
 /effect clear 98b7a77b-cd65-4f72-ad91-a6c399f1921e
 /kill 98b7a77b-cd65-4f72-ad91-a6c399f1921e
+/attribute @s minecraft:armor base get
+/attribute @s minecraft:armor base reset
+/attribute @s minecraft:armor base set 1024
+/damage @s 5 minecraft:arrow
+/attribute @s minecraft:armor base set 20
+/damage @s 5 minecraft:arrow
+/attribute @s minecraft:armor base set 1024
+/attribute @s minecraft:armor_toughness base set 1024
+/damage @s 5 minecraft:arrow
+/damage @s 10 minecraft:arrow
