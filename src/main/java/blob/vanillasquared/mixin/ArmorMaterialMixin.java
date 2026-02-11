@@ -18,8 +18,17 @@ import net.minecraft.resources.Identifier;
 public class ArmorMaterialMixin {
 
     @Unique
-    private static final Identifier vsqArmorOverride =
-            Identifier.fromNamespaceAndPath("vanillasquared", "armor");
+    private static final Identifier vsqArmorChestplateOverride =
+            Identifier.fromNamespaceAndPath("vanillasquared", "armor_chestplate_override");
+    @Unique
+    private static final Identifier vsqArmorLeggingsOverride =
+            Identifier.fromNamespaceAndPath("vanillasquared", "armor_leggings_override");
+    @Unique
+    private static final Identifier vsqArmorBootsOverride =
+            Identifier.fromNamespaceAndPath("vanillasquared", "armor_boots_override");
+    @Unique
+    private static final Identifier vsqArmorHelmetOverride =
+            Identifier.fromNamespaceAndPath("vanillasquared", "armor_helmet_override");
 
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceNetheriteChestplateArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
@@ -30,8 +39,53 @@ public class ArmorMaterialMixin {
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
         builder.add(
                 Attributes.ARMOR,
-                new AttributeModifier(vsqArmorOverride, 1.0d, AttributeModifier.Operation.ADD_VALUE),
+                new AttributeModifier(vsqArmorChestplateOverride, 1.0d, AttributeModifier.Operation.ADD_VALUE),
                 EquipmentSlotGroup.CHEST
+        );
+        cir.setReturnValue(builder.build());
+    }
+
+    @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
+    private void vsq$replaceNetheriteLeggingsArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
+        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.LEGGINGS) {
+            return;
+        }
+
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        builder.add(
+                Attributes.ARMOR,
+                new AttributeModifier(vsqArmorLeggingsOverride, 1.0d, AttributeModifier.Operation.ADD_VALUE),
+                EquipmentSlotGroup.LEGS
+        );
+        cir.setReturnValue(builder.build());
+    }
+
+    @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
+    private void vsq$replaceNetheriteBootsArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
+        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.BOOTS) {
+            return;
+        }
+
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        builder.add(
+                Attributes.ARMOR,
+                new AttributeModifier(vsqArmorBootsOverride, 1.0d, AttributeModifier.Operation.ADD_VALUE),
+                EquipmentSlotGroup.FEET
+        );
+        cir.setReturnValue(builder.build());
+    }
+
+    @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
+    private void vsq$replaceNetheriteHelmetArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
+        if ((Object) this != ArmorMaterials.NETHERITE || armorType != ArmorType.HELMET) {
+            return;
+        }
+
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        builder.add(
+                Attributes.ARMOR,
+                new AttributeModifier(vsqArmorHelmetOverride, 1.0d, AttributeModifier.Operation.ADD_VALUE),
+                EquipmentSlotGroup.HEAD
         );
         cir.setReturnValue(builder.build());
     }
