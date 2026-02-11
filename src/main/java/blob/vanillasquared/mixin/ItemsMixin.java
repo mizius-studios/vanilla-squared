@@ -25,94 +25,94 @@ public class ItemsMixin {
     private static void registerItem(String string, Item.Properties properties, CallbackInfoReturnable<Item> cir) {
         switch (string) {
             case "netherite_chestplate": {
-                properties.durability(1);
+                properties.durability(569);
             }
             case "netherite_leggings": {
-                properties.durability(1);
+                properties.durability(569);
             }
             case "netherite_boots": {
-                properties.durability(1);
+                properties.durability(569);
             }
             case "netherite_helmet": {
-                properties.durability(1);
+                properties.durability(569);
             }
 
             case "diamond_chestplate":  {
-                properties.durability(1);
+                properties.durability(450);
             }
             case "diamond_leggings": {
-                properties.durability(1);
+                properties.durability(450);
             }
             case "diamond_boots": {
-                properties.durability(1);
+                properties.durability(450);
             }
             case "diamond_helmet": {
-                properties.durability(1);
+                properties.durability(450);
             }
 
             case "iron_chestplate":  {
-                properties.durability(1);
+                properties.durability(325);
             }
             case "iron_leggings": {
-                properties.durability(1);
+                properties.durability(325);
             }
             case "iron_boots": {
-                properties.durability(1);
+                properties.durability(325);
             }
             case "iron_helmet": {
-                properties.durability(1);
+                properties.durability(325);
             }
 
             case "golden_chestplate":  {
-                properties.durability(1);
+                properties.durability(125);
             }
             case "golden_leggings": {
-                properties.durability(1);
+                properties.durability(125);
             }
             case "golden_boots": {
-                properties.durability(1);
+                properties.durability(125);
             }
             case "golden_helmet": {
-                properties.durability(1);
+                properties.durability(125);
             }
 
             case "chainmail_chestplate":  {
-                properties.durability(1);
+                properties.durability(300);
             }
             case "chainmail_leggings": {
-                properties.durability(1);
+                properties.durability(300);
             }
             case "chainmail_boots": {
-                properties.durability(1);
+                properties.durability(300);
             }
             case "chainmail_helmet": {
-                properties.durability(1);
+                properties.durability(300);
             }
 
             case "copper_chestplate":  {
-                properties.durability(1);
+                properties.durability(167);
             }
             case "copper_leggings": {
-                properties.durability(1);
+                properties.durability(167);
             }
             case "copper_boots": {
-                properties.durability(1);
+                properties.durability(167);
             }
             case "copper_helmet": {
-                properties.durability(1);
+                properties.durability(167);
             }
 
             case "leather_chestplate":  {
-                properties.durability(1);
+                properties.durability(96);
             }
             case "leather_leggings": {
-                properties.durability(1);
+                properties.durability(96);
             }
             case "leather_boots": {
-                properties.durability(1);
+                properties.durability(96);
             }
             case "leather_helmet": {
-                properties.durability(1);
+                properties.durability(96);
             }
 
             case "turtle_helmet":  {
