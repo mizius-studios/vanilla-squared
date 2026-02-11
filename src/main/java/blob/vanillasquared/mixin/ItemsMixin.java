@@ -116,7 +116,7 @@ public class ItemsMixin {
             }
 
             case "turtle_helmet":  {
-                properties.durability(1);
+                properties.durability(569);
             }
         }
     }
