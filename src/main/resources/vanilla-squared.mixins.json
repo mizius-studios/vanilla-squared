@@ -10,6 +10,7 @@
 		"ItemsMixin",
 		"LivingEntityAttributesMixin",
 		"LivingEntityMixin",
+		"PlayerMixin",
 		"RangedAttributeMixin"
 	],
 	"injectors": {
