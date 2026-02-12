@@ -5,9 +5,10 @@
 	"mixins": [
 		"ArmorMaterialMixin",
 		"AxeMixin",
-		"ItemsMixin",
 		"CombatRulesMixin",
 		"FishingRodHookMixin",
+		"ItemsMixin",
+		"LivingEntityMixin",
 		"RangedAttributeMixin"
 	],
 	"injectors": {
