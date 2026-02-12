@@ -36,7 +36,7 @@ public class ArmorMaterialMixin {
                     vsq$armorModifier(builder, vsqArmorChestplateOverride, 8.0d, EquipmentSlotGroup.CHEST);
                     vsq$armorToughnessModifier(builder, vsqArmorChestplateOverride, 3.0d, EquipmentSlotGroup.CHEST);
                     vsq$armorKnockbackResistanceModifier(builder, vsqArmorChestplateOverride, 0.1d, EquipmentSlotGroup.CHEST);
-                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 0.2d, EquipmentSlotGroup.CHEST);
+                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 10.0d, EquipmentSlotGroup.CHEST);
                     cir.setReturnValue(builder.build());
                 }
                 case LEGGINGS -> {

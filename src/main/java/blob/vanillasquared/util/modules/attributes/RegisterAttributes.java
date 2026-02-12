@@ -13,7 +13,7 @@ public class RegisterAttributes {
     public static final Holder<Attribute> maceProtection = register(
             "mace_protection",
             new RangedAttribute(
-                    "attribute.vsq.mace_protection",
+                    "Mace Protection",
                     0.0, 0.0, 1.0
             ).setSyncable(true)
     );
