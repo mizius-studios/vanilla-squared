@@ -1,5 +1,6 @@
 package blob.vanillasquared.mixin;
 
+import blob.vanillasquared.VanillaSquared;
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,7 +27,10 @@ public abstract class LivingEntityMixin {
             ItemStack weapon = livingAttacker.getMainHandItem();
             if (weapon.is(Items.MACE)) {
                 double protection = entity.getAttributeValue(RegisterAttributes.maceProtection);
+                VanillaSquared.LOGGER.info("Mace attack detected! Entity: {}, Original damage: {}, Protection: {}", 
+                    entity.getName().getString(), damage, protection);
                 damage *= (1.0F - (float) protection);
+                VanillaSquared.LOGGER.info("Damage after protection: {}", damage);
             }
         }
 
