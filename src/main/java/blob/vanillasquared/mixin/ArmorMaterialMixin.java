@@ -1,5 +1,6 @@
 package blob.vanillasquared.mixin;
 
+import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -34,24 +35,29 @@ public class ArmorMaterialMixin {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorChestplateOverride, 8.0d, EquipmentSlotGroup.CHEST);
                     vsq$armorToughnessModifier(builder, vsqArmorChestplateOverride, 3.0d, EquipmentSlotGroup.CHEST);
+                    vsq$armorKnockbackResistanceModifier(builder, vsqArmorChestplateOverride, 0.1d, EquipmentSlotGroup.CHEST);
+                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 0.2d, EquipmentSlotGroup.CHEST);
                     cir.setReturnValue(builder.build());
                 }
                 case LEGGINGS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorLeggingsOverride, 7.0d, EquipmentSlotGroup.LEGS);
                     vsq$armorToughnessModifier(builder, vsqArmorLeggingsOverride, 3.0d, EquipmentSlotGroup.LEGS);
+                    vsq$armorKnockbackResistanceModifier(builder, vsqArmorLeggingsOverride, 0.1d, EquipmentSlotGroup.LEGS);
                     cir.setReturnValue(builder.build());
                 }
                 case BOOTS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorBootsOverride, 4.0d, EquipmentSlotGroup.FEET);
                     vsq$armorToughnessModifier(builder, vsqArmorBootsOverride, 3.0d, EquipmentSlotGroup.FEET);
+                    vsq$armorKnockbackResistanceModifier(builder, vsqArmorBootsOverride, 0.1d, EquipmentSlotGroup.FEET);
                     cir.setReturnValue(builder.build());
                 }
                 case HELMET -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorHelmetOverride, 5.0d, EquipmentSlotGroup.HEAD);
                     vsq$armorToughnessModifier(builder, vsqArmorHelmetOverride, 3.0d, EquipmentSlotGroup.HEAD);
+                    vsq$armorKnockbackResistanceModifier(builder, vsqArmorHelmetOverride, 0.1d, EquipmentSlotGroup.HEAD);
                     cir.setReturnValue(builder.build());
                 }
                 default -> {}
@@ -61,19 +67,19 @@ public class ArmorMaterialMixin {
                 case CHESTPLATE -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorChestplateOverride, 7.0d, EquipmentSlotGroup.CHEST);
-                    vsq$armorToughnessModifier(builder, vsqArmorHelmetOverride, 2.0d, EquipmentSlotGroup.CHEST);
+                    vsq$armorToughnessModifier(builder, vsqArmorChestplateOverride, 2.0d, EquipmentSlotGroup.CHEST);
                     cir.setReturnValue(builder.build());
                 }
                 case LEGGINGS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorLeggingsOverride, 6.0d, EquipmentSlotGroup.LEGS);
-                    vsq$armorToughnessModifier(builder, vsqArmorHelmetOverride, 2.0d, EquipmentSlotGroup.LEGS);
+                    vsq$armorToughnessModifier(builder, vsqArmorLeggingsOverride, 2.0d, EquipmentSlotGroup.LEGS);
                     cir.setReturnValue(builder.build());
                 }
                 case BOOTS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorBootsOverride, 3.0d, EquipmentSlotGroup.FEET);
-                    vsq$armorToughnessModifier(builder, vsqArmorHelmetOverride, 2.0d, EquipmentSlotGroup.FEET);
+                    vsq$armorToughnessModifier(builder, vsqArmorBootsOverride, 2.0d, EquipmentSlotGroup.FEET);
                     cir.setReturnValue(builder.build());
                 }
                 case HELMET -> {
@@ -122,7 +128,7 @@ public class ArmorMaterialMixin {
                 }
                 case BOOTS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-                    vsq$armorModifier(builder, vsqArmorBootsOverride, 2.0d, EquipmentSlotGroup.FEET);
+                    vsq$armorModifier(builder, vsqArmorBootsOverride, 1.0d, EquipmentSlotGroup.FEET);
                     cir.setReturnValue(builder.build());
                 }
                 case HELMET -> {
@@ -206,7 +212,7 @@ public class ArmorMaterialMixin {
             }
         } else if (ArmorMaterials.TURTLE_SCUTE.equals(this)) {
                 ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-                vsq$armorModifier(builder, vsqArmorHelmetOverride, 1.5d, EquipmentSlotGroup.HEAD);
+                vsq$armorModifier(builder, vsqArmorHelmetOverride, 4.0d, EquipmentSlotGroup.HEAD);
                 cir.setReturnValue(builder.build());
             }
         }
@@ -220,4 +226,15 @@ public class ArmorMaterialMixin {
     private static void vsq$armorToughnessModifier(ItemAttributeModifiers.Builder builder, Identifier id, double value, EquipmentSlotGroup slotGroup) {
         builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id, value, AttributeModifier.Operation.ADD_VALUE), slotGroup);
     }
+
+    @Unique
+    private static void vsq$armorKnockbackResistanceModifier(ItemAttributeModifiers.Builder builder, Identifier id, double value, EquipmentSlotGroup slotGroup) {
+        builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id, value, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+    }
+
+    @Unique
+    private static void vsq$maceProtectionModifier(ItemAttributeModifiers.Builder builder, Identifier id, double value, EquipmentSlotGroup slotGroup) {
+        builder.add(RegisterAttributes.maceProtection, new AttributeModifier(id, value, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+    }
+
 }
