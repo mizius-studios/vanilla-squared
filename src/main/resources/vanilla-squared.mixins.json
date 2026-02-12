@@ -8,6 +8,7 @@
 		"CombatRulesMixin",
 		"FishingRodHookMixin",
 		"ItemsMixin",
+		"LivingEntityAttributesMixin",
 		"LivingEntityMixin",
 		"RangedAttributeMixin"
 	],
