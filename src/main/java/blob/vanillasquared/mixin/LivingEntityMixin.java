@@ -1,6 +1,7 @@
 package blob.vanillasquared.mixin;
 
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class LivingEntityMixin {
 
     @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true)
-    private float vsq$applyAttributeProtections(float amount, DamageSource source) {
+    private float vsq$applyAttributeProtections(float amount, ServerLevel level, DamageSource source) {
         LivingEntity entity = (LivingEntity)(Object)this;
 
         float damage = amount;
