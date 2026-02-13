@@ -50,13 +50,13 @@ public abstract class AxeMixin {
 
     @Unique
     private static final Map<ToolMaterial, BlockComponent> AXE = Map.of(
-            ToolMaterial.WOOD, new BlockComponent(0.1F, 0.25F, 0.25F, 2.0F, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
-            ToolMaterial.STONE, new BlockComponent(0.4F, 0.4F, 0.25F, 1.0F, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
-            ToolMaterial.COPPER, new BlockComponent(0.5F, 0.5F, 0.35F, 2.0F, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
-            ToolMaterial.IRON, new BlockComponent(0.85F, 0.65F, 0.5F, 2.0F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
-            ToolMaterial.GOLD, new BlockComponent(0F, 0F, 1.0F, 0.5F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
-            ToolMaterial.DIAMOND, new BlockComponent(0.95F, 0.75F, 0.65F, 1.0F, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
-            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 0.8F, 0.8F, 1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
+            ToolMaterial.WOOD, new BlockComponent(0.1F, 1.0F, 0.2F, 2.0F, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
+            ToolMaterial.STONE, new BlockComponent(0.4F, 1.0F, 0.2F, 1.0F, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
+            ToolMaterial.COPPER, new BlockComponent(0.5F, 1.0F, 0.25F, 2.0F, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
+            ToolMaterial.IRON, new BlockComponent(0.85F, 1.0F, 0.4F, 2.0F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
+            ToolMaterial.GOLD, new BlockComponent(0F, 1.0F, 1.0F, 0.5F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
+            ToolMaterial.DIAMOND, new BlockComponent(0.95F, 1.0F, 0.5F, 1.0F, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
+            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 1.0F, 0.625F, 1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
     );
 
     @Unique
