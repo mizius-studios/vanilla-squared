@@ -21,7 +21,7 @@ if not exist "%DEST_DIR%" mkdir "%DEST_DIR%"
 
 echo Building mod...
 pushd "%SCRIPT_DIR%"
-call gradlew.bat build
+call ./gradlew build
 if errorlevel 1 (
   popd
   echo Build failed.
