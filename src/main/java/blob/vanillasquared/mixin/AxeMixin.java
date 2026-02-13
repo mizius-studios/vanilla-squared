@@ -40,7 +40,7 @@ public abstract class AxeMixin {
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of(
             ToolMaterial.WOOD, new GeneralWeapon(5.0d, -3.2d, -0.5d, 75),
-            ToolMaterial.STONE, new GeneralWeapon(6.0d, -3.4d, -0.5d, 150),
+            ToolMaterial.STONE, new GeneralWeapon(6.0d, -3.3d, -0.5d, 150),
             ToolMaterial.COPPER, new GeneralWeapon(6.0d, -3.0d, -0.5d, 200),
             ToolMaterial.IRON, new GeneralWeapon(7.0d, -3.0d, -0.5d, 250),
             ToolMaterial.GOLD, new GeneralWeapon(6.0d, -2.9d, 0.0d, 100),
@@ -50,13 +50,13 @@ public abstract class AxeMixin {
 
     @Unique
     private static final Map<ToolMaterial, BlockComponent> AXE = Map.of(
-            ToolMaterial.WOOD, new BlockComponent(0.1F, 1.0F, 0.2F, 2.0F, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
-            ToolMaterial.STONE, new BlockComponent(0.4F, 1.0F, 0.2F, 1.0F, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
-            ToolMaterial.COPPER, new BlockComponent(0.5F, 1.0F, 0.25F, 2.0F, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
-            ToolMaterial.IRON, new BlockComponent(0.85F, 1.0F, 0.4F, 2.0F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
-            ToolMaterial.GOLD, new BlockComponent(0F, 1.0F, 1.0F, 0.5F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
-            ToolMaterial.DIAMOND, new BlockComponent(0.95F, 1.0F, 0.5F, 1.0F, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
-            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 1.0F, 0.625F, 1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
+            ToolMaterial.WOOD, new BlockComponent(0.1F, 5.0F, 0.2F, 2.0F, SoundEvents.ZOMBIE_ATTACK_WOODEN_DOOR, SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR),
+            ToolMaterial.STONE, new BlockComponent(0.4F, 5.0F, 0.2F, 1.0F, SoundEvents.STONE_PLACE, SoundEvents.STONE_BREAK),
+            ToolMaterial.COPPER, new BlockComponent(0.5F, 5.0F, 0.25F, 2.0F, SoundEvents.COPPER_BULB_PLACE, SoundEvents.COPPER_GRATE_BREAK),
+            ToolMaterial.IRON, new BlockComponent(0.85F, 5.0F, 0.4F, 2.0F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
+            ToolMaterial.GOLD, new BlockComponent(0F, 5.0F, 1.0F, 0.5F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
+            ToolMaterial.DIAMOND, new BlockComponent(0.95F, 5.0F, 0.5F, 1.0F, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
+            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 5.0F, 0.625F, 1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
     );
 
     @Unique
