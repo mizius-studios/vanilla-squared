@@ -2,6 +2,7 @@ package blob.vanillasquared.mixin;
 
 import blob.vanillasquared.util.data.BlockComponent;
 import blob.vanillasquared.util.data.GeneralWeapon;
+import blob.vanillasquared.util.data.Dura;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,13 +40,13 @@ public abstract class AxeMixin {
 
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(6.0d, -3.2d, -0.5d, 75),
-            ToolMaterial.STONE, new GeneralWeapon(7.0d, -3.3d, -0.5d, 150),
-            ToolMaterial.COPPER, new GeneralWeapon(7.0d, -3.0d, -0.5d, 200),
-            ToolMaterial.IRON, new GeneralWeapon(9.0d, -3.0d, -0.5d, 250),
-            ToolMaterial.GOLD, new GeneralWeapon(7.0d, -2.9d, 0.0d, 100),
-            ToolMaterial.DIAMOND, new GeneralWeapon(10.0d, -3.0d, -0.5d, 1550),
-            ToolMaterial.NETHERITE, new GeneralWeapon(11.0d, -3.0d, -0.5d, 2069)
+            ToolMaterial.WOOD, new GeneralWeapon(6.0d, -3.2d, -0.5d),
+            ToolMaterial.STONE, new GeneralWeapon(7.0d, -3.3d, -0.5d),
+            ToolMaterial.COPPER, new GeneralWeapon(7.0d, -3.0d, -0.5d),
+            ToolMaterial.IRON, new GeneralWeapon(9.0d, -3.0d, -0.5d),
+            ToolMaterial.GOLD, new GeneralWeapon(7.0d, -2.9d, 0.0d),
+            ToolMaterial.DIAMOND, new GeneralWeapon(10.0d, -3.0d, -0.5d),
+            ToolMaterial.NETHERITE, new GeneralWeapon(11.0d, -3.0d, -0.5d)
     );
 
     @Unique
@@ -60,12 +61,24 @@ public abstract class AxeMixin {
     );
 
     @Unique
+    private static final Map<ToolMaterial, Dura> DURABILITY = Map.of(
+            ToolMaterial.WOOD, new Dura(75),
+            ToolMaterial.STONE, new Dura(150),
+            ToolMaterial.COPPER, new Dura(200),
+            ToolMaterial.IRON, new Dura(250),
+            ToolMaterial.GOLD, new Dura(100),
+            ToolMaterial.DIAMOND, new Dura(1550),
+            ToolMaterial.NETHERITE, new Dura(2069)
+    );
+
+    @Unique
     private static final Identifier ATTRIBUTE_IDENTIFIER_REACH = Identifier.fromNamespaceAndPath("vanillasquared", "axe_reach");
 
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
     public void init(ToolMaterial toolMaterial, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
         BlockComponent s = AXE.getOrDefault(toolMaterial, BlockComponent.DEFAULT);
         GeneralWeapon a = AXE_WEAPON.getOrDefault(toolMaterial, GeneralWeapon.DEFAULT);
+        Dura d = DURABILITY.getOrDefault(toolMaterial, Dura.DEFAULT);
 
         float blockDelay = s.blockDelay();
         float shieldBreakCooldown = s.shieldBreakCooldown();
@@ -74,7 +87,7 @@ public abstract class AxeMixin {
         double attackDMG = a.attackDamage();
         double attackSpeed = a.attackSpeed();
         double attackReach = a.entityReach();
-        int dura = a.dura();
+        int dura = d.dura();
 
         Holder<SoundEvent> blockSound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(s.blockSound());
         Holder<SoundEvent> breakSound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(s.breakSound());
