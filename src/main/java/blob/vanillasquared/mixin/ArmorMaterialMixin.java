@@ -36,7 +36,6 @@ public class ArmorMaterialMixin {
                     vsq$armorModifier(builder, vsqArmorChestplateOverride, 8.0d, EquipmentSlotGroup.CHEST);
                     vsq$armorToughnessModifier(builder, vsqArmorChestplateOverride, 3.0d, EquipmentSlotGroup.CHEST);
                     vsq$armorKnockbackResistanceModifier(builder, vsqArmorChestplateOverride, 0.1d, EquipmentSlotGroup.CHEST);
-                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 1.0d, EquipmentSlotGroup.CHEST);
                     cir.setReturnValue(builder.build());
                 }
                 case LEGGINGS -> {
@@ -143,21 +142,25 @@ public class ArmorMaterialMixin {
                 case CHESTPLATE -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorChestplateOverride, 5.0d, EquipmentSlotGroup.CHEST);
+                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 0.2d, EquipmentSlotGroup.CHEST);
                     cir.setReturnValue(builder.build());
                 }
                 case LEGGINGS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorLeggingsOverride, 5.0d, EquipmentSlotGroup.LEGS);
+                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 0.2d, EquipmentSlotGroup.LEGS);
                     cir.setReturnValue(builder.build());
                 }
                 case BOOTS -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorBootsOverride, 1.0d, EquipmentSlotGroup.FEET);
+                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 0.2d, EquipmentSlotGroup.FEET);
                     cir.setReturnValue(builder.build());
                 }
                 case HELMET -> {
                     ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
                     vsq$armorModifier(builder, vsqArmorHelmetOverride, 2.0d, EquipmentSlotGroup.HEAD);
+                    vsq$maceProtectionModifier(builder, vsqArmorChestplateOverride, 0.2d, EquipmentSlotGroup.HEAD);
                     cir.setReturnValue(builder.build());
                 }
                 default -> {}
