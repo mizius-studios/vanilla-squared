@@ -26,38 +26,37 @@ import java.util.Map;
 public class ArmorMaterialMixin {
 
     @Unique
-    private static final Map<Armor, GeneralArmor> ARMOR = Map.of(
-            Armor.LEATHER_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.LEATHER_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.LEATHER_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.LEATHER_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
+    private static final Map<Armor, GeneralArmor> ARMOR = Map.ofEntries(
+            Map.entry(Armor.LEATHER_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.LEATHER_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.LEATHER_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.LEATHER_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
 
-            Armor.CHAINMAIL_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.CHAINMAIL_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.CHAINMAIL_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.CHAINMAIL_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
+            Map.entry(Armor.CHAINMAIL_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.CHAINMAIL_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.CHAINMAIL_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.CHAINMAIL_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
 
-            Armor.IRON_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.IRON_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.IRON_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.IRON_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
+            Map.entry(Armor.IRON_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.IRON_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.IRON_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.IRON_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
 
-            Armor.GOLD_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.GOLD_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.GOLD_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.GOLD_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
+            Map.entry(Armor.GOLD_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.GOLD_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.GOLD_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.GOLD_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
 
-            Armor.DIAMOND_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.DIAMOND_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.DIAMOND_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.DIAMOND_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
+            Map.entry(Armor.DIAMOND_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.DIAMOND_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.DIAMOND_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.DIAMOND_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
 
-            Armor.NETHERITE_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.NETHERITE_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.NETHERITE_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-            Armor.NETHERITE_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d),
-
-            Armor.TURTLE_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)
+            Map.entry(Armor.NETHERITE_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.NETHERITE_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.NETHERITE_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.NETHERITE_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d)),
+            Map.entry(Armor.TURTLE_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), -3.2d, 3.0d,3.0d,3.0d))
     );
 
     @Unique

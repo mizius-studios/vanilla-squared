@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class ItemsMixin {
 
     @Unique
-    private static final Map<String, Dura> DURABILITY = Map.of(
+    private static final Map<ToolMaterial, Dura> DURABILITY = Map.of(
             ToolMaterial.WOOD, new Dura(75),
             ToolMaterial.STONE, new Dura(150),
             ToolMaterial.COPPER, new Dura(200),

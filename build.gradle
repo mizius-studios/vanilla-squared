@@ -70,6 +70,7 @@ java {
 }
 
 jar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	inputs.property "archivesName", project.base.archivesName
 
 	from("LICENSE") {
