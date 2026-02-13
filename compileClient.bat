@@ -1,13 +1,20 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
-if "%~1"=="" (
-  echo Usage: %~nx0 ^<destination_folder^>
-  echo Example: %~nx0 "C:\Users\YourName\AppData\Roaming\.minecraft\mods"
+set "DEFAULT_DEST_DIR=C:\Users\adria\AppData\Roaming\ModrinthApp\profiles\Advanced vanilla - 1.21.4\mods"
+
+if not "%~2"=="" (
+  echo Usage: %~nx0 [destination_folder]
+  echo If omitted, defaults to:
+  echo   %DEFAULT_DEST_DIR%
   exit /b 1
 )
 
-set "DEST_DIR=%~1"
+if "%~1"=="" (
+  set "DEST_DIR=%DEFAULT_DEST_DIR%"
+) else (
+  set "DEST_DIR=%~1"
+)
 set "SCRIPT_DIR=%~dp0"
 
 if not exist "%DEST_DIR%" mkdir "%DEST_DIR%"
