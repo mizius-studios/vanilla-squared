@@ -79,22 +79,24 @@ public abstract class AxeMixin {
         Holder<SoundEvent> blockSound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(s.blockSound());
         Holder<SoundEvent> breakSound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(s.breakSound());
 
-        cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F)
-                .component(DataComponents.BLOCKS_ATTACKS, new BlocksAttacks(
-                        blockDelay,
-                        shieldBreakCooldown,
-                        List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, damageReduction)),
-                        new BlocksAttacks.ItemDamageFunction(1.0F, 1.0F, duraDMG),
-                        Optional.of(DamageTypeTags.BYPASSES_SHIELD),
-                        Optional.of(blockSound),
-                        Optional.of(breakSound)
-                ))
-                .component(DataComponents.WEAPON, new Weapon(1, shieldBreakCooldown))
-                .attributes(ItemAttributeModifiers.builder()
-                        .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attackDMG, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-                        .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-                        .add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(ATTRIBUTE_IDENTIFIER_REACH, attackReach, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
-                        .build())
-                .durability(dura));
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder()
+                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attackDMG, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, attackSpeed, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+
+        if (attackReach != 0.0d) {
+            builder.add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(ATTRIBUTE_IDENTIFIER_REACH, attackReach, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+        }
+
+        BlocksAttacks axeBlock = new BlocksAttacks(
+                blockDelay,
+                shieldBreakCooldown,
+                List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, damageReduction)),
+                new BlocksAttacks.ItemDamageFunction(1.0F, 1.0F, duraDMG),
+                Optional.of(DamageTypeTags.BYPASSES_SHIELD),
+                Optional.of(blockSound),
+                Optional.of(breakSound)
+        );
+
+        cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, axeBlock).component(DataComponents.WEAPON, new Weapon(1, shieldBreakCooldown)).attributes(builder.build()).durability(dura));
     }
 }
