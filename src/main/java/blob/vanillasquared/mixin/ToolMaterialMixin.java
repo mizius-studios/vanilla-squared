@@ -1,6 +1,7 @@
 package blob.vanillasquared.mixin;
 
 import blob.vanillasquared.util.data.GeneralWeapon;
+import blob.vanillasquared.util.data.Dura;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -23,13 +24,24 @@ public class ToolMaterialMixin {
 
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> SWORD = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(4.0d, -2.4d, 0.0d, 75),
-            ToolMaterial.STONE, new GeneralWeapon(5.0d, -2.4d, 0.0d, 150),
-            ToolMaterial.COPPER, new GeneralWeapon(5.0d, -2.4d, 0.0d, 200),
-            ToolMaterial.IRON, new GeneralWeapon(6.0d, -2.4d, 0.0d, 250),
-            ToolMaterial.GOLD, new GeneralWeapon(4.0d, -2.4d, 0.0d, 100),
-            ToolMaterial.DIAMOND, new GeneralWeapon(7.0d, -2.4d, 0.0d, 1550),
-            ToolMaterial.NETHERITE, new GeneralWeapon(8.0d, -2.4d, 0.0d, 2069)
+            ToolMaterial.WOOD, new GeneralWeapon(4.0d, -2.4d, 0.0d),
+            ToolMaterial.STONE, new GeneralWeapon(5.0d, -2.4d, 0.0d),
+            ToolMaterial.COPPER, new GeneralWeapon(5.0d, -2.4d, 0.0d),
+            ToolMaterial.IRON, new GeneralWeapon(6.0d, -2.4d, 0.0d),
+            ToolMaterial.GOLD, new GeneralWeapon(4.0d, -2.4d, 0.0d),
+            ToolMaterial.DIAMOND, new GeneralWeapon(7.0d, -2.4d, 0.0d),
+            ToolMaterial.NETHERITE, new GeneralWeapon(8.0d, -2.4d, 0.0d)
+    );
+
+    @Unique
+    private static final Map<ToolMaterial, Dura> DURABILITY = Map.of(
+            ToolMaterial.WOOD, new Dura(75),
+            ToolMaterial.STONE, new Dura(150),
+            ToolMaterial.COPPER, new Dura(200),
+            ToolMaterial.IRON, new Dura(250),
+            ToolMaterial.GOLD, new Dura(100),
+            ToolMaterial.DIAMOND, new Dura(1550),
+            ToolMaterial.NETHERITE, new Dura(2069)
     );
 
     @Unique
@@ -39,10 +51,12 @@ public class ToolMaterialMixin {
     private void createSwordAttributes(float f, float g, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         GeneralWeapon weapon = SWORD.getOrDefault(material, GeneralWeapon.DEFAULT);
+        Dura durability = DURABILITY.getOrDefault(material, Dura.DEFAULT);
 
         double attackDamage = weapon.attackDamage();
         double attackSpeed = weapon.attackSpeed();
         double attackReach = weapon.entityReach();
+        int dura = durability.dura();
 
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder()
                 .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, attackDamage, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
