@@ -30,7 +30,7 @@ public class ArmorMaterialMixin {
         Map.entry(Armor.COPPER_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), EquipmentSlotGroup.LEGS, 3.0d, 0.0d,0.0d,0.0d)),
         Map.entry(Armor.COPPER_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), EquipmentSlotGroup.FEET, 1.0d, 0.0d,0.0d,0.0d)),
 
-        Map.entry(Armor.CHAINMAIL_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), EquipmentSlotGroup.HEAD, 3.0d, 3.0d,0.0d,0.2d)),
+        Map.entry(Armor.CHAINMAIL_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), EquipmentSlotGroup.HEAD, 3.0d, 0.0d,0.0d,0.2d)),
         Map.entry(Armor.CHAINMAIL_CHESTPLATE, new GeneralArmor(vsqIdentifiers.vsqArmorChestplateOverride.identifier(), EquipmentSlotGroup.CHEST, 5.0d, 0.0d,0.0d,0.2d)),
         Map.entry(Armor.CHAINMAIL_LEGGINGS, new GeneralArmor(vsqIdentifiers.vsqArmorLeggingsOverride.identifier(), EquipmentSlotGroup.LEGS, 4.0d, 0.0d,0.0d,0.2d)),
         Map.entry(Armor.CHAINMAIL_BOOTS, new GeneralArmor(vsqIdentifiers.vsqArmorBootsOverride.identifier(), EquipmentSlotGroup.FEET, 1.0d, 0.0d,0.0d,0.2d)),
