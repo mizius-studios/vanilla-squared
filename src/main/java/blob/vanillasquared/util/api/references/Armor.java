@@ -3,60 +3,59 @@ package blob.vanillasquared.util.api.references;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 
 public enum Armor {
-    LEATHER_HELMET(ArmorMaterials.LEATHER, ArmorType.HELMET),
-    LEATHER_CHESTPLATE(ArmorMaterials.LEATHER, ArmorType.CHESTPLATE),
-    LEATHER_LEGGINGS(ArmorMaterials.LEATHER, ArmorType.LEGGINGS),
-    LEATHER_BOOTS(ArmorMaterials.LEATHER, ArmorType.BOOTS),
+    LEATHER_HELMET("leather", ArmorType.HELMET),
+    LEATHER_CHESTPLATE("leather", ArmorType.CHESTPLATE),
+    LEATHER_LEGGINGS("leather", ArmorType.LEGGINGS),
+    LEATHER_BOOTS("leather", ArmorType.BOOTS),
 
-    CHAINMAIL_HELMET(ArmorMaterials.CHAINMAIL, ArmorType.HELMET),
-    CHAINMAIL_CHESTPLATE(ArmorMaterials.CHAINMAIL, ArmorType.CHESTPLATE),
-    CHAINMAIL_LEGGINGS(ArmorMaterials.CHAINMAIL, ArmorType.LEGGINGS),
-    CHAINMAIL_BOOTS(ArmorMaterials.CHAINMAIL, ArmorType.BOOTS),
+    CHAINMAIL_HELMET("chainmail", ArmorType.HELMET),
+    CHAINMAIL_CHESTPLATE("chainmail", ArmorType.CHESTPLATE),
+    CHAINMAIL_LEGGINGS("chainmail", ArmorType.LEGGINGS),
+    CHAINMAIL_BOOTS("chainmail", ArmorType.BOOTS),
 
-    IRON_HELMET(ArmorMaterials.IRON, ArmorType.HELMET),
-    IRON_CHESTPLATE(ArmorMaterials.IRON, ArmorType.CHESTPLATE),
-    IRON_LEGGINGS(ArmorMaterials.IRON, ArmorType.LEGGINGS),
-    IRON_BOOTS(ArmorMaterials.IRON, ArmorType.BOOTS),
+    IRON_HELMET("iron", ArmorType.HELMET),
+    IRON_CHESTPLATE("iron", ArmorType.CHESTPLATE),
+    IRON_LEGGINGS("iron", ArmorType.LEGGINGS),
+    IRON_BOOTS("iron", ArmorType.BOOTS),
 
-    GOLD_HELMET(ArmorMaterials.GOLD, ArmorType.HELMET),
-    GOLD_CHESTPLATE(ArmorMaterials.GOLD, ArmorType.CHESTPLATE),
-    GOLD_LEGGINGS(ArmorMaterials.GOLD, ArmorType.LEGGINGS),
-    GOLD_BOOTS(ArmorMaterials.GOLD, ArmorType.BOOTS),
+    GOLD_HELMET("gold", ArmorType.HELMET),
+    GOLD_CHESTPLATE("gold", ArmorType.CHESTPLATE),
+    GOLD_LEGGINGS("gold", ArmorType.LEGGINGS),
+    GOLD_BOOTS("gold", ArmorType.BOOTS),
 
-    DIAMOND_HELMET(ArmorMaterials.DIAMOND, ArmorType.HELMET),
-    DIAMOND_CHESTPLATE(ArmorMaterials.DIAMOND, ArmorType.CHESTPLATE),
-    DIAMOND_LEGGINGS(ArmorMaterials.DIAMOND, ArmorType.LEGGINGS),
-    DIAMOND_BOOTS(ArmorMaterials.DIAMOND, ArmorType.BOOTS),
+    DIAMOND_HELMET("diamond", ArmorType.HELMET),
+    DIAMOND_CHESTPLATE("diamond", ArmorType.CHESTPLATE),
+    DIAMOND_LEGGINGS("diamond", ArmorType.LEGGINGS),
+    DIAMOND_BOOTS("diamond", ArmorType.BOOTS),
 
-    NETHERITE_HELMET(ArmorMaterials.NETHERITE, ArmorType.HELMET),
-    NETHERITE_CHESTPLATE(ArmorMaterials.NETHERITE, ArmorType.CHESTPLATE),
-    NETHERITE_LEGGINGS(ArmorMaterials.NETHERITE, ArmorType.LEGGINGS),
-    NETHERITE_BOOTS(ArmorMaterials.NETHERITE, ArmorType.BOOTS),
+    NETHERITE_HELMET("netherite", ArmorType.HELMET),
+    NETHERITE_CHESTPLATE("netherite", ArmorType.CHESTPLATE),
+    NETHERITE_LEGGINGS("netherite", ArmorType.LEGGINGS),
+    NETHERITE_BOOTS("netherite", ArmorType.BOOTS),
 
-    COPPER_HELMET(ArmorMaterials.COPPER, ArmorType.HELMET),
-    COPPER_CHESTPLATE(ArmorMaterials.COPPER, ArmorType.CHESTPLATE),
-    COPPER_LEGGINGS(ArmorMaterials.COPPER, ArmorType.LEGGINGS),
-    COPPER_BOOTS(ArmorMaterials.COPPER, ArmorType.BOOTS),
+    COPPER_HELMET("copper", ArmorType.HELMET),
+    COPPER_CHESTPLATE("copper", ArmorType.CHESTPLATE),
+    COPPER_LEGGINGS("copper", ArmorType.LEGGINGS),
+    COPPER_BOOTS("copper", ArmorType.BOOTS),
 
-    TURTLE_HELMET(ArmorMaterials.TURTLE_SCUTE, ArmorType.HELMET);
+    TURTLE_HELMET("turtle_scute", ArmorType.HELMET);
 
-    private static final Map<ArmorMaterial, Map<ArmorType, Armor>> BY_MATERIAL_AND_TYPE = createLookup();
+    private static final Map<String, Map<ArmorType, Armor>> BY_ASSET_PATH_AND_TYPE = createLookup();
 
-    private final ArmorMaterial material;
+    private final String assetPath;
     private final ArmorType type;
 
-    Armor(ArmorMaterial material, ArmorType type) {
-        this.material = material;
+    Armor(String assetPath, ArmorType type) {
+        this.assetPath = assetPath;
         this.type = type;
     }
 
-    public ArmorMaterial material() {
-        return material;
+    public String assetPath() {
+        return assetPath;
     }
 
     public ArmorType type() {
@@ -64,11 +63,14 @@ public enum Armor {
     }
 
     public static Optional<Armor> find(ArmorMaterial material, ArmorType type) {
-        Map<ArmorType, Armor> byType = BY_MATERIAL_AND_TYPE.get(material);
-        if (byType == null) {
-            return Optional.empty();
+        String assetKey = material.assetId().toString();
+        for (Map.Entry<String, Map<ArmorType, Armor>> entry : BY_ASSET_PATH_AND_TYPE.entrySet()) {
+            if (!vsq$assetKeyMatches(assetKey, entry.getKey())) {
+                continue;
+            }
+            return Optional.ofNullable(entry.getValue().get(type));
         }
-        return Optional.ofNullable(byType.get(type));
+        return Optional.empty();
     }
 
     public static Armor of(ArmorMaterial material, ArmorType type) {
@@ -77,13 +79,19 @@ public enum Armor {
                         "No Armor constant for material " + material + " and type " + type));
     }
 
-    private static Map<ArmorMaterial, Map<ArmorType, Armor>> createLookup() {
-        Map<ArmorMaterial, Map<ArmorType, Armor>> lookup = new HashMap<>();
+    private static Map<String, Map<ArmorType, Armor>> createLookup() {
+        Map<String, Map<ArmorType, Armor>> lookup = new HashMap<>();
         for (Armor armor : values()) {
-            lookup.computeIfAbsent(armor.material, ignored -> new HashMap<>())
+            lookup.computeIfAbsent(armor.assetPath, ignored -> new HashMap<>())
                     .put(armor.type, armor);
         }
         return lookup;
+    }
+
+    private static boolean vsq$assetKeyMatches(String fullAssetKey, String assetPath) {
+        return fullAssetKey.endsWith(":" + assetPath)
+                || fullAssetKey.endsWith("/" + assetPath + "]")
+                || fullAssetKey.contains(":" + assetPath + "]");
     }
 
 }
