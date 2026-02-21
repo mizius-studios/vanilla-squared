@@ -9,3 +9,8 @@ script = ""
 name = "Run"
 icon = "run"
 command = "./gradlew build --no-daemon"
+
+[[actions]]
+name = "Client"
+icon = "test"
+command = "./compileClient.sh"
