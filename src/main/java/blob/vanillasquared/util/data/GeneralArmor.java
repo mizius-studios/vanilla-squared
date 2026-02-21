@@ -9,8 +9,6 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.spongepowered.asm.mixin.Unique;
 
 public class GeneralArmor {
-
-    public static ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
     @Unique
     private static void vsq$armorModifier(ItemAttributeModifiers.Builder builder, Identifier id, double value, EquipmentSlotGroup slotGroup) {
         builder.add(Attributes.ARMOR, new AttributeModifier(id, value, AttributeModifier.Operation.ADD_VALUE), slotGroup);
@@ -32,6 +30,7 @@ public class GeneralArmor {
     }
 
     public GeneralArmor(Identifier identifier, EquipmentSlotGroup slotGroup, double attributeArmor, double attributeArmorToughness, double attributeKnockbackResistance, double attributeMaceProtection) {
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
         vsq$armorModifier(builder, identifier, attributeArmor, slotGroup);
         vsq$armorToughnessModifier(builder, identifier, attributeArmorToughness, slotGroup);
         vsq$armorKnockbackResistanceModifier(builder, identifier, attributeKnockbackResistance, slotGroup);
