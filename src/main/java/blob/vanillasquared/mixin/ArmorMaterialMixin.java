@@ -57,17 +57,11 @@ public class ArmorMaterialMixin {
             Map.entry(Armor.TURTLE_HELMET, new GeneralArmor(vsqIdentifiers.vsqArmorHelmetOverride.identifier(), EquipmentSlotGroup.HEAD, -3.2d, 3.0d,3.0d,3.0d))
     );
 
-    @Unique
-    private static final Identifier vsqArmorChestplateOverride = Identifier.fromNamespaceAndPath("vanillasquared", "armor_chestplate_override");
-    @Unique
-    private static final Identifier vsqArmorLeggingsOverride = Identifier.fromNamespaceAndPath("vanillasquared", "armor_leggings_override");
-    @Unique
-    private static final Identifier vsqArmorBootsOverride = Identifier.fromNamespaceAndPath("vanillasquared", "armor_boots_override");
-    @Unique
-    private static final Identifier vsqArmorHelmetOverride = Identifier.fromNamespaceAndPath("vanillasquared", "armor_helmet_override");
-
     @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceNetheriteArmor(ArmorType armorType, CallbackInfoReturnable<ItemAttributeModifiers> cir) {
+        ItemAttributeModifiers.Builder builder = ARMOR.get(ItemAttributeModifiers.Builder builder);
+        cir.setReturnValue(builder.build());
+        /*
         if (ArmorMaterials.NETHERITE.equals(this)) {
             switch (armorType) {
                 case CHESTPLATE -> {
@@ -278,5 +272,6 @@ public class ArmorMaterialMixin {
     private static void vsq$maceProtectionModifier(ItemAttributeModifiers.Builder builder, Identifier id, double value, EquipmentSlotGroup slotGroup) {
         builder.add(RegisterAttributes.maceProtection, new AttributeModifier(id, value, AttributeModifier.Operation.ADD_VALUE), slotGroup);
     }
-
+    */
+    }
 }
