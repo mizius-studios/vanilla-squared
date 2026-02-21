@@ -75,23 +75,23 @@ public enum Armor {
 
     public static Armor of(ArmorMaterial material, ArmorType type) {
         return find(material, type)
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "No Armor constant for material " + material + " and type " + type));
+            .orElseThrow(() -> new IllegalArgumentException(
+                "No Armor constant for material " + material + " and type " + type));
     }
 
     private static Map<String, Map<ArmorType, Armor>> createLookup() {
         Map<String, Map<ArmorType, Armor>> lookup = new HashMap<>();
         for (Armor armor : values()) {
             lookup.computeIfAbsent(armor.assetPath, ignored -> new HashMap<>())
-                    .put(armor.type, armor);
+                .put(armor.type, armor);
         }
         return lookup;
     }
 
     private static boolean vsq$assetKeyMatches(String fullAssetKey, String assetPath) {
         return fullAssetKey.endsWith(":" + assetPath)
-                || fullAssetKey.endsWith("/" + assetPath + "]")
-                || fullAssetKey.contains(":" + assetPath + "]");
+            || fullAssetKey.endsWith("/" + assetPath + "]")
+            || fullAssetKey.contains(":" + assetPath + "]");
     }
 
 }
