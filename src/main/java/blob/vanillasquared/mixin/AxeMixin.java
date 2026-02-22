@@ -41,11 +41,11 @@ public abstract class AxeMixin {
 
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(6.0d, -3.2d, -0.5d),
-            ToolMaterial.STONE, new GeneralWeapon(7.0d, -3.3d, -0.5d),
-            ToolMaterial.COPPER, new GeneralWeapon(7.0d, -3.0d, -0.5d),
-            ToolMaterial.IRON, new GeneralWeapon(9.0d, -3.0d, -0.5d),
-            ToolMaterial.GOLD, new GeneralWeapon(7.0d, -2.9d, 0.0d),
+            ToolMaterial.WOOD, new GeneralWeapon(5.0d, -3.2d, -0.5d),
+            ToolMaterial.STONE, new GeneralWeapon(6.0d, -3.3d, -0.5d),
+            ToolMaterial.COPPER, new GeneralWeapon(6.0d, -3.0d, -0.5d),
+            ToolMaterial.IRON, new GeneralWeapon(8.0d, -3.0d, -0.5d),
+            ToolMaterial.GOLD, new GeneralWeapon(6.0d, -2.9d, 0.0d),
             ToolMaterial.DIAMOND, new GeneralWeapon(10.0d, -3.0d, -0.5d),
             ToolMaterial.NETHERITE, new GeneralWeapon(11.0d, -3.0d, -0.5d)
     );
@@ -58,7 +58,7 @@ public abstract class AxeMixin {
             ToolMaterial.IRON, new BlockComponent(0.85F, 5.0F, 0.4F, 2.0F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
             ToolMaterial.GOLD, new BlockComponent(0F, 5.0F, 1.0F, 0.5F, SoundEvents.IRON_PLACE, SoundEvents.ZOMBIE_ATTACK_IRON_DOOR),
             ToolMaterial.DIAMOND, new BlockComponent(0.95F, 5.0F, 0.5F, 1.0F, SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_CLUSTER_BREAK),
-            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 5.0F, 0.625F, 1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
+            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 5.0F, 0.55F, 1.0F, SoundEvents.NETHERITE_BLOCK_PLACE, SoundEvents.NETHERITE_BLOCK_BREAK)
     );
 
     @Unique

@@ -24,13 +24,13 @@ public class ToolMaterialMixin {
 
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> SWORD = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(4.0d, -2.4d, 0.0d),
-            ToolMaterial.STONE, new GeneralWeapon(5.0d, -2.4d, 0.0d),
-            ToolMaterial.COPPER, new GeneralWeapon(5.0d, -2.4d, 0.0d),
-            ToolMaterial.IRON, new GeneralWeapon(6.0d, -2.4d, 0.0d),
-            ToolMaterial.GOLD, new GeneralWeapon(4.0d, -2.4d, 0.0d),
-            ToolMaterial.DIAMOND, new GeneralWeapon(7.0d, -2.4d, 0.0d),
-            ToolMaterial.NETHERITE, new GeneralWeapon(8.0d, -2.4d, 0.0d)
+            ToolMaterial.WOOD, new GeneralWeapon(3.0d, -2.4d, 0.0d),
+            ToolMaterial.STONE, new GeneralWeapon(4.0d, -2.4d, 0.0d),
+            ToolMaterial.COPPER, new GeneralWeapon(4.0d, -2.4d, 0.0d),
+            ToolMaterial.IRON, new GeneralWeapon(5.0d, -2.4d, 0.0d),
+            ToolMaterial.GOLD, new GeneralWeapon(5.0d, -2.4d, 0.0d),
+            ToolMaterial.DIAMOND, new GeneralWeapon(6.0d, -2.4d, 0.0d),
+            ToolMaterial.NETHERITE, new GeneralWeapon(9.0d, -2.4d, 0.0d)
     );
 
     @Unique
