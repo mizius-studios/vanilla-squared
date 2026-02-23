@@ -12,11 +12,11 @@ public class GeneralWeapon {
     public GeneralWeapon(Identifier identifier, EquipmentSlotGroup slotGroup, double attackDMG, double attackSpeed, double attackRange) {
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
         if (attackDMG != 0)
-            builder.add(Attributes.ARMOR, new AttributeModifier(identifier, attackDMG, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+            builder.add(Attributes.ATTACK_DAMAGE, new AttributeModifier(identifier, attackDMG, AttributeModifier.Operation.ADD_VALUE), slotGroup);
         if (attackSpeed != 0)
-            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(identifier, attackSpeed, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+            builder.add(Attributes.ATTACK_SPEED, new AttributeModifier(identifier, attackSpeed, AttributeModifier.Operation.ADD_VALUE), slotGroup);
         if (attackRange != 0)
-            builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(identifier, attackRange, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+            builder.add(Attributes.ENTITY_INTERACTION_RANGE, new AttributeModifier(identifier, attackRange, AttributeModifier.Operation.ADD_VALUE), slotGroup);
         this.modifiers = builder.build();
     }
 

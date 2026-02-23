@@ -37,7 +37,7 @@ public class ItemsMixin {
 
     @Inject(method = "registerItem(Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", at = @At("HEAD"))
     private static void registerItem(String string, Item.Properties properties, CallbackInfoReturnable<Item> cir) {
-        Dura durability = DURABILITY.getOrDefault(, Dura.DEFAULT);
-        properties.durability(durability.dura());
+        // Dura durability = DURABILITY.getOrDefault(, Dura.DEFAULT);
+        // properties.durability(durability.dura());
     }
 }
