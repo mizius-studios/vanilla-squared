@@ -1,4 +1,4 @@
-package blob.vanillasquared.mixin;
+package blob.vanillasquared.mixin.world.entity;
 
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
 import net.minecraft.world.entity.LivingEntity;

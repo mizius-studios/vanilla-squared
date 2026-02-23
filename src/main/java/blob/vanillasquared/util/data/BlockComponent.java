@@ -1,15 +1,32 @@
 package blob.vanillasquared.util.data;
 
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.item.component.BlocksAttacks;
 
-public record BlockComponent(
+import java.util.List;
+import java.util.Optional;
+
+public class BlockComponent{/*(
         float blockDelay,
         float shieldBreakCooldown,
         float damageReduction,
         float duraDamage,
         SoundEvent blockSound,
         SoundEvent breakSound
-) {
-    public static final BlockComponent DEFAULT = new BlockComponent(0F, 0F, 0F, 1F, SoundEvents.ANVIL_LAND, SoundEvents.ANVIL_BREAK);
+) */
+    private final BlocksAttacks blockComponent;
+
+    public BlockComponent(float blockDelay, float shieldBreakCooldown, float dmgReduction, float duraDMG) {
+        this.blockComponent = new BlocksAttacks(
+                blockDelay,
+                shieldBreakCooldown,
+                List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, dmgReduction)),
+                new BlocksAttacks.ItemDamageFunction(1.0F, 1.0F, duraDMG),
+                Optional.of(DamageTypeTags.BYPASSES_SHIELD),
+                Optional.of(SoundEvents.SHIELD_BLOCK),
+                Optional.of(SoundEvents.SHIELD_BREAK)
+        );
+    }
+    public BlocksAttacks build() { return blockComponent; }
 }

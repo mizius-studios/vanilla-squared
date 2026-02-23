@@ -1,4 +1,4 @@
-package blob.vanillasquared.mixin;
+package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import blob.vanillasquared.util.api.references.Armor;
