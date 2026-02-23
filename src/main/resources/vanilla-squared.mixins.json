@@ -7,6 +7,7 @@
 		"world.item.items.AxeMixin",
 		"world.dmgsources.CombatRulesMixin",
 		"world.entity.entities.FishingRodHookMixin",
+		"world.item.ItemPropertiesMixin",
 		"world.item.ItemsMixin",
 		"world.entity.LivingEntityAttributesMixin",
 		"world.entity.LivingEntityMixin",
