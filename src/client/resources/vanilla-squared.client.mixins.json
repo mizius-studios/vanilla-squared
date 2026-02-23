@@ -3,7 +3,6 @@
 	"package": "blob.vanillasquared.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin",
 		"GuiMixin",
 		"PlayerMixin"
 	],
