@@ -1,4 +1,4 @@
-package blob.vanillasquared.mixin;
+package blob.vanillasquared.mixin.world.dmgsources;
 
 import net.minecraft.world.damagesource.CombatRules;
 import org.spongepowered.asm.mixin.Mixin;

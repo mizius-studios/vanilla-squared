@@ -1,4 +1,4 @@
-package blob.vanillasquared.mixin;
+package blob.vanillasquared.mixin.world.attributes;
 
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import org.spongepowered.asm.mixin.Final;

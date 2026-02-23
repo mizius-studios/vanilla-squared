@@ -3,16 +3,16 @@
 	"package": "blob.vanillasquared.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ArmorMaterialMixin",
-		"AxeMixin",
-		"CombatRulesMixin",
-		"FishingRodHookMixin",
-		"ItemsMixin",
-		"LivingEntityAttributesMixin",
-		"LivingEntityMixin",
-		"PlayerMixin",
-		"RangedAttributeMixin",
-		"ToolMaterialMixin"
+		"world.item.items.ArmorMaterialMixin",
+		"world.item.items.AxeMixin",
+		"world.dmgsources.CombatRulesMixin",
+		"world.entity.entities.FishingRodHookMixin",
+		"world.item.ItemsMixin",
+		"world.entity.LivingEntityAttributesMixin",
+		"world.entity.LivingEntityMixin",
+		"world.entity.entities.PlayerMixin",
+		"world.attributes.RangedAttributeMixin",
+		"world.item.items.ToolMaterialMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
