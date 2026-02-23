@@ -1,4 +1,4 @@
-package blob.vanillasquared.mixin;
+package blob.vanillasquared.mixin.world.entity.entities;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;

@@ -1,9 +1,26 @@
 package blob.vanillasquared.util.data;
 
-public record GeneralWeapon(
-        double attackDamage,
-        double attackSpeed,
-        double entityReach
-) {
-    public static final GeneralWeapon DEFAULT = new GeneralWeapon(0.0d, 0.0d,0.0d);
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+
+public class GeneralWeapon {
+    private final ItemAttributeModifiers modifiers;
+
+    public GeneralWeapon(Identifier identifier, EquipmentSlotGroup slotGroup, double attackDMG, double attackSpeed, double attackRange) {
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        if (attackDMG != 0)
+            builder.add(Attributes.ARMOR, new AttributeModifier(identifier, attackDMG, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        if (attackSpeed != 0)
+            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(identifier, attackSpeed, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        if (attackRange != 0)
+            builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(identifier, attackRange, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        this.modifiers = builder.build();
+    }
+
+    public ItemAttributeModifiers build() {
+        return modifiers;
+    }
 }

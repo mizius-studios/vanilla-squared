@@ -7,8 +7,8 @@ public enum vsqIdentifiers {
     vsqArmorLeggingsOverride(Identifier.fromNamespaceAndPath("vanillasquared", "armor_leggings_override")),
     vsqArmorBootsOverride(Identifier.fromNamespaceAndPath("vanillasquared", "armor_boots_override")),
     vsqArmorHelmetOverride(Identifier.fromNamespaceAndPath("vanillasquared", "armor_helmet_override")),
-    vsqAxeReachOverride(Identifier.fromNamespaceAndPath("vanillasquared", "axe_reach")),
-    vsqSwordReachOverride(Identifier.fromNamespaceAndPath("vanillasquared", "sword_reach"));
+    vsqSwordOverride(Identifier.fromNamespaceAndPath("vanillasquared", "axe_override")),
+    vsqAxeOverride(Identifier.fromNamespaceAndPath("vanillasquared", "sword_override"));
 
     private final Identifier identifier;
 
