@@ -1,8 +1,7 @@
 package blob.vanillasquared.mixin.world.entity;
 
-import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
+import blob.vanillasquared.util.combat.DamageUtil;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,14 +13,6 @@ public abstract class LivingEntityMixin {
 
     @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private float vsq$applyAttributeProtections(float amount, ServerLevel level, DamageSource source) {
-        LivingEntity entity = (LivingEntity) (Object) this;
-
-        if (source.is(DamageTypeTags.IS_MACE_SMASH)) {
-            double protection = entity.getAttributeValue(RegisterAttributes.maceProtection);
-            protection = Math.max(0.0, Math.min(1.0, protection));
-            return Math.max(amount * (1.0F - (float) protection), 0.0F);
-        }
-
-        return Math.max(amount, 0.0F);
+        return DamageUtil.applyMaceProtection((LivingEntity) (Object) this, source, amount);
     }
 }
