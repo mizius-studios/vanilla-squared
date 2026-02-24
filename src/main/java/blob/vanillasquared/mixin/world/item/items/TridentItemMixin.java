@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class TridentItemMixin {
     @Inject(method = "createAttributes", at = @At("HEAD"), cancellable = true)
     private static void createAttributes(CallbackInfoReturnable<ItemAttributeModifiers> cir) {
-        GeneralWeapon trident = new GeneralWeapon(vsqIdentifiers.vsqTridentOverride.identifier(), EquipmentSlotGroup.MAINHAND, 7.0f, -2.875f, +1.0f);
+        GeneralWeapon trident = new GeneralWeapon(vsqIdentifiers.vsqTridentOverride.identifier(), EquipmentSlotGroup.MAINHAND, 7.0f, -2.875f, +0.5f);
         cir.setReturnValue(trident.build());
     }
 }
