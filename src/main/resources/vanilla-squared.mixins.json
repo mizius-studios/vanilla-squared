@@ -1,24 +1,25 @@
 {
-	"required": true,
-	"package": "blob.vanillasquared.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"world.item.items.ArmorMaterialMixin",
-		"world.item.items.AxeMixin",
-		"world.dmgsources.CombatRulesMixin",
-		"world.entity.entities.FishingRodHookMixin",
-		"world.item.ItemPropertiesMixin",
-		"world.item.ItemsMixin",
-		"world.entity.LivingEntityAttributesMixin",
-		"world.entity.LivingEntityMixin",
-		"world.entity.entities.PlayerMixin",
-		"world.attributes.RangedAttributeMixin",
-		"world.item.items.ToolMaterialMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
+  "required": true,
+  "package": "blob.vanillasquared.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "world.attributes.RangedAttributeMixin",
+    "world.dmgsources.CombatRulesMixin",
+    "world.entity.LivingEntityAttributesMixin",
+    "world.entity.LivingEntityMixin",
+    "world.entity.entities.FishingRodHookMixin",
+    "world.entity.entities.PlayerMixin",
+    "world.item.ItemPropertiesMixin",
+    "world.item.ItemsMixin",
+    "world.item.items.ArmorMaterialMixin",
+    "world.item.items.AxeMixin",
+    "world.item.items.ToolMaterialMixin",
+    "world.item.items.TridentItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
 	}
 }
