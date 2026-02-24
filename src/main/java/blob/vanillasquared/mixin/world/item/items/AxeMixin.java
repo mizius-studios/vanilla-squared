@@ -38,13 +38,13 @@ public abstract class AxeMixin {
 
     @Unique
     private static final Map<ToolMaterial, BlockComponent> BLOCK_COMPONENT = Map.of(
-            ToolMaterial.WOOD, new BlockComponent(0.1F, 0.25F, 0.2F, 2.0F),
+            ToolMaterial.WOOD, new BlockComponent(0.25F, 0.25F, 0.2F, 2.0F),
             ToolMaterial.STONE, new BlockComponent(0.4F, 0.3F, 0.2F, 1.0F),
             ToolMaterial.COPPER, new BlockComponent(0.5F, 0.25F, 0.25F, 2.0F),
-            ToolMaterial.IRON, new BlockComponent(0.85F, 0.4F, 0.4F, 2.0F),
+            ToolMaterial.IRON, new BlockComponent(0.6F, 0.4F, 0.4F, 2.0F),
             ToolMaterial.GOLD, new BlockComponent(0F, 0.0F, 1.0F, 0.5F),
-            ToolMaterial.DIAMOND, new BlockComponent(0.95F, 0.5F, 0.5F, 1.0F),
-            ToolMaterial.NETHERITE, new BlockComponent(1.0F, 0.55F, 0.55F, 1.0F)
+            ToolMaterial.DIAMOND, new BlockComponent(0.65F, 0.5F, 0.5F, 1.0F),
+            ToolMaterial.NETHERITE, new BlockComponent(0.7F, 0.55F, 0.55F, 1.0F)
     );
 
     @Unique
