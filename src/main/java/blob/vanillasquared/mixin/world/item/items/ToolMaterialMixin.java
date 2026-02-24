@@ -8,9 +8,11 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.Block;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -29,7 +32,19 @@ import java.util.Map;
 public abstract class ToolMaterialMixin {
 
     @Shadow
+    @Final
+    private TagKey<Block> incorrectBlocksForDrops;
+
+    @Shadow
+    @Final
+    private float speed;
+
+    @Shadow
     private Item.Properties applyCommonProperties(Item.Properties properties) {
+        throw new AssertionError();
+    }
+    @Shadow
+    private ItemAttributeModifiers createToolAttributes(float f, float g) {
         throw new AssertionError();
     }
     @Unique
@@ -61,8 +76,15 @@ public abstract class ToolMaterialMixin {
             return;
         }
 
+        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+        cir.setReturnValue(this.applyCommonProperties(properties).component(DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(DataComponents.WEAPON, new Weapon(1)));
+    }
+    @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
+    private void applyToolProperties (Item.Properties properties, TagKey<Block> tagKey, float f, float g, float h, CallbackInfoReturnable<Item.Properties> cir) {
+        ToolMaterial material = (ToolMaterial) (Object) this;
         Dura durability = DURABILITY.getOrDefault(material, Dura.DEFAULT);
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
-        cir.setReturnValue(this.applyCommonProperties(properties).component(DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(DataComponents.WEAPON, new Weapon(1)).durability(durability.dura()));
+
+        cir.setReturnValue(this.applyCommonProperties(properties).component(DataComponents.TOOL, new Tool(List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(this.incorrectBlocksForDrops)), Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tagKey), this.speed)), 1.0F, 1, true)).attributes(this.createToolAttributes(f, g)).component(DataComponents.WEAPON, new Weapon(2, h)).durability(durability.dura()));
     }
 }
