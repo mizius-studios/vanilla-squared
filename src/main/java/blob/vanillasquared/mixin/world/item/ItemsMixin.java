@@ -16,7 +16,7 @@ public class ItemsMixin {
 
     @Inject(method = "registerItem(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", at = @At("HEAD"))
     private static void registerItem(String string, Function<Item.Properties, Item> function, Item.Properties properties, CallbackInfoReturnable<Item> cir) {
-        BlockComponent shieldBlockComponent = new BlockComponent(1.0f, 1.0f, 0.6f, 3.0f);
+        BlockComponent shieldBlockComponent = new BlockComponent(1.0f, 1.0f, 0.82f, 3.0f);
         switch(string) {
             case "fishing_rod": properties.durability(250); break;
             case "potion": properties.stacksTo(16); break;
