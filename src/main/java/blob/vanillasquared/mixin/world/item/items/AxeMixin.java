@@ -2,7 +2,6 @@ package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.data.BlockComponent;
 import blob.vanillasquared.util.data.GeneralWeapon;
-import blob.vanillasquared.util.data.Dura;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
@@ -47,17 +46,6 @@ public abstract class AxeMixin {
             ToolMaterial.NETHERITE, new BlockComponent(0.7F, 0.55F, 0.55F, 1.0F)
     );
 
-    @Unique
-    private static final Map<ToolMaterial, Dura> DURABILITY = Map.of(
-            ToolMaterial.WOOD, new Dura(75),
-            ToolMaterial.STONE, new Dura(150),
-            ToolMaterial.COPPER, new Dura(200),
-            ToolMaterial.IRON, new Dura(250),
-            ToolMaterial.GOLD, new Dura(100),
-            ToolMaterial.DIAMOND, new Dura(1550),
-            ToolMaterial.NETHERITE, new Dura(2069)
-    );
-
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
     public void init(ToolMaterial toolMaterial, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
         BlockComponent blockComponent = BLOCK_COMPONENT.get(toolMaterial);
@@ -66,8 +54,6 @@ public abstract class AxeMixin {
             return;
         }
 
-        Dura durability = DURABILITY.getOrDefault(toolMaterial, Dura.DEFAULT);
-
-        cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, blockComponent.build()).component(DataComponents.WEAPON, new Weapon(1, 5.0F)).attributes(generalWeapon.build()).durability(durability.dura()));
+        cir.setReturnValue(this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, f, g, 5.0F).component(DataComponents.BLOCKS_ATTACKS, blockComponent.build()).component(DataComponents.WEAPON, new Weapon(1, 5.0F)).attributes(generalWeapon.build()));
     }
 }
