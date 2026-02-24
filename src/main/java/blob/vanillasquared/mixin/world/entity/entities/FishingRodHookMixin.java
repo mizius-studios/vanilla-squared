@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SimpleExplosionDamageCalculator;
 import net.minecraft.world.phys.EntityHitResult;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,7 +37,9 @@ import java.util.Optional;
 @Mixin(FishingHook.class)
 public abstract class FishingRodHookMixin extends Projectile {
 
+    @Unique
     private static final float BASE_DAMAGE = 0.5F;
+    @Unique
     private static final float BASE_KNOCKBACK = 0.4F;
 
     public FishingRodHookMixin(EntityType<? extends Projectile> entityType, Level level) {
