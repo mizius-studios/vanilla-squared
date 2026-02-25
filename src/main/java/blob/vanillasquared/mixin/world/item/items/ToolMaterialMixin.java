@@ -1,5 +1,6 @@
 package blob.vanillasquared.mixin.world.item.items;
 
+import blob.vanillasquared.util.builder.components.DualWieldComponent;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.builder.durability.Durability;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -68,10 +70,23 @@ public abstract class ToolMaterialMixin {
             ToolMaterial.DIAMOND, new Durability(1550),
             ToolMaterial.NETHERITE, new Durability(2069)
     );
+
+    @Unique
+    private static final Map<ToolMaterial, DualWieldComponent> DUAL_WIELD = Map.of(
+            ToolMaterial.WOOD, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
+            ToolMaterial.STONE, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
+            ToolMaterial.COPPER, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
+            ToolMaterial.IRON, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
+            ToolMaterial.GOLD, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
+            ToolMaterial.DIAMOND, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
+            ToolMaterial.NETHERITE, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200)
+    );
+
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         GeneralWeapon swordAttributes = SWORD.get(material);
+        DualWieldComponent dualWieldSword = DUAL_WIELD.get(material);
         if (swordAttributes == null) {
             return;
         }
