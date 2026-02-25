@@ -7,14 +7,7 @@ import net.minecraft.world.item.component.BlocksAttacks;
 import java.util.List;
 import java.util.Optional;
 
-public class BlockComponent{/*(
-        float blockDelay,
-        float shieldBreakCooldown,
-        float damageReduction,
-        float duraDamage,
-        SoundEvent blockSound,
-        SoundEvent breakSound
-) */
+public class BlockComponent{
     private final BlocksAttacks blockComponent;
 
     public BlockComponent(float blockDelay, float shieldBreakCooldown, float dmgReduction, float duraDMG) {
