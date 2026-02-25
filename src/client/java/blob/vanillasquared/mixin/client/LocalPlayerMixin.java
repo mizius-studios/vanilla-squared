@@ -23,7 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Environment(EnvType.CLIENT)
 @Mixin(LocalPlayer.class)
-public abstract class LocalPlayerMixin {
+public abstract class
+LocalPlayerMixin {
 
     @Inject(method = "raycastHitResult", at = @At("RETURN"), cancellable = true)
     private void vsq$allowHitThroughGrass(float tickDelta, Entity cameraEntity, CallbackInfoReturnable<HitResult> cir) {

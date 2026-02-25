@@ -1,7 +1,9 @@
 package blob.vanillasquared;
 
 import net.fabricmc.api.ModInitializer;
+import blob.vanillasquared.util.combat.DualWieldEvents;
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
+import blob.vanillasquared.util.modules.components.RegisterComponents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +15,8 @@ public class VanillaSquared implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		TestItem.initialize();
+		RegisterComponents.initialize();
+		DualWieldEvents.initialize();
 
 		LOGGER.info("Loaded 1 Blob Mods");
 
