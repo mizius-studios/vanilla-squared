@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.data.BlockComponent;
-import blob.vanillasquared.util.data.GeneralWeapon;
+import blob.vanillasquared.util.builder.components.BlockComponent;
+import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;

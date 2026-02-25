@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.api.references;
+package blob.vanillasquared.util.api.references.armor;
 
 public enum ArmorKeys {
     LEATHER_ARMOR("leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots"),

@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.data;
+package blob.vanillasquared.util.builder.general;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;

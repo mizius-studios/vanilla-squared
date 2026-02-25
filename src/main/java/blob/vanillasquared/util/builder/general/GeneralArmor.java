@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.data;
+package blob.vanillasquared.util.builder.general;
 
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
 import net.minecraft.resources.Identifier;

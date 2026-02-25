@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.data.GeneralWeapon;
-import blob.vanillasquared.util.data.Dura;
+import blob.vanillasquared.util.builder.general.GeneralWeapon;
+import blob.vanillasquared.util.builder.durability.Durability;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -59,14 +59,14 @@ public abstract class ToolMaterialMixin {
     );
 
     @Unique
-    private static final Map<ToolMaterial, Dura> DURABILITY = Map.of(
-            ToolMaterial.WOOD, new Dura(75),
-            ToolMaterial.STONE, new Dura(150),
-            ToolMaterial.COPPER, new Dura(200),
-            ToolMaterial.IRON, new Dura(250),
-            ToolMaterial.GOLD, new Dura(100),
-            ToolMaterial.DIAMOND, new Dura(1550),
-            ToolMaterial.NETHERITE, new Dura(2069)
+    private static final Map<ToolMaterial, Durability> DURABILITY = Map.of(
+            ToolMaterial.WOOD, new Durability(75),
+            ToolMaterial.STONE, new Durability(150),
+            ToolMaterial.COPPER, new Durability(200),
+            ToolMaterial.IRON, new Durability(250),
+            ToolMaterial.GOLD, new Durability(100),
+            ToolMaterial.DIAMOND, new Durability(1550),
+            ToolMaterial.NETHERITE, new Durability(2069)
     );
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
@@ -82,7 +82,7 @@ public abstract class ToolMaterialMixin {
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
     private void applyToolProperties (Item.Properties properties, TagKey<Block> tagKey, float f, float g, float h, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
-        Dura durability = DURABILITY.getOrDefault(material, Dura.DEFAULT);
+        Durability durability = DURABILITY.getOrDefault(material, Durability.DEFAULT);
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
 
         cir.setReturnValue(this.applyCommonProperties(properties).component(DataComponents.TOOL, new Tool(List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(this.incorrectBlocksForDrops)), Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tagKey), this.speed)), 1.0F, 1, true)).attributes(this.createToolAttributes(f, g)).component(DataComponents.WEAPON, new Weapon(2, h)).durability(durability.dura()));

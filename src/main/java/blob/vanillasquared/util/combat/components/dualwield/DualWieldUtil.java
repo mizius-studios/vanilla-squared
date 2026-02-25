@@ -1,6 +1,6 @@
-package blob.vanillasquared.util.combat;
+package blob.vanillasquared.util.combat.components.dualwield;
 
-import blob.vanillasquared.util.data.DualWieldComponent;
+import blob.vanillasquared.util.builder.components.DualWieldComponent;
 import blob.vanillasquared.util.modules.components.RegisterComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;

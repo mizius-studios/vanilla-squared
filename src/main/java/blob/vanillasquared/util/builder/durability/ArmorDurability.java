@@ -1,7 +1,7 @@
-package blob.vanillasquared.util.data;
+package blob.vanillasquared.util.builder.durability;
 
-import blob.vanillasquared.util.api.references.ArmorKeys;
-import blob.vanillasquared.util.api.references.Armor;
+import blob.vanillasquared.util.api.references.armor.ArmorKeys;
+import blob.vanillasquared.util.api.references.armor.Armor;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 
@@ -10,21 +10,21 @@ import java.util.Optional;
 
 public final class ArmorDurability {
 
-    private static final Map<ArmorKeys, Dura> DURABILITY = Map.of(
-            ArmorKeys.LEATHER_ARMOR, new Dura(96),
-            ArmorKeys.COPPER_ARMOR, new Dura(167),
-            ArmorKeys.CHAINMAIL_ARMOR, new Dura(300),
-            ArmorKeys.IRON_ARMOR, new Dura(325),
-            ArmorKeys.GOLDEN_ARMOR, new Dura(125),
-            ArmorKeys.DIAMOND_ARMOR, new Dura(450),
-            ArmorKeys.NETHERITE_ARMOR, new Dura(569),
-            ArmorKeys.TURTLE_ARMOR, new Dura(569)
+    private static final Map<ArmorKeys, Durability> DURABILITY = Map.of(
+            ArmorKeys.LEATHER_ARMOR, new Durability(96),
+            ArmorKeys.COPPER_ARMOR, new Durability(167),
+            ArmorKeys.CHAINMAIL_ARMOR, new Durability(300),
+            ArmorKeys.IRON_ARMOR, new Durability(325),
+            ArmorKeys.GOLDEN_ARMOR, new Durability(125),
+            ArmorKeys.DIAMOND_ARMOR, new Durability(450),
+            ArmorKeys.NETHERITE_ARMOR, new Durability(569),
+            ArmorKeys.TURTLE_ARMOR, new Durability(569)
     );
 
     private ArmorDurability() {
     }
 
-    public static Optional<Dura> findByMaterial(ArmorMaterial material) {
+    public static Optional<Durability> findByMaterial(ArmorMaterial material) {
         return Armor.find(material, ArmorType.HELMET)
                 .map(ArmorDurability::toArmorKey)
                 .map(DURABILITY::get);

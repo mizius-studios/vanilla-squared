@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.combat;
+package blob.vanillasquared.util.combat.components.dualwield;
 
 public interface DualWieldPlayerData {
     int vsq$getDualWieldCritCharges();

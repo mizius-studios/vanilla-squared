@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.world.item;
 
-import blob.vanillasquared.util.data.BlockComponent;
+import blob.vanillasquared.util.builder.components.BlockComponent;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;

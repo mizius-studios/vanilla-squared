@@ -1,6 +1,6 @@
 package blob.vanillasquared.util.modules.components;
 
-import blob.vanillasquared.util.data.DualWieldComponent;
+import blob.vanillasquared.util.builder.components.DualWieldComponent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;

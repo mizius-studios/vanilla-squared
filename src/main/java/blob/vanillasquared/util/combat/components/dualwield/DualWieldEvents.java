@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.combat;
+package blob.vanillasquared.util.combat.components.dualwield;
 
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.world.InteractionHand;

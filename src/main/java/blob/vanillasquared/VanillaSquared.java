@@ -1,7 +1,7 @@
 package blob.vanillasquared;
 
 import net.fabricmc.api.ModInitializer;
-import blob.vanillasquared.util.combat.DualWieldEvents;
+import blob.vanillasquared.util.combat.components.dualwield.DualWieldEvents;
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
 import blob.vanillasquared.util.modules.components.RegisterComponents;
 import org.slf4j.Logger;

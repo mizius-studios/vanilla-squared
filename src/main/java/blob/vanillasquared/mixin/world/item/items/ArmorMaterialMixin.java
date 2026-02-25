@@ -1,8 +1,8 @@
 package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
-import blob.vanillasquared.util.api.references.Armor;
-import blob.vanillasquared.util.data.GeneralArmor;
+import blob.vanillasquared.util.api.references.armor.Armor;
+import blob.vanillasquared.util.builder.general.GeneralArmor;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.equipment.ArmorMaterial;

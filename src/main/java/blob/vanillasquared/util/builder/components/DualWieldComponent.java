@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.data;
+package blob.vanillasquared.util.builder.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

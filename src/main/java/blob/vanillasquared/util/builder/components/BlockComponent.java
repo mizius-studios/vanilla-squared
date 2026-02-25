@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.data;
+package blob.vanillasquared.util.builder.components;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;

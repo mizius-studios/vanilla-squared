@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.api.references;
+package blob.vanillasquared.util.api.references.armor;
 
 import java.util.HashMap;
 import java.util.Map;
