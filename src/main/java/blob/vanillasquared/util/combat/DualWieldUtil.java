@@ -4,20 +4,17 @@ import blob.vanillasquared.util.data.DualWieldComponent;
 import blob.vanillasquared.util.modules.components.RegisterComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 
 import java.util.HashSet;
@@ -95,54 +92,7 @@ public final class DualWieldUtil {
         return sweepingDamage + offhandAttackDamage * (component.criticalDmg() / 100.0F);
     }
 
-    public static boolean performExtraSweepAttack(ServerLevel serverLevel, Player player, LivingEntity primaryTarget, DamageSource source, float damage) {
-        boolean hitAny = false;
-        primaryTarget.invulnerableTime = 0;
-        primaryTarget.hurtTime = 0;
-        primaryTarget.hurtDuration = 0;
-
-        if (primaryTarget.hurtServer(serverLevel, source, damage)) {
-            applySweepKnockback(player, primaryTarget);
-            hitAny = true;
-        }
-
-        List<LivingEntity> nearbyTargets = player.level().getEntitiesOfClass(
-                LivingEntity.class,
-                primaryTarget.getBoundingBox().inflate(1.0D, 0.25D, 1.0D)
-        );
-
-        for (LivingEntity candidate : nearbyTargets) {
-            if (candidate == player || candidate == primaryTarget) {
-                continue;
-            }
-            if (player.isAlliedTo(candidate)) {
-                continue;
-            }
-            if (candidate instanceof ArmorStand armorStand && armorStand.isMarker()) {
-                continue;
-            }
-            if (player.distanceToSqr(candidate) >= 9.0D) {
-                continue;
-            }
-
-            if (candidate.hurtServer(serverLevel, source, damage)) {
-                applySweepKnockback(player, candidate);
-                hitAny = true;
-            }
-        }
-
-        if (hitAny) {
-            spawnSweepEffects(serverLevel, player);
-        }
-        return hitAny;
-    }
-
-    private static void applySweepKnockback(Player player, LivingEntity target) {
-        float yawRadians = player.getYRot() * ((float) Math.PI / 180.0F);
-        target.knockback(0.4D, Mth.sin(yawRadians), -Mth.cos(yawRadians));
-    }
-
-    private static void spawnSweepEffects(ServerLevel serverLevel, Player player) {
+    public static void spawnSweepEffects(ServerLevel serverLevel, Player player) {
         player.level().playSound(
                 null,
                 player.getX(),
@@ -168,6 +118,20 @@ public final class DualWieldUtil {
                 zOffset,
                 0.0D
         );
+    }
+
+    public static void playCriticalEffects(Player player, LivingEntity target) {
+        player.level().playSound(
+                null,
+                player.getX(),
+                player.getY(),
+                player.getZ(),
+                SoundEvents.PLAYER_ATTACK_CRIT,
+                player.getSoundSource(),
+                1.0F,
+                1.0F
+        );
+        player.crit(target);
     }
 
     private static boolean hasMatchingIdentifier(List<String> left, List<String> right) {

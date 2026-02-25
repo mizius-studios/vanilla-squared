@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -32,6 +33,10 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
     private ItemStack vsq$enchantSwapStack = ItemStack.EMPTY;
     @Unique
     private int vsq$dualWieldCritCharges;
+    @Unique
+    private float vsq$queuedDualExtraDamage;
+    @Unique
+    private boolean vsq$queuedDualCriticalFeedback;
 
     @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private float vsq$applyMaceProtection(float amount, ServerLevel level, DamageSource source) {
@@ -40,6 +45,9 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
 
     @Inject(method = "attack", at = @At("HEAD"))
     private void vsq$applyMergedEnchantments(Entity target, CallbackInfo ci) {
+        this.vsq$queuedDualExtraDamage = 0.0F;
+        this.vsq$queuedDualCriticalFeedback = false;
+
         Player player = (Player) (Object) this;
         if (!(player.level() instanceof ServerLevel)) {
             return;
@@ -57,6 +65,40 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
         this.vsq$enchantSwapStack = mainhand;
         this.vsq$dualEnchantSwapActive = true;
         mainhand.set(DataComponents.ENCHANTMENTS, DualWieldUtil.mergeEnchantments(mainhand, offhand, active.get()));
+
+        if (!(target instanceof LivingEntity)) {
+            return;
+        }
+        if (player.getAttackStrengthScale(0.5F) <= 0.9F) {
+            return;
+        }
+
+        DualWieldComponent offhandComponent = active.get().offhand();
+        float offhandAttackDamage = DualWieldUtil.getItemAttackDamage(offhand);
+        if (offhandAttackDamage <= 0.0F) {
+            return;
+        }
+
+        boolean criticalBuffActive = this.vsq$dualWieldCritCharges > 0;
+        float extraHitDamage = DualWieldUtil.calculateExtraSweepDamage(offhandAttackDamage, offhandComponent, criticalBuffActive);
+        if (extraHitDamage <= 0.0F) {
+            return;
+        }
+
+        this.vsq$queuedDualExtraDamage = extraHitDamage;
+        this.vsq$queuedDualCriticalFeedback = criticalBuffActive;
+    }
+
+    @ModifyArg(
+            method = "attack",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/Entity;hurtOrSimulate(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+            ),
+            index = 1
+    )
+    private float vsq$addDualExtraDamageToMainHit(float damage) {
+        return damage + this.vsq$queuedDualExtraDamage;
     }
 
     @Inject(method = "attack", at = @At("RETURN"))
@@ -83,7 +125,7 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
                     shift = At.Shift.AFTER
             )
     )
-    private void vsq$applyDualWieldSweepHit(Entity target, CallbackInfo ci) {
+    private void vsq$playDualWieldFeedback(Entity target, CallbackInfo ci) {
         Player player = (Player) (Object) this;
         if (!(player.level() instanceof ServerLevel serverLevel)) {
             return;
@@ -91,33 +133,14 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
         if (!(target instanceof LivingEntity primaryTarget)) {
             return;
         }
-        if (player.getAttackStrengthScale(0.5F) <= 0.9F) {
+        if (this.vsq$queuedDualExtraDamage <= 0.0F) {
             return;
         }
 
-        ItemStack mainhand = player.getMainHandItem();
-        ItemStack offhand = player.getOffhandItem();
-        var active = DualWieldUtil.getActiveDualWield(mainhand, offhand);
-        if (active.isEmpty()) {
-            return;
-        }
-
-        DualWieldComponent offhandComponent = active.get().offhand();
-        float offhandAttackDamage = DualWieldUtil.getItemAttackDamage(offhand);
-        if (offhandAttackDamage <= 0.0F) {
-            return;
-        }
-
-        boolean criticalBuffActive = this.vsq$dualWieldCritCharges > 0;
-        float extraHitDamage = DualWieldUtil.calculateExtraSweepDamage(offhandAttackDamage, offhandComponent, criticalBuffActive);
-        if (extraHitDamage <= 0.0F) {
-            return;
-        }
-
-        DamageSource source = serverLevel.damageSources().playerAttack(player);
-        boolean hitAny = DualWieldUtil.performExtraSweepAttack(serverLevel, player, primaryTarget, source, extraHitDamage);
-        if (hitAny && criticalBuffActive && this.vsq$consumeDualWieldCritCharge()) {
-            player.crit(primaryTarget);
+        DualWieldUtil.spawnSweepEffects(serverLevel, player);
+        if (this.vsq$queuedDualCriticalFeedback) {
+            DualWieldUtil.playCriticalEffects(player, primaryTarget);
+            this.vsq$consumeDualWieldCritCharge();
         }
     }
 
@@ -127,6 +150,8 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
         this.vsq$hadMainEnchantments = false;
         this.vsq$dualEnchantSwapActive = false;
         this.vsq$enchantSwapStack = ItemStack.EMPTY;
+        this.vsq$queuedDualExtraDamage = 0.0F;
+        this.vsq$queuedDualCriticalFeedback = false;
     }
 
     @Override
