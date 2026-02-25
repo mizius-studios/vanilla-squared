@@ -23,13 +23,6 @@ import java.util.Optional;
 import java.util.Set;
 
 public final class DualWieldUtil {
-    private static final Set<Identifier> ADDITIVE_ENCHANTMENTS = Set.of(
-            Identifier.parse("minecraft:fire_aspect"),
-            Identifier.parse("minecraft:looting"),
-            Identifier.parse("minecraft:knockback"),
-            Identifier.parse("minecraft:sweeping_edge")
-    );
-
     private DualWieldUtil() {
     }
 
@@ -58,20 +51,18 @@ public final class DualWieldUtil {
         ItemEnchantments offEnchantments = offhand.getEnchantments();
 
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(mainEnchantments);
-        Set<Identifier> blockedIds = blockedIds(activeDualWield.mainhand().blockedEnchantments(), activeDualWield.offhand().blockedEnchantments());
+        Set<Identifier> nonAdditiveIds = blockedIds(activeDualWield.mainhand().blockedEnchantments(), activeDualWield.offhand().blockedEnchantments());
 
         for (Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment : offEnchantments.keySet()) {
-            if (isBlocked(enchantment, blockedIds)) {
-                continue;
-            }
-
             int offLevel = offEnchantments.getLevel(enchantment);
             if (offLevel <= 0) {
                 continue;
             }
 
             int mainLevel = mainEnchantments.getLevel(enchantment);
-            int mergedLevel = isAdditive(enchantment) ? mainLevel + offLevel : Math.max(mainLevel, offLevel);
+            int mergedLevel = isBlocked(enchantment, nonAdditiveIds)
+                    ? Math.max(mainLevel, offLevel)
+                    : mainLevel + offLevel;
             mutable.set(enchantment, mergedLevel);
         }
 
@@ -84,12 +75,8 @@ public final class DualWieldUtil {
     }
 
     public static float calculateExtraSweepDamage(float offhandAttackDamage, DualWieldComponent component, boolean critical) {
-        float sweepingDamage = offhandAttackDamage * (component.sweepingDmg() / 100.0F);
-        if (!critical) {
-            return sweepingDamage;
-        }
-
-        return sweepingDamage + offhandAttackDamage * (component.criticalDmg() / 100.0F);
+        float percentage = critical ? component.criticalDmg() : component.sweepingDmg();
+        return offhandAttackDamage * (percentage / 100.0F);
     }
 
     public static void spawnSweepEffects(ServerLevel serverLevel, Player player) {
@@ -182,15 +169,6 @@ public final class DualWieldUtil {
 
     private static boolean isBlocked(Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment, Set<Identifier> blockedIds) {
         for (Identifier id : blockedIds) {
-            if (enchantment.is(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean isAdditive(Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment) {
-        for (Identifier id : ADDITIVE_ENCHANTMENTS) {
             if (enchantment.is(id)) {
                 return true;
             }
