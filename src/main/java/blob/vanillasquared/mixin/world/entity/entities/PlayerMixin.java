@@ -137,10 +137,11 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
             return;
         }
 
-        DualWieldUtil.spawnSweepEffects(serverLevel, player);
         if (this.vsq$queuedDualCriticalFeedback) {
             DualWieldUtil.playCriticalEffects(player, primaryTarget);
             this.vsq$consumeDualWieldCritCharge();
+        } else {
+            DualWieldUtil.spawnSweepEffects(serverLevel, player);
         }
     }
 
