@@ -1,11 +1,24 @@
-# Vanilla² ⚔️🛡️
+<div align="center">
 
-Vanilla² is a Fabric combat overhaul for Minecraft 1.21.11.  
-It rebalances weapons, armor, and combat interactions while staying close to the vanilla feel.
+# ⚔️ Vanilla² (Fabric)
 
-## What this mod changes 🎮
+### Armor, Weapons and combat interaction overhaul while staying close to the vanilla feel.
 
-### Core combat rebalance ⚔️
+[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-brightgreen.svg)](https://www.minecraft.net/)
+[![Fabric](https://img.shields.io/badge/Fabric-Compatible-orange.svg)](https://fabricmc.net/)
+
+</div>
+
+## 📦 Installation
+
+### 1️⃣ Download & Install
+- 🔽 Download the latest version from the [releases page](../../releases)
+- 📁 Place the `.jar` file into your `/mods` folder
+
+### 2️⃣ Restart
+Restart your server.
+
+## 🎮 Changes
 
 - Reworks sword, axe, and trident combat stats such as attack damage, attack speed, and interaction tuning
 - Expands armor scaling so high armor values keep working past vanilla limits
@@ -34,43 +47,25 @@ It rebalances weapons, armor, and combat interactions while staying close to the
 - Improves offhand interaction priority for fishing rod and shield related combat cases
 - Extends armor HUD rendering to display armor values above 20 with extra rows
 
-## Tech stack and requirements 🧱
-
+## 🔎 Technological Information 
 - Minecraft 1.21.11
 - Fabric Loader 0.18.4 or newer
 - Fabric API 0.141.2 plus 1.21.11
 - Java 21
 - Gradle via wrapper scripts included in the repo
 
-## Build guide 🔨
+### 📋 Runtime Requirements
+- ⚙️ Fabric Loader + Fabric API
 
-### Quick build
+## 🛠️ Development
 
-```bash
-./gradlew build
-```
+### 📦 Build Artifacts
+- **Runtime Jar** at `/build/libs/<mod>.jar`
 
-Build outputs appear in `build/libs`.
+### 🔨 Building
+- **Gradle Wrappers** included.
+- `./gradlew build` to build **Runtime Jar**.
+- `./gradlew runClient` to run a **dedicated Minecraft client** instance with the mod pre-installed.
 
-### Run in dev client
+</div>
 
-```bash
-./gradlew runClient
-```
-
-If you use the helper scripts, update the destination folder inside each script to match your local launcher profile.
-
-## Project layout 🗂️
-
-- `src/main/java` shared gameplay logic and server side mixins
-- `src/client/java` client side mixins and combat targeting quality of life logic
-- `src/main/resources` Fabric metadata and main mixin config
-- `src/client/resources` client mixin config
-
-## Notes for contributors 🧪
-
-- Java release target is 21
-- Main mod id is `vanilla-squared`
-- Main gameplay hooks are delivered through mixins and Fabric events
-
-Have fun testing and tuning combat ⚡
