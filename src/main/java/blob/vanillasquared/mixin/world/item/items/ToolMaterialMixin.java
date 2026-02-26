@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.combat.components.dualwield.DualWieldComponent;
-import blob.vanillasquared.util.combat.components.hitthrough.HitThroughComponent;
+import blob.vanillasquared.util.builder.components.DualWieldBuilder;
+import blob.vanillasquared.util.builder.components.HitThroughBuilder;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.builder.durability.Durability;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
@@ -11,13 +11,13 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.component.Weapon;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
@@ -74,30 +74,30 @@ public abstract class ToolMaterialMixin {
     );
 
     @Unique
-    private static final Map<ToolMaterial, DualWieldComponent> DUAL_WIELD = Map.of(
-            ToolMaterial.WOOD, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
-            ToolMaterial.STONE, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
-            ToolMaterial.COPPER, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
-            ToolMaterial.IRON, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
-            ToolMaterial.GOLD, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
-            ToolMaterial.DIAMOND, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200),
-            ToolMaterial.NETHERITE, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200)
+    private static final Map<ToolMaterial, DualWieldBuilder> DUAL_WIELD = Map.of(
+            ToolMaterial.WOOD, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.STONE, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.COPPER, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.IRON, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.GOLD, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.DIAMOND, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.NETHERITE, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS)
     );
 
     @Unique
-    private static final HitThroughComponent HIT_THROUGH_PLANTS = new HitThroughComponent(Identifier.fromNamespaceAndPath("vsq", "hit_through"));
+    private static final HitThroughBuilder HIT_THROUGH_PLANTS = new HitThroughBuilder("vsq", "hit_through");
 
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         GeneralWeapon swordAttributes = SWORD.get(material);
-        DualWieldComponent dualWieldSword = DUAL_WIELD.get(material);
+        DualWieldBuilder dualWieldSword = DUAL_WIELD.get(material);
         if (swordAttributes == null) {
             return;
         }
 
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
-        cir.setReturnValue(this.applyCommonProperties(properties).component(net.minecraft.core.component.DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1)).component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS));
+        cir.setReturnValue(this.applyCommonProperties(properties).component(net.minecraft.core.component.DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1)).component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build()).component(DataComponents.DUAL_WIELD, dualWieldSword.build()));
     }
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
     private void applyToolProperties (Item.Properties properties, TagKey<Block> tagKey, float f, float g, float h, CallbackInfoReturnable<Item.Properties> cir) {

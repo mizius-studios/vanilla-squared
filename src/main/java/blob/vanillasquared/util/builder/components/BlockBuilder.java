@@ -7,10 +7,10 @@ import net.minecraft.world.item.component.BlocksAttacks;
 import java.util.List;
 import java.util.Optional;
 
-public class BlockComponent{
+public class BlockBuilder {
     private final BlocksAttacks blockComponent;
 
-    public BlockComponent(float blockDelay, float shieldBreakCooldown, float dmgReduction, float duraDMG) {
+    public BlockBuilder(float blockDelay, float shieldBreakCooldown, float dmgReduction, float duraDMG) {
         this.blockComponent = new BlocksAttacks(
                 blockDelay,
                 shieldBreakCooldown,

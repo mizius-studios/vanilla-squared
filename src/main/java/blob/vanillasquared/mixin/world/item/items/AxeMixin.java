@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.builder.components.BlockComponent;
+import blob.vanillasquared.util.builder.components.BlockBuilder;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import net.minecraft.core.component.DataComponents;
@@ -36,19 +36,19 @@ public abstract class AxeMixin {
     );
 
     @Unique
-    private static final Map<ToolMaterial, BlockComponent> BLOCK_COMPONENT = Map.of(
-            ToolMaterial.WOOD, new BlockComponent(0.25F, 0.25F, 0.2F, 2.0F),
-            ToolMaterial.STONE, new BlockComponent(0.4F, 0.3F, 0.2F, 1.0F),
-            ToolMaterial.COPPER, new BlockComponent(0.5F, 0.25F, 0.25F, 2.0F),
-            ToolMaterial.IRON, new BlockComponent(0.6F, 0.4F, 0.4F, 2.0F),
-            ToolMaterial.GOLD, new BlockComponent(0F, 0.0F, 1.0F, 0.5F),
-            ToolMaterial.DIAMOND, new BlockComponent(0.65F, 0.5F, 0.5F, 1.0F),
-            ToolMaterial.NETHERITE, new BlockComponent(0.7F, 0.55F, 0.55F, 1.0F)
+    private static final Map<ToolMaterial, BlockBuilder> BLOCK_COMPONENT = Map.of(
+            ToolMaterial.WOOD, new BlockBuilder(0.25F, 0.25F, 0.2F, 2.0F),
+            ToolMaterial.STONE, new BlockBuilder(0.4F, 0.3F, 0.2F, 1.0F),
+            ToolMaterial.COPPER, new BlockBuilder(0.5F, 0.25F, 0.25F, 2.0F),
+            ToolMaterial.IRON, new BlockBuilder(0.6F, 0.4F, 0.4F, 2.0F),
+            ToolMaterial.GOLD, new BlockBuilder(0F, 0.0F, 1.0F, 0.5F),
+            ToolMaterial.DIAMOND, new BlockBuilder(0.65F, 0.5F, 0.5F, 1.0F),
+            ToolMaterial.NETHERITE, new BlockBuilder(0.7F, 0.55F, 0.55F, 1.0F)
     );
 
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
     public void init(ToolMaterial toolMaterial, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
-        BlockComponent blockComponent = BLOCK_COMPONENT.get(toolMaterial);
+        BlockBuilder blockComponent = BLOCK_COMPONENT.get(toolMaterial);
         GeneralWeapon generalWeapon = AXE_WEAPON.get(toolMaterial);
         if (blockComponent == null || generalWeapon == null) {
             return;
