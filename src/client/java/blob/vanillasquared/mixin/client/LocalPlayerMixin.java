@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.client;
 
-import blob.vanillasquared.util.builder.components.HitThroughComponent;
+import blob.vanillasquared.util.combat.components.hitthrough.HitThroughComponent;
 import blob.vanillasquared.util.modules.components.DataComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

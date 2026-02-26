@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.builder.components.DualWieldComponent;
-import blob.vanillasquared.util.builder.components.HitThroughComponent;
+import blob.vanillasquared.util.combat.components.dualwield.DualWieldComponent;
+import blob.vanillasquared.util.combat.components.hitthrough.HitThroughComponent;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.builder.durability.Durability;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;

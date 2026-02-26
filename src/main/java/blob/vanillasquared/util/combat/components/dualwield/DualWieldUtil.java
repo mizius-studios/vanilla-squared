@@ -1,9 +1,7 @@
 package blob.vanillasquared.util.combat.components.dualwield;
 
-import blob.vanillasquared.util.builder.components.DualWieldComponent;
-import blob.vanillasquared.util.modules.components.RegisterComponents;
+import blob.vanillasquared.util.modules.components.DataComponents;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -30,12 +28,12 @@ public final class DualWieldUtil {
         if (mainhand.isEmpty() || offhand.isEmpty()) {
             return Optional.empty();
         }
-        if (!mainhand.has(RegisterComponents.dualWield) || !offhand.has(RegisterComponents.dualWield)) {
+        if (!mainhand.has(DataComponents.DUAL_WIELD) || !offhand.has(DataComponents.DUAL_WIELD)) {
             return Optional.empty();
         }
 
-        DualWieldComponent mainComponent = mainhand.get(RegisterComponents.dualWield);
-        DualWieldComponent offComponent = offhand.get(RegisterComponents.dualWield);
+        DualWieldComponent mainComponent = mainhand.get(DataComponents.DUAL_WIELD);
+        DualWieldComponent offComponent = offhand.get(DataComponents.DUAL_WIELD);
         if (mainComponent == null || offComponent == null) {
             return Optional.empty();
         }
@@ -70,7 +68,7 @@ public final class DualWieldUtil {
     }
 
     public static float getItemAttackDamage(ItemStack stack) {
-        ItemAttributeModifiers modifiers = stack.getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
+        ItemAttributeModifiers modifiers = stack.getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
         return (float) modifiers.compute(Attributes.ATTACK_DAMAGE, 0.0D, EquipmentSlot.MAINHAND);
     }
 

@@ -1,7 +1,7 @@
 package blob.vanillasquared.util.modules.components;
 
-import blob.vanillasquared.util.builder.components.DualWieldComponent;
-import blob.vanillasquared.util.builder.components.HitThroughComponent;
+import blob.vanillasquared.util.combat.components.dualwield.DualWieldComponent;
+import blob.vanillasquared.util.combat.components.hitthrough.HitThroughComponent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;

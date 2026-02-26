@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.builder.components;
+package blob.vanillasquared.util.combat.components.hitthrough;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
