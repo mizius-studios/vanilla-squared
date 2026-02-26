@@ -65,7 +65,7 @@ public enum Armor {
     public static Optional<Armor> find(ArmorMaterial material, ArmorType type) {
         String assetKey = material.assetId().toString();
         for (Map.Entry<String, Map<ArmorType, Armor>> entry : BY_ASSET_PATH_AND_TYPE.entrySet()) {
-            if (!vsq$assetKeyMatches(assetKey, entry.getKey())) {
+            if (!assetKeyMatches(assetKey, entry.getKey())) {
                 continue;
             }
             return Optional.ofNullable(entry.getValue().get(type));
@@ -88,7 +88,7 @@ public enum Armor {
         return lookup;
     }
 
-    private static boolean vsq$assetKeyMatches(String fullAssetKey, String assetPath) {
+    private static boolean assetKeyMatches(String fullAssetKey, String assetPath) {
         return fullAssetKey.endsWith(":" + assetPath)
             || fullAssetKey.endsWith("/" + assetPath + "]")
             || fullAssetKey.contains(":" + assetPath + "]");

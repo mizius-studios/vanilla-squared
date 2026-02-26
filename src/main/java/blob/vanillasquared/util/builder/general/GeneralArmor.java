@@ -11,16 +11,28 @@ public class GeneralArmor {
 
     private final ItemAttributeModifiers modifiers;
 
-    public GeneralArmor(Identifier identifier, EquipmentSlotGroup slotGroup, double attributeArmor, double attributeArmorToughness, double attributeKnockbackResistance, double attributeMaceProtection) {
+    public GeneralArmor(
+            Identifier identifier,
+            EquipmentSlotGroup slotGroup,
+            double armor,
+            double armorToughness,
+            double knockbackResistance,
+            double maceProtection
+    ) {
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
-        if (attributeArmor != 0)
-            builder.add(Attributes.ARMOR, new AttributeModifier(identifier, attributeArmor, AttributeModifier.Operation.ADD_VALUE), slotGroup);
-        if (attributeArmorToughness != 0)
-            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(identifier, attributeArmorToughness, AttributeModifier.Operation.ADD_VALUE), slotGroup);
-        if (attributeKnockbackResistance != 0)
-            builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(identifier, attributeKnockbackResistance, AttributeModifier.Operation.ADD_VALUE), slotGroup);
-        if (attributeMaceProtection != 0)
-            builder.add(RegisterAttributes.maceProtection, new AttributeModifier(identifier, attributeMaceProtection, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        if (armor != 0) {
+            builder.add(Attributes.ARMOR, new AttributeModifier(identifier, armor, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        }
+        if (armorToughness != 0) {
+            builder.add(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(identifier, armorToughness, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        }
+        if (knockbackResistance != 0) {
+            builder.add(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(identifier, knockbackResistance, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        }
+        if (maceProtection != 0) {
+            builder.add(RegisterAttributes.maceProtectionAttribute, new AttributeModifier(identifier, maceProtection, AttributeModifier.Operation.ADD_VALUE), slotGroup);
+        }
+
         this.modifiers = builder.build();
     }
 

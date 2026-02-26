@@ -10,7 +10,7 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 
 public class RegisterAttributes {
 
-    public static final Holder<Attribute> maceProtection = register(
+    public static final Holder<Attribute> maceProtectionAttribute = register(
             "mace_protection",
             new RangedAttribute(
                     "Mace Protection",

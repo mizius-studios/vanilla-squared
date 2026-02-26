@@ -13,6 +13,6 @@ public abstract class LivingEntityAttributesMixin {
 
     @Inject(method = "createLivingAttributes", at = @At("RETURN"))
     private static void vsq$addCustomAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
-        cir.getReturnValue().add(RegisterAttributes.maceProtection);
+        cir.getReturnValue().add(RegisterAttributes.maceProtectionAttribute);
     }
 }

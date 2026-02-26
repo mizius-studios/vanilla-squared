@@ -15,16 +15,16 @@ public class DualWieldBuilder {
             int cooldown,
             int criticalHits,
             List<String> blockedEnchantments,
-            int sweepingDmg,
-            int criticalDmg
+            int sweepingDamage,
+            int criticalDamage
     ) {
         this.dualWieldComponent = new DualWieldComponent(
                 identifiers,
                 cooldown,
                 criticalHits,
                 blockedEnchantments,
-                sweepingDmg,
-                criticalDmg
+                sweepingDamage,
+                criticalDamage
         );
     }
 
@@ -33,8 +33,8 @@ public class DualWieldBuilder {
             List<String> identifiers,
             int cooldown,
             int criticalHits,
-            int sweepingDmg,
-            int criticalDmg,
+            int sweepingDamage,
+            int criticalDamage,
             ResourceKey<Enchantment>... blockedEnchantments
     ) {
         this(
@@ -42,8 +42,8 @@ public class DualWieldBuilder {
                 cooldown,
                 criticalHits,
                 Arrays.stream(blockedEnchantments).map(key -> key.identifier().toString()).toList(),
-                sweepingDmg,
-                criticalDmg
+                sweepingDamage,
+                criticalDamage
         );
     }
 

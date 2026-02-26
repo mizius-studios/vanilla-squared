@@ -15,6 +15,6 @@ public class ItemPropertiesMixin {
     @Inject(method = "humanoidArmor", at = @At("RETURN"))
     private void vsq$replaceArmorDurability(ArmorMaterial armorMaterial, ArmorType armorType, CallbackInfoReturnable<Item.Properties> cir) {
         Item.Properties properties = cir.getReturnValue();
-        ArmorDurability.findByMaterial(armorMaterial).ifPresent(dura -> properties.durability(dura.dura()));
+        ArmorDurability.findByMaterial(armorMaterial).ifPresent(durability -> properties.durability(durability.durability()));
     }
 }

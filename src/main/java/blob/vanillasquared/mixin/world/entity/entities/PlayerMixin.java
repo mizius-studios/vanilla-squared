@@ -53,18 +53,18 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
             return;
         }
 
-        ItemStack mainhand = player.getMainHandItem();
-        ItemStack offhand = player.getOffhandItem();
-        var active = DualWieldUtil.getActiveDualWield(mainhand, offhand);
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+        var active = DualWieldUtil.getActiveDualWield(mainHand, offHand);
         if (active.isEmpty()) {
             return;
         }
 
-        this.vsq$originalMainEnchantments = mainhand.getEnchantments();
-        this.vsq$hadMainEnchantments = mainhand.has(DataComponents.ENCHANTMENTS);
-        this.vsq$enchantSwapStack = mainhand;
+        this.vsq$originalMainEnchantments = mainHand.getEnchantments();
+        this.vsq$hadMainEnchantments = mainHand.has(DataComponents.ENCHANTMENTS);
+        this.vsq$enchantSwapStack = mainHand;
         this.vsq$dualEnchantSwapActive = true;
-        mainhand.set(DataComponents.ENCHANTMENTS, DualWieldUtil.mergeEnchantments(mainhand, offhand, active.get()));
+        mainHand.set(DataComponents.ENCHANTMENTS, DualWieldUtil.mergeEnchantments(mainHand, offHand, active.get()));
 
         if (!(target instanceof LivingEntity)) {
             return;
@@ -73,14 +73,14 @@ public abstract class PlayerMixin implements DualWieldPlayerData {
             return;
         }
 
-        DualWieldComponent offhandComponent = active.get().offhand();
-        float offhandAttackDamage = DualWieldUtil.getItemAttackDamage(offhand);
-        if (offhandAttackDamage <= 0.0F) {
+        DualWieldComponent offHandComponent = active.get().offHand();
+        float offHandAttackDamage = DualWieldUtil.getItemAttackDamage(offHand);
+        if (offHandAttackDamage <= 0.0F) {
             return;
         }
 
         boolean criticalBuffActive = this.vsq$dualWieldCritCharges > 0;
-        float extraHitDamage = DualWieldUtil.calculateExtraSweepDamage(offhandAttackDamage, offhandComponent, criticalBuffActive);
+        float extraHitDamage = DualWieldUtil.calculateExtraSweepDamage(offHandAttackDamage, offHandComponent, criticalBuffActive);
         if (extraHitDamage <= 0.0F) {
             return;
         }

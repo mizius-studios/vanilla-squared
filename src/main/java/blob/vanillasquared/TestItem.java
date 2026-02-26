@@ -12,20 +12,16 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 
 public class TestItem {
-	public static <GenericItem extends Item> GenericItem register(String name, Function<Item.Properties, GenericItem> itemFactory, Item.Properties settings) {
-		// Create the item key.
-		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, name));
+    public static <GenericItem extends Item> GenericItem register(String name, Function<Item.Properties, GenericItem> itemFactory, Item.Properties settings) {
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, name));
+        GenericItem item = itemFactory.apply(settings.setId(itemKey));
+        Registry.register(BuiltInRegistries.ITEM, itemKey, item);
+        return item;
+    }
 
-		// Create the item instance.
-		GenericItem item = itemFactory.apply(settings.setId(itemKey));
+    public static final Item TEST_ITEM1 = register("test1", Item::new, new Item.Properties());
 
-		// Register the item.
-		Registry.register(BuiltInRegistries.ITEM, itemKey, item);
-
-		return item;
-	}
-	public static final Item TEST_ITEM1 = register("test1", Item::new, new Item.Properties());
-	public static void initialize() {
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.OP_BLOCKS).register((itemGroup) -> itemGroup.accept(TestItem.TEST_ITEM1));
-	}
+    public static void initialize() {
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.OP_BLOCKS).register(itemGroup -> itemGroup.accept(TEST_ITEM1));
+    }
 }
