@@ -53,13 +53,13 @@ public abstract class ToolMaterialMixin {
 
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> SWORD = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 3.0D, -2.4D, 0.0D),
-            ToolMaterial.STONE, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
-            ToolMaterial.COPPER, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
-            ToolMaterial.IRON, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
-            ToolMaterial.GOLD, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
-            ToolMaterial.DIAMOND, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
-            ToolMaterial.NETHERITE, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 9.0D, -2.4D, 0.0D)
+            ToolMaterial.WOOD, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
+            ToolMaterial.STONE, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
+            ToolMaterial.COPPER, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
+            ToolMaterial.IRON, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
+            ToolMaterial.GOLD, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
+            ToolMaterial.DIAMOND, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 7.0D, -2.4D, 0.0D),
+            ToolMaterial.NETHERITE, new GeneralWeapon(vsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 10.0D, -2.4D, 0.0D)
     );
 
     @Unique

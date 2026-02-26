@@ -11,14 +11,14 @@ import java.util.Optional;
 public final class ArmorDurability {
 
     private static final Map<ArmorKeys, Durability> DURABILITY = Map.of(
-            ArmorKeys.LEATHER_ARMOR, new Durability(96),
-            ArmorKeys.COPPER_ARMOR, new Durability(167),
-            ArmorKeys.CHAINMAIL_ARMOR, new Durability(300),
-            ArmorKeys.IRON_ARMOR, new Durability(325),
-            ArmorKeys.GOLDEN_ARMOR, new Durability(125),
-            ArmorKeys.DIAMOND_ARMOR, new Durability(450),
-            ArmorKeys.NETHERITE_ARMOR, new Durability(569),
-            ArmorKeys.TURTLE_ARMOR, new Durability(569)
+            ArmorKeys.LEATHER_ARMOR, new Durability(196),
+            ArmorKeys.COPPER_ARMOR, new Durability(267),
+            ArmorKeys.CHAINMAIL_ARMOR, new Durability(400),
+            ArmorKeys.IRON_ARMOR, new Durability(425),
+            ArmorKeys.GOLDEN_ARMOR, new Durability(225),
+            ArmorKeys.DIAMOND_ARMOR, new Durability(550),
+            ArmorKeys.NETHERITE_ARMOR, new Durability(669),
+            ArmorKeys.TURTLE_ARMOR, new Durability(669)
     );
 
     private ArmorDurability() {
