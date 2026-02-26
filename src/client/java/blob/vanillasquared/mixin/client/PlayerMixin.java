@@ -23,16 +23,16 @@ public class PlayerMixin {
     @Inject(method = "useItem(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", at = @At("HEAD"), cancellable = true)
     private void vsq$prioritizeRod(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
 
-        ItemStack mainhand = player.getMainHandItem();
+        ItemStack mainHand = player.getMainHandItem();
 
         if (hand == InteractionHand.MAIN_HAND
-                && mainhand.getItem() instanceof AxeItem
+                && mainHand.getItem() instanceof AxeItem
                 && player.getOffhandItem().is(Items.SHIELD)) {
             cir.setReturnValue(InteractionResult.PASS);
             return;
         }
 
-        if (hand == InteractionHand.MAIN_HAND && mainhand.getComponents().has(DataComponents.BLOCKS_ATTACKS)) {
+        if (hand == InteractionHand.MAIN_HAND && mainHand.getComponents().has(DataComponents.BLOCKS_ATTACKS)) {
             ItemStack off = player.getOffhandItem();
 
             if (off.getItem() instanceof FishingRodItem) {

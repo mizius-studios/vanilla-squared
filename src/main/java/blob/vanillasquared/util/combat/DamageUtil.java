@@ -15,7 +15,7 @@ public final class DamageUtil {
             return Math.max(amount, 0.0F);
         }
 
-        double protection = entity.getAttributeValue(RegisterAttributes.maceProtection);
+        double protection = entity.getAttributeValue(RegisterAttributes.maceProtectionAttribute);
         protection = Math.clamp(protection, 0.0, 1.0);
         return Math.max(amount * (1.0F - (float) protection), 0.0F);
     }

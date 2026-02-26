@@ -24,16 +24,16 @@ public final class DualWieldUtil {
     private DualWieldUtil() {
     }
 
-    public static Optional<ActiveDualWield> getActiveDualWield(ItemStack mainhand, ItemStack offhand) {
-        if (mainhand.isEmpty() || offhand.isEmpty()) {
+    public static Optional<ActiveDualWield> getActiveDualWield(ItemStack mainHand, ItemStack offHand) {
+        if (mainHand.isEmpty() || offHand.isEmpty()) {
             return Optional.empty();
         }
-        if (!mainhand.has(DataComponents.DUAL_WIELD) || !offhand.has(DataComponents.DUAL_WIELD)) {
+        if (!mainHand.has(DataComponents.DUAL_WIELD) || !offHand.has(DataComponents.DUAL_WIELD)) {
             return Optional.empty();
         }
 
-        DualWieldComponent mainComponent = mainhand.get(DataComponents.DUAL_WIELD);
-        DualWieldComponent offComponent = offhand.get(DataComponents.DUAL_WIELD);
+        DualWieldComponent mainComponent = mainHand.get(DataComponents.DUAL_WIELD);
+        DualWieldComponent offComponent = offHand.get(DataComponents.DUAL_WIELD);
         if (mainComponent == null || offComponent == null) {
             return Optional.empty();
         }
@@ -44,12 +44,12 @@ public final class DualWieldUtil {
         return Optional.of(new ActiveDualWield(mainComponent, offComponent));
     }
 
-    public static ItemEnchantments mergeEnchantments(ItemStack mainhand, ItemStack offhand, ActiveDualWield activeDualWield) {
-        ItemEnchantments mainEnchantments = mainhand.getEnchantments();
-        ItemEnchantments offEnchantments = offhand.getEnchantments();
+    public static ItemEnchantments mergeEnchantments(ItemStack mainHand, ItemStack offHand, ActiveDualWield activeDualWield) {
+        ItemEnchantments mainEnchantments = mainHand.getEnchantments();
+        ItemEnchantments offEnchantments = offHand.getEnchantments();
 
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(mainEnchantments);
-        Set<Identifier> nonAdditiveIds = blockedIds(activeDualWield.mainhand().blockedEnchantments(), activeDualWield.offhand().blockedEnchantments());
+        Set<Identifier> nonAdditiveIds = blockedIds(activeDualWield.mainHand().blockedEnchantments(), activeDualWield.offHand().blockedEnchantments());
 
         for (Holder<net.minecraft.world.item.enchantment.Enchantment> enchantment : offEnchantments.keySet()) {
             int offLevel = offEnchantments.getLevel(enchantment);
@@ -72,9 +72,9 @@ public final class DualWieldUtil {
         return (float) modifiers.compute(Attributes.ATTACK_DAMAGE, 0.0D, EquipmentSlot.MAINHAND);
     }
 
-    public static float calculateExtraSweepDamage(float offhandAttackDamage, DualWieldComponent component, boolean critical) {
-        float percentage = critical ? component.criticalDmg() : component.sweepingDmg();
-        return offhandAttackDamage * (percentage / 100.0F);
+    public static float calculateExtraSweepDamage(float offHandAttackDamage, DualWieldComponent component, boolean critical) {
+        float percentage = critical ? component.criticalDamage() : component.sweepingDamage();
+        return offHandAttackDamage * (percentage / 100.0F);
     }
 
     public static void spawnSweepEffects(ServerLevel serverLevel, Player player) {
@@ -174,6 +174,6 @@ public final class DualWieldUtil {
         return false;
     }
 
-    public record ActiveDualWield(DualWieldComponent mainhand, DualWieldComponent offhand) {
+    public record ActiveDualWield(DualWieldComponent mainHand, DualWieldComponent offHand) {
     }
 }

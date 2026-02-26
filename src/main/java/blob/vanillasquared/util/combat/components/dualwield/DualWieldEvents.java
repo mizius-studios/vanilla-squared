@@ -18,22 +18,22 @@ public final class DualWieldEvents {
                 return InteractionResult.PASS;
             }
 
-            ItemStack mainhand = player.getMainHandItem();
-            ItemStack offhand = player.getOffhandItem();
-            Optional<DualWieldUtil.ActiveDualWield> active = DualWieldUtil.getActiveDualWield(mainhand, offhand);
+            ItemStack mainHand = player.getMainHandItem();
+            ItemStack offHand = player.getOffhandItem();
+            Optional<DualWieldUtil.ActiveDualWield> active = DualWieldUtil.getActiveDualWield(mainHand, offHand);
             if (active.isEmpty()) {
                 return InteractionResult.PASS;
             }
-            if (player.getCooldowns().isOnCooldown(offhand)) {
+            if (player.getCooldowns().isOnCooldown(offHand)) {
                 return InteractionResult.FAIL;
             }
 
             if (!level.isClientSide()) {
                 DualWieldUtil.ActiveDualWield config = active.get();
-                if (config.offhand().cooldown() > 0) {
-                    player.getCooldowns().addCooldown(offhand, config.offhand().cooldown());
+                if (config.offHand().cooldown() > 0) {
+                    player.getCooldowns().addCooldown(offHand, config.offHand().cooldown());
                 }
-                ((DualWieldPlayerData) player).vsq$setDualWieldCritCharges(config.offhand().criticalHits());
+                ((DualWieldPlayerData) player).vsq$setDualWieldCritCharges(config.offHand().criticalHits());
             }
 
             return InteractionResult.SUCCESS;

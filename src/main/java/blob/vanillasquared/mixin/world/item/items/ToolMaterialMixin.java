@@ -4,7 +4,7 @@ import blob.vanillasquared.util.builder.components.DualWieldBuilder;
 import blob.vanillasquared.util.builder.components.HitThroughBuilder;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.builder.durability.Durability;
-import blob.vanillasquared.util.api.other.vsqIdentifiers;
+import blob.vanillasquared.util.api.other.VsqIdentifiers;
 import blob.vanillasquared.util.modules.components.DataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -28,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -51,15 +50,16 @@ public abstract class ToolMaterialMixin {
     private ItemAttributeModifiers createToolAttributes(float f, float g) {
         throw new AssertionError();
     }
+
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> SWORD = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,3.0d, -2.4d, 0.0d),
-            ToolMaterial.STONE, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,4.0d, -2.4d, 0.0d),
-            ToolMaterial.COPPER, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,4.0d, -2.4d, 0.0d),
-            ToolMaterial.IRON, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,5.0d, -2.4d, 0.0d),
-            ToolMaterial.GOLD, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,5.0d, -2.4d, 0.0d),
-            ToolMaterial.DIAMOND, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,6.0d, -2.4d, 0.0d),
-            ToolMaterial.NETHERITE, new GeneralWeapon(vsqIdentifiers.vsqSwordOverride.identifier(), EquipmentSlotGroup.MAINHAND,9.0d, -2.4d, 0.0d)
+            ToolMaterial.WOOD, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 3.0D, -2.4D, 0.0D),
+            ToolMaterial.STONE, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
+            ToolMaterial.COPPER, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
+            ToolMaterial.IRON, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
+            ToolMaterial.GOLD, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
+            ToolMaterial.DIAMOND, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
+            ToolMaterial.NETHERITE, new GeneralWeapon(VsqIdentifiers.swordOverride.identifier(), EquipmentSlotGroup.MAINHAND, 9.0D, -2.4D, 0.0D)
     );
 
     @Unique
@@ -75,36 +75,83 @@ public abstract class ToolMaterialMixin {
 
     @Unique
     private static final Map<ToolMaterial, DualWieldBuilder> DUAL_WIELD = Map.of(
-            ToolMaterial.WOOD, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
-            ToolMaterial.STONE, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
-            ToolMaterial.COPPER, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
-            ToolMaterial.IRON, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
-            ToolMaterial.GOLD, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
-            ToolMaterial.DIAMOND, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
-            ToolMaterial.NETHERITE, new DualWieldBuilder(Collections.singletonList("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS)
+            ToolMaterial.WOOD, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.STONE, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.COPPER, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.IRON, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.GOLD, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.DIAMOND, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS),
+            ToolMaterial.NETHERITE, new DualWieldBuilder(List.of("vsq$sword"), 1000, 1, 50, 200, Enchantments.SHARPNESS)
     );
 
     @Unique
     private static final HitThroughBuilder HIT_THROUGH_PLANTS = new HitThroughBuilder("vsq", "hit_through");
 
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
-    private void applySwordProperties(Item.Properties properties, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
+    private void applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         GeneralWeapon swordAttributes = SWORD.get(material);
         DualWieldBuilder dualWieldSword = DUAL_WIELD.get(material);
-        if (swordAttributes == null) {
+        if (swordAttributes == null || dualWieldSword == null) {
             return;
         }
 
-        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
-        cir.setReturnValue(this.applyCommonProperties(properties).component(net.minecraft.core.component.DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1)).component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build()).component(DataComponents.DUAL_WIELD, dualWieldSword.build()));
+        cir.setReturnValue(buildSwordProperties(properties, swordAttributes, dualWieldSword));
     }
+
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
-    private void applyToolProperties (Item.Properties properties, TagKey<Block> tagKey, float f, float g, float h, CallbackInfoReturnable<Item.Properties> cir) {
+    private void applyToolProperties(Item.Properties properties, TagKey<Block> tagKey, float attackDamage, float attackSpeed, float weaponDamage, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         Durability durability = DURABILITY.getOrDefault(material, Durability.DEFAULT);
-        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+        cir.setReturnValue(buildToolProperties(properties, tagKey, attackDamage, attackSpeed, weaponDamage, durability));
+    }
 
-        cir.setReturnValue(this.applyCommonProperties(properties).component(net.minecraft.core.component.DataComponents.TOOL, new Tool(List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(this.incorrectBlocksForDrops)), Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tagKey), this.speed)), 1.0F, 1, true)).attributes(this.createToolAttributes(f, g)).component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(2, h)).durability(durability.dura()));
+    @Unique
+    private Item.Properties buildSwordProperties(Item.Properties properties, GeneralWeapon swordAttributes, DualWieldBuilder dualWieldSword) {
+        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+        Tool toolComponent = new Tool(createSwordRules(holderGetter), 1.0F, 2, false);
+
+        return this.applyCommonProperties(properties)
+                .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
+                .attributes(swordAttributes.build())
+                .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1))
+                .component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build())
+                .component(DataComponents.DUAL_WIELD, dualWieldSword.build());
+    }
+
+    @Unique
+    private Item.Properties buildToolProperties(
+            Item.Properties properties,
+            TagKey<Block> tagKey,
+            float attackDamage,
+            float attackSpeed,
+            float weaponDamage,
+            Durability durability
+    ) {
+        HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
+        Tool toolComponent = new Tool(
+                List.of(
+                        Tool.Rule.deniesDrops(holderGetter.getOrThrow(this.incorrectBlocksForDrops)),
+                        Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tagKey), this.speed)
+                ),
+                1.0F,
+                1,
+                true
+        );
+
+        return this.applyCommonProperties(properties)
+                .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
+                .attributes(this.createToolAttributes(attackDamage, attackSpeed))
+                .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(2, weaponDamage))
+                .durability(durability.durability());
+    }
+
+    @Unique
+    private List<Tool.Rule> createSwordRules(HolderGetter<Block> holderGetter) {
+        return List.of(
+                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
+                Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
+                Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)
+        );
     }
 }

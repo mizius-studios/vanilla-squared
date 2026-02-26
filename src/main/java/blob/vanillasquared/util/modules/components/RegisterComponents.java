@@ -9,7 +9,7 @@ import net.minecraft.resources.Identifier;
 
 public final class RegisterComponents {
 
-    public static final DataComponentType<DualWieldComponent> dualWield = Registry.register(
+    public static final DataComponentType<DualWieldComponent> dualWieldComponent = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
             Identifier.fromNamespaceAndPath("vsq", "dual_wield"),
             DataComponentType.<DualWieldComponent>builder()
@@ -19,7 +19,7 @@ public final class RegisterComponents {
                     .build()
     );
 
-    public static final DataComponentType<HitThroughComponent> hitThrough = Registry.register(
+    public static final DataComponentType<HitThroughComponent> hitThroughComponent = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
             Identifier.fromNamespaceAndPath("vsq", "hit_through"),
             DataComponentType.<HitThroughComponent>builder()
