@@ -8,6 +8,7 @@
     "world.entity.LivingEntityAttributesMixin",
     "world.entity.LivingEntityMixin",
     "world.entity.entities.FishingRodHookMixin",
+    "world.entity.entities.PlayerAttributesMixin",
     "world.entity.entities.PlayerMixin",
     "world.item.ItemPropertiesMixin",
     "world.item.ItemsMixin",
