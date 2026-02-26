@@ -1,6 +1,7 @@
 package blob.vanillasquared.util.modules.components;
 
 import blob.vanillasquared.util.builder.components.DualWieldComponent;
+import blob.vanillasquared.util.builder.components.HitThroughComponent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,6 +15,16 @@ public final class RegisterComponents {
             DataComponentType.<DualWieldComponent>builder()
                     .persistent(DualWieldComponent.CODEC)
                     .networkSynchronized(DualWieldComponent.STREAM_CODEC)
+                    .cacheEncoding()
+                    .build()
+    );
+
+    public static final DataComponentType<HitThroughComponent> hitThrough = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Identifier.fromNamespaceAndPath("vsq", "hit_through"),
+            DataComponentType.<HitThroughComponent>builder()
+                    .persistent(HitThroughComponent.CODEC)
+                    .networkSynchronized(HitThroughComponent.STREAM_CODEC)
                     .cacheEncoding()
                     .build()
     );

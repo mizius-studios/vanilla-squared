@@ -1,13 +1,13 @@
 package blob.vanillasquared.mixin.client;
 
-import blob.vanillasquared.util.combat.HitThroughConfig;
+import blob.vanillasquared.util.builder.components.HitThroughComponent;
+import blob.vanillasquared.util.modules.components.DataComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -33,8 +33,8 @@ LocalPlayerMixin {
         }
 
         LocalPlayer player = (LocalPlayer) (Object) this;
-        ItemStack mainHand = player.getMainHandItem();
-        if (!HitThroughConfig.canHitThrough(mainHand)) {
+        HitThroughComponent hitThrough = player.getMainHandItem().get(DataComponents.HIT_THROUGH);
+        if (hitThrough == null) {
             return;
         }
 
@@ -44,7 +44,7 @@ LocalPlayerMixin {
         }
 
         BlockState firstBlockState = player.level().getBlockState(blockHit.getBlockPos());
-        if (!HitThroughConfig.isPassThroughBlock(mainHand, firstBlockState)) {
+        if (!hitThrough.canHitThrough(firstBlockState)) {
             return;
         }
 
@@ -52,7 +52,7 @@ LocalPlayerMixin {
         Vec3 viewVector = cameraEntity.getViewVector(tickDelta);
         double maxRange = Math.max(player.blockInteractionRange(), player.entityInteractionRange());
         Vec3 rayEnd = eyePosition.add(viewVector.scale(maxRange));
-        Vec3 collisionEnd = this.vsq$findFirstSolidCollision(player, cameraEntity, mainHand, eyePosition, rayEnd, viewVector);
+        Vec3 collisionEnd = this.vsq$findFirstSolidCollision(player, cameraEntity, hitThrough, eyePosition, rayEnd, viewVector);
 
         double clipDistanceSquared = eyePosition.distanceToSqr(collisionEnd);
         if (clipDistanceSquared <= 0.0D) {
@@ -84,7 +84,7 @@ LocalPlayerMixin {
     private Vec3 vsq$findFirstSolidCollision(
             LocalPlayer player,
             Entity cameraEntity,
-            ItemStack stack,
+            HitThroughComponent hitThrough,
             Vec3 start,
             Vec3 end,
             Vec3 direction
@@ -100,7 +100,7 @@ LocalPlayerMixin {
             }
 
             BlockState blockState = player.level().getBlockState(blockHit.getBlockPos());
-            if (!HitThroughConfig.isPassThroughBlock(stack, blockState)) {
+            if (!hitThrough.canHitThrough(blockState)) {
                 return blockHit.getLocation();
             }
 

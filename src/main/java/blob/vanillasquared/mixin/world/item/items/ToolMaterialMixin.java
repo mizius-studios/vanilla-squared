@@ -1,15 +1,17 @@
 package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.builder.components.DualWieldComponent;
+import blob.vanillasquared.util.builder.components.HitThroughComponent;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.builder.durability.Durability;
 import blob.vanillasquared.util.api.other.vsqIdentifiers;
+import blob.vanillasquared.util.modules.components.DataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -82,6 +84,9 @@ public abstract class ToolMaterialMixin {
             ToolMaterial.NETHERITE, new DualWieldComponent(Collections.singletonList("vsq$sword"), 1000, 1, Collections.singletonList("minecraft:sharpness"), 50, 200)
     );
 
+    @Unique
+    private static final HitThroughComponent HIT_THROUGH_PLANTS = new HitThroughComponent(Identifier.fromNamespaceAndPath("vsq", "hit_through"));
+
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float f, float g, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
@@ -92,7 +97,7 @@ public abstract class ToolMaterialMixin {
         }
 
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
-        cir.setReturnValue(this.applyCommonProperties(properties).component(DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(DataComponents.WEAPON, new Weapon(1)));
+        cir.setReturnValue(this.applyCommonProperties(properties).component(net.minecraft.core.component.DataComponents.TOOL, new Tool(List.of(Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE), Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)), 1.0F, 2, false)).attributes(swordAttributes.build()).component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1)).component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS));
     }
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
     private void applyToolProperties (Item.Properties properties, TagKey<Block> tagKey, float f, float g, float h, CallbackInfoReturnable<Item.Properties> cir) {
@@ -100,6 +105,6 @@ public abstract class ToolMaterialMixin {
         Durability durability = DURABILITY.getOrDefault(material, Durability.DEFAULT);
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
 
-        cir.setReturnValue(this.applyCommonProperties(properties).component(DataComponents.TOOL, new Tool(List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(this.incorrectBlocksForDrops)), Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tagKey), this.speed)), 1.0F, 1, true)).attributes(this.createToolAttributes(f, g)).component(DataComponents.WEAPON, new Weapon(2, h)).durability(durability.dura()));
+        cir.setReturnValue(this.applyCommonProperties(properties).component(net.minecraft.core.component.DataComponents.TOOL, new Tool(List.of(Tool.Rule.deniesDrops(holderGetter.getOrThrow(this.incorrectBlocksForDrops)), Tool.Rule.minesAndDrops(holderGetter.getOrThrow(tagKey), this.speed)), 1.0F, 1, true)).attributes(this.createToolAttributes(f, g)).component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(2, h)).durability(durability.dura()));
     }
 }
