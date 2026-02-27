@@ -17,17 +17,6 @@ public class GeneralArmor {
             double armor,
             double armorToughness,
             double knockbackResistance,
-            double maceProtection
-    ) {
-        this(identifier, slotGroup, armor, armorToughness, knockbackResistance, maceProtection, 0.0D, 0.0D, 0.0D);
-    }
-
-    public GeneralArmor(
-            Identifier identifier,
-            EquipmentSlotGroup slotGroup,
-            double armor,
-            double armorToughness,
-            double knockbackResistance,
             double maceProtection,
             double magicProtection,
             double dripstoneProtection,
