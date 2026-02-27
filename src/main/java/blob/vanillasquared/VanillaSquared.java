@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class VanillaSquared implements ModInitializer {
-    public static final String MOD_ID = "vanilla-squared";
+    public static final String MOD_ID = "vsq";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
@@ -19,7 +19,7 @@ public class VanillaSquared implements ModInitializer {
         RegisterComponents.initialize();
         DualWieldEvents.initialize();
 
-        LOGGER.info("Loaded 1 Blob Mods");
+        LOGGER.info("Blob");
 
         RegisterAttributes.initialize();
     }
