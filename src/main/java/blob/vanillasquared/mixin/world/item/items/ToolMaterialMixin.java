@@ -10,6 +10,7 @@ import blob.vanillasquared.util.modules.components.DataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
+import net.minecraft.world.item.component.UseCooldown;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -30,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Mixin(ToolMaterial.class)
 public abstract class ToolMaterialMixin {
@@ -86,6 +89,8 @@ public abstract class ToolMaterialMixin {
 
     @Unique
     private static final HitThroughBuilder HIT_THROUGH_PLANTS = new HitThroughBuilder(VanillaSquared.MOD_ID, "hit_through");
+    @Unique
+    private static final UseCooldown VSQ_SWORD_COOLDOWN = new UseCooldown(0.0F, Optional.of(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "cooldown/sword")));
 
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed, CallbackInfoReturnable<Item.Properties> cir) {
@@ -115,6 +120,7 @@ public abstract class ToolMaterialMixin {
                 .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
                 .attributes(swordAttributes.build())
                 .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1))
+                .component(net.minecraft.core.component.DataComponents.USE_COOLDOWN, VSQ_SWORD_COOLDOWN)
                 .component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build())
                 .component(DataComponents.DUAL_WIELD, dualWieldSword.build());
     }
