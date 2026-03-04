@@ -10,6 +10,7 @@
     "world.entity.entities.FishingRodHookMixin",
     "world.entity.entities.PlayerAttributesMixin",
     "world.entity.entities.PlayerMixin",
+    "world.item.ItemCooldownsMixin",
     "world.item.ItemPropertiesMixin",
     "world.item.ItemsMixin",
     "world.item.items.ArmorMaterialMixin",
