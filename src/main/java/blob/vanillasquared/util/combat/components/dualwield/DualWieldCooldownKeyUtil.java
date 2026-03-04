@@ -25,6 +25,12 @@ public final class DualWieldCooldownKeyUtil {
         return cooldowns.isOnCooldown(probe);
     }
 
+    public static float getCooldownPercent(ItemCooldowns cooldowns, Identifier group, float partialTick) {
+        ItemStack probe = new ItemStack(Items.STONE);
+        probe.set(DataComponents.USE_COOLDOWN, new UseCooldown(0.0F, Optional.of(group)));
+        return cooldowns.getCooldownPercent(probe, partialTick);
+    }
+
     private static String sanitizeIdentifierToken(String token) {
         String lower = token.toLowerCase();
         String sanitized = lower.replaceAll("[^a-z0-9/._-]", "_");
