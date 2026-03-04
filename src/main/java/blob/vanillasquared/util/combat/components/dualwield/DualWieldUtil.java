@@ -40,11 +40,26 @@ public final class DualWieldUtil {
         if (mainComponent == null || offComponent == null) {
             return Optional.empty();
         }
-        if (!hasMatchingIdentifier(mainComponent.identifiers(), offComponent.identifiers())) {
+        if (findFirstMatchingIdentifier(mainComponent.identifiers(), offComponent.identifiers()).isEmpty()) {
             return Optional.empty();
         }
 
         return Optional.of(new ActiveDualWield(mainComponent, offComponent));
+    }
+
+    public static Optional<String> findFirstMatchingIdentifier(List<String> left, List<String> right) {
+        if (left.isEmpty() || right.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Set<String> normalized = new HashSet<>(left);
+        for (String identifier : right) {
+            if (normalized.contains(identifier)) {
+                return Optional.of(identifier);
+            }
+        }
+
+        return Optional.empty();
     }
 
     public static ItemEnchantments mergeEnchantments(ItemStack mainHand, ItemStack offHand, ActiveDualWield activeDualWield) {
@@ -119,20 +134,6 @@ public final class DualWieldUtil {
                 1.0F
         );
         player.crit(target);
-    }
-
-    private static boolean hasMatchingIdentifier(List<String> left, List<String> right) {
-        if (left.isEmpty() || right.isEmpty()) {
-            return false;
-        }
-
-        Set<String> normalized = new HashSet<>(left);
-        for (String identifier : right) {
-            if (normalized.contains(identifier)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static boolean isBlocked(

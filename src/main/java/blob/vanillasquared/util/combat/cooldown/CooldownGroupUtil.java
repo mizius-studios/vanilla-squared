@@ -1,7 +1,6 @@
 package blob.vanillasquared.util.combat.cooldown;
 
 import blob.vanillasquared.VanillaSquared;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -12,7 +11,7 @@ public final class CooldownGroupUtil {
     }
 
     public static Identifier stackGroup(ItemStack stack) {
-        UseCooldown useCooldown = stack.get(DataComponents.USE_COOLDOWN);
+        UseCooldown useCooldown = stack.get(net.minecraft.core.component.DataComponents.USE_COOLDOWN);
         Identifier raw = useCooldown != null
                 ? useCooldown.cooldownGroup().orElseGet(() -> BuiltInRegistries.ITEM.getKey(stack.getItem()))
                 : BuiltInRegistries.ITEM.getKey(stack.getItem());

@@ -1,5 +1,6 @@
 package blob.vanillasquared.util.combat.components.dualwield;
 
+import net.minecraft.resources.Identifier;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,15 +25,26 @@ public final class DualWieldEvents {
             if (active.isEmpty()) {
                 return InteractionResult.PASS;
             }
-            if (player.getCooldowns().isOnCooldown(offHand)) {
+
+            Optional<String> matchingIdentifier = DualWieldUtil.findFirstMatchingIdentifier(
+                    active.get().mainHand().identifiers(),
+                    active.get().offHand().identifiers()
+            );
+            if (matchingIdentifier.isEmpty()) {
+                return InteractionResult.PASS;
+            }
+
+            Identifier cooldownGroup = DualWieldCooldownKeyUtil.offhandGroupFromDualIdentifier(matchingIdentifier.get());
+            if (DualWieldCooldownKeyUtil.isOnCooldown(player.getCooldowns(), cooldownGroup)) {
                 return InteractionResult.FAIL;
             }
 
+            DualWieldUtil.ActiveDualWield config = active.get();
+            if (config.offHand().cooldown() > 0) {
+                player.getCooldowns().addCooldown(cooldownGroup, config.offHand().cooldown());
+            }
+
             if (!level.isClientSide()) {
-                DualWieldUtil.ActiveDualWield config = active.get();
-                if (config.offHand().cooldown() > 0) {
-                    player.getCooldowns().addCooldown(offHand, config.offHand().cooldown());
-                }
                 ((DualWieldPlayerData) player).vsq$setDualWieldCritCharges(config.offHand().criticalHits());
             }
 
