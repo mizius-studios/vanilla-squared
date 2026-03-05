@@ -23,12 +23,14 @@ public final class SpecialEffectEvents {
             Identifier cooldownGroup = SpecialEffectCooldownKeyUtil.cooldownGroup(stack, specialEffect);
             boolean vanillaCooldownActive = SpecialEffectCooldownKeyUtil.isOnCooldown(player.getCooldowns(), vanillaGroup);
             boolean secondaryCooldownActive = SpecialEffectCooldownKeyUtil.isOnCooldown(player.getCooldowns(), cooldownGroup);
+
             if (vanillaCooldownActive && secondaryCooldownActive) {
                 return InteractionResult.FAIL;
             }
 
-            if (!level.isClientSide() && specialEffect.cooldown() > 0 && !vanillaCooldownActive) {
+            if (vanillaCooldownActive && !secondaryCooldownActive && specialEffect.cooldown() > 0) {
                 player.getCooldowns().addCooldown(cooldownGroup, specialEffect.cooldown());
+                return InteractionResult.FAIL;
             }
 
             return InteractionResult.PASS;
