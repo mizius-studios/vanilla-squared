@@ -3,6 +3,7 @@ package blob.vanillasquared.util.modules.components;
 import blob.vanillasquared.VanillaSquared;
 import blob.vanillasquared.util.combat.components.dualwield.DualWieldComponent;
 import blob.vanillasquared.util.combat.components.hitthrough.HitThroughComponent;
+import blob.vanillasquared.util.combat.components.specialeffect.SpecialEffectComponent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,6 +27,16 @@ public final class RegisterComponents {
             DataComponentType.<HitThroughComponent>builder()
                     .persistent(HitThroughComponent.CODEC)
                     .networkSynchronized(HitThroughComponent.STREAM_CODEC)
+                    .cacheEncoding()
+                    .build()
+    );
+
+    public static final DataComponentType<SpecialEffectComponent> specialEffectComponent = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "special_effect"),
+            DataComponentType.<SpecialEffectComponent>builder()
+                    .persistent(SpecialEffectComponent.CODEC)
+                    .networkSynchronized(SpecialEffectComponent.STREAM_CODEC)
                     .cacheEncoding()
                     .build()
     );

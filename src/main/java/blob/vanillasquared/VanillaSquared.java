@@ -2,6 +2,7 @@ package blob.vanillasquared;
 
 import net.fabricmc.api.ModInitializer;
 import blob.vanillasquared.util.combat.components.dualwield.DualWieldEvents;
+import blob.vanillasquared.util.combat.components.specialeffect.SpecialEffectEvents;
 import blob.vanillasquared.util.modules.attributes.RegisterAttributes;
 import blob.vanillasquared.util.modules.components.RegisterComponents;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ public class VanillaSquared implements ModInitializer {
         TestItem.initialize();
         RegisterComponents.initialize();
         DualWieldEvents.initialize();
+        SpecialEffectEvents.initialize();
 
         LOGGER.info("Blob");
 
