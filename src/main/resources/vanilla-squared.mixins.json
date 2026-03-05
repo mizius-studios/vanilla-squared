@@ -13,6 +13,7 @@
     "world.item.ItemCooldownsMixin",
     "world.item.ItemPropertiesMixin",
     "world.item.ItemsMixin",
+    "world.item.components.ItemAttributeModifiersDisplayDefaultMixin",
     "world.item.items.ArmorMaterialMixin",
     "world.item.items.AxeMixin",
     "world.item.items.ToolMaterialMixin",

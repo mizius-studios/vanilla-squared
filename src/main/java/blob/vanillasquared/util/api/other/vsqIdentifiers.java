@@ -10,7 +10,11 @@ public enum vsqIdentifiers {
     armorHelmetOverride(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "armor_helmet_override")),
     swordOverride(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "sword_override")),
     axeOverride(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "axe_override")),
-    tridentOverride(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "trident_override"));
+    tridentOverride(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "trident_override")),
+    maceProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "mace_protection_attribute")),
+    magicProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "magic_protection_attribute")),
+    dripstoneProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "dripstone_protection_attribute")),
+    spearProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "spear_protection_attribute"));
 
     private final Identifier identifier;
 
