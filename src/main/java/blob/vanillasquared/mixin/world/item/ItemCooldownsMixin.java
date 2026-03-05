@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.world.item;
 
-import blob.vanillasquared.util.combat.cooldown.CooldownGroupUtil;
+import blob.vanillasquared.util.api.combat.cooldown.CooldownGroupUtil;
 import blob.vanillasquared.util.combat.components.dualwield.DualWieldCooldownKeyUtil;
 import blob.vanillasquared.util.combat.components.dualwield.DualWieldComponent;
 import blob.vanillasquared.util.modules.components.DataComponents;

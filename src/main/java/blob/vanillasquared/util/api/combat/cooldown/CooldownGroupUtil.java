@@ -1,4 +1,4 @@
-package blob.vanillasquared.util.combat.cooldown;
+package blob.vanillasquared.util.api.combat.cooldown;
 
 import blob.vanillasquared.VanillaSquared;
 import net.minecraft.core.registries.BuiltInRegistries;
