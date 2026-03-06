@@ -11,15 +11,13 @@ public final class VSQNetworking {
     public static void initialize() {
         PayloadTypeRegistry.playC2S().register(DebugPayload.TYPE, DebugPayload.CODEC);
 
-        ServerPlayNetworking.registerGlobalReceiver(DebugPayload.TYPE, (payload, context) -> {
-            context.server().execute(() -> {
-                var player = context.player();
-                VanillaSquared.LOGGER.info(
-                        "[debug-key] {} ({}) pressed special effect key",
-                        player.getGameProfile().name(),
-                        player.getUUID()
-                );
-            });
-        });
+        ServerPlayNetworking.registerGlobalReceiver(DebugPayload.TYPE, (payload, context) -> context.server().execute(() -> {
+            var player = context.player();
+            VanillaSquared.LOGGER.info(
+                    "[debug-key] {} ({}) pressed special effect key",
+                    player.getGameProfile().name(),
+                    player.getUUID()
+            );
+        }));
     }
 }
