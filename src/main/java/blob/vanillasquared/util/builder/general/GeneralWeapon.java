@@ -68,12 +68,12 @@ public class GeneralWeapon {
         public enum Type {
             ATTACK_DMG,
             ATTACK_SPEED,
-            ATTACK_RANGE;
+            ATTACK_RANGE
         }
         public enum Item {
             SWORD,
             AXE,
-            TRIDENT;
+            TRIDENT
         }
     }
 
