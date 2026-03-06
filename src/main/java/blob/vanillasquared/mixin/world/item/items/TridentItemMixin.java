@@ -1,6 +1,5 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.TridentItem;
@@ -14,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class TridentItemMixin {
     @Inject(method = "createAttributes", at = @At("HEAD"), cancellable = true)
     private static void createAttributes(CallbackInfoReturnable<ItemAttributeModifiers> cir) {
-        GeneralWeapon trident = new GeneralWeapon(vsqIdentifiers.tridentOverride.identifier(), EquipmentSlotGroup.MAINHAND, 10.0F, -2.875F, 0.5F);
+        GeneralWeapon trident = new GeneralWeapon(GeneralWeapon.UtilIdentifiers.tridentOverride, EquipmentSlotGroup.MAINHAND, 10.0F, -2.875F, 0.5F);
         cir.setReturnValue(trident.build());
     }
 }
