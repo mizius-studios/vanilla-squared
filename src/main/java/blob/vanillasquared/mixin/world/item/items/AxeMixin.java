@@ -2,7 +2,6 @@ package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.builder.components.BlockBuilder;
 import blob.vanillasquared.util.builder.general.GeneralWeapon;
-import blob.vanillasquared.util.api.other.vsqIdentifiers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -28,13 +27,13 @@ public abstract class AxeMixin {
 
     @Unique
     private static final Map<ToolMaterial, GeneralWeapon> AXE_WEAPON = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 6.0D, -3.2D, -0.5D),
-            ToolMaterial.STONE, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 7.0D, -3.3D, -0.5D),
-            ToolMaterial.COPPER, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 7.0D, -3.0D, -0.5D),
-            ToolMaterial.IRON, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 8.0D, -3.0D, -0.5D),
-            ToolMaterial.GOLD, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 7.0D, -2.9D, 0.0D),
-            ToolMaterial.DIAMOND, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 11.0D, -3.0D, -0.5D),
-            ToolMaterial.NETHERITE, new GeneralWeapon(vsqIdentifiers.axeOverride.identifier(), EquipmentSlotGroup.MAINHAND, 12.0D, -3.0D, -0.5D)
+            ToolMaterial.WOOD, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 6.0D, -3.2D, -0.5D),
+            ToolMaterial.STONE, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 7.0D, -3.3D, -0.5D),
+            ToolMaterial.COPPER, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 7.0D, -3.0D, -0.5D),
+            ToolMaterial.IRON, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 8.0D, -3.0D, -0.5D),
+            ToolMaterial.GOLD, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 7.0D, -2.9D, 0.0D),
+            ToolMaterial.DIAMOND, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 11.0D, -3.0D, -0.5D),
+            ToolMaterial.NETHERITE, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.axeOverride, EquipmentSlotGroup.MAINHAND, 12.0D, -3.0D, -0.5D)
     );
 
     @Unique

@@ -1,12 +1,9 @@
 package blob.vanillasquared.util.modules.attributes;
 
 import blob.vanillasquared.VanillaSquared;
-import blob.vanillasquared.util.api.other.vsqIdentifiers;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
@@ -14,28 +11,28 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 public class RegisterAttributes {
 
     public static final Holder<Attribute> maceProtectionAttribute = register(
-            vsqIdentifiers.maceProtectionAttribute.identifier(),
+            RegisterAttributes.UtilIdentifiers.maceProtectionAttribute.get(),
             new RangedAttribute(
                     "vsq.attributes.mace_protection",
                     0.0, 0.0, 1.0
             ).setSyncable(true)
     );
     public static final Holder<Attribute> magicProtectionAttribute = register(
-            vsqIdentifiers.magicProtectionAttribute.identifier(),
+            RegisterAttributes.UtilIdentifiers.magicProtectionAttribute.get(),
             new RangedAttribute(
                     "Magic Protection",
                     0.0, 0.0, 1.0
             ).setSyncable(true)
     );
     public static final Holder<Attribute> dripstoneProtectionAttribute = register(
-            vsqIdentifiers.dripstoneProtectionAttribute.identifier(),
+            RegisterAttributes.UtilIdentifiers.dripstoneProtectionAttribute.get(),
             new RangedAttribute(
                     "Dripstone Protection",
                     0.0, 0.0, 1.0
             ).setSyncable(true)
     );
     public static final Holder<Attribute> spearProtectionAttribute = register(
-            vsqIdentifiers.spearProtectionAttribute.identifier(),
+            RegisterAttributes.UtilIdentifiers.spearProtectionAttribute.get(),
             new RangedAttribute(
                     "Spear Protection",
                     0.0, 0.0, 1.0
@@ -49,6 +46,16 @@ public class RegisterAttributes {
                 attribute
         );
         return BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute);
+    }
+    public enum UtilIdentifiers {
+        maceProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "mace_protection_attribute")),
+        magicProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "magic_protection_attribute")),
+        dripstoneProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "dripstone_protection_attribute")),
+        spearProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "spear_protection_attribute"));
+
+        private final Identifier identifier;
+        UtilIdentifiers(Identifier identifier) { this.identifier = identifier; }
+        public Identifier get() { return this.identifier; }
     }
     public static void initialize() {
 
