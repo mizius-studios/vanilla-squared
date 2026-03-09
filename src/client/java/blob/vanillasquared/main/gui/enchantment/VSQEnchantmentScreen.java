@@ -2,45 +2,47 @@ package blob.vanillasquared.main.gui.enchantment;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.EnchantmentMenu;
 
 public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMenu> {
-    private static final int BG_COLOR = 0xEE101420;
-    private static final int PANEL_COLOR = 0xEE1A2233;
-    private static final int PANEL_BORDER = 0xFF3F5D86;
-    private static final int SLOT_HINT_COLOR = 0x66FFFFFF;
-    private static final int OPTION_ENABLED = 0xFF2A3F5C;
-    private static final int OPTION_HOVER = 0xFF34527A;
-    private static final int OPTION_DISABLED = 0xFF1B2330;
-
-    private static final int OPTIONS_X = 74;
-    private static final int OPTIONS_Y = 18;
-    private static final int OPTION_W = 156;
-    private static final int OPTION_H = 22;
-    private static final int OPTION_GAP = 4;
+    private static final Identifier GUI_TEXTURE =
+        Identifier.fromNamespaceAndPath("vsq", "textures/gui/containers/enchantment_table.png");
+    private static final int TEX_W = 256;
+    private static final int TEX_H = 256;
+    private static final int OPTIONS_X = 60;
+    private static final int OPTIONS_Y = 14;
+    private static final int OPTION_W = 108;
+    private static final int OPTION_H = 19;
+    private static final int OPTION_GAP = 19;
+    private static final int OPTION_U = 0;
+    private static final int OPTION_V_ENABLED = 166;
+    private static final int OPTION_V_HOVER = 185;
+    private static final int OPTION_V_DISABLED = 204;
 
     public VSQEnchantmentScreen(EnchantmentMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
-        this.imageWidth = 238;
-        this.imageHeight = 182;
-        this.inventoryLabelY = this.imageHeight - 94;
+        this.imageWidth = 176;
+        this.imageHeight = 166;
+        this.inventoryLabelY = 72;
     }
 
     @Override
     protected void init() {
         super.init();
         this.titleLabelX = 10;
-        this.titleLabelY = 8;
+        this.titleLabelY = 5;
         this.inventoryLabelX = 8;
-        this.inventoryLabelY = this.imageHeight - 94;
+        this.inventoryLabelY = 72;
     }
 
     @Override
@@ -74,34 +76,41 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         int x0 = this.leftPos;
         int y0 = this.topPos;
 
-        guiGraphics.fill(x0, y0, x0 + this.imageWidth, y0 + this.imageHeight, BG_COLOR);
-        guiGraphics.renderOutline(x0, y0, this.imageWidth, this.imageHeight, PANEL_BORDER);
-
-        guiGraphics.fill(x0 + 4, y0 + 4, x0 + 70, y0 + 76, PANEL_COLOR);
-        guiGraphics.renderOutline(x0 + 4, y0 + 4, 66, 72, PANEL_BORDER);
-
-        guiGraphics.fill(x0 + 8, y0 + 12, x0 + 66, y0 + 16, SLOT_HINT_COLOR);
+        guiGraphics.blit(
+            RenderPipelines.GUI_TEXTURED,
+            GUI_TEXTURE,
+            x0,
+            y0,
+            0.0F,
+            0.0F,
+            this.imageWidth,
+            this.imageHeight,
+            TEX_W,
+            TEX_H
+        );
 
         int optionsTop = y0 + OPTIONS_Y;
         for (int i = 0; i < 3; i++) {
             int rowY = optionsTop + i * (OPTION_H + OPTION_GAP);
-            boolean hovered = this.isHoveringOption(i, mouseX, mouseY);
-            boolean available = this.menu.costs[i] > 0;
-
-            int optionColor;
-            if (!available) {
-                optionColor = OPTION_DISABLED;
-            } else if (hovered) {
-                optionColor = OPTION_HOVER;
-            } else {
-                optionColor = OPTION_ENABLED;
-            }
+            boolean hovered = this.isHoveringOption(i, mouseX, mouseY) && this.menu.costs[i] > 0;
+            boolean disabled = !this.canUseOption(i);
+            int optionV = disabled ? OPTION_V_DISABLED : (hovered ? OPTION_V_HOVER : OPTION_V_ENABLED);
 
             int rowX = x0 + OPTIONS_X;
-            guiGraphics.fill(rowX, rowY, rowX + OPTION_W, rowY + OPTION_H, optionColor);
-            guiGraphics.renderOutline(rowX, rowY, OPTION_W, OPTION_H, PANEL_BORDER);
+            guiGraphics.blit(
+                RenderPipelines.GUI_TEXTURED,
+                GUI_TEXTURE,
+                rowX,
+                rowY,
+                OPTION_U,
+                optionV,
+                OPTION_W,
+                OPTION_H,
+                TEX_W,
+                TEX_H
+            );
 
-            this.renderOptionText(guiGraphics, i, rowX, rowY, available);
+            this.renderOptionText(guiGraphics, i, rowX, rowY, !disabled);
         }
     }
 
@@ -178,6 +187,10 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
 
     private boolean canAfford(int option) {
         return this.hasEnoughXp(option) && this.hasEnoughLapis(option);
+    }
+
+    private boolean canUseOption(int option) {
+        return this.menu.costs[option] > 0 && (this.canAfford(option) || (this.minecraft != null && this.minecraft.player != null && this.minecraft.player.hasInfiniteMaterials()));
     }
 
     private boolean isHoveringOption(int option, int mouseX, int mouseY) {
