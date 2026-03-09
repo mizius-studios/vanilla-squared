@@ -44,22 +44,25 @@ public class ItemAttributeModifiersDisplayDefaultMixin {
 
     @ModifyArg(method = "apply", at = @At(value = "INVOKE", target = "Ljava/text/DecimalFormat;format(D)Ljava/lang/String;"), index = 0)
     private double vsq$modifyTooltipValue(double value) {
-        double playerBaseAttackDMG = player_.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
-        double playerBaseAttackSpeed = player_.getAttributeBaseValue(Attributes.ATTACK_SPEED);
+        if (player_ != null) {
+            double playerBaseAttackDMG = player_.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
+            double playerBaseAttackSpeed = player_.getAttributeBaseValue(Attributes.ATTACK_SPEED);
 
-        if (attributeHolder.is(RegisterAttributes.UtilIdentifiers.maceProtectionAttribute.get())
-                || attributeHolder.is(RegisterAttributes.UtilIdentifiers.magicProtectionAttribute.get())
-                || attributeHolder.is(RegisterAttributes.UtilIdentifiers.dripstoneProtectionAttribute.get())
-                || attributeHolder.is(RegisterAttributes.UtilIdentifiers.spearProtectionAttribute.get())) {
-            return value * 10;
-        } else if (modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_DMG))
-                || modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_DMG))
-                || modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_DMG))) {
-            return value + playerBaseAttackDMG;
-        } else if (modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))
-                || modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))
-                || modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))) {
-            return playerBaseAttackSpeed + value;
-        } return value;
+            if (attributeHolder.is(RegisterAttributes.UtilIdentifiers.maceProtectionAttribute.get())
+                    || attributeHolder.is(RegisterAttributes.UtilIdentifiers.magicProtectionAttribute.get())
+                    || attributeHolder.is(RegisterAttributes.UtilIdentifiers.dripstoneProtectionAttribute.get())
+                    || attributeHolder.is(RegisterAttributes.UtilIdentifiers.spearProtectionAttribute.get())) {
+                return value * 10;
+            } else if (modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_DMG))
+                    || modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_DMG))
+                    || modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_DMG))) {
+                return value + playerBaseAttackDMG;
+            } else if (modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))
+                    || modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))
+                    || modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))) {
+                return playerBaseAttackSpeed + value;
+            }
+        }
+        return value;
     }
 }
