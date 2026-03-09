@@ -40,7 +40,6 @@
 		"fabric-api": "*"
 	},
 	"breaks": {
-		"clientspoofer": "*",
 		"viafabricplus": "*"
 	},
 	"suggests": {
