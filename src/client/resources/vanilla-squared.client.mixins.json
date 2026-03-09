@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
 	"client": [
 		"gui.GuiMixin",
+		"gui.MenuScreensMixin",
       "world.entities.LocalPlayerMixin",
 		"world.entities.PlayerMixin"
 	],
