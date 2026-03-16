@@ -1,15 +1,24 @@
 package blob.vanillasquared.mixin.world.inventory;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -19,6 +28,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
     @Shadow
@@ -26,18 +39,161 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
     @Mutable
     private Container enchantSlots;
 
+    @Unique
+    private ContainerLevelAccess vsq$access = ContainerLevelAccess.NULL;
+
+    @Unique
+    private ServerPlayer vsq$serverPlayer;
+
+    @Unique
+    private int vsq$nearbyBlockCount;
+
+    @Unique
+    private Player vsq$player;
+
     protected EnchantmentMenuMixin(MenuType<?> menuType, int containerId) {
         super(menuType, containerId);
     }
 
     @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;)V", at = @At("TAIL"))
     private void vsq$rebuildSlotLayoutClient(int containerId, Inventory playerInventory, CallbackInfo ci) {
+        this.vsq$player = playerInventory.player;
         this.vsq$rebuildSlotLayout(playerInventory);
     }
 
     @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V", at = @At("TAIL"))
     private void vsq$rebuildSlotLayoutServer(int containerId, Inventory playerInventory, ContainerLevelAccess access, CallbackInfo ci) {
+        this.vsq$player = playerInventory.player;
         this.vsq$rebuildSlotLayout(playerInventory);
+        this.vsq$access = access;
+        if (playerInventory.player instanceof ServerPlayer serverPlayer) {
+            this.vsq$serverPlayer = serverPlayer;
+        }
+        this.vsq$debugNearbyBlocks(playerInventory, access);
+        this.vsq$updateNearbyBlockCount();
+    }
+
+    @Inject(method = "slotsChanged(Lnet/minecraft/world/Container;)V", at = @At("TAIL"))
+    private void vsq$refreshNearbyBlockCount(Container container, CallbackInfo ci) {
+        this.vsq$updateNearbyBlockCount();
+    }
+
+    @Unique
+    private void vsq$updateNearbyBlockCount() {
+        if (this.vsq$serverPlayer == null) {
+            return;
+        }
+
+        this.vsq$access.execute((Level level, BlockPos tablePos) -> {
+            if (level.isClientSide()) {
+                return;
+            }
+
+            this.vsq$nearbyBlockCount = this.vsq$countNearbyBlocks(level, tablePos);
+        });
+    }
+
+    @Unique
+    private ItemStack vsq$createBookshelfDisplayStack() {
+        if (this.vsq$nearbyBlockCount <= 0) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack stack = new ItemStack(Items.BOOKSHELF);
+        stack.setCount(Math.min(this.vsq$nearbyBlockCount, stack.getMaxStackSize()));
+        stack.set(DataComponents.ITEM_NAME, Component.literal(this.vsq$nearbyBlockCount + " Blocks"));
+        return stack;
+    }
+
+    @Unique
+    private ItemStack vsq$createLevelDisplayStack() {
+        if (this.vsq$player == null || this.vsq$player.experienceLevel <= 0) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack stack = new ItemStack(Items.EXPERIENCE_BOTTLE);
+        stack.setCount(Math.min(this.vsq$player.experienceLevel, stack.getMaxStackSize()));
+        stack.set(DataComponents.ITEM_NAME, Component.literal(this.vsq$player.experienceLevel + " Levels"));
+        return stack;
+    }
+
+
+    @Unique
+    private int vsq$countNearbyBlocks(Level level, BlockPos tablePos) {
+        int total = 0;
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                for (int dy = 0; dy <= 2; dy++) {
+                    BlockPos pos = tablePos.offset(dx, dy, dz);
+                    if (pos.equals(tablePos)) {
+                        continue;
+                    }
+
+                    BlockState state = level.getBlockState(pos);
+                    if (state.isAir()) {
+                        continue;
+                    }
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
+    @Unique
+    private void vsq$debugNearbyBlocks(Inventory playerInventory, ContainerLevelAccess access) {
+        if (!(playerInventory.player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+
+        access.execute((Level level, BlockPos tablePos) -> {
+            if (level.isClientSide()) {
+                return;
+            }
+
+            Map<String, Integer> counts = new TreeMap<>();
+
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    for (int dy = 0; dy <= 2; dy++) {
+                        BlockPos pos = tablePos.offset(dx, dy, dz);
+                        if (pos.equals(tablePos)) {
+                            continue;
+                        }
+
+                        BlockState state = level.getBlockState(pos);
+                        if (state.isAir()) {
+                            continue;
+                        }
+
+                        var key = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+                        if (key == null) {
+                            continue;
+                        }
+
+                        String name = key.getPath().toUpperCase(Locale.ROOT);
+                        counts.merge(name, 1, Integer::sum);
+                    }
+                }
+            }
+
+            if (counts.isEmpty()) {
+                serverPlayer.sendSystemMessage(Component.literal("[vsq debug] Enchantment Table nearby blocks: none"));
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder("[vsq debug] Enchantment Table nearby blocks (r=2, y+0..2): ");
+            boolean first = true;
+            for (var entry : counts.entrySet()) {
+                if (!first) {
+                    sb.append(", ");
+                }
+                first = false;
+                sb.append(entry.getKey()).append(" x").append(entry.getValue());
+            }
+
+            serverPlayer.sendSystemMessage(Component.literal(sb.toString()));
+        });
     }
 
     @Unique
@@ -55,6 +211,18 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
         this.slots.clear();
         accessor.vsq$getLastSlots().clear();
         accessor.vsq$getRemoteSlots().clear();
+
+        this.addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return EnchantmentMenuMixin.this.vsq$nearbyBlockCount;
+            }
+
+            @Override
+            public void set(int value) {
+                EnchantmentMenuMixin.this.vsq$nearbyBlockCount = value;
+            }
+        });
 
         this.addSlot(new Slot(this.enchantSlots, 0, 26, 23) {
             @Override
@@ -78,14 +246,44 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
         this.addSlot(new Slot(this.enchantSlots, 6, 134, 54) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.EXPERIENCE_BOTTLE);
+                return false;
+            }
+
+            @Override
+            public ItemStack getItem() {
+                return EnchantmentMenuMixin.this.vsq$createLevelDisplayStack();
+            }
+
+            @Override
+            public boolean hasItem() {
+                return EnchantmentMenuMixin.this.vsq$player != null && EnchantmentMenuMixin.this.vsq$player.experienceLevel > 0;
+            }
+
+            @Override
+            public boolean mayPickup(Player player) {
+                return false;
             }
         });
 
         this.addSlot(new Slot(this.enchantSlots, 7, 152, 54) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.BOOKSHELF);
+                return false;
+            }
+
+            @Override
+            public ItemStack getItem() {
+                return EnchantmentMenuMixin.this.vsq$createBookshelfDisplayStack();
+            }
+
+            @Override
+            public boolean hasItem() {
+                return EnchantmentMenuMixin.this.vsq$nearbyBlockCount > 0;
+            }
+
+            @Override
+            public boolean mayPickup(Player player) {
+                return false;
             }
         });
 
