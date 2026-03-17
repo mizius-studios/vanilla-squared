@@ -10,10 +10,10 @@ import net.minecraft.world.inventory.EnchantmentMenu;
 
 public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMenu> {
     private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath("vsq", "textures/gui/containers/enchantment_table.png");
-    private static final Identifier XP_ENABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "textures/gui/containers/enchantment_table/xp_requirement_enabled.png");
-    private static final Identifier XP_DISABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "textures/gui/sprites/containers/enchantment_table/xp_requirement_disabled.png");
-    private static final Identifier BLOCKS_ENABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "textures/gui/containers/enchantment_table/block_requirement_enabled.png");
-    private static final Identifier BLOCKS_DISABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "textures/gui/sprites/containers/enchantment_table/block_requirement_disabled.png");
+    private static final Identifier XP_ENABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/xp_requirement_enabled");
+    private static final Identifier XP_DISABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/xp_requirement_disabled");
+    private static final Identifier BLOCKS_ENABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/block_requirement_enabled");
+    private static final Identifier BLOCKS_DISABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/block_requirement_disabled");
     private static final int TEX_W = 256;
     private static final int TEX_H = 256;
 
