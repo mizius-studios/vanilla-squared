@@ -20,6 +20,9 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
     private static final Identifier BLOCKS_HOVER_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/block_requirement_hover");
     private static final int TEX_W = 256;
     private static final int TEX_H = 256;
+    private static final int TEXT_ENABLED = ARGB.opaque(0xEFE2C6);
+    private static final int TEXT_DISABLED = ARGB.opaque(0x8A7F6A);
+    private static final int TEXT_HOVER = ARGB.opaque(0xFFFFFF);
 
     public VSQEnchantmentScreen(EnchantmentMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -58,17 +61,12 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_ENABLED_SPRITE, x + 119, y + 35, 51, 18);
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_ENABLED_SPRITE, x + 119, y + 53, 51, 18);
     }
-    public int MouseOver(double mouseX, double mouseY) {
-        int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
-        double mouseXOffset = mouseX - x;
-        double mouseYOffset = mouseY - y;
-        if (mouseXOffset >= 119 && mouseXOffset <= 170 && mouseYOffset >= 35 && mouseYOffset <= 53) {
-            return 0;
-        } else if (mouseXOffset >= 119 && mouseXOffset <= 170 && mouseYOffset >= 53 && mouseYOffset <= 71) {
-            return 1;
-        }
-        return -1;
+    private boolean vsq$isXpHovered(int mouseX, int mouseY) {
+        return this.isHovering(120, 36, 51, 18, mouseX, mouseY);
+    }
+
+    private boolean vsq$isBlocksHovered(int mouseX, int mouseY) {
+        return this.isHovering(120, 54, 51, 18, mouseX, mouseY);
     }
 
     @Override
@@ -84,39 +82,34 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         int levelRequirement = properties != null ? properties.vsq$getLevelRequirement() : 0;
         int blockAmount = properties != null ? properties.vsq$getBlockAmount() : 0;
         int blockRequirement = properties != null ? properties.vsq$getBlockRequirement() : 0;
+        boolean xpHovered = this.vsq$isXpHovered(mouseX, mouseY);
+        boolean blocksHovered = this.vsq$isBlocksHovered(mouseX, mouseY);
 
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
+
         if (playerLevel >= levelRequirement && playerLevel != -1) {
-            if (this.MouseOver(mouseX, mouseY) == 0) {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_HOVER_SPRITE, Button0x, Button0y, 51, 18);
-                guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, ARGB.opaque(0xEAAFE0), false);
-            } else {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_ENABLED_SPRITE, Button0x, Button0y, 51, 18);
-                guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, ARGB.opaque(0x70644F), false);
-            }
-        } else if (playerLevel != -1) {
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, xpHovered ? XP_HOVER_SPRITE : XP_ENABLED_SPRITE, Button0x, Button0y, 51, 18);
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, xpHovered ? TEXT_HOVER : TEXT_ENABLED, false);
+        } else if (levelRequirement == -1) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_DISABLED_SPRITE, Button0x, Button0y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp.none", levelRequirement), Button0x + 15, Button0y + 5, ARGB.opaque(0x332E24), false);
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp.none"), Button0x + 15, Button0y + 5, TEXT_DISABLED, false);
         } else {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_DISABLED_SPRITE, Button0x, Button0y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, ARGB.opaque(0x332E24), false);
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, TEXT_DISABLED, false);
         }
+
         if (blockAmount >= blockRequirement && blockAmount != -1) {
-            if (this.MouseOver(mouseX, mouseY) == 1) {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_HOVER_SPRITE, Button1x, Button1y, 51, 18);
-                guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockAmount), Button1x + 15, Button1y + 5, ARGB.opaque(0xEAAFE0), false);
-            } else {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_ENABLED_SPRITE, Button1x, Button1y, 51, 18);
-                guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockAmount), Button1x + 15, Button1y + 5, ARGB.opaque(0x70644F), false);
-            }
-        } else if (blockAmount != -1) {
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocksHovered ? BLOCKS_HOVER_SPRITE : BLOCKS_ENABLED_SPRITE, Button1x, Button1y, 51, 18);
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockRequirement), Button1x + 15, Button1y + 5, blocksHovered ? TEXT_HOVER : TEXT_ENABLED, false);
+        } else if (blockRequirement == -1) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_DISABLED_SPRITE, Button1x, Button1y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks.none", blockAmount), Button1x + 15, Button1y + 5, ARGB.opaque(0x332E24), false);
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks.none"), Button1x + 15, Button1y + 5, TEXT_DISABLED, false);
         } else {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_DISABLED_SPRITE, Button1x, Button1y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockAmount), Button1x + 15, Button1y + 5, ARGB.opaque(0x332E24), false);
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockRequirement), Button1x + 15, Button1y + 5, TEXT_DISABLED, false);
         }
+
     }
 }
