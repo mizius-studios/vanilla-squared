@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.gui.enchantment;
 
-import blob.vanillasquared.mixin.world.inventory.EnchantMenuMixinUtil;
+import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -96,22 +97,28 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         int Button0y = y + 35;
         int Button1x = x + 119;
         int Button1y = y + 53;
+        VSQEnchantmentMenuProperties properties = this.menu instanceof VSQEnchantmentMenuProperties vsqProperties ? vsqProperties : null;
+        int playerLevel = properties != null ? properties.vsq$getPlayerLevel() : 0;
+        int levelRequirement = properties != null ? properties.vsq$getLevelRequirement() : 0;
+        int blockAmount = properties != null ? properties.vsq$getBlockAmount() : 0;
+        int blockRequirement = properties != null ? properties.vsq$getBlockRequirement() : 0;
+
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
-        if (EnchantMenuMixinUtil.getPlayerLevel() >= EnchantMenuMixinUtil.getLevelRequirement()) {
+        if (playerLevel >= levelRequirement) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_ENABLED_SPRITE, Button0x, Button0y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", EnchantMenuMixinUtil.getLevelRequirement()), Button0x + 15, Button0y + 4, ARGB.opaque(0x70644F));
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, ARGB.opaque(0x70644F));
         } else {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, XP_DISABLED_SPRITE, Button0x, Button0y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", EnchantMenuMixinUtil.getLevelRequirement()), Button0x + 15, Button0y + 4, ARGB.opaque(0x332E24));
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", levelRequirement), Button0x + 15, Button0y + 5, ARGB.opaque(0x332E24));
         }
-        if (EnchantMenuMixinUtil.getBlockAmount() >= EnchantMenuMixinUtil.getBlockRequirement()) {
+        if (blockAmount >= blockRequirement) {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_ENABLED_SPRITE, Button1x, Button1y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", EnchantMenuMixinUtil.getBlockAmount()), Button1x + 15, Button1y + 4, ARGB.opaque(0x70644F));
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockAmount), Button1x + 15, Button1y + 5, ARGB.opaque(0x70644F));
         } else {
             guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, BLOCKS_DISABLED_SPRITE, Button1x, Button1y, 51, 18);
-            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", EnchantMenuMixinUtil.getBlockAmount()), Button1x + 15, Button1y + 4, ARGB.opaque(0x332E24));
+            guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", blockAmount), Button1x + 15, Button1y + 5, ARGB.opaque(0x332E24));
         }
     }
 }
