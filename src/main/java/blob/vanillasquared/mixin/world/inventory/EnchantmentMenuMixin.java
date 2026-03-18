@@ -1,5 +1,6 @@
 package blob.vanillasquared.mixin.world.inventory;
 
+import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -9,8 +10,8 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
@@ -31,11 +32,21 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static blob.vanillasquared.mixin.world.inventory.EnchantMenuMixinUtil.VSQ$DUMMYBLOCKREQUIREMENT;
-import static blob.vanillasquared.mixin.world.inventory.EnchantMenuMixinUtil.VSQ$DUMMYLEVELREQUIREMENT;
-
 @Mixin(EnchantmentMenu.class)
-public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
+public abstract class EnchantmentMenuMixin extends AbstractContainerMenu implements VSQEnchantmentMenuProperties {
+    @Unique
+    private static final int VSQ$PROPERTY_PLAYER_LEVEL = 0;
+    @Unique
+    private static final int VSQ$PROPERTY_BLOCK_COUNT = 1;
+    @Unique
+    private static final int VSQ$PROPERTY_LEVEL_REQUIREMENT = 2;
+    @Unique
+    private static final int VSQ$PROPERTY_BLOCK_REQUIREMENT = 3;
+    @Unique
+    private static final int VSQ$DUMMYLEVELREQUIREMENT = 69;
+    @Unique
+    private static final int VSQ$DUMMYBLOCKREQUIREMENT = 4;
+
     @Shadow
     @Final
     @Mutable
@@ -47,10 +58,47 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
     @Unique
     private ServerPlayer vsq$serverPlayer;
 
-    @Unique private int vsq$nearbyBlockCount;
+    @Unique
+    private int vsq$playerLevel;
+    @Unique
+    private int vsq$nearbyBlockCount;
 
     @Unique
     private Player vsq$player;
+
+    @Unique
+    private final ContainerData vsq$properties = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return switch (index) {
+                case VSQ$PROPERTY_PLAYER_LEVEL -> {
+                    if (EnchantmentMenuMixin.this.vsq$player != null && !EnchantmentMenuMixin.this.vsq$player.level().isClientSide()) {
+                        EnchantmentMenuMixin.this.vsq$playerLevel = EnchantmentMenuMixin.this.vsq$player.experienceLevel;
+                    }
+                    yield EnchantmentMenuMixin.this.vsq$playerLevel;
+                }
+                case VSQ$PROPERTY_BLOCK_COUNT -> EnchantmentMenuMixin.this.vsq$nearbyBlockCount;
+                case VSQ$PROPERTY_LEVEL_REQUIREMENT -> VSQ$DUMMYLEVELREQUIREMENT;
+                case VSQ$PROPERTY_BLOCK_REQUIREMENT -> VSQ$DUMMYBLOCKREQUIREMENT;
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value) {
+            switch (index) {
+                case VSQ$PROPERTY_PLAYER_LEVEL -> EnchantmentMenuMixin.this.vsq$playerLevel = value;
+                case VSQ$PROPERTY_BLOCK_COUNT -> EnchantmentMenuMixin.this.vsq$nearbyBlockCount = value;
+                default -> {
+                }
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+    };
 
     protected EnchantmentMenuMixin(MenuType<?> menuType, int containerId) {
         super(menuType, containerId);
@@ -114,7 +162,6 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
                 }
             }
         }
-        EnchantMenuMixinUtil.setBlockAmount(total);
         return total;
     }
 
@@ -190,50 +237,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
         accessor.vsq$getLastSlots().clear();
         accessor.vsq$getRemoteSlots().clear();
 
-        this.addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return EnchantmentMenuMixin.this.vsq$nearbyBlockCount;
-            }
-
-            @Override
-            public void set(int value) {
-                EnchantmentMenuMixin.this.vsq$nearbyBlockCount = value;
-            }
-        });
-        this.addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return VSQ$DUMMYLEVELREQUIREMENT;
-            }
-
-            @Override
-            public void set(int value) {
-                // Do nothing
-            }
-        });
-        this.addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return VSQ$DUMMYBLOCKREQUIREMENT;
-            }
-
-            @Override
-            public void set(int value) {
-                // Do nothing
-            }
-        });
-        this.addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return VSQ$DUMMYBLOCKREQUIREMENT;
-            }
-
-            @Override
-            public void set(int value) {
-                // Do nothing
-            }
-        });
+        this.addDataSlots(this.vsq$properties);
 
         this.addSlot(new Slot(this.enchantSlots, 0, 26, 23) {
             @Override
@@ -268,5 +272,25 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu {
         for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
             this.addSlot(new Slot(playerInventory, hotbarSlot, 8 + hotbarSlot * 18, 142));
         }
+    }
+
+    @Override
+    public int vsq$getPlayerLevel() {
+        return this.vsq$properties.get(VSQ$PROPERTY_PLAYER_LEVEL);
+    }
+
+    @Override
+    public int vsq$getBlockAmount() {
+        return this.vsq$properties.get(VSQ$PROPERTY_BLOCK_COUNT);
+    }
+
+    @Override
+    public int vsq$getLevelRequirement() {
+        return this.vsq$properties.get(VSQ$PROPERTY_LEVEL_REQUIREMENT);
+    }
+
+    @Override
+    public int vsq$getBlockRequirement() {
+        return this.vsq$properties.get(VSQ$PROPERTY_BLOCK_REQUIREMENT);
     }
 }
