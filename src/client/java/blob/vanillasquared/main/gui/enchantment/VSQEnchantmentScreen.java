@@ -53,8 +53,8 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        int x = this.leftPos;
-        int y = this.topPos;
+        int x = (this.width - this.imageWidth) / 2;
+        int y = (this.height - this.imageHeight) / 2;
 
 
         guiGraphics.blit(
@@ -87,14 +87,12 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         } else {
             blocksSprite = BLOCKS_ENABLED_SPRITE;
         }
-
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, xpSprite, x + 119, y + 35, 51, 18);
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocksSprite, x + 119, y + 53, 51, 18);
-
-        int button0x = x + 119;
-        int button0y = y + 35;
-        int button1x = x + 119;
-        int button1y = y + 53;
+        int button0x = x + 120;
+        int button0y = y + 36;
+        int button1x = x + 120;
+        int button1y = y + 54;
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, xpSprite, button0x - 1, button0y - 1, 51, 18);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocksSprite, button1x - 1, button1y - 1, 51, 18);
         if (this.vsq$playerLevel >= this.vsq$levelRequirement && this.vsq$playerLevel != -1) {
             guiGraphics.drawString(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", this.vsq$levelRequirement), button0x + 15, button0y + 5, this.vsq$xpHovered ? TEXT_HOVER : TEXT_ENABLED, false);
         } else if (this.vsq$levelRequirement == -1) {
@@ -112,17 +110,15 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         }
     }
     private boolean vsq$isXpHovered(int mouseX, int mouseY) {
-        return this.isHovering(118, 34, 51, 18, mouseX, mouseY);
+        return this.isHovering(120, 36, 51, 18, mouseX, mouseY);
     }
 
     private boolean vsq$isBlocksHovered(int mouseX, int mouseY) {
-        return this.isHovering(118, 52, 51, 18, mouseX, mouseY);
+        return this.isHovering(120, 54, 51, 18, mouseX, mouseY);
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        int x = (this.width - this.imageWidth) / 2;
-        int y = (this.height - this.imageHeight) / 2;
         VSQEnchantmentMenuProperties properties = this.menu instanceof VSQEnchantmentMenuProperties vsqProperties ? vsqProperties : null;
         this.vsq$playerLevel = properties != null ? properties.vsq$getPlayerLevel() : 0;
         this.vsq$levelRequirement = properties != null ? properties.vsq$getLevelRequirement() : 0;
