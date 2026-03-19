@@ -5,7 +5,7 @@ $TARGET_DIR = "C:\Users\jan\AppData\Roaming\norisk\NoRiskClientV3\data\profiles\
 
 .\gradlew build
 
-$JAR_FILE = Get-ChildItem build\libs\vsq--2.7.3-STABLE.jar -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+$JAR_FILE = Get-ChildItem build\libs\VSQ-2.7.4-STABLE.jar -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if ($null -eq $JAR_FILE) {
     Write-Host "No jar found in build/libs."
     exit 1
