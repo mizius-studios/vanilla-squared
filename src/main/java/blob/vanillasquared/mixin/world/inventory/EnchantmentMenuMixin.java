@@ -19,6 +19,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -46,6 +48,12 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     private static final int VSQ$DUMMYLEVELREQUIREMENT = 69;
     @Unique
     private static final int VSQ$DUMMYBLOCKREQUIREMENT = 4;
+    @Unique
+    private static final Block[] VSQ$DUMMY_DEBUG_BLOCKS = new Block[] {
+            Blocks.BOOKSHELF,
+            Blocks.CHISELED_BOOKSHELF,
+            Blocks.LECTERN
+    };
 
     @Shadow
     @Final
@@ -191,7 +199,12 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
                             continue;
                         }
 
-                        var key = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+                        Block block = state.getBlock();
+                        if (!this.vsq$matchesDummyDebugBlock(block)) {
+                            continue;
+                        }
+
+                        var key = BuiltInRegistries.BLOCK.getKey(block);
                         if (key == null) {
                             continue;
                         }
@@ -203,11 +216,11 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             }
 
             if (counts.isEmpty()) {
-                serverPlayer.sendSystemMessage(Component.literal("[vsq debug] Enchantment Table nearby blocks: none"));
+                serverPlayer.sendSystemMessage(Component.literal("[vsq debug] Enchantment Table matching blocks: none"));
                 return;
             }
 
-            StringBuilder sb = new StringBuilder("[vsq debug] Enchantment Table nearby blocks (r=2, y+0..2): ");
+            StringBuilder sb = new StringBuilder("[vsq debug] Enchantment Table matching blocks (dummy list, r=2, y+0..2): ");
             boolean first = true;
             for (var entry : counts.entrySet()) {
                 if (!first) {
@@ -219,6 +232,16 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
             serverPlayer.sendSystemMessage(Component.literal(sb.toString()));
         });
+    }
+
+    @Unique
+    private boolean vsq$matchesDummyDebugBlock(Block block) {
+        for (Block candidate : VSQ$DUMMY_DEBUG_BLOCKS) {
+            if (candidate == block) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Unique
