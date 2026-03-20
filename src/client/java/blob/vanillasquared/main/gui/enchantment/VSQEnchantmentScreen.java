@@ -1,9 +1,7 @@
 package blob.vanillasquared.main.gui.enchantment;
 
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
-import com.mojang.blaze3d.platform.cursor.CursorType;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
-import com.sun.jna.PointerType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
