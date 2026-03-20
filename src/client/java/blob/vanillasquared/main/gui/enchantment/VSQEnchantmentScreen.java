@@ -97,6 +97,9 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
             TEX_H
         );
 
+        this.vsq$inputSlot.render(this.menu, guiGraphics, partialTick, x, y);
+        this.vsq$lapislazuli.render(this.menu, guiGraphics, partialTick, x, y);
+
         Identifier xpSprite;
         if (this.vsq$levelRequirement == -1 || this.vsq$playerLevel == -1 || !this.vsq$hasRequiredXp) {
             xpSprite = XP_DISABLED_SPRITE;
