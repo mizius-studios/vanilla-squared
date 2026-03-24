@@ -72,14 +72,14 @@ public abstract class FishingRodHookMixin extends Projectile {
         int smite = EnchantmentHelper.getItemEnchantmentLevel(enchants.getOrThrow(Enchantments.SMITE), weapon);
         int bane  = EnchantmentHelper.getItemEnchantmentLevel(enchants.getOrThrow(Enchantments.BANE_OF_ARTHROPODS), weapon);
 
-        if (smite > 0 && living.getType().is(EntityTypeTags.UNDEAD)) {
+        if (smite > 0 && living.getType().builtInRegistryHolder().is(EntityTypeTags.UNDEAD)) {
             damage += smite * 2.5F;
         }
 
-        if (bane > 0 && living.getType().is(EntityTypeTags.ARTHROPOD)) {
+        if (bane > 0 && living.getType().builtInRegistryHolder().is(EntityTypeTags.ARTHROPOD)) {
             damage += bane * 2.5F;
 
-            int duration = 20 + serverLevel.random.nextInt(10 * bane);
+            int duration = 20 + serverLevel.getRandom().nextInt(10 * bane);
             living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, duration, 3));
         }
 
@@ -90,7 +90,7 @@ public abstract class FishingRodHookMixin extends Projectile {
                     null, living.getX(), living.getY(), living.getZ(),
                     SoundEvents.FIRECHARGE_USE,
                     SoundSource.PLAYERS,
-                    0.7F, 1.0F + serverLevel.random.nextFloat() * 0.4F
+                    0.7F, 1.0F + serverLevel.getRandom().nextFloat() * 0.4F
             );
         }
 

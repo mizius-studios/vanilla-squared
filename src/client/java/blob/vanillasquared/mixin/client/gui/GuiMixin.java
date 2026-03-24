@@ -3,7 +3,7 @@ package blob.vanillasquared.mixin.client.gui;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
@@ -33,8 +33,8 @@ public abstract class GuiMixin {
      * @reason Render armor values above 20 in additional HUD rows.
      */
     @Overwrite
-    private static void renderArmor(
-        GuiGraphics guiGraphics,
+    private static void extractArmor(
+        GuiGraphicsExtractor guiGraphics,
         Player player,
         int top,
         int lines,

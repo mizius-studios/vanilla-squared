@@ -10,8 +10,8 @@ public final class VSQNetworking {
     private VSQNetworking() {}
 
     public static void initialize() {
-        PayloadTypeRegistry.playC2S().register(DebugPayload.TYPE, DebugPayload.CODEC);
-        PayloadTypeRegistry.playS2C().register(EnchantmentBlockCountsPayload.TYPE, EnchantmentBlockCountsPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(DebugPayload.TYPE, DebugPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(EnchantmentBlockCountsPayload.TYPE, EnchantmentBlockCountsPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(DebugPayload.TYPE, (payload, context) -> context.server().execute(() -> {
             var player = context.player();

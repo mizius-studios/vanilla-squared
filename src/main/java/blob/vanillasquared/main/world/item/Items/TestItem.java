@@ -3,7 +3,7 @@ package blob.vanillasquared.main.world.item.Items;
 import java.util.function.Function;
 
 import blob.vanillasquared.main.VanillaSquared;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -23,6 +23,6 @@ public class TestItem {
     public static final Item TEST_ITEM1 = register("test1", Item::new, new Item.Properties());
 
     public static void initialize() {
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.OP_BLOCKS).register(itemGroup -> itemGroup.accept(TEST_ITEM1));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.OP_BLOCKS).register(output -> output.accept(TEST_ITEM1));
     }
 }
