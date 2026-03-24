@@ -6,7 +6,6 @@ import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipe;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeInput;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
-import blob.vanillasquared.main.world.recipe.enchanting.VSQRecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
