@@ -51,6 +51,21 @@ public final class EnchantingRecipeRegistry {
                 .findFirst();
     }
 
+    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstStructuralMatch(EnchantingRecipeInput input) {
+        return RECIPES.values().stream()
+                .filter(holder -> holder.value().findMatch(input).isPresent())
+                .findFirst();
+    }
+
+    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel) {
+        return RECIPES.values().stream()
+                .filter(holder -> {
+                    EnchantingRecipe recipe = holder.value();
+                    return recipe.findMatch(input).isPresent() && recipe.canPlayerCraft(playerLevel);
+                })
+                .findFirst();
+    }
+
     private static final class ReloadListener implements SimpleResourceReloadListener<Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>>>, IdentifiableResourceReloadListener {
         private final HolderLookup.Provider registries;
 

@@ -1,5 +1,7 @@
 {
   "type": "vsq:enchanting",
+  "level": 12,
+  "consumed_levels": 3,
   "input": {
     "item": "minecraft:diamond_sword",
     "count": 1

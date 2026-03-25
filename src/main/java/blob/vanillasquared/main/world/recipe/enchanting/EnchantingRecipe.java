@@ -1,5 +1,9 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -19,24 +23,35 @@ import java.util.List;
 import java.util.Optional;
 
 public record EnchantingRecipe(
+        int level,
+        int consumedLevels,
         EnchantingIngredient input,
         EnchantingIngredient material,
         List<EnchantingIngredient> ingredients,
         EnchantingComponentModifier componentModifier
 ) implements Recipe<EnchantingRecipeInput> {
+    private static final com.mojang.serialization.Codec<List<EnchantingIngredient>> INGREDIENTS_CODEC = net.minecraft.util.ExtraCodecs.JSON.flatXmap(
+            EnchantingRecipe::vsq$decodeIngredients,
+            EnchantingRecipe::vsq$encodeIngredients
+    );
+
     public static final MapCodec<EnchantingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("level", 0).forGetter(EnchantingRecipe::level),
+            com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("consumed_levels", 0).forGetter(EnchantingRecipe::consumedLevels),
             EnchantingIngredient.CODEC.fieldOf("input").forGetter(EnchantingRecipe::input),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
-            EnchantingIngredient.CODEC.listOf().fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
+            INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
             EnchantingComponentModifier.CODEC.fieldOf("component_modifier").forGetter(EnchantingRecipe::componentModifier)
-    ).apply(instance, EnchantingRecipe::new));
+    ).apply(instance, EnchantingRecipe::vsq$create));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipe> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT, EnchantingRecipe::level,
+            ByteBufCodecs.VAR_INT, EnchantingRecipe::consumedLevels,
             EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::input,
             EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::material,
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::ingredients,
             EnchantingComponentModifier.STREAM_CODEC, EnchantingRecipe::componentModifier,
-            EnchantingRecipe::new
+            EnchantingRecipe::vsq$create
     );
 
     public EnchantingRecipe {
@@ -44,6 +59,13 @@ public record EnchantingRecipe(
         if (ingredients.size() != 4) {
             throw new IllegalArgumentException("Enchanting recipes require exactly 4 cross ingredients");
         }
+        if (level < 0) {
+            throw new IllegalArgumentException("Enchanting recipe level must be non-negative");
+        }
+        if (consumedLevels < 0) {
+            throw new IllegalArgumentException("Enchanting recipe consumed levels must be non-negative");
+        }
+        consumedLevels = Math.min(consumedLevels, level);
     }
 
     @Override
@@ -131,6 +153,46 @@ public record EnchantingRecipe(
         }
 
         return Optional.of(new Match(matchedCrossSlots));
+    }
+
+    public boolean canPlayerCraft(int playerLevel) {
+        return playerLevel >= this.level;
+    }
+
+    private static EnchantingRecipe vsq$create(int level, int consumedLevels, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, EnchantingComponentModifier componentModifier) {
+        return new EnchantingRecipe(level, consumedLevels, input, material, ingredients, componentModifier);
+    }
+
+    private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {
+        if (!json.isJsonArray()) {
+            return DataResult.error(() -> "Enchanting recipe ingredients must be a JSON array");
+        }
+
+        List<EnchantingIngredient> decoded = new ArrayList<>();
+        int index = 0;
+        for (JsonElement element : json.getAsJsonArray()) {
+            int currentIndex = index++;
+            var parsedResult = EnchantingIngredient.CODEC.parse(JsonOps.INSTANCE, element);
+            var parsed = parsedResult.result();
+            if (parsed.isEmpty()) {
+                String details = parsedResult.error().map(error -> error.message()).orElse("unknown reason");
+                return DataResult.error(() -> "Failed to parse enchanting ingredient at index " + currentIndex + ": " + details);
+            }
+            decoded.add(parsed.get());
+        }
+        return DataResult.success(decoded);
+    }
+
+    private static DataResult<JsonElement> vsq$encodeIngredients(List<EnchantingIngredient> ingredients) {
+        JsonArray array = new JsonArray();
+        for (EnchantingIngredient ingredient : ingredients) {
+            var encoded = EnchantingIngredient.CODEC.encodeStart(JsonOps.INSTANCE, ingredient).result();
+            if (encoded.isEmpty()) {
+                return DataResult.error(() -> "Failed to encode enchanting ingredient list");
+            }
+            array.add(encoded.get());
+        }
+        return DataResult.success(array);
     }
 
     public record Match(List<Integer> matchedCrossSlots) {

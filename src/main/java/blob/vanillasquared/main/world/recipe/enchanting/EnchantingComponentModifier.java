@@ -95,13 +95,10 @@ public record EnchantingComponentModifier(Map<Identifier, JsonElement> component
 
         Codec componentCodec = componentType.codecOrThrow();
         Object currentValue = stack.get(componentType);
-        var encodedCurrent = currentValue == null ? java.util.Optional.<JsonElement>empty() : componentCodec.encodeStart(ops, currentValue).result();
         JsonElement mergedJson = currentValue == null
                 ? modifierJson.deepCopy()
                 : vsq$mergeJson(
-                        encodedCurrent.isPresent()
-                                ? encodedCurrent.get()
-                                : vsq$throwInvalidComponent("Failed to encode component " + componentId),
+                        vsq$encodeComponent(componentCodec, ops, currentValue, componentId),
                         modifierJson
                 );
 
@@ -110,6 +107,20 @@ public record EnchantingComponentModifier(Map<Identifier, JsonElement> component
                 ? decodedValue.get()
                 : vsq$throwInvalidComponent("Failed to decode component " + componentId + " from " + mergedJson);
         stack.set(componentType, mergedValue);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static JsonElement vsq$encodeComponent(Codec componentCodec, RegistryOps<JsonElement> ops, Object currentValue, Identifier componentId) {
+        var encodedValue = componentCodec.encodeStart(ops, currentValue).result();
+        if (encodedValue.isEmpty()) {
+            return vsq$throwInvalidComponent("Failed to encode component " + componentId);
+        }
+
+        Object encoded = encodedValue.get();
+        if (encoded instanceof JsonElement jsonElement) {
+            return jsonElement;
+        }
+        return vsq$throwInvalidComponent("Encoded component " + componentId + " was not a JsonElement");
     }
 
     private static <T> T vsq$throwInvalidComponent(String message) {

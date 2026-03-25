@@ -57,8 +57,6 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     @Unique
     private static final int VSQ$PROPERTY_BLOCK_REQUIREMENT = 3;
     @Unique
-    private static final int VSQ$DUMMY_LEVEL_REQUIREMENT = 69;
-    @Unique
     private static final Map<Identifier, Integer> VSQ$DUMMY_DEBUG_BLOCKS = Map.of(
             BuiltInRegistries.BLOCK.getKey(Blocks.BOOKSHELF), 5,
             BuiltInRegistries.BLOCK.getKey(Blocks.CHISELED_BOOKSHELF), 2,
@@ -169,9 +167,12 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
             Map<Identifier, Integer> detectedBlocks = this.vsq$collectDetectedBlocks(level, tablePos);
             Map<Identifier, Integer> requiredBlocks = VSQ$DUMMY_DEBUG_BLOCKS;
+            EnchantingRecipeInput recipeInput = this.vsq$createRecipeInput();
+            Optional<RecipeHolder<EnchantingRecipe>> structuralMatch = EnchantingRecipeRegistry.findFirstStructuralMatch(recipeInput);
+            int levelRequirement = structuralMatch.map(holder -> holder.value().level()).orElse(-1);
             this.vsq$nearbyBlockCount = detectedBlocks.values().stream().mapToInt(Integer::intValue).sum();
             this.vsq$blockRequirement = requiredBlocks.values().stream().mapToInt(Integer::intValue).sum();
-            this.vsq$levelRequirement = VSQ$DUMMY_LEVEL_REQUIREMENT;
+            this.vsq$levelRequirement = levelRequirement;
             this.vsq$sendDetectedBlockCounts(detectedBlocks, requiredBlocks, this.vsq$levelRequirement, this.vsq$player.experienceLevel);
         });
     }
@@ -390,7 +391,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
         EnchantingRecipeInput recipeInput = this.vsq$createRecipeInput();
         List<RecipeHolder<EnchantingRecipe>> enchantingRecipes = List.copyOf(EnchantingRecipeRegistry.recipes());
-        Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = EnchantingRecipeRegistry.findFirstMatch(recipeInput, player.level());
+        Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = EnchantingRecipeRegistry.findFirstCraftableMatch(recipeInput, player.experienceLevel);
         if (recipeHolder.isEmpty()) {
             VanillaSquared.LOGGER.info(
                     "No Enchanting recipe matched. loadedEnchantingRecipes={}, input={}, material={}, cross=[{},{},{},{}]",
@@ -425,9 +426,13 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             int containerSlotIndex = matchedSlotIndex + 2;
             this.getSlot(containerSlotIndex).remove(recipe.ingredients().get(ingredientIndex).count());
         }
+        if (recipe.consumedLevels() > 0) {
+            player.giveExperienceLevels(-recipe.consumedLevels());
+        }
         this.getSlot(0).set(result);
         this.slotsChanged(this.enchantSlots);
         this.broadcastChanges();
+        this.vsq$refresh();
         VanillaSquared.LOGGER.info("Applied Enchanting recipe {} -> {}", holder.id(), result);
         return true;
     }
