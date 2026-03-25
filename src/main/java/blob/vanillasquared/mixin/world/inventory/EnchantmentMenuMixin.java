@@ -260,24 +260,14 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
         this.addDataSlots(this.vsq$properties);
 
-        this.addSlot(new Slot(this.enchantSlots, 0, 26, 23) {
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                return stack.isEnchantable();
-            }
-        });
+        this.addSlot(new Slot(this.enchantSlots, 0, 26, 23)); // Input Slot
 
-        this.addSlot(new Slot(this.enchantSlots, 1, 80, 36) {
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.LAPIS_LAZULI);
-            }
-        });
+        this.addSlot(new Slot(this.enchantSlots, 1, 80, 36)); // Middle Material Slot
 
-        this.addSlot(new Slot(this.enchantSlots, 2, 80, 18));
-        this.addSlot(new Slot(this.enchantSlots, 3, 62, 36));
-        this.addSlot(new Slot(this.enchantSlots, 4, 98, 36));
-        this.addSlot(new Slot(this.enchantSlots, 5, 80, 54));
+        this.addSlot(new Slot(this.enchantSlots, 2, 80, 18)); // Cross Slot Top
+        this.addSlot(new Slot(this.enchantSlots, 3, 62, 36)); // Cross Slot Left
+        this.addSlot(new Slot(this.enchantSlots, 4, 98, 36)); // Cross Slot Right
+        this.addSlot(new Slot(this.enchantSlots, 5, 80, 54)); // Cross Slot Bottom
 
         this.vsq$addPlayerSlots(playerInventory);
     }
@@ -417,17 +407,25 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
         RecipeHolder<EnchantingRecipe> holder = recipeHolder.get();
         EnchantingRecipe recipe = holder.value();
-        ItemStack result = recipe.assemble(recipeInput);
+        Optional<EnchantingRecipe.Match> match = recipe.findMatch(recipeInput);
+        if (match.isEmpty()) {
+            VanillaSquared.LOGGER.warn("Enchanting recipe {} was selected but no longer matches at craft time", holder.id());
+            return false;
+        }
+
+        ItemStack result = recipe.assemble(recipeInput, player.registryAccess());
         if (result.isEmpty()) {
             VanillaSquared.LOGGER.warn("Enchanting recipe {} assembled to an empty stack", holder.id());
             return false;
         }
 
-        this.getSlot(1).remove(1);
-        for (int slotIndex = 2; slotIndex <= 5; slotIndex++) {
-            this.getSlot(slotIndex).remove(1);
+        this.getSlot(1).remove(recipe.material().count());
+        for (int ingredientIndex = 0; ingredientIndex < recipe.ingredients().size(); ingredientIndex++) {
+            int matchedSlotIndex = match.get().matchedCrossSlots().get(ingredientIndex);
+            int containerSlotIndex = matchedSlotIndex + 2;
+            this.getSlot(containerSlotIndex).remove(recipe.ingredients().get(ingredientIndex).count());
         }
-        this.getSlot(0).set(result.copyWithCount(1));
+        this.getSlot(0).set(result);
         this.slotsChanged(this.enchantSlots);
         this.broadcastChanges();
         VanillaSquared.LOGGER.info("Applied Enchanting recipe {} -> {}", holder.id(), result);

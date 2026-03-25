@@ -1,0 +1,34 @@
+{
+  "type": "vsq:enchanting",
+  "input": {
+    "item": "minecraft:diamond_sword",
+    "count": 1
+  },
+  "material": {
+    "item": "minecraft:lapis_lazuli",
+    "count": 3
+  },
+  "ingredients": [
+    {
+      "tag": "minecraft:planks",
+      "count": 2
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:lapis_lazuli",
+      "count": 2
+    }
+  ],
+  "component_modifier": {
+    "minecraft:enchantments": {
+      "minecraft:sharpness": 5
+    }
+  }
+}
