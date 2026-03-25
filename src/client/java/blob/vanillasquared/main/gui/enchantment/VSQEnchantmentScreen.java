@@ -189,6 +189,18 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         this.vsq$lapislazuli.tick(LAPIS_LAZULI_SLOT_EMPTY_SPRITES);
     }
 
+    private boolean vsq$hasDisplayableRecipe() {
+        return this.vsq$levelRequirement != -1 && this.vsq$blockRequirement != -1;
+    }
+
+    private void vsq$updateBookOpenState(boolean shouldOpen) {
+        if (shouldOpen) {
+            this.open += 0.2F;
+        } else {
+            this.open -= 0.2F;
+        }
+    }
+
     private void tickBook() {
         ItemStack current = this.menu.getSlot(0).getItem();
         if (!ItemStack.matches(current, this.last)) {
@@ -202,19 +214,7 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         this.oFlip = this.flip;
         this.oOpen = this.open;
 
-        boolean hasOffer = false;
-        for (int i = 0; i < 3; i++) {
-            if (this.menu.costs[i] != 0) {
-                hasOffer = true;
-                break;
-            }
-        }
-
-        if (hasOffer) {
-            this.open += 0.2F;
-        } else {
-            this.open -= 0.2F;
-        }
+        this.vsq$updateBookOpenState(this.vsq$hasDisplayableRecipe());
 
         this.open = Mth.clamp(this.open, 0.0F, 1.0F);
         float f = (this.flipT - this.flip) * 0.4F;
