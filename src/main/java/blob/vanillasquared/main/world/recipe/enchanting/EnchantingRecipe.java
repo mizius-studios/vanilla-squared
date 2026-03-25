@@ -175,7 +175,7 @@ public record EnchantingRecipe(
             var parsedResult = EnchantingIngredient.CODEC.parse(JsonOps.INSTANCE, element);
             var parsed = parsedResult.result();
             if (parsed.isEmpty()) {
-                String details = parsedResult.error().map(error -> error.message()).orElse("unknown reason");
+                String details = parsedResult.error().map(DataResult.Error::message).orElse("unknown reason");
                 return DataResult.error(() -> "Failed to parse enchanting ingredient at index " + currentIndex + ": " + details);
             }
             decoded.add(parsed.get());
