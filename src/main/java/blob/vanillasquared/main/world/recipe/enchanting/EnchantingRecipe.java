@@ -167,6 +167,10 @@ public record EnchantingRecipe(
         return playerLevel >= this.level;
     }
 
+    public boolean wouldModifyInput(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        return this.componentModifier.modifies(input.input(), registries);
+    }
+
     public boolean hasRequiredBlocks(java.util.Map<net.minecraft.resources.Identifier, Integer> countedBlocks) {
         for (EnchantingBlockRequirement requirement : this.blocks) {
             if (!requirement.matches(countedBlocks)) {

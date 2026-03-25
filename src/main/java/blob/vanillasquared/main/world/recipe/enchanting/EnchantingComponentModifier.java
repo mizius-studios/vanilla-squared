@@ -69,6 +69,10 @@ public record EnchantingComponentModifier(Map<Identifier, JsonElement> component
         return result;
     }
 
+    public boolean modifies(ItemStack originalStack, HolderLookup.Provider registries) {
+        return !ItemStack.matches(originalStack, this.apply(originalStack, registries));
+    }
+
     private static DataResult<EnchantingComponentModifier> vsq$validate(EnchantingComponentModifier modifier) {
         for (Map.Entry<Identifier, JsonElement> entry : modifier.componentModifier.entrySet()) {
             DataComponentType<?> componentType = BuiltInRegistries.DATA_COMPONENT_TYPE.getValue(entry.getKey());

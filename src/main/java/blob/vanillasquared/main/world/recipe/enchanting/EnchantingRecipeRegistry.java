@@ -52,20 +52,34 @@ public final class EnchantingRecipeRegistry {
     }
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstStructuralMatch(EnchantingRecipeInput input) {
+        return findFirstStructuralMatch(input, null);
+    }
+
+    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstStructuralMatch(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return RECIPES.values().stream()
-                .filter(holder -> holder.value().findMatch(input).isPresent())
+                .filter(holder -> {
+                    EnchantingRecipe recipe = holder.value();
+                    return recipe.findMatch(input).isPresent() && (registries == null || recipe.wouldModifyInput(input, registries));
+                })
                 .findFirst();
     }
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel) {
-        return findFirstCraftableMatch(input, playerLevel, Map.of());
+        return findFirstCraftableMatch(input, playerLevel, Map.of(), null);
     }
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks) {
+        return findFirstCraftableMatch(input, playerLevel, countedBlocks, null);
+    }
+
+    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
         return RECIPES.values().stream()
                 .filter(holder -> {
                     EnchantingRecipe recipe = holder.value();
-                    return recipe.findMatch(input).isPresent() && recipe.canPlayerCraft(playerLevel) && recipe.hasRequiredBlocks(countedBlocks);
+                    return recipe.findMatch(input).isPresent()
+                            && recipe.canPlayerCraft(playerLevel)
+                            && recipe.hasRequiredBlocks(countedBlocks)
+                            && (registries == null || recipe.wouldModifyInput(input, registries));
                 })
                 .findFirst();
     }

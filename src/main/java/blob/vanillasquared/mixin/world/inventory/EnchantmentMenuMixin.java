@@ -160,7 +160,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
             Map<Identifier, Integer> detectedBlocks = this.vsq$collectDetectedBlocks(level, tablePos);
             EnchantingRecipeInput recipeInput = this.vsq$createRecipeInput();
-            Optional<RecipeHolder<EnchantingRecipe>> structuralMatch = EnchantingRecipeRegistry.findFirstStructuralMatch(recipeInput);
+            Optional<RecipeHolder<EnchantingRecipe>> structuralMatch = EnchantingRecipeRegistry.findFirstStructuralMatch(recipeInput, this.vsq$serverPlayer.registryAccess());
             List<EnchantingRecipe.BlockRequirementDisplay> blockDisplay = structuralMatch
                     .map(holder -> holder.value().blockRequirementDisplay(detectedBlocks))
                     .orElse(List.of());
@@ -359,7 +359,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
         List<RecipeHolder<EnchantingRecipe>> enchantingRecipes = List.copyOf(EnchantingRecipeRegistry.recipes());
         Map<Identifier, Integer> detectedBlocks = new TreeMap<>(Identifier::compareTo);
         this.vsq$access.execute((level, tablePos) -> detectedBlocks.putAll(this.vsq$collectDetectedBlocks(level, tablePos)));
-        Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = EnchantingRecipeRegistry.findFirstCraftableMatch(recipeInput, player.experienceLevel, detectedBlocks);
+        Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = EnchantingRecipeRegistry.findFirstCraftableMatch(recipeInput, player.experienceLevel, detectedBlocks, player.registryAccess());
         if (recipeHolder.isEmpty()) {
             VanillaSquared.LOGGER.info(
                     "No Enchanting recipe matched. loadedEnchantingRecipes={}, input={}, material={}, cross=[{},{},{},{}]",
