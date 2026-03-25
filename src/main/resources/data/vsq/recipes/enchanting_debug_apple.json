@@ -2,6 +2,14 @@
   "type": "vsq:enchanting",
   "level": 12,
   "consumed_levels": 3,
+  "name": {
+    "text": "Lorem Ipsum Dolor Sit Amet",
+    "color": "gray"
+  },
+  "description": {
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nUt enim ad minim veniam,\nquis nostrud exercitation ullamco laboris\nnisi ut aliquip ex ea commodo consequat.",
+    "color": "gray"
+  },
   "input": {
     "item": "minecraft:diamond_sword",
     "count": 1

@@ -14,6 +14,7 @@ public interface VSQEnchantmentMenuProperties {
     boolean vsq$hasRequiredXp();
     boolean vsq$hasRequiredBlocks();
     List<Component> vsq$getDetectedBlockTooltipLines();
-    void vsq$setDetectedBlockCounts(int containerId, List<Identifier> blockIds, List<Integer> counts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel);
+    List<Component> vsq$getBookTooltipLines();
+    void vsq$setDetectedBlockCounts(int containerId, List<Identifier> blockIds, List<Integer> counts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription);
     boolean vsq$tryCraftEnchantingRecipe(ServerPlayer player);
 }

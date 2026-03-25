@@ -81,6 +81,8 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     private boolean vsq$hasRequiredBlocks;
     @Unique
     private List<Component> vsq$detectedBlockTooltipLines = List.of();
+    @Unique
+    private List<Component> vsq$bookTooltipLines = List.of();
 
     @Unique
     private Player vsq$player;
@@ -164,10 +166,12 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             List<EnchantingRecipe.BlockRequirementDisplay> blockDisplay = structuralMatch
                     .map(holder -> holder.value().blockRequirementDisplay(detectedBlocks))
                     .orElse(List.of());
+            Component recipeName = structuralMatch.map(holder -> holder.value().name()).orElse(Component.empty());
+            Component recipeDescription = structuralMatch.map(holder -> holder.value().description()).orElse(Component.empty());
             this.vsq$levelRequirement = structuralMatch.map(holder -> holder.value().level()).orElse(-1);
             this.vsq$blockRequirement = structuralMatch.map(holder -> holder.value().blocks().stream().mapToInt(EnchantingBlockRequirement::count).sum()).orElse(-1);
             this.vsq$nearbyBlockCount = this.vsq$blockRequirement == -1 ? -1 : blockDisplay.stream().mapToInt(EnchantingRecipe.BlockRequirementDisplay::placedCount).sum();
-            this.vsq$sendDetectedBlockCounts(blockDisplay, this.vsq$levelRequirement, this.vsq$blockRequirement, this.vsq$player.experienceLevel);
+            this.vsq$sendDetectedBlockCounts(blockDisplay, this.vsq$levelRequirement, this.vsq$blockRequirement, this.vsq$player.experienceLevel, recipeName, recipeDescription);
         });
     }
 
@@ -203,7 +207,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     }
 
     @Unique
-    private void vsq$sendDetectedBlockCounts(List<EnchantingRecipe.BlockRequirementDisplay> blockDisplay, int levelRequirement, int blockRequirement, int playerLevel) {
+    private void vsq$sendDetectedBlockCounts(List<EnchantingRecipe.BlockRequirementDisplay> blockDisplay, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription) {
         if (this.vsq$serverPlayer == null) {
             return;
         }
@@ -217,7 +221,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             requiredBlockCounts.add(entry.requiredCount());
         }
 
-        ServerPlayNetworking.send(this.vsq$serverPlayer, new EnchantmentBlockCountsPayload(this.containerId, blockIds, blockCounts, requiredBlockCounts, playerLevel, levelRequirement, blockRequirement));
+        ServerPlayNetworking.send(this.vsq$serverPlayer, new EnchantmentBlockCountsPayload(this.containerId, blockIds, blockCounts, requiredBlockCounts, playerLevel, levelRequirement, blockRequirement, recipeName, recipeDescription));
     }
 
     @Unique
@@ -299,7 +303,12 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     }
 
     @Override
-    public void vsq$setDetectedBlockCounts(int containerId, List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel) {
+    public List<Component> vsq$getBookTooltipLines() {
+        return this.vsq$bookTooltipLines;
+    }
+
+    @Override
+    public void vsq$setDetectedBlockCounts(int containerId, List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription) {
         if (this.containerId != containerId) {
             return;
         }
@@ -320,6 +329,9 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
         this.vsq$blockRequirement = blockRequirement;
         this.vsq$hasRequiredXp = this.vsq$levelRequirement != -1 && this.vsq$playerLevel >= this.vsq$levelRequirement;
         this.vsq$hasRequiredBlocks = this.vsq$blockRequirement != -1;
+        this.vsq$bookTooltipLines = this.vsq$levelRequirement == -1 || this.vsq$blockRequirement == -1
+                ? List.of()
+                : List.of(recipeName.copy(), recipeDescription.copy());
 
         List<Component> tooltipLines = new ArrayList<>(blockIds.size());
         for (int j = 0; j < blockIds.size() && !blockIds.isEmpty(); j++) {
@@ -342,6 +354,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
         }
         if (this.vsq$blockRequirement == -1) {
             this.vsq$hasRequiredBlocks = false;
+            this.vsq$bookTooltipLines = List.of();
             this.vsq$detectedBlockTooltipLines = List.of(Component.translatable("vsq.gui.container.enchantment_table.blocks.tooltip.none"));
         } else if (blockIds.isEmpty()) {
             this.vsq$hasRequiredBlocks = true;

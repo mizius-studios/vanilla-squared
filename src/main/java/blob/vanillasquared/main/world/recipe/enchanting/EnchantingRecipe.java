@@ -9,6 +9,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
@@ -25,6 +27,8 @@ import java.util.Optional;
 public record EnchantingRecipe(
         int level,
         int consumedLevels,
+        Component name,
+        Component description,
         EnchantingIngredient input,
         EnchantingIngredient material,
         List<EnchantingIngredient> ingredients,
@@ -43,6 +47,8 @@ public record EnchantingRecipe(
     public static final MapCodec<EnchantingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("level", 0).forGetter(EnchantingRecipe::level),
             com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("consumed_levels", 0).forGetter(EnchantingRecipe::consumedLevels),
+            ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
+            ComponentSerialization.CODEC.fieldOf("description").forGetter(EnchantingRecipe::description),
             EnchantingIngredient.CODEC.fieldOf("input").forGetter(EnchantingRecipe::input),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
             INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
@@ -53,6 +59,8 @@ public record EnchantingRecipe(
     public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipe> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, EnchantingRecipe::level,
             ByteBufCodecs.VAR_INT, EnchantingRecipe::consumedLevels,
+            ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::name,
+            ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::description,
             EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::input,
             EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::material,
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::ingredients,
@@ -64,6 +72,8 @@ public record EnchantingRecipe(
     public EnchantingRecipe {
         ingredients = List.copyOf(ingredients);
         blocks = List.copyOf(blocks);
+        name = name.copy();
+        description = description.copy();
         if (ingredients.size() != 4) {
             throw new IllegalArgumentException("Enchanting recipes require exactly 4 cross ingredients");
         }
@@ -188,8 +198,8 @@ public record EnchantingRecipe(
         return display;
     }
 
-    private static EnchantingRecipe vsq$create(int level, int consumedLevels, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
-        return new EnchantingRecipe(level, consumedLevels, input, material, ingredients, blocks, componentModifier);
+    private static EnchantingRecipe vsq$create(int level, int consumedLevels, Component name, Component description, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
+        return new EnchantingRecipe(level, consumedLevels, name, description, input, material, ingredients, blocks, componentModifier);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {

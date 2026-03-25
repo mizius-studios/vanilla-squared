@@ -3,6 +3,7 @@ package blob.vanillasquared.main.network.handlers;
 import blob.vanillasquared.main.network.payload.EnchantmentBlockCountsPayload;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public final class EnchantmentBlockCountsPayloadHandler {
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(EnchantmentBlockCountsPayload.TYPE, (payload, context) ->
                 context.client().execute(() -> {
-                    VSQ$PENDING_COUNTS.put(payload.containerId(), new CachedCounts(payload.blockIds(), payload.blockCounts(), payload.requiredBlockCounts(), payload.levelRequirement(), payload.blockRequirement(), payload.playerLevel()));
+                    VSQ$PENDING_COUNTS.put(payload.containerId(), new CachedCounts(payload.blockIds(), payload.blockCounts(), payload.requiredBlockCounts(), payload.levelRequirement(), payload.blockRequirement(), payload.playerLevel(), payload.recipeName(), payload.recipeDescription()));
 
                     if (context.client().player == null) {
                         return;
@@ -28,7 +29,7 @@ public final class EnchantmentBlockCountsPayloadHandler {
                         return;
                     }
 
-                    properties.vsq$setDetectedBlockCounts(payload.containerId(), payload.blockIds(), payload.blockCounts(), payload.requiredBlockCounts(), payload.levelRequirement(), payload.blockRequirement(), payload.playerLevel());
+                    properties.vsq$setDetectedBlockCounts(payload.containerId(), payload.blockIds(), payload.blockCounts(), payload.requiredBlockCounts(), payload.levelRequirement(), payload.blockRequirement(), payload.playerLevel(), payload.recipeName(), payload.recipeDescription());
                 })
         );
     }
@@ -39,14 +40,16 @@ public final class EnchantmentBlockCountsPayloadHandler {
             return;
         }
 
-        properties.vsq$setDetectedBlockCounts(containerId, cachedCounts.blockIds(), cachedCounts.blockCounts(), cachedCounts.requiredBlockCounts(), cachedCounts.levelRequirement(), cachedCounts.blockRequirement(), cachedCounts.playerLevel());
+        properties.vsq$setDetectedBlockCounts(containerId, cachedCounts.blockIds(), cachedCounts.blockCounts(), cachedCounts.requiredBlockCounts(), cachedCounts.levelRequirement(), cachedCounts.blockRequirement(), cachedCounts.playerLevel(), cachedCounts.recipeName(), cachedCounts.recipeDescription());
     }
 
-    private record CachedCounts(List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel) {
+    private record CachedCounts(List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription) {
         private CachedCounts {
             blockIds = List.copyOf(blockIds);
             blockCounts = List.copyOf(blockCounts);
             requiredBlockCounts = List.copyOf(requiredBlockCounts);
+            recipeName = recipeName.copy();
+            recipeDescription = recipeDescription.copy();
         }
     }
 }
