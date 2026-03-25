@@ -55,6 +55,14 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     private static final int VSQ$PROPERTY_LEVEL_REQUIREMENT = 2;
     @Unique
     private static final int VSQ$PROPERTY_BLOCK_REQUIREMENT = 3;
+    @Unique
+    private static final int VSQ$INPUT_SLOT = 0;
+    @Unique
+    private static final int VSQ$MATERIAL_SLOT = 1;
+    @Unique
+    private static final int VSQ$FIRST_CROSS_SLOT = 2;
+    @Unique
+    private static final int VSQ$CROSS_SLOT_COUNT = 4;
 
     @Shadow
     @Final
@@ -242,14 +250,12 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
         this.addDataSlots(this.vsq$properties);
 
-        this.addSlot(new Slot(this.enchantSlots, 0, 26, 23)); // Input Slot
-
-        this.addSlot(new Slot(this.enchantSlots, 1, 80, 36)); // Middle Material Slot
-
-        this.addSlot(new Slot(this.enchantSlots, 2, 80, 18)); // Cross Slot Top
-        this.addSlot(new Slot(this.enchantSlots, 3, 62, 36)); // Cross Slot Left
-        this.addSlot(new Slot(this.enchantSlots, 4, 98, 36)); // Cross Slot Right
-        this.addSlot(new Slot(this.enchantSlots, 5, 80, 54)); // Cross Slot Bottom
+        this.addSlot(new Slot(this.enchantSlots, VSQ$INPUT_SLOT, 26, 23)); // Input Slot
+        this.addSlot(new Slot(this.enchantSlots, VSQ$MATERIAL_SLOT, 80, 36)); // Middle Material Slot
+        this.addSlot(new Slot(this.enchantSlots, VSQ$FIRST_CROSS_SLOT, 80, 18)); // Cross Slot Top
+        this.addSlot(new Slot(this.enchantSlots, VSQ$FIRST_CROSS_SLOT + 1, 62, 36)); // Cross Slot Left
+        this.addSlot(new Slot(this.enchantSlots, VSQ$FIRST_CROSS_SLOT + 2, 98, 36)); // Cross Slot Right
+        this.addSlot(new Slot(this.enchantSlots, VSQ$FIRST_CROSS_SLOT + 3, 80, 54)); // Cross Slot Bottom
 
         this.vsq$addPlayerSlots(playerInventory);
     }
@@ -313,12 +319,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             return;
         }
 
-        if (blockIds.size() != blockCounts.size()) {
-            this.vsq$detectedBlockTooltipLines = List.of();
-            return;
-        }
-
-        if (blockIds.size() != requiredBlockCounts.size()) {
+        if (!vsq$hasMatchingBlockCounts(blockIds, blockCounts, requiredBlockCounts)) {
             this.vsq$detectedBlockTooltipLines = List.of();
             return;
         }
@@ -333,25 +334,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
                 ? List.of()
                 : List.of(recipeName.copy(), recipeDescription.copy());
 
-        List<Component> tooltipLines = new ArrayList<>(blockIds.size());
-        for (int j = 0; j < blockIds.size() && !blockIds.isEmpty(); j++) {
-            int countRequired = requiredBlockCounts.get(j);
-            Identifier blockId = blockIds.get(j);
-            Block block = BuiltInRegistries.BLOCK.getValue(blockId);
-            int detectedCount = blockCounts.get(j);
-            if (detectedCount < countRequired) {
-                this.vsq$hasRequiredBlocks = false;
-            }
-
-            MutableComponent line = Component.translatable(
-                    "vsq.gui.container.enchantment_table.blocks.tooltip.entry",
-                    detectedCount,
-                    countRequired,
-                    block.getName()
-            );
-            tooltipLines.add(line);
-            this.vsq$detectedBlockTooltipLines = Collections.unmodifiableList(tooltipLines);
-        }
+        this.vsq$detectedBlockTooltipLines = this.vsq$buildDetectedBlockTooltipLines(blockIds, blockCounts, requiredBlockCounts);
         if (this.vsq$blockRequirement == -1) {
             this.vsq$hasRequiredBlocks = false;
             this.vsq$bookTooltipLines = List.of();
@@ -370,19 +353,18 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
 
         EnchantingRecipeInput recipeInput = this.vsq$createRecipeInput();
         List<RecipeHolder<EnchantingRecipe>> enchantingRecipes = List.copyOf(EnchantingRecipeRegistry.recipes());
-        Map<Identifier, Integer> detectedBlocks = new TreeMap<>(Identifier::compareTo);
-        this.vsq$access.execute((level, tablePos) -> detectedBlocks.putAll(this.vsq$collectDetectedBlocks(level, tablePos)));
+        Map<Identifier, Integer> detectedBlocks = this.vsq$collectDetectedBlocks();
         Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = EnchantingRecipeRegistry.findFirstCraftableMatch(recipeInput, player.experienceLevel, detectedBlocks, player.registryAccess());
         if (recipeHolder.isEmpty()) {
             VanillaSquared.LOGGER.info(
                     "No Enchanting recipe matched. loadedEnchantingRecipes={}, input={}, material={}, cross=[{},{},{},{}]",
                     enchantingRecipes.size(),
-                    this.getSlot(0).getItem(),
-                    this.getSlot(1).getItem(),
-                    this.getSlot(2).getItem(),
-                    this.getSlot(3).getItem(),
-                    this.getSlot(4).getItem(),
-                    this.getSlot(5).getItem()
+                    this.getSlot(VSQ$INPUT_SLOT).getItem(),
+                    this.getSlot(VSQ$MATERIAL_SLOT).getItem(),
+                    this.getSlot(VSQ$FIRST_CROSS_SLOT).getItem(),
+                    this.getSlot(VSQ$FIRST_CROSS_SLOT + 1).getItem(),
+                    this.getSlot(VSQ$FIRST_CROSS_SLOT + 2).getItem(),
+                    this.getSlot(VSQ$FIRST_CROSS_SLOT + 3).getItem()
             );
             return false;
         }
@@ -404,16 +386,16 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             return false;
         }
 
-        this.getSlot(1).remove(recipe.material().count());
+        this.getSlot(VSQ$MATERIAL_SLOT).remove(recipe.material().count());
         for (int ingredientIndex = 0; ingredientIndex < recipe.ingredients().size(); ingredientIndex++) {
             int matchedSlotIndex = match.get().matchedCrossSlots().get(ingredientIndex);
-            int containerSlotIndex = matchedSlotIndex + 2;
+            int containerSlotIndex = matchedSlotIndex + VSQ$FIRST_CROSS_SLOT;
             this.getSlot(containerSlotIndex).remove(recipe.ingredients().get(ingredientIndex).count());
         }
         if (recipe.consumedLevels() > 0) {
             player.giveExperienceLevels(-recipe.consumedLevels());
         }
-        this.getSlot(0).set(result);
+        this.getSlot(VSQ$INPUT_SLOT).set(result);
         this.slotsChanged(this.enchantSlots);
         this.broadcastChanges();
         this.vsq$refresh();
@@ -422,16 +404,54 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     }
 
     @Unique
+    private static boolean vsq$hasMatchingBlockCounts(List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts) {
+        return blockIds.size() == blockCounts.size() && blockIds.size() == requiredBlockCounts.size();
+    }
+
+    @Unique
+    private Map<Identifier, Integer> vsq$collectDetectedBlocks() {
+        Map<Identifier, Integer> detectedBlocks = new TreeMap<>(Identifier::compareTo);
+        this.vsq$access.execute((level, tablePos) -> detectedBlocks.putAll(this.vsq$collectDetectedBlocks(level, tablePos)));
+        return detectedBlocks;
+    }
+
+    @Unique
+    private List<Component> vsq$buildDetectedBlockTooltipLines(List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts) {
+        List<Component> tooltipLines = new ArrayList<>(blockIds.size());
+        for (int index = 0; index < blockIds.size(); index++) {
+            int countRequired = requiredBlockCounts.get(index);
+            int detectedCount = blockCounts.get(index);
+            Block block = BuiltInRegistries.BLOCK.getValue(blockIds.get(index));
+            if (detectedCount < countRequired) {
+                this.vsq$hasRequiredBlocks = false;
+            }
+
+            MutableComponent line = Component.translatable(
+                    "vsq.gui.container.enchantment_table.blocks.tooltip.entry",
+                    detectedCount,
+                    countRequired,
+                    block.getName()
+            );
+            tooltipLines.add(line);
+        }
+        return Collections.unmodifiableList(tooltipLines);
+    }
+
+    @Unique
     private EnchantingRecipeInput vsq$createRecipeInput() {
         return new EnchantingRecipeInput(
-                this.getSlot(0).getItem().copy(),
-                this.getSlot(1).getItem().copy(),
-                List.of(
-                        this.getSlot(2).getItem().copy(),
-                        this.getSlot(3).getItem().copy(),
-                        this.getSlot(4).getItem().copy(),
-                        this.getSlot(5).getItem().copy()
-                )
+                this.getSlot(VSQ$INPUT_SLOT).getItem().copy(),
+                this.getSlot(VSQ$MATERIAL_SLOT).getItem().copy(),
+                this.vsq$getCrossSlotItems()
         );
+    }
+
+    @Unique
+    private List<ItemStack> vsq$getCrossSlotItems() {
+        List<ItemStack> crossSlotItems = new ArrayList<>(VSQ$CROSS_SLOT_COUNT);
+        for (int index = 0; index < VSQ$CROSS_SLOT_COUNT; index++) {
+            crossSlotItems.add(this.getSlot(VSQ$FIRST_CROSS_SLOT + index).getItem().copy());
+        }
+        return List.copyOf(crossSlotItems);
     }
 }

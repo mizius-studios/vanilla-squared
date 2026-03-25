@@ -8,13 +8,22 @@ import java.util.List;
 
 public interface VSQEnchantmentMenuProperties {
     int vsq$getPlayerLevel();
+
     int vsq$getBlockAmount();
+
     int vsq$getLevelRequirement();
+
     int vsq$getBlockRequirement();
+
     boolean vsq$hasRequiredXp();
+
     boolean vsq$hasRequiredBlocks();
+
     List<Component> vsq$getDetectedBlockTooltipLines();
+
     List<Component> vsq$getBookTooltipLines();
+
     void vsq$setDetectedBlockCounts(int containerId, List<Identifier> blockIds, List<Integer> counts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription);
+
     boolean vsq$tryCraftEnchantingRecipe(ServerPlayer player);
 }

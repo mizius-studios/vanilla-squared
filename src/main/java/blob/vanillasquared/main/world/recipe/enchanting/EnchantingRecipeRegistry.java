@@ -31,7 +31,7 @@ import java.util.concurrent.Executor;
 public final class EnchantingRecipeRegistry {
     private static final Identifier ENCHANTING_TYPE_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting");
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_loader");
-    private static final FileToIdConverter RECIPE_LISTER = FileToIdConverter.json("recipes");
+    private static final FileToIdConverter RECIPE_CONVERTER = FileToIdConverter.json("recipes");
     private static volatile Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> RECIPES = Map.of();
 
     private EnchantingRecipeRegistry() {
@@ -57,10 +57,7 @@ public final class EnchantingRecipeRegistry {
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstStructuralMatch(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return RECIPES.values().stream()
-                .filter(holder -> {
-                    EnchantingRecipe recipe = holder.value();
-                    return recipe.findMatch(input).isPresent() && (registries == null || recipe.wouldModifyInput(input, registries));
-                })
+                .filter(holder -> vsq$hasStructuralMatch(holder.value(), input, registries))
                 .findFirst();
     }
 
@@ -74,14 +71,19 @@ public final class EnchantingRecipeRegistry {
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
         return RECIPES.values().stream()
-                .filter(holder -> {
-                    EnchantingRecipe recipe = holder.value();
-                    return recipe.findMatch(input).isPresent()
-                            && recipe.canPlayerCraft(playerLevel)
-                            && recipe.hasRequiredBlocks(countedBlocks)
-                            && (registries == null || recipe.wouldModifyInput(input, registries));
-                })
+                .filter(holder -> vsq$hasCraftableMatch(holder.value(), input, playerLevel, countedBlocks, registries))
                 .findFirst();
+    }
+
+    private static boolean vsq$hasStructuralMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, HolderLookup.Provider registries) {
+        return recipe.findMatch(input).isPresent()
+                && (registries == null || recipe.wouldModifyInput(input, registries));
+    }
+
+    private static boolean vsq$hasCraftableMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
+        return vsq$hasStructuralMatch(recipe, input, registries)
+                && recipe.canPlayerCraft(playerLevel)
+                && recipe.hasRequiredBlocks(countedBlocks);
     }
 
     private static final class ReloadListener implements SimpleResourceReloadListener<Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>>>, IdentifiableResourceReloadListener {
@@ -102,9 +104,9 @@ public final class EnchantingRecipeRegistry {
                 Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> loadedRecipes = new TreeMap<>((left, right) -> left.identifier().compareTo(right.identifier()));
                 RegistryOps<com.google.gson.JsonElement> ops = this.registries.createSerializationContext(JsonOps.INSTANCE);
 
-                for (Map.Entry<Identifier, Resource> entry : RECIPE_LISTER.listMatchingResources(resourceManager).entrySet()) {
+                for (Map.Entry<Identifier, Resource> entry : RECIPE_CONVERTER.listMatchingResources(resourceManager).entrySet()) {
                     Identifier fileId = entry.getKey();
-                    Identifier recipeId = RECIPE_LISTER.fileToId(fileId);
+                    Identifier recipeId = RECIPE_CONVERTER.fileToId(fileId);
 
                     try (Reader reader = entry.getValue().openAsReader()) {
                         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();

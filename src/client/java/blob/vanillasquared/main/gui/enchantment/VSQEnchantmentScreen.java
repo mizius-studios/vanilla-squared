@@ -25,6 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMenu> {
+    private static final int BUTTON_X = 120;
+    private static final int XP_BUTTON_Y = 36;
+    private static final int BLOCKS_BUTTON_Y = 54;
+    private static final int BUTTON_WIDTH = 51;
+    private static final int BUTTON_HEIGHT = 18;
+    private static final int BOOK_X = 127;
+    private static final int BOOK_Y = 4;
+    private static final int BOOK_WIDTH = 33;
+    private static final int BOOK_HEIGHT = 28;
     private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath("vsq", "textures/gui/containers/enchantment_table.png");
     private static final Identifier XP_ENABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/xp_requirement_enabled");
     private static final Identifier XP_DISABLED_SPRITE = Identifier.fromNamespaceAndPath("vsq", "containers/enchantment_table/xp_requirement_disabled");
@@ -98,15 +107,15 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         float f = this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         float g = Mth.lerp(f, this.oOpen, this.open);
         float h = Mth.lerp(f, this.oFlip, this.flip);
-        int bookX = x + 127;
-        int bookY = y + 4;
-        int bookWidth = bookX + 33;
-        int bookHeight = bookY + 28;
+        int bookX = x + BOOK_X;
+        int bookY = y + BOOK_Y;
+        int bookWidth = bookX + BOOK_WIDTH;
+        int bookHeight = bookY + BOOK_HEIGHT;
         guiGraphics.book(this.bookModel, ENCHANTING_BOOK_LOCATION, 38.0F, g, h, bookX, bookY, bookWidth, bookHeight);
     }
 
     private boolean vsq$isBookHovered(double mouseX, double mouseY) {
-        return this.isHovering(127, 4, 33, 28, mouseX, mouseY);
+        return this.isHovering(BOOK_X, BOOK_Y, BOOK_WIDTH, BOOK_HEIGHT, mouseX, mouseY);
     }
 
     @Override
@@ -133,60 +142,62 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         this.vsq$inputSlot.extractRenderState(this.menu, guiGraphics, partialTick, x, y);
         this.vsq$lapislazuli.extractRenderState(this.menu, guiGraphics, partialTick, x, y);
 
-        Identifier xpSprite;
-        if (this.vsq$levelRequirement == -1 || this.vsq$playerLevel == -1 || !this.vsq$hasRequiredXp) {
-            xpSprite = XP_DISABLED_SPRITE;
-            if (this.vsq$isXpHovered(mouseX, mouseY)) {
-                guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
-            }
-        } else if (this.vsq$isXpHovered(mouseX, mouseY)) {
-            guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
-            xpSprite = XP_HOVER_SPRITE;
-        } else {
-            xpSprite = XP_ENABLED_SPRITE;
-        }
-
-        Identifier blocksSprite;
-        if (this.vsq$blockRequirement == -1 || this.vsq$blockAmount == -1 || !this.vsq$hasRequiredBlocks) {
-            blocksSprite = BLOCKS_DISABLED_SPRITE;
-            if (this.vsq$isBlocksHovered(mouseX, mouseY)) {
-                guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
-            }
-        } else if (this.vsq$isBlocksHovered(mouseX, mouseY)) {
-            blocksSprite = BLOCKS_HOVER_SPRITE;
-            guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
-        } else {
-            blocksSprite = BLOCKS_ENABLED_SPRITE;
-        }
-        int button0x = x + 120;
-        int button0y = y + 36;
-        int button1x = x + 120;
-        int button1y = y + 54;
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, xpSprite, button0x - 1, button0y - 1, 51, 18);
-        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocksSprite, button1x - 1, button1y - 1, 51, 18);
-        if (this.vsq$playerLevel != -1 && this.vsq$hasRequiredXp) {
-            guiGraphics.text(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", this.vsq$levelRequirement), button0x + 15, button0y + 5, this.vsq$isXpHovered(mouseX, mouseY) ? TEXT_HOVER : TEXT_ENABLED, false);
-        } else if (this.vsq$levelRequirement == -1) {
-            guiGraphics.text(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp.none"), button0x + 15, button0y + 5, TEXT_DISABLED, false);
-        } else {
-            guiGraphics.text(this.font, Component.translatable("vsq.gui.container.enchantment_table.xp", this.vsq$levelRequirement), button0x + 15, button0y + 5, TEXT_DISABLED, false);
-        }
-
-        if (this.vsq$blockAmount != -1 && this.vsq$hasRequiredBlocks) {
-            guiGraphics.text(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", this.vsq$blockRequirement), button1x + 15, button1y + 5, this.vsq$isBlocksHovered(mouseX, mouseY) ? TEXT_HOVER : TEXT_ENABLED, false);
-        } else if (this.vsq$blockRequirement == -1) {
-            guiGraphics.text(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks.none"), button1x + 15, button1y + 5, TEXT_DISABLED, false);
-        } else {
-            guiGraphics.text(this.font, Component.translatable("vsq.gui.container.enchantment_table.blocks", this.vsq$blockRequirement), button1x + 15, button1y + 5, TEXT_DISABLED, false);
-        }
+        boolean xpHovered = this.vsq$isXpHovered(mouseX, mouseY);
+        boolean blocksHovered = this.vsq$isBlocksHovered(mouseX, mouseY);
+        Identifier xpSprite = this.vsq$getRequirementSprite(
+                this.vsq$levelRequirement != -1 && this.vsq$playerLevel != -1,
+                this.vsq$hasRequiredXp,
+                xpHovered,
+                XP_DISABLED_SPRITE,
+                XP_ENABLED_SPRITE,
+                XP_HOVER_SPRITE,
+                guiGraphics
+        );
+        Identifier blocksSprite = this.vsq$getRequirementSprite(
+                this.vsq$blockRequirement != -1 && this.vsq$blockAmount != -1,
+                this.vsq$hasRequiredBlocks,
+                blocksHovered,
+                BLOCKS_DISABLED_SPRITE,
+                BLOCKS_ENABLED_SPRITE,
+                BLOCKS_HOVER_SPRITE,
+                guiGraphics
+        );
+        int buttonX = x + BUTTON_X;
+        int xpButtonY = y + XP_BUTTON_Y;
+        int blocksButtonY = y + BLOCKS_BUTTON_Y;
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, xpSprite, buttonX - 1, xpButtonY - 1, BUTTON_WIDTH, BUTTON_HEIGHT);
+        guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, blocksSprite, buttonX - 1, blocksButtonY - 1, BUTTON_WIDTH, BUTTON_HEIGHT);
+        this.vsq$renderRequirementText(
+                guiGraphics,
+                buttonX,
+                xpButtonY,
+                xpHovered,
+                this.vsq$playerLevel != -1 && this.vsq$hasRequiredXp,
+                this.vsq$levelRequirement == -1,
+                Component.translatable("vsq.gui.container.enchantment_table.xp", this.vsq$levelRequirement),
+                Component.translatable("vsq.gui.container.enchantment_table.xp.none")
+        );
+        this.vsq$renderRequirementText(
+                guiGraphics,
+                buttonX,
+                blocksButtonY,
+                blocksHovered,
+                this.vsq$blockAmount != -1 && this.vsq$hasRequiredBlocks,
+                this.vsq$blockRequirement == -1,
+                Component.translatable("vsq.gui.container.enchantment_table.blocks", this.vsq$blockRequirement),
+                Component.translatable("vsq.gui.container.enchantment_table.blocks.none")
+        );
     }
+
     private boolean vsq$isXpHovered(int mouseX, int mouseY) {
-        return this.isHovering(120, 36, 51, 18, mouseX, mouseY);
+        return this.isHovering(BUTTON_X, XP_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mouseX, mouseY);
     }
 
     private boolean vsq$isBlocksHovered(int mouseX, int mouseY) {
-        return this.isHovering(120, 54, 51, 18, mouseX, mouseY);
+        return this.isHovering(BUTTON_X, BLOCKS_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mouseX, mouseY);
     }
+
+    @Override
     protected void containerTick() {
         super.containerTick();
         this.vsq$syncFromMenu();
@@ -230,7 +241,7 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
     }
 
     private void vsq$syncFromMenu() {
-        VSQEnchantmentMenuProperties properties = this.menu instanceof VSQEnchantmentMenuProperties vsqProperties ? vsqProperties : null;
+        VSQEnchantmentMenuProperties properties = this.vsq$getProperties();
         this.vsq$playerLevel = properties != null ? properties.vsq$getPlayerLevel() : -1;
         this.vsq$levelRequirement = properties != null ? properties.vsq$getLevelRequirement() : -1;
         this.vsq$blockAmount = properties != null ? properties.vsq$getBlockAmount() : -1;
@@ -261,7 +272,7 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         this.vsq$syncFromMenu();
         super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
-        VSQEnchantmentMenuProperties properties = this.menu instanceof VSQEnchantmentMenuProperties vsqProperties ? vsqProperties : null;
+        VSQEnchantmentMenuProperties properties = this.vsq$getProperties();
         List<Component> buttonTooltip = null;
 
         if (this.vsq$isXpHovered(mouseX, mouseY) && this.vsq$levelRequirement != -1) {
@@ -283,20 +294,13 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
             }
             if (!this.vsq$hasRequiredBlocks) {
                 guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
-                blocksTooltip = blocksTooltip.stream()
-                    .map(line -> (Component) line.copy().withStyle(ChatFormatting.RED))
-                    .toList();
-            } else {
-                blocksTooltip = blocksTooltip.stream()
-                    .map(line -> (Component) line.copy().withStyle(ChatFormatting.GRAY))
-                    .toList();
             }
+            blocksTooltip = this.vsq$styleTooltipLines(blocksTooltip, this.vsq$hasRequiredBlocks ? ChatFormatting.GRAY : ChatFormatting.RED);
             buttonTooltip = blocksTooltip;
         }
         if (buttonTooltip != null) {
             guiGraphics.setComponentTooltipForNextFrame(this.font, buttonTooltip, mouseX, mouseY);
         }
-
     }
 
     @Override
@@ -307,5 +311,35 @@ public class VSQEnchantmentScreen extends AbstractContainerScreen<EnchantmentMen
         }
 
         return super.mouseClicked(event, doubleClick);
+    }
+
+    private VSQEnchantmentMenuProperties vsq$getProperties() {
+        return this.menu instanceof VSQEnchantmentMenuProperties vsqProperties ? vsqProperties : null;
+    }
+
+    private Identifier vsq$getRequirementSprite(boolean hasData, boolean meetsRequirement, boolean hovered, Identifier disabledSprite, Identifier enabledSprite, Identifier hoverSprite, GuiGraphicsExtractor guiGraphics) {
+        if (!hasData || !meetsRequirement) {
+            if (hovered) {
+                guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
+            }
+            return disabledSprite;
+        }
+        if (hovered) {
+            guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
+            return hoverSprite;
+        }
+        return enabledSprite;
+    }
+
+    private void vsq$renderRequirementText(GuiGraphicsExtractor guiGraphics, int buttonX, int buttonY, boolean hovered, boolean enabled, boolean showNoneText, Component valueText, Component noneText) {
+        Component text = showNoneText ? noneText : valueText;
+        int color = enabled ? (hovered ? TEXT_HOVER : TEXT_ENABLED) : TEXT_DISABLED;
+        guiGraphics.text(this.font, text, buttonX + 15, buttonY + 5, color, false);
+    }
+
+    private List<Component> vsq$styleTooltipLines(List<Component> lines, ChatFormatting formatting) {
+        return lines.stream()
+                .map(line -> (Component) line.copy().withStyle(formatting))
+                .toList();
     }
 }
