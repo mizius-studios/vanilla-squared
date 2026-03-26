@@ -2,8 +2,12 @@ package blob.vanillasquared.main;
 
 import net.fabricmc.api.ClientModInitializer;
 import blob.vanillasquared.main.gui.settings.controls.VSQControls;
-import blob.vanillasquared.main.network.handlers.EnchantmentBlockCountsPayloadHandler;
+import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayloadHandler;
+import blob.vanillasquared.main.network.handlers.EnchantingRecipeStatePayloadHandler;
 import blob.vanillasquared.main.network.handlers.KeybindInputHandler;
+import blob.vanillasquared.main.world.inventory.VSQMenuTypes;
+import net.minecraft.client.gui.screens.MenuScreens;
+import blob.vanillasquared.main.gui.enchantment.VSQEnchantmentScreen;
 
 public class VanillaSquaredClient implements ClientModInitializer {
     public static final String MOD_ID = "vsq";
@@ -11,7 +15,9 @@ public class VanillaSquaredClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         VSQControls.initialize();
-        EnchantmentBlockCountsPayloadHandler.register();
+        EnchantingRecipeStatePayloadHandler.register();
+        EnchantingRecipeBookSyncPayloadHandler.register();
         KeybindInputHandler.register();
+        MenuScreens.register(VSQMenuTypes.ENCHANTING, VSQEnchantmentScreen::new);
     }
 }

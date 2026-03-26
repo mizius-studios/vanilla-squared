@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.world.inventory;
 
-import blob.vanillasquared.main.network.payload.EnchantmentBlockCountsPayload;
+import blob.vanillasquared.main.network.payload.EnchantingRecipeStatePayload;
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingBlockRequirement;
@@ -249,7 +249,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
             requiredBlockCounts.add(entry.requiredCount());
         }
 
-        ServerPlayNetworking.send(this.vsq$serverPlayer, new EnchantmentBlockCountsPayload(this.containerId, blockIds, blockCounts, requiredBlockCounts, playerLevel, levelRequirement, blockRequirement, recipeName, recipeDescription));
+        ServerPlayNetworking.send(this.vsq$serverPlayer, new EnchantingRecipeStatePayload(this.containerId, blockIds, blockCounts, requiredBlockCounts, playerLevel, levelRequirement, blockRequirement, recipeName, recipeDescription));
     }
 
     @Unique
@@ -334,7 +334,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     }
 
     @Override
-    public void vsq$setDetectedBlockCounts(int containerId, List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription) {
+    public void vsq$applyRecipeState(int containerId, List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription) {
         if (this.containerId != containerId) {
             return;
         }
@@ -424,6 +424,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     }
     @Overwrite
     public ItemStack quickMoveStack(Player player, int index) {
+        this.vsq$refresh();
         Slot slot = this.slots.get(index);
         if (slot == null || !slot.hasItem()) {
             return ItemStack.EMPTY;
@@ -459,6 +460,7 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
         }
 
         slot.onTake(player, stack);
+        this.vsq$refresh();
         return original;
     }
 

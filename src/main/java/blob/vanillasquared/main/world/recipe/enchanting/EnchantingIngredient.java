@@ -16,9 +16,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 public record EnchantingIngredient(Ingredient ingredient, int count, Identifier tagId) {
@@ -137,6 +141,10 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
         if (stack.getCount() < this.count) {
             return false;
         }
+        return this.matchesIgnoringCount(stack);
+    }
+
+    public boolean matchesIgnoringCount(ItemStack stack) {
         if (this.tagId != null) {
             return stack.is(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId));
         }
@@ -154,6 +162,45 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
             throw new IllegalStateException("Unknown or empty item tag: " + this.tagId);
         }
         return Ingredient.of(HolderSet.direct(holders));
+    }
+
+    public Optional<Ingredient> safeIngredient() {
+        if (this.ingredient != null) {
+            return Optional.of(this.ingredient);
+        }
+
+        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
+        List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false).toList();
+        if (holders.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(Ingredient.of(HolderSet.direct(holders)));
+    }
+
+    public SlotDisplay display() {
+        ItemStack preview = this.previewStack();
+        if (!preview.isEmpty()) {
+            preview.setCount(this.count);
+            return new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(preview));
+        }
+        if (this.tagId != null) {
+            return new SlotDisplay.TagSlotDisplay(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId));
+        }
+        return Empty.INSTANCE;
+    }
+
+    public ItemStack previewStack() {
+        if (this.ingredient != null) {
+            return this.ingredient.items().findFirst()
+                    .map(holder -> new ItemStack(holder.value()))
+                    .orElse(ItemStack.EMPTY);
+        }
+
+        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
+        return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
+                .findFirst()
+                .map(holder -> new ItemStack(holder.value()))
+                .orElse(ItemStack.EMPTY);
     }
 
     private static <T> T vsq$removeCount(DynamicOps<T> ops, T input) {

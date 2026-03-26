@@ -3,10 +3,11 @@ package blob.vanillasquared.main.network;
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.network.payload.DebugPayload;
 import blob.vanillasquared.main.network.payload.EnchantingBookClickPayload;
-import blob.vanillasquared.main.network.payload.EnchantmentBlockCountsPayload;
-import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
+import blob.vanillasquared.main.network.payload.EnchantingRecipeBookSyncPayload;
+import blob.vanillasquared.main.network.payload.EnchantingRecipeSelectionPayload;
+import blob.vanillasquared.main.network.payload.EnchantingRecipeStatePayload;
+import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.EnchantmentMenu;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
@@ -17,12 +18,17 @@ public final class VSQNetworking {
     public static void initialize() {
         PayloadTypeRegistry.serverboundPlay().register(DebugPayload.TYPE, DebugPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(EnchantingBookClickPayload.TYPE, EnchantingBookClickPayload.CODEC);
-        PayloadTypeRegistry.clientboundPlay().register(EnchantmentBlockCountsPayload.TYPE, EnchantmentBlockCountsPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(EnchantingRecipeSelectionPayload.TYPE, EnchantingRecipeSelectionPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(EnchantingRecipeStatePayload.TYPE, EnchantingRecipeStatePayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(EnchantingRecipeBookSyncPayload.TYPE, EnchantingRecipeBookSyncPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(DebugPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleDebugPayload(context.player()))
         );
         ServerPlayNetworking.registerGlobalReceiver(EnchantingBookClickPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleEnchantingBookClick(payload, context.player()))
+        );
+        ServerPlayNetworking.registerGlobalReceiver(EnchantingRecipeSelectionPayload.TYPE, (payload, context) ->
+                context.server().execute(() -> vsq$handleEnchantingRecipeSelection(payload, context.player()))
         );
     }
 
@@ -35,14 +41,22 @@ public final class VSQNetworking {
     }
 
     private static void vsq$handleEnchantingBookClick(EnchantingBookClickPayload payload, ServerPlayer player) {
-        if (!(player.containerMenu instanceof EnchantmentMenu menu)) {
+        if (!(player.containerMenu instanceof VSQEnchantmentMenu menu)) {
             return;
         }
         if (menu.containerId != payload.containerId()) {
             return;
         }
-        if (menu instanceof VSQEnchantmentMenuProperties properties) {
-            properties.vsq$tryCraftEnchantingRecipe(player);
+        menu.vsq$tryCraftEnchantingRecipe(player);
+    }
+
+    private static void vsq$handleEnchantingRecipeSelection(EnchantingRecipeSelectionPayload payload, ServerPlayer player) {
+        if (!(player.containerMenu instanceof VSQEnchantmentMenu menu)) {
+            return;
         }
+        if (menu.containerId != payload.containerId()) {
+            return;
+        }
+        menu.vsq$setSelectedDisplayId(payload.displayId());
     }
 }
