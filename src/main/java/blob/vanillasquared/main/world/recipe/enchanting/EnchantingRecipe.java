@@ -29,6 +29,7 @@ public record EnchantingRecipe(
         int consumedLevels,
         Component name,
         Component description,
+        List<EnchantingIncompatibleComponents> incompatible,
         EnchantingIngredient input,
         EnchantingIngredient material,
         List<EnchantingIngredient> ingredients,
@@ -49,6 +50,7 @@ public record EnchantingRecipe(
             com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("consumed_levels", 0).forGetter(EnchantingRecipe::consumedLevels),
             ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
             ComponentSerialization.CODEC.fieldOf("description").forGetter(EnchantingRecipe::description),
+            EnchantingIncompatibleComponents.LIST_CODEC.optionalFieldOf("incompatible", List.of()).forGetter(EnchantingRecipe::incompatible),
             EnchantingIngredient.CODEC.fieldOf("input").forGetter(EnchantingRecipe::input),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
             INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
@@ -61,6 +63,7 @@ public record EnchantingRecipe(
             ByteBufCodecs.VAR_INT, EnchantingRecipe::consumedLevels,
             ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::name,
             ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::description,
+            EnchantingIncompatibleComponents.LIST_STREAM_CODEC, EnchantingRecipe::incompatible,
             EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::input,
             EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::material,
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::ingredients,
@@ -70,6 +73,7 @@ public record EnchantingRecipe(
     );
 
     public EnchantingRecipe {
+        incompatible = List.copyOf(incompatible);
         ingredients = List.copyOf(ingredients);
         blocks = List.copyOf(blocks);
         name = name.copy();
@@ -177,6 +181,15 @@ public record EnchantingRecipe(
         return playerLevel >= this.level;
     }
 
+    public boolean isCompatibleInput(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        for (EnchantingIncompatibleComponents incompatibleGroup : this.incompatible) {
+            if (incompatibleGroup.matches(input.input(), registries)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean wouldModifyInput(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
         return this.componentModifier.modifies(input.input(), registries);
     }
@@ -198,8 +211,8 @@ public record EnchantingRecipe(
         return display;
     }
 
-    private static EnchantingRecipe vsq$create(int level, int consumedLevels, Component name, Component description, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
-        return new EnchantingRecipe(level, consumedLevels, name, description, input, material, ingredients, blocks, componentModifier);
+    private static EnchantingRecipe vsq$create(int level, int consumedLevels, Component name, Component description, List<EnchantingIncompatibleComponents> incompatible, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
+        return new EnchantingRecipe(level, consumedLevels, name, description, incompatible, input, material, ingredients, blocks, componentModifier);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {

@@ -77,6 +77,7 @@ public final class EnchantingRecipeRegistry {
 
     private static boolean vsq$hasStructuralMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return recipe.findMatch(input).isPresent()
+                && (registries == null || recipe.isCompatibleInput(input, registries))
                 && (registries == null || recipe.wouldModifyInput(input, registries));
     }
 

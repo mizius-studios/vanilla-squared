@@ -36,6 +36,17 @@
       "count": 2
     }
   ],
+  "incompatible": [
+    {
+      "minecraft:item_name": "Evil Item"
+    },
+    {
+      "minecraft:enchantments": {
+        "minecraft:mending": 1
+      },
+      "minecraft:damage": 1
+    }
+  ],
   "blocks": [
     {
       "block": "minecraft:bookshelf",
