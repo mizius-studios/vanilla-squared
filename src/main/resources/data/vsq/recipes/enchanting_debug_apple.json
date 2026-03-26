@@ -1,5 +1,7 @@
 {
   "type": "vsq:enchanting",
+  "category": "weapons",
+  "group": "debug",
   "level": 12,
   "consumed_levels": 3,
   "name": {

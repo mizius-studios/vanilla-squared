@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 public record EnchantingRecipe(
+        EnchantingRecipeCategory category,
+        String group,
         int level,
         int consumedLevels,
         Component name,
@@ -46,6 +48,8 @@ public record EnchantingRecipe(
     );
 
     public static final MapCodec<EnchantingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            EnchantingRecipeCategory.CODEC.fieldOf("category").forGetter(EnchantingRecipe::category),
+            com.mojang.serialization.Codec.STRING.optionalFieldOf("group", "").forGetter(EnchantingRecipe::group),
             com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("level", 0).forGetter(EnchantingRecipe::level),
             com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("consumed_levels", 0).forGetter(EnchantingRecipe::consumedLevels),
             ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
@@ -59,6 +63,8 @@ public record EnchantingRecipe(
     ).apply(instance, EnchantingRecipe::vsq$create));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipe> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.stringUtf8(16), recipe -> recipe.category().serializedName(),
+            ByteBufCodecs.STRING_UTF8, EnchantingRecipe::group,
             ByteBufCodecs.VAR_INT, EnchantingRecipe::level,
             ByteBufCodecs.VAR_INT, EnchantingRecipe::consumedLevels,
             ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::name,
@@ -69,10 +75,25 @@ public record EnchantingRecipe(
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::ingredients,
             EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::blocks,
             EnchantingComponentModifier.STREAM_CODEC, EnchantingRecipe::componentModifier,
-            EnchantingRecipe::vsq$create
+            (categoryName, group, level, consumedLevels, name, description, incompatible, input, material, ingredients, blocks, componentModifier) ->
+                    EnchantingRecipe.vsq$create(
+                            EnchantingRecipeCategory.fromSerializedName(categoryName),
+                            group,
+                            level,
+                            consumedLevels,
+                            name,
+                            description,
+                            incompatible,
+                            input,
+                            material,
+                            ingredients,
+                            blocks,
+                            componentModifier
+                    )
     );
 
     public EnchantingRecipe {
+        group = group == null ? "" : group;
         incompatible = List.copyOf(incompatible);
         ingredients = List.copyOf(ingredients);
         blocks = List.copyOf(blocks);
@@ -122,7 +143,7 @@ public record EnchantingRecipe(
 
     @Override
     public String group() {
-        return "";
+        return this.group;
     }
 
     @Override
@@ -137,7 +158,7 @@ public record EnchantingRecipe(
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return new RecipeBookCategory();
+        return this.category.recipeBookCategory();
     }
 
     public Optional<Match> findMatch(EnchantingRecipeInput input) {
@@ -211,8 +232,8 @@ public record EnchantingRecipe(
         return display;
     }
 
-    private static EnchantingRecipe vsq$create(int level, int consumedLevels, Component name, Component description, List<EnchantingIncompatibleComponents> incompatible, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
-        return new EnchantingRecipe(level, consumedLevels, name, description, incompatible, input, material, ingredients, blocks, componentModifier);
+    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, int level, int consumedLevels, Component name, Component description, List<EnchantingIncompatibleComponents> incompatible, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
+        return new EnchantingRecipe(category, group, level, consumedLevels, name, description, incompatible, input, material, ingredients, blocks, componentModifier);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {
