@@ -9,10 +9,12 @@ import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeInput;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,6 +26,7 @@ import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Block;
@@ -32,6 +35,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -63,6 +67,22 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
     private static final int VSQ$FIRST_CROSS_SLOT = 2;
     @Unique
     private static final int VSQ$CROSS_SLOT_COUNT = 4;
+    @Unique
+    private static final int VSQ$TABLE_SLOT_COUNT = 6;
+    @Unique
+    private static final int VSQ$PLAYER_INV_START = VSQ$TABLE_SLOT_COUNT;
+    @Unique
+    private static final int VSQ$PLAYER_INV_END = VSQ$PLAYER_INV_START + 27;
+    @Unique
+    private static final int VSQ$HOTBAR_START = VSQ$PLAYER_INV_END;
+    @Unique
+    private static final Identifier VSQ$ENCHANTABLE_TAG_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting/enchantable");
+    @Unique
+    private static final Identifier VSQ$MATERIAL_TAG_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting/material");
+    @Unique
+    private static final TagKey<Item> VSQ$ENCHANTABLE_TAG = TagKey.create(Registries.ITEM, VSQ$ENCHANTABLE_TAG_ID);
+    @Unique
+    private static final TagKey<Item> VSQ$MATERIAL_TAG = TagKey.create(Registries.ITEM, VSQ$MATERIAL_TAG_ID);
 
     @Shadow
     @Final
@@ -401,6 +421,45 @@ public abstract class EnchantmentMenuMixin extends AbstractContainerMenu impleme
         this.vsq$refresh();
         VanillaSquared.LOGGER.info("Applied Enchanting recipe {} -> {}", holder.id(), result);
         return true;
+    }
+    @Overwrite
+    public ItemStack quickMoveStack(Player player, int index) {
+        Slot slot = this.slots.get(index);
+        if (slot == null || !slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack stack = slot.getItem();
+        ItemStack original = stack.copy();
+
+        if (index < VSQ$TABLE_SLOT_COUNT) {
+            if (!this.moveItemStackTo(stack, VSQ$PLAYER_INV_START, this.slots.size(), true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (stack.is(VSQ$ENCHANTABLE_TAG)) {
+            if (!this.moveItemStackTo(stack, VSQ$INPUT_SLOT, VSQ$INPUT_SLOT + 1, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (stack.is(VSQ$MATERIAL_TAG)) {
+            if (!this.moveItemStackTo(stack, VSQ$MATERIAL_SLOT, VSQ$MATERIAL_SLOT + 1, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (!this.moveItemStackTo(stack, VSQ$FIRST_CROSS_SLOT, VSQ$FIRST_CROSS_SLOT + VSQ$CROSS_SLOT_COUNT, false)) {
+            return ItemStack.EMPTY;
+        }
+
+        if (stack.isEmpty()) {
+            slot.setByPlayer(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+
+        if (stack.getCount() == original.getCount()) {
+            return ItemStack.EMPTY;
+        }
+
+        slot.onTake(player, stack);
+        return original;
     }
 
     @Unique
