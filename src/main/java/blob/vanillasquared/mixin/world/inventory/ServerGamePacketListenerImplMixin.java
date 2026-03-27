@@ -30,11 +30,11 @@ public abstract class ServerGamePacketListenerImplMixin {
         }
         menu.vsq$setSelectedDisplayId(packet.recipe().index());
         RecipeHolder<EnchantingRecipe> recipeHolder = menu.vsq$getDisplayRecipes().get(packet.recipe().index());
-        boolean placed = menu.vsq$handleRecipeBookPlacement(this.player, packet.recipe().index());
-        if (!placed && recipeHolder != null) {
+        VSQEnchantmentMenu.PlacementOutcome outcome = menu.vsq$handleRecipeBookPlacement(this.player, packet.recipe().index());
+        if (!outcome.fullyPlaced() && recipeHolder != null) {
             this.player.connection.send(new ClientboundPlaceGhostRecipePacket(
                     menu.containerId,
-                    EnchantingRecipeBookSyncPayload.createDisplay(recipeHolder.value(), this.player.registryAccess())
+                    EnchantingRecipeBookSyncPayload.createDisplay(recipeHolder.value(), this.player.registryAccess(), outcome.missingInput())
             ));
         }
         ci.cancel();

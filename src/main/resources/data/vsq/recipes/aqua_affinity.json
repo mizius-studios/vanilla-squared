@@ -10,6 +10,10 @@
   "description": {
     "translate": "vsq.enchantment.aqua_affinity.description"
   },
+  "icon": {
+    "item": "minecraft:iron_helmet",
+    "enchanted": true
+  },
   "input": {
     "tag": "minecraft:enchantable/head_armor",
     "count": 1

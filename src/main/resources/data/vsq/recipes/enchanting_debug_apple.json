@@ -12,6 +12,10 @@
     "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nUt enim ad minim veniam,\nquis nostrud exercitation ullamco laboris\nnisi ut aliquip ex ea commodo consequat.",
     "color": "gray"
   },
+  "icon": {
+    "item": "minecraft:diamond_sword",
+    "enchanted": true
+  },
   "input": {
     "item": "minecraft:diamond_sword",
     "count": 1

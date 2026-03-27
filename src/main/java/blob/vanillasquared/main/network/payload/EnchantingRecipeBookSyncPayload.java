@@ -11,6 +11,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -68,6 +69,10 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
         return vsq$createDisplay(recipe, registries, Optional.empty());
     }
 
+    public static RecipeDisplay createDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, EnchantingRecipeInput previewInput) {
+        return vsq$createDisplay(recipe, registries, Optional.of(previewInput));
+    }
+
     private static RecipeDisplay vsq$createDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, Optional<EnchantingRecipeInput> previewInput) {
         List<SlotDisplay> ingredients = new ArrayList<>(6);
         if (previewInput.isPresent()) {
@@ -84,8 +89,12 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
                 ingredients.add(ingredient.display());
             }
         }
-        ItemStack previewStack = previewInput.map(EnchantingRecipeInput::input).map(ItemStack::copy).orElseGet(recipe.input()::previewStack);
-        ItemStack previewResult = previewStack.isEmpty() ? new ItemStack(Items.ENCHANTED_BOOK) : recipe.componentModifier().apply(previewStack, registries);
+        ItemStack previewResult = recipe.icon()
+                .map(icon -> icon.createStack(recipe.name()))
+                .orElseGet(() -> new ItemStack(Items.ENCHANTED_BOOK));
+        if (!previewResult.isEmpty()) {
+            previewResult.set(DataComponents.ITEM_NAME, recipe.name().copy());
+        }
         return new ShapelessCraftingRecipeDisplay(
                 ingredients,
                 previewResult.isEmpty() ? Empty.INSTANCE : new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(previewResult)),

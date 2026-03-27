@@ -7,6 +7,7 @@
 		"gui.GhostSlotAccessor",
 		"gui.GhostSlotsAccessor",
 		"gui.GhostSlotsMixin",
+		"gui.RecipeButtonMixin",
 		"gui.SearchRecipeBookCategoryMixin",
       "world.entities.LocalPlayerMixin",
 		"world.entities.PlayerMixin"

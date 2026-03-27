@@ -10,6 +10,12 @@ public record EnchantingRecipeInput(
         ItemStack material,
         List<ItemStack> ingredients
 ) implements RecipeInput {
+    public static final EnchantingRecipeInput EMPTY = new EnchantingRecipeInput(
+            ItemStack.EMPTY,
+            ItemStack.EMPTY,
+            List.of(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY)
+    );
+
     public EnchantingRecipeInput {
         ingredients = List.copyOf(ingredients);
         if (ingredients.size() != 4) {

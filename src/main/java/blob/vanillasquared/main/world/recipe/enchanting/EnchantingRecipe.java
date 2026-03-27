@@ -32,6 +32,7 @@ public record EnchantingRecipe(
         int consumedLevels,
         Component name,
         Component description,
+        Optional<EnchantingRecipeIcon> icon,
         List<EnchantingIncompatibleComponents> incompatible,
         EnchantingIngredient input,
         EnchantingIngredient material,
@@ -55,6 +56,7 @@ public record EnchantingRecipe(
             com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("consumed_levels", 0).forGetter(EnchantingRecipe::consumedLevels),
             ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
             ComponentSerialization.CODEC.fieldOf("description").forGetter(EnchantingRecipe::description),
+            EnchantingRecipeIcon.CODEC.optionalFieldOf("icon").forGetter(EnchantingRecipe::icon),
             EnchantingIncompatibleComponents.LIST_CODEC.optionalFieldOf("incompatible", List.of()).forGetter(EnchantingRecipe::incompatible),
             EnchantingIngredient.CODEC.fieldOf("input").forGetter(EnchantingRecipe::input),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
@@ -63,35 +65,43 @@ public record EnchantingRecipe(
             EnchantingComponentModifier.CODEC.fieldOf("component_modifier").forGetter(EnchantingRecipe::componentModifier)
     ).apply(instance, EnchantingRecipe::vsq$create));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipe> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.stringUtf8(16), recipe -> recipe.category().serializedName(),
-            ByteBufCodecs.STRING_UTF8, EnchantingRecipe::group,
-            ByteBufCodecs.VAR_INT, EnchantingRecipe::level,
-            ByteBufCodecs.VAR_INT, EnchantingRecipe::consumedLevels,
-            ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::name,
-            ComponentSerialization.TRUSTED_STREAM_CODEC, EnchantingRecipe::description,
-            EnchantingIncompatibleComponents.LIST_STREAM_CODEC, EnchantingRecipe::incompatible,
-            EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::input,
-            EnchantingIngredient.STREAM_CODEC, EnchantingRecipe::material,
-            EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::ingredients,
-            EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()), EnchantingRecipe::blocks,
-            EnchantingComponentModifier.STREAM_CODEC, EnchantingRecipe::componentModifier,
-            (categoryName, group, level, consumedLevels, name, description, incompatible, input, material, ingredients, blocks, componentModifier) ->
-                    EnchantingRecipe.vsq$create(
-                            EnchantingRecipeCategory.fromSerializedName(categoryName),
-                            group,
-                            level,
-                            consumedLevels,
-                            name,
-                            description,
-                            incompatible,
-                            input,
-                            material,
-                            ingredients,
-                            blocks,
-                            componentModifier
-                    )
-    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipe> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public EnchantingRecipe decode(RegistryFriendlyByteBuf buf) {
+            return EnchantingRecipe.vsq$create(
+                    EnchantingRecipeCategory.fromSerializedName(ByteBufCodecs.stringUtf8(16).decode(buf)),
+                    ByteBufCodecs.STRING_UTF8.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf),
+                    ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf),
+                    ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf),
+                    ByteBufCodecs.optional(EnchantingRecipeIcon.STREAM_CODEC).decode(buf),
+                    EnchantingIncompatibleComponents.LIST_STREAM_CODEC.decode(buf),
+                    EnchantingIngredient.STREAM_CODEC.decode(buf),
+                    EnchantingIngredient.STREAM_CODEC.decode(buf),
+                    EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
+                    EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
+                    EnchantingComponentModifier.STREAM_CODEC.decode(buf)
+            );
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, EnchantingRecipe value) {
+            ByteBufCodecs.stringUtf8(16).encode(buf, value.category().serializedName());
+            ByteBufCodecs.STRING_UTF8.encode(buf, value.group());
+            ByteBufCodecs.VAR_INT.encode(buf, value.level());
+            ByteBufCodecs.VAR_INT.encode(buf, value.consumedLevels());
+            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, value.name());
+            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, value.description());
+            ByteBufCodecs.optional(EnchantingRecipeIcon.STREAM_CODEC).encode(buf, value.icon());
+            EnchantingIncompatibleComponents.LIST_STREAM_CODEC.encode(buf, value.incompatible());
+            EnchantingIngredient.STREAM_CODEC.encode(buf, value.input());
+            EnchantingIngredient.STREAM_CODEC.encode(buf, value.material());
+            EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.ingredients());
+            EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.blocks());
+            EnchantingComponentModifier.STREAM_CODEC.encode(buf, value.componentModifier());
+        }
+    };
 
     public EnchantingRecipe {
         group = group == null ? "" : group;
@@ -100,6 +110,7 @@ public record EnchantingRecipe(
         blocks = List.copyOf(blocks);
         name = name.copy();
         description = description.copy();
+        icon = icon == null ? Optional.empty() : icon;
         if (ingredients.size() != 4) {
             throw new IllegalArgumentException("Enchanting recipes require exactly 4 cross ingredients");
         }
@@ -233,8 +244,8 @@ public record EnchantingRecipe(
         return display;
     }
 
-    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, int level, int consumedLevels, Component name, Component description, List<EnchantingIncompatibleComponents> incompatible, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
-        return new EnchantingRecipe(category, group, level, consumedLevels, name, description, incompatible, input, material, ingredients, blocks, componentModifier);
+    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, int level, int consumedLevels, Component name, Component description, Optional<EnchantingRecipeIcon> icon, List<EnchantingIncompatibleComponents> incompatible, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
+        return new EnchantingRecipe(category, group, level, consumedLevels, name, description, icon, incompatible, input, material, ingredients, blocks, componentModifier);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {
