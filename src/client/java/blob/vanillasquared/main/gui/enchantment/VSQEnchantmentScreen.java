@@ -4,6 +4,7 @@ import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayload
 import blob.vanillasquared.main.network.payload.EnchantingBookClickPayload;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
+import blob.vanillasquared.util.api.VSQUtil;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.ChatFormatting;
@@ -26,7 +27,6 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmentMenu> {
@@ -96,6 +96,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     private List<Component> vsq$bookTooltipLines = List.of();
     private final CyclingSlotBackground vsq$inputSlot = new CyclingSlotBackground(0);
     private final CyclingSlotBackground vsq$lapislazuli = new CyclingSlotBackground(1);
+    private final VSQUtil.VSQ$Component vsq$util = new VSQUtil.VSQ$Component();
 
     public VSQEnchantmentScreen(VSQEnchantmentMenu menu, Inventory inventory, Component title) {
         this(menu, new VSQEnchantmentRecipeBookComponent(menu), inventory, title);
@@ -183,7 +184,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
             buttonTooltip = List.of(xpTooltip);
         } else if (this.vsq$isBookHovered(mouseX, mouseY) && this.vsq$hasDisplayableRecipe() && !this.vsq$bookTooltipLines.isEmpty()) {
             guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
-            buttonTooltip = this.vsq$expandTooltipLines(this.vsq$bookTooltipLines);
+            buttonTooltip = vsq$util.expandTooltipLines(this.vsq$bookTooltipLines);
         } else if (this.vsq$isBookHovered(mouseX, mouseY) && !this.vsq$hasDisplayableRecipe()) {
             guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
         } else if (this.vsq$isBlocksHovered(mouseX, mouseY) && this.vsq$blockRequirement != -1) {
@@ -194,7 +195,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
             if (!this.vsq$hasRequiredBlocks) {
                 guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
             }
-            buttonTooltip = this.vsq$styleTooltipLines(blocksTooltip, this.vsq$hasRequiredBlocks ? ChatFormatting.GRAY : ChatFormatting.RED);
+            buttonTooltip = this.vsq$util.styleTooltipLines(blocksTooltip, this.vsq$hasRequiredBlocks ? ChatFormatting.GRAY : ChatFormatting.RED);
         }
         if (buttonTooltip != null) {
             guiGraphics.setComponentTooltipForNextFrame(this.font, buttonTooltip, mouseX, mouseY);
@@ -302,21 +303,6 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
         this.vsq$bookTooltipLines = properties.vsq$getBookTooltipLines();
     }
 
-    private List<Component> vsq$expandTooltipLines(List<Component> components) {
-        List<Component> expanded = new ArrayList<>();
-        for (Component component : components) {
-            String[] lines = component.getString().split("\\R", -1);
-            if (lines.length == 1) {
-                expanded.add(component);
-                continue;
-            }
-            for (String line : lines) {
-                expanded.add(Component.literal(line).withStyle(component.getStyle()));
-            }
-        }
-        return expanded;
-    }
-
     private Identifier vsq$getRequirementSprite(boolean hasData, boolean meetsRequirement, boolean hovered, Identifier disabledSprite, Identifier enabledSprite, Identifier hoverSprite, GuiGraphicsExtractor guiGraphics) {
         if (!hasData || !meetsRequirement) {
             if (hovered) {
@@ -335,9 +321,5 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
         Component text = showNoneText ? noneText : valueText;
         int color = enabled ? (hovered ? TEXT_HOVER : TEXT_ENABLED) : TEXT_DISABLED;
         guiGraphics.text(this.font, text, buttonX + 15, buttonY + 5, color, false);
-    }
-
-    private List<Component> vsq$styleTooltipLines(List<Component> lines, ChatFormatting formatting) {
-        return lines.stream().map(line -> (Component) line.copy().withStyle(formatting)).toList();
     }
 }
