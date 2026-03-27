@@ -35,9 +35,6 @@ import java.util.Optional;
 public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantmentMenuProperties {
     public static final BlockPos SYNTHETIC_OPEN_POS = new BlockPos(0, -2_048, 0);
     public static final int INPUT_SLOT = EnchantingSlotLayout.INPUT_SLOT;
-    public static final int MATERIAL_SLOT = EnchantingSlotLayout.MATERIAL_SLOT;
-    public static final int FIRST_CROSS_SLOT = EnchantingSlotLayout.FIRST_CROSS_SLOT;
-    public static final int CROSS_SLOT_COUNT = EnchantingSlotLayout.CROSS_SLOT_COUNT;
     public static final int TABLE_SLOT_COUNT = EnchantingSlotLayout.TABLE_SLOT_COUNT;
     private static final Identifier ENCHANTABLE_TAG_ID = Identifier.fromNamespaceAndPath("vsq", "enchanting/enchantable");
     private static final Identifier MATERIAL_TAG_ID = Identifier.fromNamespaceAndPath("vsq", "enchanting/material");

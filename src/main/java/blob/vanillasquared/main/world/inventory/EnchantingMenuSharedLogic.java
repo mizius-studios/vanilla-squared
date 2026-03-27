@@ -80,10 +80,6 @@ public final class EnchantingMenuSharedLogic {
         return blockCounts;
     }
 
-    public static boolean hasMatchingBlockCounts(List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts) {
-        return blockIds.size() == blockCounts.size() && blockIds.size() == requiredBlockCounts.size();
-    }
-
     public static TooltipBuildResult buildDetectedBlockTooltipLines(List<Identifier> blockIds, List<Integer> blockCounts, List<Integer> requiredBlockCounts, boolean hasRequiredBlocksInitially) {
         List<Component> tooltipLines = new ArrayList<>(blockIds.size());
         boolean hasRequiredBlocks = hasRequiredBlocksInitially;
