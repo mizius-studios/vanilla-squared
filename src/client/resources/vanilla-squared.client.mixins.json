@@ -3,11 +3,15 @@
 	"package": "blob.vanillasquared.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"gui.AbstractContainerScreenAccessor",
+		"gui.AbstractRecipeBookScreenAccessor",
+		"gui.CyclingSlotBackgroundMixin",
 		"gui.GuiMixin",
 		"gui.GhostSlotAccessor",
 		"gui.GhostSlotsAccessor",
 		"gui.GhostSlotsMixin",
 		"gui.RecipeButtonMixin",
+		"gui.RecipeBookComponentAccessor",
 		"gui.SearchRecipeBookCategoryMixin",
       "world.entities.LocalPlayerMixin",
 		"world.entities.PlayerMixin"
