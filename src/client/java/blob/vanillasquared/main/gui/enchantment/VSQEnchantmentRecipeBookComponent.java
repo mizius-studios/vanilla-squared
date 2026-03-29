@@ -1,5 +1,6 @@
 package blob.vanillasquared.main.gui.enchantment;
 
+import blob.vanillasquared.main.VanillaSquaredClient;
 import blob.vanillasquared.mixin.client.gui.GhostSlotsAccessor;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayloadHandler;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeSelectionPayload;
@@ -27,10 +28,10 @@ import java.util.OptionalInt;
 
 public class VSQEnchantmentRecipeBookComponent extends RecipeBookComponent<VSQEnchantmentMenu> {
     private static final WidgetSprites FILTER_BUTTON_SPRITES = new WidgetSprites(
-            net.minecraft.resources.Identifier.withDefaultNamespace("recipe_book/filter_enabled"),
-            net.minecraft.resources.Identifier.withDefaultNamespace("recipe_book/filter_disabled"),
-            net.minecraft.resources.Identifier.withDefaultNamespace("recipe_book/filter_enabled_highlighted"),
-            net.minecraft.resources.Identifier.withDefaultNamespace("recipe_book/filter_disabled_highlighted")
+            net.minecraft.resources.Identifier.fromNamespaceAndPath(VanillaSquaredClient.MOD_ID, "containers/recipe_book/enchant_filter_enabled"),
+            net.minecraft.resources.Identifier.fromNamespaceAndPath(VanillaSquaredClient.MOD_ID, "containers/recipe_book/enchant_filter_disabled"),
+            net.minecraft.resources.Identifier.fromNamespaceAndPath(VanillaSquaredClient.MOD_ID, "containers/recipe_book/enchant_filter_enabled_highlighted"),
+            net.minecraft.resources.Identifier.fromNamespaceAndPath(VanillaSquaredClient.MOD_ID, "containers/recipe_book/enchant_filter_disabled_highlighted")
     );
 
     private static final List<TabInfo> TABS = List.of(
