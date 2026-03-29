@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "weapons",
+    "group":  "smite",
+    "level":  5,
+    "consumed_levels":  5,
+    "name":  {
+                 "text":  "Smite V"
+             },
+    "description":  {
+                        "text":  "Smite V"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/weapon",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:smite":  5
+                                                          }
+                           }
+}

@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "weapons",
+    "group":  "punch",
+    "level":  2,
+    "consumed_levels":  2,
+    "name":  {
+                 "text":  "Punch II"
+             },
+    "description":  {
+                        "text":  "Punch II"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/bow",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:punch":  2
+                                                          }
+                           }
+}

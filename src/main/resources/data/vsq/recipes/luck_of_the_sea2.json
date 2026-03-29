@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "weapons",
+    "group":  "luck_of_the_sea",
+    "level":  2,
+    "consumed_levels":  2,
+    "name":  {
+                 "text":  "Luck Of The Sea II"
+             },
+    "description":  {
+                        "text":  "Luck Of The Sea II"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/fishing",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:luck_of_the_sea":  2
+                                                          }
+                           }
+}

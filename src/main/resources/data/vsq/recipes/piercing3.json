@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "weapons",
+    "group":  "piercing",
+    "level":  3,
+    "consumed_levels":  3,
+    "name":  {
+                 "text":  "Piercing III"
+             },
+    "description":  {
+                        "text":  "Piercing III"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/crossbow",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:piercing":  3
+                                                          }
+                           }
+}

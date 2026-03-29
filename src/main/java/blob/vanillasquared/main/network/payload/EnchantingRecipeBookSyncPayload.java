@@ -89,17 +89,21 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
                 ingredients.add(ingredient.display());
             }
         }
-        ItemStack previewResult = recipe.icon()
-                .map(icon -> icon.createStack(recipe.name()))
-                .orElseGet(() -> new ItemStack(Items.ENCHANTED_BOOK));
-        if (!previewResult.isEmpty()) {
-            previewResult.set(DataComponents.ITEM_NAME, recipe.name().copy());
-        }
         return new ShapelessCraftingRecipeDisplay(
                 ingredients,
-                previewResult.isEmpty() ? Empty.INSTANCE : new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(previewResult)),
+                vsq$resultDisplay(recipe),
                 new SlotDisplay.ItemSlotDisplay(Items.ENCHANTING_TABLE)
         );
+    }
+
+    private static SlotDisplay vsq$resultDisplay(EnchantingRecipe recipe) {
+        return recipe.icon()
+                .map(icon -> icon.createDisplay(recipe.name()))
+                .orElseGet(() -> {
+                    ItemStack fallback = new ItemStack(Items.ENCHANTED_BOOK);
+                    fallback.set(DataComponents.ITEM_NAME, recipe.name().copy());
+                    return new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(fallback));
+                });
     }
 
     private static Optional<List<Ingredient>> vsq$createCraftingRequirements(EnchantingRecipe recipe) {

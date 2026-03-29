@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "armor",
+    "group":  "feather_falling",
+    "level":  2,
+    "consumed_levels":  2,
+    "name":  {
+                 "text":  "Feather Falling II"
+             },
+    "description":  {
+                        "text":  "Feather Falling II"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/foot_armor",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:feather_falling":  2
+                                                          }
+                           }
+}

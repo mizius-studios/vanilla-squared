@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "weapons",
+    "group":  "wind_burst",
+    "level":  2,
+    "consumed_levels":  2,
+    "name":  {
+                 "text":  "Wind Burst II"
+             },
+    "description":  {
+                        "text":  "Wind Burst II"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/mace",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:wind_burst":  2
+                                                          }
+                           }
+}

@@ -1,0 +1,44 @@
+﻿{
+    "type":  "vsq:enchanting",
+    "category":  "armor",
+    "group":  "depth_strider",
+    "level":  1,
+    "consumed_levels":  1,
+    "name":  {
+                 "text":  "Depth Strider I"
+             },
+    "description":  {
+                        "text":  "Depth Strider I"
+                    },
+    "input":  {
+                  "tag":  "minecraft:enchantable/foot_armor",
+                  "count":  1
+              },
+    "material":  {
+                     "item":  "minecraft:lapis_lazuli",
+                     "count":  1
+                 },
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        },
+                        {
+                            "item":  "minecraft:book",
+                            "count":  1
+                        }
+                    ],
+    "component_modifier":  {
+                               "minecraft:enchantments":  {
+                                                              "minecraft:depth_strider":  1
+                                                          }
+                           }
+}
