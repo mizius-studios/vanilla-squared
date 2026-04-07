@@ -7,14 +7,13 @@
     "world.dmgsources.CombatRulesMixin",
     "world.entity.LivingEntityAttributesMixin",
     "world.entity.LivingEntityMixin",
-    "world.entity.entities.FishingRodHookMixin",
-    "world.entity.entities.PlayerAttributesMixin",
-    "world.entity.entities.PlayerMixin",
     "world.inventory.EnchantingTableBlockMixin",
     "world.inventory.EnchantmentMenuMixin",
     "world.inventory.RecipeManagerAccessor",
     "world.inventory.ServerPlayerOpenMenuMixin",
     "world.inventory.ServerGamePacketListenerImplMixin",
+    "world.inventory.MerchantMenuMixin",
+    "world.inventory.AnvilMenuMixin",
     "world.item.ItemCooldownsMixin",
     "world.item.ItemPropertiesMixin",
     "world.item.ItemsMixin",
@@ -22,7 +21,15 @@
     "world.item.items.ArmorMaterialMixin",
     "world.item.items.AxeMixin",
     "world.item.items.ToolMaterialMixin",
-    "world.item.items.TridentItemMixin"
+    "world.item.items.TridentItemMixin",
+    "world.loot.LootPoolMixin",
+    "world.item.CreativeInventoryMixin",
+    "world.item.EnchantedBookEliminatorMixin",
+    "world.item.trading.MerchantOffersPacketMixin",
+    "world.entity.entities.TradeOffersEnchantBookMixin",
+    "world.entity.entities.FishingRodHookMixin",
+    "world.entity.entities.PlayerAttributesMixin",
+    "world.entity.entities.PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
