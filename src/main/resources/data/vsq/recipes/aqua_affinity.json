@@ -1,0 +1,34 @@
+{
+  "type": "vsq:enchanting",
+  "category": "armor",
+  "group": "aqua_affinity",
+  "name": {
+    "text": "Aqua Affinity"
+  },
+  "description": {
+    "text": "Aqua Affinity I"
+  },
+  "material": {
+    "item": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    }
+  ],
+  "enchantment": "minecraft:aqua_affinity"
+}

@@ -51,22 +51,10 @@ public final class EnchantingRecipeRegistry {
                 .findFirst();
     }
 
-    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstStructuralMatch(EnchantingRecipeInput input) {
-        return findFirstStructuralMatch(input, null);
-    }
-
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstStructuralMatch(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return RECIPES.values().stream()
                 .filter(holder -> vsq$hasStructuralMatch(holder.value(), input, registries))
                 .findFirst();
-    }
-
-    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel) {
-        return findFirstCraftableMatch(input, playerLevel, Map.of(), null);
-    }
-
-    public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks) {
-        return findFirstCraftableMatch(input, playerLevel, countedBlocks, null);
     }
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstCraftableMatch(EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
@@ -76,14 +64,15 @@ public final class EnchantingRecipeRegistry {
     }
 
     private static boolean vsq$hasStructuralMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, HolderLookup.Provider registries) {
-        return recipe.findMatch(input).isPresent()
-                && (registries == null || recipe.isCompatibleInput(input, registries))
-                && (registries == null || recipe.wouldModifyInput(input, registries));
+        return recipe.findMatch(input, registries).isPresent()
+                && recipe.isBelowMaximumEnchantmentLevel(input, registries)
+                && recipe.wouldModifyInput(input, registries)
+                && recipe.respectsVanillaEnchantmentIncompatibilities(input, registries);
     }
 
     private static boolean vsq$hasCraftableMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
         return vsq$hasStructuralMatch(recipe, input, registries)
-                && recipe.canPlayerCraft(playerLevel)
+                && recipe.canPlayerCraft(input, playerLevel, registries)
                 && recipe.hasRequiredBlocks(countedBlocks);
     }
 

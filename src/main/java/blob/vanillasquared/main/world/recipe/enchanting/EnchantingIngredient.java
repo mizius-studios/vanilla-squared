@@ -91,14 +91,12 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
             }
 
             return Ingredient.CODEC.encodeStart(ops, input.ingredient).flatMap(encoded -> {
-                if (input.count == 1) {
-                    return DataResult.success(encoded);
-                }
-
                 return ops.getMap(encoded).flatMap(map -> {
                     var builder = ops.mapBuilder();
                     map.entries().forEach(entry -> builder.add(entry.getFirst(), entry.getSecond()));
-                    builder.add(ops.createString("count"), ops.createInt(input.count));
+                    if (input.count != 1) {
+                        builder.add(ops.createString("count"), ops.createInt(input.count));
+                    }
                     return builder.build(prefix);
                 });
             });

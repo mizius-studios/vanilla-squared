@@ -1,0 +1,34 @@
+{
+  "type": "vsq:enchanting",
+  "category": "weapons",
+  "group": "quick_charge",
+  "name": {
+    "text": "Quick Charge"
+  },
+  "description": {
+    "text": "Quick Charge I"
+  },
+  "material": {
+    "item": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    }
+  ],
+  "enchantment": "minecraft:quick_charge"
+}

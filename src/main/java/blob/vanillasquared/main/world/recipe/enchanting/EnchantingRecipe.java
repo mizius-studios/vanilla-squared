@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
@@ -28,17 +27,12 @@ import java.util.Optional;
 public record EnchantingRecipe(
         EnchantingRecipeCategory category,
         String group,
-        int level,
-        int consumedLevels,
         Component name,
         Component description,
-        Optional<EnchantingRecipeIcon> icon,
-        List<EnchantingIncompatibleComponents> incompatible,
-        EnchantingIngredient input,
         EnchantingIngredient material,
         List<EnchantingIngredient> ingredients,
         List<EnchantingBlockRequirement> blocks,
-        EnchantingComponentModifier componentModifier
+        EnchantingRecipeEnchantment enchantment
 ) implements Recipe<EnchantingRecipeInput> {
     private static final com.mojang.serialization.Codec<List<EnchantingIngredient>> INGREDIENTS_CODEC = net.minecraft.util.ExtraCodecs.JSON.flatXmap(
             EnchantingRecipe::vsq$decodeIngredients,
@@ -52,17 +46,12 @@ public record EnchantingRecipe(
     public static final MapCodec<EnchantingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             EnchantingRecipeCategory.CODEC.fieldOf("category").forGetter(EnchantingRecipe::category),
             com.mojang.serialization.Codec.STRING.optionalFieldOf("group", "").forGetter(EnchantingRecipe::group),
-            com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("level", 0).forGetter(EnchantingRecipe::level),
-            com.mojang.serialization.Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("consumed_levels", 0).forGetter(EnchantingRecipe::consumedLevels),
             ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
             ComponentSerialization.CODEC.fieldOf("description").forGetter(EnchantingRecipe::description),
-            EnchantingRecipeIcon.CODEC.optionalFieldOf("icon").forGetter(EnchantingRecipe::icon),
-            EnchantingIncompatibleComponents.LIST_CODEC.optionalFieldOf("incompatible", List.of()).forGetter(EnchantingRecipe::incompatible),
-            EnchantingIngredient.CODEC.fieldOf("input").forGetter(EnchantingRecipe::input),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
             INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
             BLOCKS_CODEC.optionalFieldOf("blocks", List.of()).forGetter(EnchantingRecipe::blocks),
-            EnchantingComponentModifier.CODEC.fieldOf("component_modifier").forGetter(EnchantingRecipe::componentModifier)
+            EnchantingRecipeEnchantment.CODEC.fieldOf("enchantment").forGetter(EnchantingRecipe::enchantment)
     ).apply(instance, EnchantingRecipe::vsq$create));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipe> STREAM_CODEC = new StreamCodec<>() {
@@ -71,17 +60,12 @@ public record EnchantingRecipe(
             return EnchantingRecipe.vsq$create(
                     EnchantingRecipeCategory.fromSerializedName(ByteBufCodecs.stringUtf8(16).decode(buf)),
                     ByteBufCodecs.STRING_UTF8.decode(buf),
-                    ByteBufCodecs.VAR_INT.decode(buf),
-                    ByteBufCodecs.VAR_INT.decode(buf),
                     ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf),
                     ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf),
-                    ByteBufCodecs.optional(EnchantingRecipeIcon.STREAM_CODEC).decode(buf),
-                    EnchantingIncompatibleComponents.LIST_STREAM_CODEC.decode(buf),
-                    EnchantingIngredient.STREAM_CODEC.decode(buf),
                     EnchantingIngredient.STREAM_CODEC.decode(buf),
                     EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                     EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
-                    EnchantingComponentModifier.STREAM_CODEC.decode(buf)
+                    EnchantingRecipeEnchantment.STREAM_CODEC.decode(buf)
             );
         }
 
@@ -89,43 +73,29 @@ public record EnchantingRecipe(
         public void encode(RegistryFriendlyByteBuf buf, EnchantingRecipe value) {
             ByteBufCodecs.stringUtf8(16).encode(buf, value.category().serializedName());
             ByteBufCodecs.STRING_UTF8.encode(buf, value.group());
-            ByteBufCodecs.VAR_INT.encode(buf, value.level());
-            ByteBufCodecs.VAR_INT.encode(buf, value.consumedLevels());
             ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, value.name());
             ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, value.description());
-            ByteBufCodecs.optional(EnchantingRecipeIcon.STREAM_CODEC).encode(buf, value.icon());
-            EnchantingIncompatibleComponents.LIST_STREAM_CODEC.encode(buf, value.incompatible());
-            EnchantingIngredient.STREAM_CODEC.encode(buf, value.input());
             EnchantingIngredient.STREAM_CODEC.encode(buf, value.material());
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.ingredients());
             EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.blocks());
-            EnchantingComponentModifier.STREAM_CODEC.encode(buf, value.componentModifier());
+            EnchantingRecipeEnchantment.STREAM_CODEC.encode(buf, value.enchantment());
         }
     };
 
     public EnchantingRecipe {
         group = group == null ? "" : group;
-        incompatible = List.copyOf(incompatible);
         ingredients = List.copyOf(ingredients);
         blocks = List.copyOf(blocks);
         name = name.copy();
         description = description.copy();
-        icon = icon == null ? Optional.empty() : icon;
         if (ingredients.size() != 4) {
             throw new IllegalArgumentException("Enchanting recipes require exactly 4 cross ingredients");
         }
-        if (level < 0) {
-            throw new IllegalArgumentException("Enchanting recipe level must be non-negative");
-        }
-        if (consumedLevels < 0) {
-            throw new IllegalArgumentException("Enchanting recipe consumed levels must be non-negative");
-        }
-        consumedLevels = Math.min(consumedLevels, level);
     }
 
     @Override
     public boolean matches(EnchantingRecipeInput input, Level level) {
-        return this.findMatch(input).isPresent();
+        return this.findMatch(input, level.registryAccess()).isPresent();
     }
 
     @Override
@@ -134,7 +104,7 @@ public record EnchantingRecipe(
     }
 
     public ItemStack assemble(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
-        return this.componentModifier.apply(input.input(), registries);
+        return this.enchantment.apply(input.input(), registries);
     }
 
     @Override
@@ -144,13 +114,7 @@ public record EnchantingRecipe(
 
     @Override
     public PlacementInfo placementInfo() {
-        List<Ingredient> placementIngredients = new ArrayList<>(6);
-        placementIngredients.add(this.input.ingredient());
-        placementIngredients.add(this.material.ingredient());
-        for (EnchantingIngredient ingredient : this.ingredients) {
-            placementIngredients.add(ingredient.ingredient());
-        }
-        return PlacementInfo.create(placementIngredients);
+        return PlacementInfo.NOT_PLACEABLE;
     }
 
     @Override
@@ -173,11 +137,14 @@ public record EnchantingRecipe(
         return this.category.recipeBookCategory();
     }
 
-    public Optional<Match> findMatch(EnchantingRecipeInput input) {
-        if (!this.input.test(input.input()) || !this.material.test(input.material())) {
+    public Optional<Match> findMatch(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        if (!this.inputIngredient(registries).test(input.input()) || !this.material.test(input.material())) {
             return Optional.empty();
         }
+        return this.vsq$findCrossMatch(input);
+    }
 
+    private Optional<Match> vsq$findCrossMatch(EnchantingRecipeInput input) {
         List<ItemStack> crossStacks = input.ingredients();
         boolean[] usedSlots = new boolean[crossStacks.size()];
         List<Integer> matchedCrossSlots = new ArrayList<>(this.ingredients.size());
@@ -210,21 +177,32 @@ public record EnchantingRecipe(
         return Optional.of(new Match(matchedCrossSlots));
     }
 
-    public boolean canPlayerCraft(int playerLevel) {
-        return playerLevel >= this.level;
-    }
-
-    public boolean isCompatibleInput(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
-        for (EnchantingIncompatibleComponents incompatibleGroup : this.incompatible) {
-            if (incompatibleGroup.matches(input.input(), registries)) {
-                return false;
-            }
-        }
-        return true;
+    public boolean canPlayerCraft(EnchantingRecipeInput input, int playerLevel, net.minecraft.core.HolderLookup.Provider registries) {
+        return playerLevel >= this.xpCost(input, registries);
     }
 
     public boolean wouldModifyInput(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
-        return this.componentModifier.modifies(input.input(), registries);
+        return this.enchantment.modifies(input.input(), registries);
+    }
+
+    public boolean isBelowMaximumEnchantmentLevel(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        return this.enchantment.isBelowMaximumLevel(input.input(), registries);
+    }
+
+    public boolean respectsVanillaEnchantmentIncompatibilities(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        return this.enchantment.respectsVanillaEnchantmentIncompatibilities(input.input(), registries);
+    }
+
+    public int xpCost(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        return this.enchantment.xpCost(input.input(), registries);
+    }
+
+    public Component displayName(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        return this.enchantment.displayName(input.input(), registries);
+    }
+
+    public Component previewName(net.minecraft.core.HolderLookup.Provider registries) {
+        return this.enchantment.displayName(ItemStack.EMPTY, registries);
     }
 
     public boolean hasRequiredBlocks(java.util.Map<net.minecraft.resources.Identifier, Integer> countedBlocks) {
@@ -244,8 +222,12 @@ public record EnchantingRecipe(
         return display;
     }
 
-    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, int level, int consumedLevels, Component name, Component description, Optional<EnchantingRecipeIcon> icon, List<EnchantingIncompatibleComponents> incompatible, EnchantingIngredient input, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingComponentModifier componentModifier) {
-        return new EnchantingRecipe(category, group, level, consumedLevels, name, description, icon, incompatible, input, material, ingredients, blocks, componentModifier);
+    public EnchantingIngredient inputIngredient(net.minecraft.core.HolderLookup.Provider registries) {
+        return new EnchantingIngredient(this.enchantment.supportedItemsIngredient(registries), 1, null);
+    }
+
+    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, Component name, Component description, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingRecipeEnchantment enchantment) {
+        return new EnchantingRecipe(category, group, name, description, material, ingredients, blocks, enchantment);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {
