@@ -1,0 +1,34 @@
+{
+  "type": "vsq:enchanting",
+  "category": "tools",
+  "group": "silk_touch",
+  "name": {
+    "text": "Silk Touch"
+  },
+  "description": {
+    "text": "Silk Touch I"
+  },
+  "material": {
+    "item": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    }
+  ],
+  "enchantment": "minecraft:silk_touch"
+}
