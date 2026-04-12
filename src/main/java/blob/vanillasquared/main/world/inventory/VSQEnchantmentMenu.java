@@ -234,7 +234,6 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
         this.nearbyBlockCount = blockRequirement == -1 ? -1 : counts.stream().mapToInt(Integer::intValue).sum();
         this.blockRequirement = blockRequirement;
         this.hasRequiredXp = this.levelRequirement != -1 && this.playerLevel >= this.levelRequirement;
-        this.hasRequiredBlocks = this.blockRequirement != -1;
         this.bookTooltipLines = this.levelRequirement == -1 || this.blockRequirement == -1 ? List.of() : List.of(recipeName.copy(), recipeDescription.copy());
         EnchantingMenuSharedLogic.TooltipBuildResult tooltipBuildResult = EnchantingMenuSharedLogic.buildDetectedBlockTooltipLines(blockIds, counts, requiredBlockCounts, this.blockRequirement != -1);
         this.detectedBlockTooltipLines = tooltipBuildResult.lines();
