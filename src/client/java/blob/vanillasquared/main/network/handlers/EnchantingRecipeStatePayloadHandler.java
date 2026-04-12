@@ -70,7 +70,7 @@ public final class EnchantingRecipeStatePayloadHandler {
                 cachedRecipeState.playerLevel(),
                 cachedRecipeState.recipeName(),
                 cachedRecipeState.recipeDescription(),
-                cachedRecipeState.selectionCleared()
+                false
         );
     }
 
