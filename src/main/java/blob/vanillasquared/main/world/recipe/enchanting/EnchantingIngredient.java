@@ -8,6 +8,7 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,6 +18,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
@@ -153,13 +156,8 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
         if (this.ingredient != null) {
             return this.ingredient;
         }
-
-        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
-        List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false).toList();
-        if (holders.isEmpty()) {
-            throw new IllegalStateException("Unknown or empty item tag: " + this.tagId);
-        }
-        return Ingredient.of(HolderSet.direct(holders));
+        return this.safeIngredient()
+                .orElseThrow(() -> new IllegalStateException("Unknown or empty item tag: " + this.tagId));
     }
 
     public Optional<Ingredient> safeIngredient() {
@@ -168,7 +166,9 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
         }
 
         TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
-        List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false).toList();
+        List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
+                .filter(holder -> this.vsq$isSupportedEnchantingItem(holder.value()))
+                .toList();
         if (holders.isEmpty()) {
             return Optional.empty();
         }
@@ -196,9 +196,14 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
 
         TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
         return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
+                .filter(holder -> this.vsq$isSupportedEnchantingItem(holder.value()))
                 .findFirst()
                 .map(holder -> new ItemStack(holder.value()))
                 .orElse(ItemStack.EMPTY);
+    }
+
+    private boolean vsq$isSupportedEnchantingItem(Item item) {
+        return item != Items.AIR;
     }
 
     private static <T> T vsq$removeCount(DynamicOps<T> ops, T input) {

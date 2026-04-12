@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.gui.enchantment;
 
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayloadHandler;
+import blob.vanillasquared.main.network.handlers.EnchantingRecipeStatePayloadHandler;
 import blob.vanillasquared.main.network.payload.EnchantingBookClickPayload;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenuProperties;
@@ -111,6 +112,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     @Override
     protected void init() {
         super.init();
+        EnchantingRecipeStatePayloadHandler.applyCached(this.menu.containerId, this.menu);
         this.bookModel = new BookModel(this.minecraft.getEntityModels().bakeLayer(ModelLayers.BOOK));
         this.titleLabelX = 10;
         this.titleLabelY = 5;
@@ -236,6 +238,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     public void removed() {
         this.vsq$recipeBookComponent.vsq$clearSelection();
         EnchantingRecipeBookSyncPayloadHandler.clearContainer(this.minecraft, this.menu.containerId);
+        EnchantingRecipeStatePayloadHandler.clearContainer(this.menu.containerId);
         super.removed();
     }
 
