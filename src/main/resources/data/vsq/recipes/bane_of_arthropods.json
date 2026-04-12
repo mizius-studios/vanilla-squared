@@ -3,10 +3,10 @@
   "category": "weapons",
   "group": "bane_of_arthropods",
   "name": {
-    "text": "Bane Of Arthropods"
+    "text": "Bane of Arthropods"
   },
   "description": {
-    "text": "Bane Of Arthropods I"
+    "text": "Bane of Arthropods I"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

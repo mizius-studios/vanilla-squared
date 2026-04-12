@@ -38,6 +38,10 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
             return;
         }
 
+        if (this.selectedTab == null) {
+            return;
+        }
+
         List<RecipeCollection> collections = Lists.newArrayList(this.book.getCollection(this.selectedTab.getCategory()));
         collections.removeIf(collection -> !collection.hasAnySelected());
 
