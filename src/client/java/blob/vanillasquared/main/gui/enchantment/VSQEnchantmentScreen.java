@@ -129,6 +129,9 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     public void containerTick() {
         super.containerTick();
         this.vsq$syncFromMenu();
+        if (this.menu.vsq$isSelectionCleared()) {
+            this.vsq$recipeBookComponent.vsq$clearSelection();
+        }
         this.tickBook();
         this.vsq$inputSlot.tick(INPUT_SLOT_EMPTY_SPRITES);
         this.vsq$lapislazuli.tick(LAPIS_LAZULI_SLOT_EMPTY_SPRITES);
@@ -304,9 +307,6 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
         this.vsq$hasRequiredXp = properties.vsq$hasRequiredXp();
         this.vsq$hasRequiredBlocks = properties.vsq$hasRequiredBlocks();
         this.vsq$bookTooltipLines = properties.vsq$getBookTooltipLines();
-        if (properties.vsq$isSelectionCleared()) {
-            this.vsq$recipeBookComponent.vsq$clearSelection();
-        }
     }
 
     private Identifier vsq$getRequirementSprite(boolean hasData, boolean meetsRequirement, boolean hovered, Identifier disabledSprite, Identifier enabledSprite, Identifier hoverSprite, GuiGraphicsExtractor guiGraphics) {
