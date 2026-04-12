@@ -129,7 +129,7 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     }
 
     public boolean canApplyNextLevel(ItemStack originalStack, HolderLookup.Provider registries) {
-        return this.isBelowMaximumLevel(originalStack, registries) && this.nextLevel(originalStack, registries) > this.currentLevel(originalStack, registries);
+        return this.isBelowMaximumLevel(originalStack, registries);
     }
 
     public boolean respectsVanillaEnchantmentIncompatibilities(ItemStack originalStack, HolderLookup.Provider registries) {
