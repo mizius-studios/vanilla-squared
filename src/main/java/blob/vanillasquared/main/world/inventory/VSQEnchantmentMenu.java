@@ -62,7 +62,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     private List<Component> detectedBlockTooltipLines = List.of();
     private List<Component> bookTooltipLines = List.of();
     private int selectedDisplayId = -1;
-    private volatile boolean selectionCleared;
+    private boolean selectionCleared;
     private final Map<Integer, RecipeHolder<EnchantingRecipe>> displayRecipes = new LinkedHashMap<>();
 
     public VSQEnchantmentMenu(int containerId, Inventory playerInventory) {
