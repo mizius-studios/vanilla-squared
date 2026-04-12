@@ -1,0 +1,34 @@
+{
+  "type": "vsq:enchanting",
+  "category": "weapons",
+  "group": "looting",
+  "name": {
+    "text": "Looting"
+  },
+  "description": {
+    "text": "Looting I"
+  },
+  "material": {
+    "item": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    }
+  ],
+  "enchantment": "minecraft:looting"
+}

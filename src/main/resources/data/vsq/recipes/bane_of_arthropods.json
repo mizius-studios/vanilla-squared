@@ -1,0 +1,34 @@
+{
+  "type": "vsq:enchanting",
+  "category": "weapons",
+  "group": "bane_of_arthropods",
+  "name": {
+    "text": "Bane Of Arthropods"
+  },
+  "description": {
+    "text": "Bane Of Arthropods I"
+  },
+  "material": {
+    "item": "minecraft:lapis_lazuli",
+    "count": 1
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    },
+    {
+      "item": "minecraft:book",
+      "count": 1
+    }
+  ],
+  "enchantment": "minecraft:bane_of_arthropods"
+}

@@ -76,14 +76,18 @@ public final class EnchantingRecipeRegistry {
     }
 
     private static boolean vsq$hasStructuralMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, HolderLookup.Provider registries) {
-        return recipe.findMatch(input).isPresent()
-                && (registries == null || recipe.isCompatibleInput(input, registries))
-                && (registries == null || recipe.wouldModifyInput(input, registries));
+        if (registries == null) {
+            return false;
+        }
+        return recipe.findMatch(input, registries).isPresent()
+                && recipe.isBelowMaximumEnchantmentLevel(input, registries)
+                && recipe.wouldModifyInput(input, registries)
+                && recipe.respectsVanillaEnchantmentIncompatibilities(input, registries);
     }
 
     private static boolean vsq$hasCraftableMatch(EnchantingRecipe recipe, EnchantingRecipeInput input, int playerLevel, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
         return vsq$hasStructuralMatch(recipe, input, registries)
-                && recipe.canPlayerCraft(playerLevel)
+                && recipe.canPlayerCraft(input, playerLevel, registries)
                 && recipe.hasRequiredBlocks(countedBlocks);
     }
 
