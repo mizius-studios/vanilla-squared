@@ -10,6 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,6 +37,9 @@ public abstract class ServerPlayerOpenMenuMixin extends Player {
                 || !(provider instanceof ExtendedMenuProvider<?>)) {
             return;
         }
+        if (!this.vsq$isEnchantmentMenuProvider(provider)) {
+            return;
+        }
         BlockPos openingPos = this.vsq$resolveOpeningPos(provider);
         if (VSQEnchantmentMenu.SYNTHETIC_OPEN_POS.equals(openingPos)) {
             return;
@@ -43,6 +48,11 @@ public abstract class ServerPlayerOpenMenuMixin extends Player {
         Component title = provider.getDisplayName();
         VanillaSquared.LOGGER.debug("Redirecting vanilla EnchantmentMenu open to VSQEnchantmentMenu via {}", provider.getClass().getName());
         cir.setReturnValue(((ServerPlayer) (Object) this).openMenu(new EnchantmentMenuRedirectProvider(title, openingPos)));
+    }
+
+    private boolean vsq$isEnchantmentMenuProvider(MenuProvider provider) {
+        AbstractContainerMenu probeMenu = provider.createMenu(Math.max(1, this.containerCounter + 1), this.getInventory(), this);
+        return probeMenu instanceof EnchantmentMenu || probeMenu instanceof VSQEnchantmentMenu;
     }
 
     private BlockPos vsq$resolveOpeningPos(MenuProvider provider) {
