@@ -96,7 +96,10 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
     }
 
     private static SlotDisplay vsq$resultDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, Optional<EnchantingRecipeInput> previewInput) {
-        return recipe.enchantment().iconDisplay(recipe.name(), registries);
+        return recipe.enchantment().iconDisplay(
+                previewInput.map(input -> recipe.displayName(input, registries)).orElseGet(recipe::name),
+                registries
+        );
     }
 
     private static Optional<List<Ingredient>> vsq$createCraftingRequirements(EnchantingRecipe recipe, HolderLookup.Provider registries) {
