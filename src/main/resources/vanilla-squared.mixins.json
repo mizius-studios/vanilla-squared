@@ -3,6 +3,8 @@
   "package": "blob.vanillasquared.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "world.FeatureFlagsMixin",
+    "world.PackFeatureSourceMixin",
     "world.attributes.RangedAttributeMixin",
     "world.dmgsources.CombatRulesMixin",
     "world.entity.LivingEntityAttributesMixin",
