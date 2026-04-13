@@ -53,10 +53,7 @@ public final class VSQExperiments {
             return;
         }
 
-        List<RecipeHolder<?>> recipes = new ArrayList<>(EnchantingRecipeRegistry.recipes().size());
-        for (RecipeHolder<?> holder : EnchantingRecipeRegistry.recipes()) {
-            recipes.add(holder);
-        }
+        List<RecipeHolder<?>> recipes = new ArrayList<>(EnchantingRecipeRegistry.recipes());
         if (recipes.isEmpty()) {
             return;
         }
