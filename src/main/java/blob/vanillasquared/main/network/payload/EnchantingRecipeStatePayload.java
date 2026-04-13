@@ -26,8 +26,10 @@ public record EnchantingRecipeStatePayload(
 ) implements CustomPacketPayload {
     public static final Type<EnchantingRecipeStatePayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_state"));
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, List<Identifier>> IDENTIFIER_LIST_CODEC = Identifier.STREAM_CODEC.apply(ByteBufCodecs.list());
-    private static final StreamCodec<RegistryFriendlyByteBuf, List<Integer>> VAR_INT_LIST_CODEC = ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list());
+    private static final StreamCodec<RegistryFriendlyByteBuf, List<Identifier>> IDENTIFIER_LIST_CODEC =
+            Identifier.STREAM_CODEC.apply(ByteBufCodecs.list()).mapStream(buf -> buf);
+    private static final StreamCodec<RegistryFriendlyByteBuf, List<Integer>> VAR_INT_LIST_CODEC =
+            ByteBufCodecs.VAR_INT.apply(ByteBufCodecs.list()).mapStream(buf -> buf);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, EnchantingRecipeStatePayload> CODEC = new StreamCodec<>() {
         @Override
