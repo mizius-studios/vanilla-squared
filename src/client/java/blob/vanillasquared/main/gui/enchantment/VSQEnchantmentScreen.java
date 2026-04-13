@@ -114,7 +114,6 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
         super.init();
         this.bookModel = new BookModel(this.minecraft.getEntityModels().bakeLayer(ModelLayers.BOOK));
         EnchantingRecipeStatePayloadHandler.applyCached(this.menu.containerId, this.menu);
-        this.bookModel = new BookModel(this.minecraft.getEntityModels().bakeLayer(ModelLayers.BOOK));
         this.titleLabelX = 10;
         this.titleLabelY = 5;
         this.inventoryLabelX = 8;

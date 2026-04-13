@@ -114,7 +114,7 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
         if (!this.canApplyNextLevel(originalStack, registries)) {
             return 0;
         }
-        return this.nextLevel(originalStack, registries) * 5;
+        return this.nextLevel(originalStack, registries) * 3;
     }
 
     public Component displayName(ItemStack originalStack, HolderLookup.Provider registries) {

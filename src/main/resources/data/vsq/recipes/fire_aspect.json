@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "fire_aspect",
   "name": {
-    "text": "Fire Aspect"
+    "translate": "enchantment.minecraft.fire_aspect"
   },
   "description": {
-    "text": "Fire Aspect I"
+    "translate": "vsq.enchantment.fire_aspect.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:flint_and_steel",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:fire_charge",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:magma_block",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:lava_bucket",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:fire_aspect"
+  "enchantment": "minecraft:fire_aspect",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 2
 }

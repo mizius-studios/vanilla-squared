@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "loyalty",
   "name": {
-    "text": "Loyalty"
+    "translate": "enchantment.minecraft.loyalty"
   },
   "description": {
-    "text": "Loyalty I"
+    "translate": "vsq.enchantment.loyalty.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
       "item": "minecraft:book",
-      "count": 1
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_shard",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_crystals",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:spyglass",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:loyalty"
+  "enchantment": "minecraft:loyalty",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 6
+    }
+  ],
+  "level_multiplier": 3
 }

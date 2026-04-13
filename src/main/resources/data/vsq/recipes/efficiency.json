@@ -3,32 +3,39 @@
   "category": "tools",
   "group": "efficiency",
   "name": {
-    "text": "Efficiency"
+    "translate": "enchantment.minecraft.efficiency"
   },
   "description": {
-    "text": "Efficiency I"
+    "translate": "vsq.enchantment.efficiency.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:iron_ingot",
+      "count": 3
+    },
+    {
+      "item": "minecraft:obsidian",
       "count": 1
     },
     {
-      "item": "minecraft:book",
+      "tag": "minecraft:pickaxes",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
+      "tag": "minecraft:shovels",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:efficiency"
+  "enchantment": "minecraft:efficiency",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 9
+    }
+  ],
+  "level_multiplier": 2
 }

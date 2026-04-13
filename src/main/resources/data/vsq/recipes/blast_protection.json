@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "blast_protection",
   "name": {
-    "text": "Blast Protection"
+    "translate": "enchantment.minecraft.blast_protection"
   },
   "description": {
-    "text": "Blast Protection I"
+    "translate": "vsq.enchantment.blast_protection.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:tnt",
+      "count": 2
+    },
+    {
+      "item": "minecraft:tnt_minecart",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:gunpowder",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:firework_star",
+      "count": 2
     }
   ],
-  "enchantment": "minecraft:blast_protection"
+  "enchantment": "minecraft:blast_protection",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 6
+    }
+  ],
+  "level_multiplier": 2
 }

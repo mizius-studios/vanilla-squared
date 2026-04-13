@@ -34,7 +34,7 @@ public abstract class ServerGamePacketListenerImplMixin {
         if (!outcome.fullyPlaced() && recipeHolder != null) {
             this.player.connection.send(new ClientboundPlaceGhostRecipePacket(
                     menu.containerId,
-                    EnchantingRecipeBookSyncPayload.createDisplay(recipeHolder.value(), this.player.registryAccess(), outcome.missingInput())
+                    EnchantingRecipeBookSyncPayload.createGhostDisplay(recipeHolder.value(), this.player.registryAccess(), outcome.missingInput())
             ));
         }
         ci.cancel();

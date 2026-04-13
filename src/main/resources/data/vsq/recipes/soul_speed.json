@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "soul_speed",
   "name": {
-    "text": "Soul Speed"
+    "translate": "enchantment.minecraft.soul_speed"
   },
   "description": {
-    "text": "Soul Speed I"
+    "translate": "vsq.enchantment.soul_speed.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:soul_sand",
+      "count": 4
+    },
+    {
+      "item": "minecraft:soul_soil",
+      "count": 4
+    },
+    {
+      "item": "minecraft:ghast_tear",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
+      "item": "minecraft:dried_ghast",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:soul_speed"
+  "enchantment": "minecraft:soul_speed",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 2
 }

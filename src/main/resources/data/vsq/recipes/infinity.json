@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "infinity",
   "name": {
-    "text": "Infinity"
+    "translate": "enchantment.minecraft.infinity"
   },
   "description": {
-    "text": "Infinity I"
+    "translate": "vsq.enchantment.infinity.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 5
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:bow",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:arrow",
+      "count": 16
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:tipped_arrow",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:spectral_arrow",
+      "count": 3
     }
   ],
-  "enchantment": "minecraft:infinity"
+  "enchantment": "minecraft:infinity",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 12
+    }
+  ],
+  "level_multiplier": 1
 }
