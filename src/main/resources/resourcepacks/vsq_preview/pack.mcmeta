@@ -1,0 +1,17 @@
+{
+  "features": {
+    "enabled": [
+      "vsq:preview"
+    ]
+  },
+  "pack": {
+    "description": {
+      "translate": "vsq.gui.experiments.vsq.description"
+    },
+    "max_format": 101,
+    "min_format": [
+      101,
+      1
+    ]
+  }
+}
