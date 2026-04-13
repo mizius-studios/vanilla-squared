@@ -72,6 +72,20 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
         return vsq$createDisplay(recipe, registries, Optional.of(previewInput));
     }
 
+    public static RecipeDisplay createGhostDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, EnchantingRecipeInput missingInput) {
+        List<SlotDisplay> ingredients = new ArrayList<>(6);
+        ingredients.add(vsq$missingDisplay(recipe.inputIngredient(registries), missingInput.input()));
+        ingredients.add(vsq$missingDisplay(recipe.material(), missingInput.material()));
+        for (int index = 0; index < recipe.ingredients().size(); index++) {
+            ingredients.add(vsq$missingDisplay(recipe.ingredients().get(index), missingInput.ingredients().get(index)));
+        }
+        return new ShapelessCraftingRecipeDisplay(
+                ingredients,
+                vsq$resultDisplay(recipe, registries, Optional.empty()),
+                new SlotDisplay.ItemSlotDisplay(Items.ENCHANTING_TABLE)
+        );
+    }
+
     private static RecipeDisplay vsq$createDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, Optional<EnchantingRecipeInput> previewInput) {
         List<SlotDisplay> ingredients = new ArrayList<>(6);
         if (previewInput.isPresent()) {
@@ -131,6 +145,13 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
 
     private static SlotDisplay vsq$stackDisplay(ItemStack stack) {
         return stack.isEmpty() ? Empty.INSTANCE : new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack));
+    }
+
+    private static SlotDisplay vsq$missingDisplay(EnchantingIngredient ingredient, ItemStack missingStack) {
+        if (missingStack.isEmpty()) {
+            return Empty.INSTANCE;
+        }
+        return ingredient.display(missingStack.getCount());
     }
 
     @Override

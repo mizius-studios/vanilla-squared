@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "piercing",
   "name": {
-    "text": "Piercing"
+    "translate": "enchantment.minecraft.piercing"
   },
   "description": {
-    "text": "Piercing I"
+    "translate": "vsq.enchantment.piercing.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:crossbow",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:arrow",
+      "count": 8
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:pointed_dripstone",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:shield",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:piercing"
+  "enchantment": "minecraft:piercing",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 6
+    }
+  ],
+  "level_multiplier": 3
 }

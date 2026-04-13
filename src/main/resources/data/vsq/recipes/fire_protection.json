@@ -3,10 +3,10 @@
   "category": "armor",
   "group": "fire_protection",
   "name": {
-    "text": "Fire Protection"
+    "translate": "enchantment.minecraft.fire_protection"
   },
   "description": {
-    "text": "Fire Protection I"
+    "translate": "vsq.enchantment.fire_protection.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
@@ -14,21 +14,28 @@
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "tag": "minecraft:enchantable/armor",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:fire_charge",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:magma_block",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:lava_bucket",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:fire_protection"
+  "enchantment": "minecraft:fire_protection",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 6
+    }
+  ],
+  "level_multiplier": 2
 }

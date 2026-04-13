@@ -176,10 +176,22 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
     }
 
     public SlotDisplay display() {
-        ItemStack preview = this.previewStack();
-        if (!preview.isEmpty()) {
-            preview.setCount(this.count);
-            return new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(preview));
+        return this.display(this.count);
+    }
+
+    public SlotDisplay display(int displayCount) {
+        List<SlotDisplay> displays = this.previewStacks().stream()
+                .map(stack -> {
+                    ItemStack preview = stack.copy();
+                    preview.setCount(displayCount);
+                    return (SlotDisplay) new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(preview));
+                })
+                .toList();
+        if (displays.size() == 1) {
+            return displays.getFirst();
+        }
+        if (!displays.isEmpty()) {
+            return new SlotDisplay.Composite(displays);
         }
         if (this.tagId != null) {
             return new SlotDisplay.TagSlotDisplay(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId));
@@ -188,17 +200,20 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
     }
 
     public ItemStack previewStack() {
+        return this.previewStacks().stream().findFirst().orElse(ItemStack.EMPTY);
+    }
+
+    private List<ItemStack> previewStacks() {
         if (this.ingredient != null) {
-            return this.ingredient.items().findFirst()
+            return this.ingredient.items()
                     .map(holder -> new ItemStack(holder.value()))
-                    .orElse(ItemStack.EMPTY);
+                    .toList();
         }
 
         TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
         return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
-                .findFirst()
                 .map(holder -> new ItemStack(holder.value()))
-                .orElse(ItemStack.EMPTY);
+                .toList();
     }
 
     private static <T> T vsq$removeCount(DynamicOps<T> ops, T input) {

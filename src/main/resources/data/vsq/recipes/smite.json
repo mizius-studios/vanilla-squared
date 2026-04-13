@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "smite",
   "name": {
-    "text": "Smite"
+    "translate": "enchantment.minecraft.smite"
   },
   "description": {
-    "text": "Smite I"
+    "translate": "vsq.enchantment.smite.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:bone",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:rotten_flesh",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:soul_sand",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:soul_soil",
+      "count": 2
     }
   ],
-  "enchantment": "minecraft:smite"
+  "enchantment": "minecraft:smite",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 1
 }

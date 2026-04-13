@@ -3,32 +3,39 @@
   "category": "util",
   "group": "vanishing_curse",
   "name": {
-    "text": "Vanishing Curse"
+    "translate": "enchantment.minecraft.vanishing_curse"
   },
   "description": {
-    "text": "Vanishing Curse I"
+    "translate": "vsq.enchantment.vanishing_curse.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:recovery_compass",
+      "count": 4
     },
     {
       "item": "minecraft:book",
-      "count": 1
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:ender_eye",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:fermented_spider_eye",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:vanishing_curse"
+  "enchantment": "minecraft:vanishing_curse",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 9
+    }
+  ],
+  "level_multiplier": 6
 }

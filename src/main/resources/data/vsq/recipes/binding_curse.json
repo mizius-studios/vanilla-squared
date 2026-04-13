@@ -3,32 +3,39 @@
   "category": "util",
   "group": "binding_curse",
   "name": {
-    "text": "Binding Curse"
+    "translate": "enchantment.minecraft.binding_curse"
   },
   "description": {
-    "text": "Binding Curse I"
+    "translate": "vsq.enchantment.binding_curse.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 5
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:iron_chain",
+      "count": 2
+    },
+    {
+      "item": "minecraft:copper_chain",
+      "count": 2
     },
     {
       "item": "minecraft:book",
-      "count": 1
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:lead",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:binding_curse"
+  "enchantment": "minecraft:binding_curse",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 2
+    }
+  ],
+  "level_multiplier": 5
 }

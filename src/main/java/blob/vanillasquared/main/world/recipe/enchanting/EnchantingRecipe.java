@@ -32,6 +32,7 @@ public record EnchantingRecipe(
         EnchantingIngredient material,
         List<EnchantingIngredient> ingredients,
         List<EnchantingBlockRequirement> blocks,
+        int levelMultiplier,
         EnchantingRecipeEnchantment enchantment
 ) implements Recipe<EnchantingRecipeInput> {
     private static final com.mojang.serialization.Codec<List<EnchantingIngredient>> INGREDIENTS_CODEC = net.minecraft.util.ExtraCodecs.JSON.flatXmap(
@@ -51,6 +52,7 @@ public record EnchantingRecipe(
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
             INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
             BLOCKS_CODEC.optionalFieldOf("blocks", List.of()).forGetter(EnchantingRecipe::blocks),
+            com.mojang.serialization.Codec.INT.optionalFieldOf("level_multiplier", 1).forGetter(EnchantingRecipe::levelMultiplier),
             EnchantingRecipeEnchantment.CODEC.fieldOf("enchantment").forGetter(EnchantingRecipe::enchantment)
     ).apply(instance, EnchantingRecipe::vsq$create));
 
@@ -65,6 +67,7 @@ public record EnchantingRecipe(
                     EnchantingIngredient.STREAM_CODEC.decode(buf),
                     EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                     EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
+                    ByteBufCodecs.VAR_INT.decode(buf),
                     EnchantingRecipeEnchantment.STREAM_CODEC.decode(buf)
             );
         }
@@ -78,6 +81,7 @@ public record EnchantingRecipe(
             EnchantingIngredient.STREAM_CODEC.encode(buf, value.material());
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.ingredients());
             EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.blocks());
+            ByteBufCodecs.VAR_INT.encode(buf, value.levelMultiplier());
             EnchantingRecipeEnchantment.STREAM_CODEC.encode(buf, value.enchantment());
         }
     };
@@ -88,6 +92,7 @@ public record EnchantingRecipe(
         blocks = List.copyOf(blocks);
         name = name.copy();
         description = description.copy();
+        levelMultiplier = Math.max(levelMultiplier, 1);
         if (ingredients.size() != 4) {
             throw new IllegalArgumentException("Enchanting recipes require exactly 4 cross ingredients");
         }
@@ -194,7 +199,7 @@ public record EnchantingRecipe(
     }
 
     public int xpCost(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
-        return this.enchantment.xpCost(input.input(), registries);
+        return this.enchantment.xpCost(input.input(), registries) * this.levelMultiplier;
     }
 
     public Component displayName(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
@@ -226,8 +231,8 @@ public record EnchantingRecipe(
         return new EnchantingIngredient(this.enchantment.supportedItemsIngredient(registries), 1, null);
     }
 
-    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, Component name, Component description, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, EnchantingRecipeEnchantment enchantment) {
-        return new EnchantingRecipe(category, group, name, description, material, ingredients, blocks, enchantment);
+    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, Component name, Component description, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, int levelMultiplier, EnchantingRecipeEnchantment enchantment) {
+        return new EnchantingRecipe(category, group, name, description, material, ingredients, blocks, levelMultiplier, enchantment);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {
