@@ -6,12 +6,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class EnchantingRecipeStatePayloadHandler {
-    private static final Map<Integer, CachedRecipeState> PENDING_RECIPE_STATES = new ConcurrentHashMap<>();
+    private static final Map<Integer, CachedRecipeState> PENDING_RECIPE_STATES = new HashMap<>();
 
     private EnchantingRecipeStatePayloadHandler() {
     }

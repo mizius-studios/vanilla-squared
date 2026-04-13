@@ -166,7 +166,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
 
         TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
         List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
-                .filter(holder -> this.vsq$isSupportedEnchantingItem(holder.value()))
+                .filter(holder -> vsq$isSupportedEnchantingItem(holder.value()))
                 .toList();
         if (holders.isEmpty()) {
             return Optional.empty();
@@ -195,13 +195,13 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
 
         TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
         return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
-                .filter(holder -> this.vsq$isSupportedEnchantingItem(holder.value()))
+                .filter(holder -> vsq$isSupportedEnchantingItem(holder.value()))
                 .findFirst()
                 .map(holder -> new ItemStack(holder.value()))
                 .orElse(ItemStack.EMPTY);
     }
 
-    private boolean vsq$isSupportedEnchantingItem(Item item) {
+    private static boolean vsq$isSupportedEnchantingItem(Item item) {
         return item != Items.AIR;
     }
 
