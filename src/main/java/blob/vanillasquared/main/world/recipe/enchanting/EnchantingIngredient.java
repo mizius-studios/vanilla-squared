@@ -24,12 +24,21 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 public record EnchantingIngredient(Ingredient ingredient, int count, Identifier tagId) {
     private static final Codec<Integer> COUNT_CODEC = Codec.intRange(1, Item.ABSOLUTE_MAX_STACK_SIZE);
+    private static final Map<Identifier, Optional<Ingredient>> TAG_INGREDIENT_CACHE = new HashMap<>();
+    private static final Map<Identifier, ItemStack> TAG_PREVIEW_CACHE = new HashMap<>();
+
+    public static void clearTagCache() {
+        TAG_INGREDIENT_CACHE.clear();
+        TAG_PREVIEW_CACHE.clear();
+    }
 
     public static final Codec<EnchantingIngredient> CODEC = new Codec<>() {
         @Override
@@ -164,7 +173,11 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
             return Optional.of(this.ingredient);
         }
 
-        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
+        return TAG_INGREDIENT_CACHE.computeIfAbsent(this.tagId, EnchantingIngredient::resolveTagIngredient);
+    }
+
+    private static Optional<Ingredient> resolveTagIngredient(Identifier tagId) {
+        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, tagId);
         List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
                 .filter(holder -> vsq$isSupportedEnchantingItem(holder.value()))
                 .toList();
@@ -193,7 +206,11 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
                     .orElse(ItemStack.EMPTY);
         }
 
-        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId);
+        return TAG_PREVIEW_CACHE.computeIfAbsent(this.tagId, EnchantingIngredient::resolveTagPreview);
+    }
+
+    private static ItemStack resolveTagPreview(Identifier tagId) {
+        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, tagId);
         return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
                 .filter(holder -> vsq$isSupportedEnchantingItem(holder.value()))
                 .findFirst()
