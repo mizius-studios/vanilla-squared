@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public record EnchantingIngredient(Ingredient ingredient, int count, Identifier tagId) {
@@ -162,7 +163,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
         if (this.ingredient != null) {
             return this.ingredient;
         }
-        return this.safeIngredient().orElse(Ingredient.EMPTY);
+        return this.safeIngredient().orElseGet(() -> Ingredient.of(Stream.empty()));
     }
 
     public Optional<Ingredient> safeIngredient() {

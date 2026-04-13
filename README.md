@@ -4,7 +4,7 @@
 
 ### Armor, Weapons and combat interaction overhaul while staying close to the vanilla feel.
 
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.11-brightgreen.svg)](https://www.minecraft.net/)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.1.2-brightgreen.svg)](https://www.minecraft.net/)
 [![Fabric](https://img.shields.io/badge/Fabric-Compatible-orange.svg)](https://fabricmc.net/)
 
 </div>
@@ -48,9 +48,9 @@ Restart your server.
 - Extends armor HUD rendering to display armor values above 20 with extra rows
 
 ## 🔎 Technological Information 
-- Minecraft 1.21.11
+- Minecraft 26.1.2
 - Fabric Loader 0.18.4 or newer
-- Fabric API 0.141.2 plus 1.21.11
+- Fabric API 0.145.4 plus 26.1.2
 - Java 21
 - Gradle via wrapper scripts included in the repo
 
