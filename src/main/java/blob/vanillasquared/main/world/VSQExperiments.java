@@ -1,7 +1,6 @@
 package blob.vanillasquared.main.world;
 
 import blob.vanillasquared.main.VanillaSquared;
-import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -12,10 +11,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.flag.FeatureFlag;
-import net.minecraft.world.item.crafting.RecipeHolder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class VSQExperiments {
     public static final Identifier PREVIEW_FEATURE_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "preview");
@@ -52,13 +47,6 @@ public final class VSQExperiments {
         if (!isPreviewEnabled(player.level())) {
             return;
         }
-
-        List<RecipeHolder<?>> recipes = new ArrayList<>(EnchantingRecipeRegistry.recipes());
-        if (recipes.isEmpty()) {
-            return;
-        }
-
-        player.awardRecipes(recipes);
     }
 
     public static void vsq$setPreviewFlag(FeatureFlag flag) {

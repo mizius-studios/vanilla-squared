@@ -14,6 +14,7 @@
     "world.inventory.RecipeManagerAccessor",
     "world.inventory.ServerPlayerOpenMenuMixin",
     "world.inventory.ServerGamePacketListenerImplMixin",
+    "world.inventory.ServerRecipeBookMixin",
     "world.inventory.MerchantMenuMixin",
     "world.inventory.AnvilMenuMixin",
     "world.item.ItemCooldownsMixin",

@@ -45,6 +45,10 @@ public final class EnchantingRecipeRegistry {
         return RECIPES.values();
     }
 
+    public static boolean contains(ResourceKey<Recipe<?>> recipeKey) {
+        return RECIPES.containsKey(recipeKey);
+    }
+
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstMatch(EnchantingRecipeInput input, Level level) {
         return RECIPES.values().stream()
                 .filter(holder -> holder.value().matches(input, level))

@@ -398,11 +398,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     private Optional<RecipeHolder<EnchantingRecipe>> vsq$getPreviewRecipe(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
         if (this.selectedDisplayId != -1) {
             RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(this.selectedDisplayId);
-            if (selected != null
-                    && selected.value().findMatch(input, registries).isPresent()
-                    && selected.value().isBelowMaximumEnchantmentLevel(input, registries)
-                    && selected.value().wouldModifyInput(input, registries)
-                    && selected.value().respectsVanillaEnchantmentIncompatibilities(input, registries)) {
+            if (selected != null) {
                 return Optional.of(selected);
             }
             this.selectedDisplayId = -1;
