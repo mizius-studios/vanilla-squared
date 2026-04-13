@@ -24,16 +24,16 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.StreamSupport;
 
 public record EnchantingIngredient(Ingredient ingredient, int count, Identifier tagId) {
     private static final Codec<Integer> COUNT_CODEC = Codec.intRange(1, Item.ABSOLUTE_MAX_STACK_SIZE);
-    private static final Map<Identifier, Optional<Ingredient>> TAG_INGREDIENT_CACHE = new HashMap<>();
-    private static final Map<Identifier, ItemStack> TAG_PREVIEW_CACHE = new HashMap<>();
+    private static final Map<Identifier, Optional<Ingredient>> TAG_INGREDIENT_CACHE = new ConcurrentHashMap<>();
+    private static final Map<Identifier, ItemStack> TAG_PREVIEW_CACHE = new ConcurrentHashMap<>();
 
     public static void clearTagCache() {
         TAG_INGREDIENT_CACHE.clear();
@@ -156,7 +156,8 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
 
     public boolean matchesIgnoringCount(ItemStack stack) {
         if (this.tagId != null) {
-            return stack.is(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId));
+            return stack.is(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId))
+                    && vsq$isSupportedEnchantingItem(stack.getItem());
         }
         return this.ingredient.test(stack);
     }
