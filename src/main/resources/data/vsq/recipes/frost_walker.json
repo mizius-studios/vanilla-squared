@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "frost_walker",
   "name": {
-    "text": "Frost Walker"
+    "translate": "enchantment.minecraft.frost_walker"
   },
   "description": {
-    "text": "Frost Walker I"
+    "translate": "vsq.enchantment.frost_walker.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:ice",
+      "count": 4
+    },
+    {
+      "item": "minecraft:packed_ice",
+      "count": 2
+    },
+    {
+      "item": "minecraft:blue_ice",
       "count": 1
     },
     {
       "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "count": 3
     }
   ],
-  "enchantment": "minecraft:frost_walker"
+  "enchantment": "minecraft:frost_walker",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 2
 }

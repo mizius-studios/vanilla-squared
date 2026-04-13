@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "breach",
   "name": {
-    "text": "Breach"
+    "translate": "enchantment.minecraft.breach"
   },
   "description": {
-    "text": "Breach I"
+    "translate": "vsq.enchantment.breach.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "tag": "minecraft:enchantable/armor",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:firework_rocket",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:firework_star",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:shield",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:breach"
+  "enchantment": "minecraft:breach",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 16
+    }
+  ],
+  "level_multiplier": 3
 }

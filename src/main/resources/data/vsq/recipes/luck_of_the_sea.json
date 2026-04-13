@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "luck_of_the_sea",
   "name": {
-    "text": "Luck Of The Sea"
+    "translate": "enchantment.minecraft.luck_of_the_sea"
   },
   "description": {
-    "text": "Luck Of The Sea I"
+    "translate": "vsq.enchantment.luck_of_the_sea.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
       "item": "minecraft:book",
+      "count": 3
+    },
+    {
+      "tag": "minecraft:fishes",
+      "count": 6
+    },
+    {
+      "tag": "minecraft:nautilus_bucket_food",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:ink_sac",
+      "count": 10
     }
   ],
-  "enchantment": "minecraft:luck_of_the_sea"
+  "enchantment": "minecraft:luck_of_the_sea",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 2
 }

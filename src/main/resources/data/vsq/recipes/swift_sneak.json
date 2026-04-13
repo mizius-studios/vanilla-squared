@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "swift_sneak",
   "name": {
-    "text": "Swift Sneak"
+    "translate": "enchantment.minecraft.swift_sneak"
   },
   "description": {
-    "text": "Swift Sneak I"
+    "translate": "vsq.enchantment.swift_sneak.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:sculk_catalyst",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:sculk",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:echo_shard",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:sculk_shrieker",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:swift_sneak"
+  "enchantment": "minecraft:swift_sneak",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 12
+    }
+  ],
+  "level_multiplier": 4
 }

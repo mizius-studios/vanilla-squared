@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "aqua_affinity",
   "name": {
-    "text": "Aqua Affinity"
+    "translate": "enchantment.minecraft.aqua_affinity"
   },
   "description": {
-    "text": "Aqua Affinity I"
+    "translate": "vsq.enchantment.aqua_affinity.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:water_bucket",
       "count": 1
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:prismarine_crystals",
+      "count": 4
+    },
+    {
+      "tag": "minecraft:pickaxes",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_shard",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:aqua_affinity"
+  "enchantment": "minecraft:aqua_affinity",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 1
 }

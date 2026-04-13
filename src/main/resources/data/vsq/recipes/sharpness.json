@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "sharpness",
   "name": {
-    "text": "Sharpness"
+    "translate": "enchantment.minecraft.sharpness"
   },
   "description": {
-    "text": "Sharpness I"
+    "translate": "vsq.enchantment.sharpness.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 6
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "tag": "minecraft:swords",
       "count": 1
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:bow",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:grindstone",
+      "count": 2
     },
     {
-      "item": "minecraft:book",
+      "tag": "minecraft:axes",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:sharpness"
+  "enchantment": "minecraft:sharpness",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 16
+    }
+  ],
+  "level_multiplier": 3
 }

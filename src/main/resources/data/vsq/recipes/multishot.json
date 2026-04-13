@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "multishot",
   "name": {
-    "text": "Multishot"
+    "translate": "enchantment.minecraft.multishot"
   },
   "description": {
-    "text": "Multishot I"
+    "translate": "vsq.enchantment.multishot.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:crossbow",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:arrow",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:tipped_arrow",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:spectral_arrow",
+      "count": 3
     }
   ],
-  "enchantment": "minecraft:multishot"
+  "enchantment": "minecraft:multishot",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 9
 }

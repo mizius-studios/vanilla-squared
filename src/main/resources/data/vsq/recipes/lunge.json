@@ -3,32 +3,38 @@
   "category": "weapons",
   "group": "lunge",
   "name": {
-    "text": "Lunge"
+    "translate": "enchantment.minecraft.lunge"
   },
   "description": {
-    "text": "Lunge I"
+    "translate": "vsq.enchantment.lunge.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "tag": "minecraft:spears"
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:wind_charge",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:slime_ball",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:firework_rocket",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:lunge"
+  "enchantment": "minecraft:lunge",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 6
+    }
+  ],
+  "level_multiplier": 3
 }

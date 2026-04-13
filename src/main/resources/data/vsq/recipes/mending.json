@@ -3,32 +3,39 @@
   "category": "util",
   "group": "mending",
   "name": {
-    "text": "Mending"
+    "translate": "enchantment.minecraft.mending"
   },
   "description": {
-    "text": "Mending I"
+    "translate": "vsq.enchantment.mending.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:experience_bottle",
+      "count": 8
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:sculk_catalyst",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:sculk",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:echo_shard",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:mending"
+  "enchantment": "minecraft:mending",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 16
+    }
+  ],
+  "level_multiplier": 15
 }

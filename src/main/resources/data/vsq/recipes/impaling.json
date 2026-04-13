@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "impaling",
   "name": {
-    "text": "Impaling"
+    "translate": "enchantment.minecraft.impaling"
   },
   "description": {
-    "text": "Impaling I"
+    "translate": "vsq.enchantment.impaling.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "tag": "minecraft:fishes",
+      "count": 3
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_crystals",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_shard",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
+      "item": "minecraft:water_bucket",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:impaling"
+  "enchantment": "minecraft:impaling",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 6
+    }
+  ],
+  "level_multiplier": 2
 }

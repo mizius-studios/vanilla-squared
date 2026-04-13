@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "respiration",
   "name": {
-    "text": "Respiration"
+    "translate": "enchantment.minecraft.respiration"
   },
   "description": {
-    "text": "Respiration I"
+    "translate": "vsq.enchantment.respiration.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:sponge",
+      "count": 4
+    },
+    {
+      "item": "minecraft:water_bucket",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_shard",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_crystals",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:respiration"
+  "enchantment": "minecraft:respiration",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 3
 }

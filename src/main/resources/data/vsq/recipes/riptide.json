@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "riptide",
   "name": {
-    "text": "Riptide"
+    "translate": "enchantment.minecraft.riptide"
   },
   "description": {
-    "text": "Riptide I"
+    "translate": "vsq.enchantment.riptide.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:water_bucket",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_crystals",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:prismarine_shard",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:firework_rocket",
+      "count": 4
     }
   ],
-  "enchantment": "minecraft:riptide"
+  "enchantment": "minecraft:riptide",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 3
 }

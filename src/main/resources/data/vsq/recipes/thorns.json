@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "thorns",
   "name": {
-    "text": "Thorns"
+    "translate": "enchantment.minecraft.thorns"
   },
   "description": {
-    "text": "Thorns I"
+    "translate": "vsq.enchantment.thorns.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:cactus_flower",
+      "count": 4
+    },
+    {
+      "item": "minecraft:cactus",
+      "count": 4
+    },
+    {
+      "tag": "minecraft:enchantable/armor",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
+      "item": "minecraft:shield",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:thorns"
+  "enchantment": "minecraft:thorns",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 2
 }

@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "lure",
   "name": {
-    "text": "Lure"
+    "translate": "enchantment.minecraft.lure"
   },
   "description": {
-    "text": "Lure I"
+    "translate": "vsq.enchantment.lure.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 3
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
-      "count": 1
+      "tag": "minecraft:fishes",
+      "count": 4
     },
     {
       "item": "minecraft:book",
+      "count": 3
+    },
+    {
+      "tag": "minecraft:nautilus_bucket_food",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
+      "item": "minecraft:fishing_rod",
       "count": 1
     }
   ],
-  "enchantment": "minecraft:lure"
+  "enchantment": "minecraft:lure",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 3
+    }
+  ],
+  "level_multiplier": 3
 }

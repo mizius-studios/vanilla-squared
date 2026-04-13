@@ -3,32 +3,39 @@
   "category": "armor",
   "group": "feather_falling",
   "name": {
-    "text": "Feather Falling"
+    "translate": "enchantment.minecraft.feather_falling"
   },
   "description": {
-    "text": "Feather Falling I"
+    "translate": "vsq.enchantment.feather_falling.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 4
   },
   "ingredients": [
     {
-      "item": "minecraft:book",
+      "item": "minecraft:feather",
+      "count": 4
+    },
+    {
+      "item": "minecraft:water_bucket",
       "count": 1
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "tag": "minecraft:wool",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
-    },
-    {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:hay_block",
+      "count": 2
     }
   ],
-  "enchantment": "minecraft:feather_falling"
+  "enchantment": "minecraft:feather_falling",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 9
+    }
+  ],
+  "level_multiplier": 3
 }

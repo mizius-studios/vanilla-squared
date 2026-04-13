@@ -3,32 +3,39 @@
   "category": "weapons",
   "group": "density",
   "name": {
-    "text": "Density"
+    "translate": "enchantment.minecraft.density"
   },
   "description": {
-    "text": "Density I"
+    "translate": "vsq.enchantment.density.description"
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
-    "count": 1
+    "count": 5
   },
   "ingredients": [
     {
       "item": "minecraft:book",
-      "count": 1
+      "count": 5
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:breeze_rod",
+      "count": 4
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:obsidian",
+      "count": 6
     },
     {
-      "item": "minecraft:book",
-      "count": 1
+      "item": "minecraft:blue_ice",
+      "count": 6
     }
   ],
-  "enchantment": "minecraft:density"
+  "enchantment": "minecraft:density",
+  "blocks": [
+    {
+      "tag": "vsq:enchantment_blocks",
+      "count": 16
+    }
+  ],
+  "level_multiplier": 2
 }
