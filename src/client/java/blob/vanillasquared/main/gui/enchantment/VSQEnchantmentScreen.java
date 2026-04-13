@@ -129,7 +129,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     public void containerTick() {
         super.containerTick();
         this.vsq$syncFromMenu();
-        if (this.menu.vsq$isSelectionCleared()) {
+        if (this.menu.vsq$consumeSelectionCleared()) {
             this.vsq$recipeBookComponent.vsq$clearSelection();
         }
         this.tickBook();

@@ -27,8 +27,7 @@ public final class EnchantingRecipeStatePayloadHandler {
                             payload.blockRequirement(),
                             payload.playerLevel(),
                             payload.recipeName(),
-                            payload.recipeDescription(),
-                            payload.selectionCleared()
+                            payload.recipeDescription()
                     ));
 
                     if (context.client().player == null) {
@@ -86,8 +85,7 @@ public final class EnchantingRecipeStatePayloadHandler {
             int blockRequirement,
             int playerLevel,
             Component recipeName,
-            Component recipeDescription,
-            boolean selectionCleared
+            Component recipeDescription
     ) {
         private CachedRecipeState {
             blockIds = List.copyOf(blockIds);

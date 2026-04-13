@@ -225,7 +225,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     @Override
-    public boolean vsq$isSelectionCleared() {
+    public boolean vsq$consumeSelectionCleared() {
         if (this.selectionCleared) {
             this.selectionCleared = false;
             return true;

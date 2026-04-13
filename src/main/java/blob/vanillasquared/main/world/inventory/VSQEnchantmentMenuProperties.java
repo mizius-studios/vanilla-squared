@@ -23,7 +23,7 @@ public interface VSQEnchantmentMenuProperties {
 
     List<Component> vsq$getBookTooltipLines();
 
-    boolean vsq$isSelectionCleared();
+    boolean vsq$consumeSelectionCleared();
 
     void vsq$applyRecipeState(int containerId, List<Identifier> blockIds, List<Integer> counts, List<Integer> requiredBlockCounts, int levelRequirement, int blockRequirement, int playerLevel, Component recipeName, Component recipeDescription, boolean selectionCleared);
 
