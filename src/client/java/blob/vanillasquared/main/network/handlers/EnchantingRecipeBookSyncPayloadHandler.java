@@ -3,6 +3,7 @@ package blob.vanillasquared.main.network.handlers;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeBookSyncPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplayId;
@@ -72,5 +73,9 @@ public final class EnchantingRecipeBookSyncPayloadHandler {
         CONTAINER_DISPLAY_IDS.put(payload.containerId(), List.copyOf(displayIds));
         CONTAINER_DISPLAY_LOOKUP.put(payload.containerId(), Map.copyOf(displayLookup));
         recipeBook.rebuildCollections();
+        if (minecraft.screen instanceof RecipeUpdateListener recipeUpdateListener
+                && minecraft.player.containerMenu.containerId == payload.containerId()) {
+            recipeUpdateListener.recipesUpdated();
+        }
     }
 }
