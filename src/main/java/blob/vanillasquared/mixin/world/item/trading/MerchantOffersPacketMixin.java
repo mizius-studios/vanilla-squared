@@ -5,6 +5,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,12 +16,19 @@ public abstract class MerchantOffersPacketMixin {
 
     @Shadow
     @Final
+    @Mutable
     private MerchantOffers offers;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void vsq$filterBooksFromPacket(int containerId, MerchantOffers offers, int level, int xp, boolean showProgress, boolean canRestock, CallbackInfo ci) {
         if (this.offers != null) {
-            this.offers.removeIf(offer -> offer.getResult().is(Items.ENCHANTED_BOOK));
+            MerchantOffers filtered = new MerchantOffers();
+            for (var offer : this.offers) {
+                if (!offer.getResult().is(Items.ENCHANTED_BOOK)) {
+                    filtered.add(offer);
+                }
+            }
+            this.offers = filtered;
         }
     }
 }
