@@ -36,6 +36,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     private static final int BLOCKS_BUTTON_Y = 54;
     private static final int BUTTON_WIDTH = 51;
     private static final int BUTTON_HEIGHT = 18;
+    private static final int REQUIREMENT_HOVER_INSET = 1;
     private static final int RECIPE_BOOK_BUTTON_X = 24;
     private static final int RECIPE_BOOK_BUTTON_Y = 50;
     private static final int BOOK_X = 127;
@@ -255,11 +256,11 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     }
 
     private boolean vsq$isXpHovered(int mouseX, int mouseY) {
-        return this.isHovering(BUTTON_X, XP_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mouseX, mouseY);
+        return this.isHovering(BUTTON_X + REQUIREMENT_HOVER_INSET, XP_BUTTON_Y + REQUIREMENT_HOVER_INSET, BUTTON_WIDTH - REQUIREMENT_HOVER_INSET * 2, BUTTON_HEIGHT - REQUIREMENT_HOVER_INSET * 2, mouseX, mouseY);
     }
 
     private boolean vsq$isBlocksHovered(int mouseX, int mouseY) {
-        return this.isHovering(BUTTON_X, BLOCKS_BUTTON_Y, BUTTON_WIDTH, BUTTON_HEIGHT, mouseX, mouseY);
+        return this.isHovering(BUTTON_X + REQUIREMENT_HOVER_INSET, BLOCKS_BUTTON_Y + REQUIREMENT_HOVER_INSET, BUTTON_WIDTH - REQUIREMENT_HOVER_INSET * 2, BUTTON_HEIGHT - REQUIREMENT_HOVER_INSET * 2, mouseX, mouseY);
     }
 
     private boolean vsq$isBookHovered(double mouseX, double mouseY) {
