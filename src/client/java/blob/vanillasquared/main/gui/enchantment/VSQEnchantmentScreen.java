@@ -230,9 +230,6 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     @Override
     protected void onRecipeBookButtonClick() {
         super.onRecipeBookButtonClick();
-        if (!this.vsq$recipeBookComponent.isVisible()) {
-            this.vsq$recipeBookComponent.vsq$clearSelection();
-        }
     }
 
     @Override

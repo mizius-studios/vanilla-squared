@@ -12,6 +12,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -294,6 +296,9 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
             player.giveExperienceLevels(-xpCost);
         }
         this.getSlot(EnchantingSlotLayout.INPUT_SLOT).set(result);
+        this.access.execute((level, tablePos) ->
+                level.playSound(null, tablePos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F)
+        );
         this.broadcastChanges();
         this.vsq$refresh(player);
         return true;
