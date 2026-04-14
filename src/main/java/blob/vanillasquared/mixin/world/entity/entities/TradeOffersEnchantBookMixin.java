@@ -1,17 +1,26 @@
 package blob.vanillasquared.mixin.world.entity.entities;
 
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "net.minecraft.world.entity.npc.TradeOffers$EnchantBookForEmeralds")
+@Mixin(MerchantOffer.class)
 public abstract class TradeOffersEnchantBookMixin {
 
-    @Inject(method = "getOffer", at = @At("HEAD"), cancellable = true)
-    private void vsq$remove(Entity entity, RandomSource random, CallbackInfoReturnable<?> cir) {
-        cir.setReturnValue(null);
+    @Shadow @Final private ItemStack result;
+    @Shadow private int uses;
+    @Shadow @Final private int maxUses;
+
+    @Inject(method = "<init>*", at = @At("RETURN"))
+    private void vsq$cancelEnchantedBookOffers(CallbackInfo ci) {
+        if (this.result.is(Items.ENCHANTED_BOOK)) {
+            this.uses = this.maxUses;
+        }
     }
 }
