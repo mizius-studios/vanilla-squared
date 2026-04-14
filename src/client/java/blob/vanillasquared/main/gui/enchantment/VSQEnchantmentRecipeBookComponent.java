@@ -35,7 +35,7 @@ public class VSQEnchantmentRecipeBookComponent extends RecipeBookComponent<VSQEn
     );
 
     private static final List<TabInfo> TABS = List.of(
-            new TabInfo(SearchRecipeBookCategory.CRAFTING),
+            new TabInfo(vsq$enchanted(Items.COMPASS), Optional.empty(), SearchRecipeBookCategory.CRAFTING),
             new TabInfo(vsq$enchanted(Items.IRON_SWORD), Optional.empty(), VSQEnchantmentRecipeBookCategories.WEAPONS),
             new TabInfo(vsq$enchanted(Items.IRON_PICKAXE), Optional.empty(), VSQEnchantmentRecipeBookCategories.TOOLS),
             new TabInfo(vsq$enchanted(Items.IRON_CHESTPLATE), Optional.empty(), VSQEnchantmentRecipeBookCategories.ARMOR),
