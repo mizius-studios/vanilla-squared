@@ -36,7 +36,8 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     private static final int BLOCKS_BUTTON_Y = 54;
     private static final int BUTTON_WIDTH = 51;
     private static final int BUTTON_HEIGHT = 18;
-    private static final int REQUIREMENT_HOVER_INSET = 1;
+    private static final int REQUIREMENT_HOVER_RIGHT_INSET = 2;
+    private static final int REQUIREMENT_HOVER_BOTTOM_INSET = 2;
     private static final int RECIPE_BOOK_BUTTON_X = 24;
     private static final int RECIPE_BOOK_BUTTON_Y = 50;
     private static final int BOOK_X = 127;
@@ -181,6 +182,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
         super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
 
         List<Component> buttonTooltip = null;
+        boolean bookHovered = this.vsq$isBookHovered(mouseX, mouseY);
         if (this.vsq$isXpHovered(mouseX, mouseY) && this.vsq$levelRequirement != -1) {
             Component xpTooltip = Component.translatable("vsq.gui.container.enchantment_table.xp.tooltip", this.vsq$playerLevel, this.vsq$levelRequirement).withStyle(ChatFormatting.GRAY);
             if (!this.vsq$hasRequiredXp) {
@@ -188,10 +190,10 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
                 xpTooltip = xpTooltip.copy().withStyle(ChatFormatting.RED);
             }
             buttonTooltip = List.of(xpTooltip);
-        } else if (this.vsq$isBookHovered(mouseX, mouseY) && this.vsq$hasDisplayableRecipe() && !this.vsq$bookTooltipLines.isEmpty()) {
+        } else if (bookHovered && this.vsq$hasDisplayableRecipe() && !this.vsq$bookTooltipLines.isEmpty()) {
             guiGraphics.requestCursor(CursorTypes.POINTING_HAND);
             buttonTooltip = vsq$util.expandTooltipLines(this.vsq$bookTooltipLines);
-        } else if (this.vsq$isBookHovered(mouseX, mouseY) && !this.vsq$hasDisplayableRecipe()) {
+        } else if (bookHovered && !this.vsq$hasDisplayableRecipe()) {
             guiGraphics.requestCursor(CursorTypes.NOT_ALLOWED);
         } else if (this.vsq$isBlocksHovered(mouseX, mouseY) && this.vsq$blockRequirement != -1) {
             List<Component> blocksTooltip = this.menu.vsq$getDetectedBlockTooltipLines();
@@ -210,7 +212,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0 && this.vsq$isBookHovered(event.x(), event.y())) {
+        if (event.button() == 0 && this.vsq$isBookHovered(event.x(), event.y()) && this.vsq$hasDisplayableRecipe()) {
             ClientPlayNetworking.send(new EnchantingBookClickPayload(this.menu.containerId));
             return true;
         }
@@ -234,11 +236,6 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     }
 
     @Override
-    public void fillGhostRecipe(RecipeDisplay recipeDisplay) {
-        super.fillGhostRecipe(recipeDisplay);
-    }
-
-    @Override
     public void removed() {
         this.vsq$recipeBookComponent.vsq$clearSelection();
         EnchantingRecipeBookSyncPayloadHandler.clearContainer(this.minecraft, this.menu.containerId);
@@ -256,11 +253,11 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     }
 
     private boolean vsq$isXpHovered(int mouseX, int mouseY) {
-        return this.isHovering(BUTTON_X + REQUIREMENT_HOVER_INSET, XP_BUTTON_Y + REQUIREMENT_HOVER_INSET, BUTTON_WIDTH - REQUIREMENT_HOVER_INSET * 2, BUTTON_HEIGHT - REQUIREMENT_HOVER_INSET * 2, mouseX, mouseY);
+        return this.isHovering(BUTTON_X, XP_BUTTON_Y, BUTTON_WIDTH - REQUIREMENT_HOVER_RIGHT_INSET, BUTTON_HEIGHT - REQUIREMENT_HOVER_BOTTOM_INSET, mouseX, mouseY);
     }
 
     private boolean vsq$isBlocksHovered(int mouseX, int mouseY) {
-        return this.isHovering(BUTTON_X + REQUIREMENT_HOVER_INSET, BLOCKS_BUTTON_Y + REQUIREMENT_HOVER_INSET, BUTTON_WIDTH - REQUIREMENT_HOVER_INSET * 2, BUTTON_HEIGHT - REQUIREMENT_HOVER_INSET * 2, mouseX, mouseY);
+        return this.isHovering(BUTTON_X, BLOCKS_BUTTON_Y, BUTTON_WIDTH - REQUIREMENT_HOVER_RIGHT_INSET, BUTTON_HEIGHT - REQUIREMENT_HOVER_BOTTOM_INSET, mouseX, mouseY);
     }
 
     private boolean vsq$isBookHovered(double mouseX, double mouseY) {
