@@ -5,6 +5,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -49,7 +50,39 @@ public record VSQEnchantmentComponent(
         }
     };
 
-    private static final Codec<List<VSQEnchantmentSlotEntry>> SLOT_LIST_CODEC = NULLABLE_ENTRY_CODEC.listOf();
+    private static final Codec<List<VSQEnchantmentSlotEntry>> SLOT_LIST_CODEC = new Codec<>() {
+        @Override
+        public <T> DataResult<Pair<List<VSQEnchantmentSlotEntry>, T>> decode(DynamicOps<T> ops, T input) {
+            return ops.getList(input).setLifecycle(com.mojang.serialization.Lifecycle.stable()).flatMap(listInput -> {
+                List<T> rawEntries = new ArrayList<>();
+                listInput.accept(rawEntries::add);
+                List<VSQEnchantmentSlotEntry> entries = new ArrayList<>();
+                for (T element : rawEntries) {
+                    DataResult<Pair<VSQEnchantmentSlotEntry, T>> decoded = NULLABLE_ENTRY_CODEC.decode(ops, element);
+                    var result = decoded.result();
+                    if (result.isEmpty()) {
+                        String message = decoded.error().map(DataResult.Error::message).orElse("Failed to decode slotted enchantment entry");
+                        return DataResult.error(() -> message);
+                    }
+                    entries.add(result.get().getFirst());
+                }
+                return DataResult.success(Pair.of(entries, input));
+            });
+        }
+
+        @Override
+        public <T> DataResult<T> encode(List<VSQEnchantmentSlotEntry> input, DynamicOps<T> ops, T prefix) {
+            List<T> encoded = new ArrayList<>(input.size());
+            for (VSQEnchantmentSlotEntry entry : input) {
+                var result = NULLABLE_ENTRY_CODEC.encodeStart(ops, entry).result();
+                if (result.isEmpty()) {
+                    return NULLABLE_ENTRY_CODEC.encodeStart(ops, entry);
+                }
+                encoded.add(result.get());
+            }
+            return ops.mergeToList(prefix, encoded);
+        }
+    };
     public static final MapCodec<VSQEnchantmentComponent> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             SLOT_LIST_CODEC.optionalFieldOf("special").forGetter(VSQEnchantmentComponent::special),
             SLOT_LIST_CODEC.optionalFieldOf("damage").forGetter(VSQEnchantmentComponent::damage),

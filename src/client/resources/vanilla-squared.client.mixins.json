@@ -5,9 +5,12 @@
 	"client": [
 		"gui.AbstractContainerScreenMixin",
 		"gui.AbstractContainerScreenAccessor",
+		"gui.AbstractRecipeBookScreenMixin",
 		"gui.AbstractRecipeBookScreenAccessor",
+		"gui.AnvilScreenMixin",
 		"gui.CreativeModeInventoryScreenMixin",
 		"gui.CyclingSlotBackgroundMixin",
+		"gui.EditBoxMixin",
 		"gui.GuiMixin",
 		"gui.ScreenMixin",
 		"gui.GhostSlotAccessor",
