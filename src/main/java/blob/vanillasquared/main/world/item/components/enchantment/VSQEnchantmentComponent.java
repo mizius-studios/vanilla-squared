@@ -74,9 +74,10 @@ public record VSQEnchantmentComponent(
         public <T> DataResult<T> encode(List<VSQEnchantmentSlotEntry> input, DynamicOps<T> ops, T prefix) {
             List<T> encoded = new ArrayList<>(input.size());
             for (VSQEnchantmentSlotEntry entry : input) {
-                var result = NULLABLE_ENTRY_CODEC.encodeStart(ops, entry).result();
+                DataResult<T> entryResult = NULLABLE_ENTRY_CODEC.encodeStart(ops, entry);
+                var result = entryResult.result();
                 if (result.isEmpty()) {
-                    return NULLABLE_ENTRY_CODEC.encodeStart(ops, entry);
+                    return entryResult;
                 }
                 encoded.add(result.get());
             }
