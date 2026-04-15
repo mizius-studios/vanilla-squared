@@ -232,10 +232,6 @@ public final class VSQEnchantmentSlots {
     public static Map<VSQEnchantmentSlotType, Integer> definedCapacities(ItemStack stack) {
         Item item = stack.getItem();
         EnumMap<VSQEnchantmentSlotType, Integer> capacities = new EnumMap<>(VSQEnchantmentSlotType.class);
-        if (!(item instanceof Item)) {
-            return capacities;
-        }
-
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
         boolean armor = itemPath.endsWith("_helmet") || itemPath.endsWith("_chestplate") || itemPath.endsWith("_leggings") || itemPath.endsWith("_boots");
         boolean sword = itemPath.endsWith("_sword");

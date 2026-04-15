@@ -10,7 +10,6 @@
 		"gui.AnvilScreenMixin",
 		"gui.CreativeModeInventoryScreenMixin",
 		"gui.CyclingSlotBackgroundMixin",
-		"gui.EditBoxMixin",
 		"gui.GuiMixin",
 		"gui.ScreenMixin",
 		"gui.GhostSlotAccessor",
