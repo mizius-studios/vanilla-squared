@@ -2,6 +2,7 @@ package blob.vanillasquared.main.gui.enchantment;
 
 import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -31,6 +32,20 @@ public final class VSQEnchantmentTooltipState {
 
     public static ItemStack hoveredStack() {
         return isActive() ? hoveredStack : ItemStack.EMPTY;
+    }
+
+    public static boolean cycleHovered(int delta) {
+        ItemStack stack = hoveredStack();
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
+        if (component == null) {
+            return false;
+        }
+
+        return cycle(component, delta);
     }
 
     public static int selectedIndex(VSQEnchantmentComponent component) {

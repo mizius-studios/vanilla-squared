@@ -1,12 +1,9 @@
 package blob.vanillasquared.mixin.client.gui;
 
 import blob.vanillasquared.main.gui.enchantment.VSQEnchantmentTooltipState;
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentComponent;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
-import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,20 +18,10 @@ public abstract class ScreenMixin {
             return;
         }
 
-        ItemStack stack = VSQEnchantmentTooltipState.hoveredStack();
-        if (stack.isEmpty()) {
-            return;
-        }
-
-        VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
-        if (component == null) {
-            return;
-        }
-
         if (event.key() == GLFW.GLFW_KEY_LEFT || event.key() == GLFW.GLFW_KEY_UP) {
-            cir.setReturnValue(VSQEnchantmentTooltipState.cycle(component, -1));
+            cir.setReturnValue(VSQEnchantmentTooltipState.cycleHovered(-1));
         } else if (event.key() == GLFW.GLFW_KEY_RIGHT || event.key() == GLFW.GLFW_KEY_DOWN) {
-            cir.setReturnValue(VSQEnchantmentTooltipState.cycle(component, 1));
+            cir.setReturnValue(VSQEnchantmentTooltipState.cycleHovered(1));
         }
     }
 

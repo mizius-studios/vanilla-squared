@@ -3,9 +3,10 @@
 	"package": "blob.vanillasquared.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
+		"gui.AbstractContainerScreenMixin",
 		"gui.AbstractContainerScreenAccessor",
 		"gui.AbstractRecipeBookScreenAccessor",
-		"gui.ContainerEventHandlerMixin",
+		"gui.CreativeModeInventoryScreenMixin",
 		"gui.CyclingSlotBackgroundMixin",
 		"gui.GuiMixin",
 		"gui.ScreenMixin",
