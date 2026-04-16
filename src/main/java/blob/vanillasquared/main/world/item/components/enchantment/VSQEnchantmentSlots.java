@@ -246,8 +246,10 @@ public final class VSQEnchantmentSlots {
         Optional<VSQEnchantmentProfile> leftProfile = selectedProfile(stack, enchantment);
         Optional<VSQEnchantmentProfile> rightProfile = selectedProfile(stack, other);
         if (leftProfile.isPresent() || rightProfile.isPresent()) {
-            return !leftProfile.map(profile -> profile.exclusiveSet().contains(other)).orElse(false)
+            boolean profileCompatible = !leftProfile.map(profile -> profile.exclusiveSet().contains(other)).orElse(false)
                     && !rightProfile.map(profile -> profile.exclusiveSet().contains(enchantment)).orElse(false);
+            boolean vanillaCompatible = leftProfile.isPresent() && rightProfile.isPresent() || Enchantment.areCompatible(enchantment, other);
+            return profileCompatible && vanillaCompatible;
         }
         return Enchantment.areCompatible(enchantment, other);
     }
