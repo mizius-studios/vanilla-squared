@@ -37,6 +37,9 @@ public record HitThroughComponent(RegistryReference block) {
     }
 
     public Identifier tag() {
+        if (!this.block.tag()) {
+            throw new IllegalStateException("block reference is not a tag: " + this.block.asString());
+        }
         return this.block.id();
     }
 
