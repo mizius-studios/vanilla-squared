@@ -50,6 +50,9 @@ public abstract class EnchantmentHelperMixin {
     private static void vsq$useSelectedProfileDamageImmunity(ServerLevel level, LivingEntity victim, DamageSource source, CallbackInfoReturnable<Boolean> cir) {
         MutableBoolean result = new MutableBoolean();
         EnchantmentHelper.runIterationOnEquipment(victim, (enchantment, enchantmentLevel, item) -> {
+            if (result.booleanValue()) {
+                return;
+            }
             LootContext context = Enchantment.damageContext(level, enchantmentLevel, victim, source);
             for (ConditionalEffect<DamageImmunity> effect : VSQEnchantmentSlots.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.DAMAGE_IMMUNITY)) {
                 if (effect.matches(context)) {
@@ -195,7 +198,7 @@ public abstract class EnchantmentHelperMixin {
         Pair<List<T>, Integer> picked = vsq$getHighestLevel(item, componentType);
         if (picked != null) {
             List<T> list = picked.getFirst();
-            cir.setReturnValue(Optional.of(list.get(Math.min(picked.getSecond(), list.size()) - 1)));
+            cir.setReturnValue(Optional.of(list.get(Math.max(0, Math.min(picked.getSecond(), list.size()) - 1))));
         } else {
             cir.setReturnValue(Optional.empty());
         }

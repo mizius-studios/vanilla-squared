@@ -63,6 +63,9 @@ public record DualWieldComponent(
     }
 
     public Identifier blockedEnchantmentsTag() {
+        if (!this.blockedEnchantments.tag()) {
+            throw new IllegalStateException("blockedEnchantments is not a tag reference");
+        }
         return this.blockedEnchantments.id();
     }
 }
