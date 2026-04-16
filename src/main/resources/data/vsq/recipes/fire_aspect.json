@@ -33,8 +33,8 @@
   "enchantment": "minecraft:fire_aspect",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 3
+      "count": 3,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 2

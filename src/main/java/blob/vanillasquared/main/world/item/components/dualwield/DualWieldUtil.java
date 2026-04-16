@@ -1,13 +1,12 @@
 package blob.vanillasquared.main.world.item.components.dualwield;
 
 import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.util.api.references.RegistryReference;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -75,7 +74,7 @@ public final class DualWieldUtil {
             }
 
             int mainLevel = mainEnchantments.getLevel(enchantment);
-            int mergedLevel = isBlocked(enchantment, activeDualWield.mainHand().blockedEnchantmentsTag(), activeDualWield.offHand().blockedEnchantmentsTag())
+            int mergedLevel = isBlocked(enchantment, activeDualWield.mainHand().blockedEnchantments(), activeDualWield.offHand().blockedEnchantments())
                     ? Math.max(mainLevel, offLevel)
                     : mainLevel + offLevel;
             mutable.set(enchantment, mergedLevel);
@@ -138,12 +137,19 @@ public final class DualWieldUtil {
 
     private static boolean isBlocked(
             Holder<Enchantment> enchantment,
-            Identifier mainBlockedTagId,
-            Identifier offBlockedTagId
+            RegistryReference mainBlocked,
+            RegistryReference offBlocked
     ) {
-        TagKey<Enchantment> mainBlockedTag = TagKey.create(Registries.ENCHANTMENT, mainBlockedTagId);
-        TagKey<Enchantment> offBlockedTag = TagKey.create(Registries.ENCHANTMENT, offBlockedTagId);
-        return enchantment.is(mainBlockedTag) || enchantment.is(offBlockedTag);
+        return isBlocked(enchantment, mainBlocked) || isBlocked(enchantment, offBlocked);
+    }
+
+    private static boolean isBlocked(Holder<Enchantment> enchantment, RegistryReference blocked) {
+        if (blocked.tag()) {
+            return enchantment.is(blocked.tagKey(Registries.ENCHANTMENT));
+        }
+        return enchantment.unwrapKey()
+                .map(key -> key.identifier().equals(blocked.id()))
+                .orElse(false);
     }
 
     public record ActiveDualWield(DualWieldComponent mainHand, DualWieldComponent offHand) {

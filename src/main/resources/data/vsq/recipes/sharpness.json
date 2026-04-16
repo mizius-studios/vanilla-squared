@@ -14,8 +14,8 @@
   },
   "ingredients": [
     {
-      "tag": "minecraft:swords",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:swords"
     },
     {
       "item": "minecraft:bow",
@@ -26,15 +26,15 @@
       "count": 2
     },
     {
-      "tag": "minecraft:axes",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:axes"
     }
   ],
   "enchantment": "minecraft:sharpness",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 16
+      "count": 16,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 3

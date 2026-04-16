@@ -2,6 +2,7 @@ package blob.vanillasquared.main.world.item.components.enchantment;
 
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -62,7 +63,7 @@ public final class VSQEnchantmentSlots {
             return;
         }
 
-        Optional<VSQEnchantmentComponent> migrated = tryPopulateFromVanilla(component, enchantments);
+        Optional<VSQEnchantmentComponent> migrated = tryPopulateFromVanilla(component, stack, enchantments);
         if (migrated.isPresent()) {
             stack.set(DataComponents.VSQ_ENCHANTMENT, migrated.get());
             syncDerivedEnchantments(stack);
@@ -122,7 +123,7 @@ public final class VSQEnchantmentSlots {
             return false;
         }
 
-        VSQEnchantmentSlotType slotType = slotType(enchantment);
+        VSQEnchantmentSlotType slotType = slotType(stack, enchantment);
         if (slotType == null) {
             return false;
         }
@@ -165,7 +166,7 @@ public final class VSQEnchantmentSlots {
     public static boolean setEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment, int level) {
         ensureSeeded(stack);
         VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
-        VSQEnchantmentSlotType slotType = slotType(enchantment);
+        VSQEnchantmentSlotType slotType = slotType(stack, enchantment);
         if (component == null || slotType == null) {
             return false;
         }
@@ -227,6 +228,43 @@ public final class VSQEnchantmentSlots {
             return access.vsq$getEnchantmentSlotType();
         }
         return null;
+    }
+
+    public static VSQEnchantmentSlotType slotType(ItemStack stack, Holder<Enchantment> enchantment) {
+        return selectedProfile(stack, enchantment).map(VSQEnchantmentProfile::enchantmentSlot).orElse(null);
+    }
+
+    public static int maxLevel(ItemStack stack, Holder<Enchantment> enchantment) {
+        return selectedProfile(stack, enchantment).map(VSQEnchantmentProfile::maxLevel).orElse(enchantment.value().getMaxLevel());
+    }
+
+    public static Optional<VSQEnchantmentProfile> selectedProfile(ItemStack stack, Holder<Enchantment> enchantment) {
+        return selectedProfile(stack, enchantment.value());
+    }
+
+    public static Optional<VSQEnchantmentProfile> selectedProfile(ItemStack stack, Enchantment enchantment) {
+        if (!((Object) enchantment instanceof VSQEnchantmentAccess access)) {
+            return Optional.empty();
+        }
+
+        for (VSQEnchantmentProfile profile : access.vsq$getProfiles()) {
+            if (profile.matches(stack)) {
+                return Optional.of(profile);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public static <T> List<T> profileEffects(ItemStack stack, Holder<Enchantment> enchantment, DataComponentType<List<T>> effectType) {
+        return selectedProfile(stack, enchantment)
+                .map(profile -> profile.effects().getOrDefault(effectType, List.<T>of()))
+                .orElseGet(() -> enchantment.value().getEffects(effectType));
+    }
+
+    public static <T> T profileEffect(ItemStack stack, Holder<Enchantment> enchantment, DataComponentType<T> effectType) {
+        return selectedProfile(stack, enchantment)
+                .map(profile -> profile.effects().get(effectType))
+                .orElseGet(() -> enchantment.value().effects().get(effectType));
     }
 
     public static Map<VSQEnchantmentSlotType, Integer> definedCapacities(ItemStack stack) {
@@ -305,12 +343,12 @@ public final class VSQEnchantmentSlots {
         return false;
     }
 
-    public static Optional<VSQEnchantmentComponent> tryPopulateFromVanilla(VSQEnchantmentComponent base, ItemEnchantments enchantments) {
+    public static Optional<VSQEnchantmentComponent> tryPopulateFromVanilla(VSQEnchantmentComponent base, ItemStack stack, ItemEnchantments enchantments) {
         VSQEnchantmentComponent working = base;
         for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
             Holder<Enchantment> enchantment = entry.getKey();
             int level = entry.getIntValue();
-            VSQEnchantmentSlotType slotType = slotType(enchantment);
+            VSQEnchantmentSlotType slotType = slotType(stack, enchantment);
             if (slotType == null) {
                 continue;
             }

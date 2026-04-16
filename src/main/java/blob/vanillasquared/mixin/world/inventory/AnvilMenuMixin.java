@@ -55,7 +55,7 @@ public abstract class AnvilMenuMixin extends AbstractContainerMenu {
             return;
         }
 
-        var migrated = VSQEnchantmentSlots.tryPopulateFromVanilla(component, EnchantmentHelper.getEnchantmentsForCrafting(result));
+        var migrated = VSQEnchantmentSlots.tryPopulateFromVanilla(component, result, EnchantmentHelper.getEnchantmentsForCrafting(result));
         if (migrated.isEmpty()) {
             resultSlot.set(ItemStack.EMPTY);
             this.cost.set(0);

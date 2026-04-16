@@ -1,9 +1,11 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
+import blob.vanillasquared.util.api.references.RegistryReference;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -37,7 +39,7 @@ public record EnchantingBlockRequirement(
 
     public EnchantingBlockRequirement {
         if ((blockId == null) == (tagId == null)) {
-            throw new IllegalArgumentException("Enchanting block requirements must define exactly one of block or tag");
+            throw new IllegalArgumentException("Enchanting block requirements must define exactly one block reference");
         }
         if (count <= 0) {
             throw new IllegalArgumentException("Enchanting block requirement count must be positive");
@@ -95,27 +97,23 @@ public record EnchantingBlockRequirement(
 
         JsonObject object = json.getAsJsonObject();
         boolean hasBlock = object.has("block");
-        boolean hasTag = object.has("tag");
-        if (hasBlock == hasTag) {
-            return DataResult.error(() -> "Enchanting block requirements must define exactly one of block or tag");
+        if (!hasBlock) {
+            return DataResult.error(() -> "Enchanting block requirements must define a block reference");
         }
 
         int count = object.has("count") ? object.get("count").getAsInt() : 1;
 
         try {
-            if (hasBlock) {
-                Identifier blockId = Identifier.tryParse(object.get("block").getAsString());
-                if (blockId == null) {
-                    return DataResult.error(() -> "Invalid block id in Enchanting block requirement");
-                }
-                return DataResult.success(forBlock(blockId, count));
+            var blockReferenceResult = RegistryReference.CODEC.parse(JsonOps.INSTANCE, object.get("block")).result();
+            if (blockReferenceResult.isEmpty()) {
+                return DataResult.error(() -> "Invalid block reference in Enchanting block requirement");
             }
 
-            Identifier tagId = Identifier.tryParse(object.get("tag").getAsString());
-            if (tagId == null) {
-                return DataResult.error(() -> "Invalid block tag id in Enchanting block requirement");
+            RegistryReference blockReference = blockReferenceResult.get();
+            if (blockReference.tag()) {
+                return DataResult.success(forTag(blockReference.id(), count));
             }
-            return DataResult.success(forTag(tagId, count));
+            return DataResult.success(forBlock(blockReference.id(), count));
         } catch (IllegalArgumentException exception) {
             return DataResult.error(exception::getMessage);
         }
@@ -126,7 +124,7 @@ public record EnchantingBlockRequirement(
         if (requirement.blockId() != null) {
             object.addProperty("block", requirement.blockId().toString());
         } else {
-            object.addProperty("tag", requirement.tagId().toString());
+            object.addProperty("block", RegistryReference.tag(requirement.tagId()).asString());
         }
         object.addProperty("count", requirement.count());
         return DataResult.success(object);

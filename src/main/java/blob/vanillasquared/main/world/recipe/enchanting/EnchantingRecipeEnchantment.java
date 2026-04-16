@@ -92,15 +92,15 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
 
     public int nextLevel(ItemStack originalStack, HolderLookup.Provider registries) {
         int currentLevel = this.currentLevel(originalStack, registries);
-        int maxLevel = this.maxLevel(registries);
+        int maxLevel = this.maxLevel(originalStack, registries);
         if (currentLevel >= maxLevel) {
             return Math.max(currentLevel, 1);
         }
         return Math.max(currentLevel + 1, 1);
     }
 
-    public int maxLevel(HolderLookup.Provider registries) {
-        return Math.max(this.vsq$enchantmentHolder(registries).value().definition().maxLevel(), 1);
+    public int maxLevel(ItemStack originalStack, HolderLookup.Provider registries) {
+        return Math.max(VSQEnchantmentSlots.maxLevel(originalStack, this.vsq$enchantmentHolder(registries)), 1);
     }
 
     public int xpCost(ItemStack originalStack, HolderLookup.Provider registries) {
@@ -118,7 +118,7 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     }
 
     public boolean isBelowMaximumLevel(ItemStack originalStack, HolderLookup.Provider registries) {
-        return this.currentLevel(originalStack, registries) < this.maxLevel(registries);
+        return this.currentLevel(originalStack, registries) < this.maxLevel(originalStack, registries);
     }
 
     public boolean canApplyNextLevel(ItemStack originalStack, HolderLookup.Provider registries) {

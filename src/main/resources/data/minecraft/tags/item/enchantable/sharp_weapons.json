@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#minecraft:enchantable/melee_weapon",
+    "#minecraft:axes",
+    "#minecraft:enchantable/trident",
+    "#minecraft:enchantable/mace",
+    "#vsq:enchanting/ranged_weapon",
+    "#minecraft:enchantable/crossbow"
+  ]
+}

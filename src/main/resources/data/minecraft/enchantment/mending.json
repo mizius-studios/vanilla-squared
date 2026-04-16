@@ -1,31 +1,39 @@
-﻿{
+{
   "anvil_cost": 4,
+  "profiles": [
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#minecraft:enchantable/durability"
+      },
+      "enchantment_slot": "util",
+      "max_level": 1,
+      "effects": {
+        "minecraft:repair_with_xp": [
+          {
+            "effect": {
+              "type": "minecraft:multiply",
+              "factor": 2
+            }
+          }
+        ]
+      },
+      "slots": [
+        "any"
+      ],
+      "max_cost": {
+        "base": 75,
+        "per_level_above_first": 25
+      },
+      "min_cost": {
+        "base": 25,
+        "per_level_above_first": 25
+      }
+    }
+  ],
   "description": {
     "translate": "enchantment.minecraft.mending"
   },
-  "effects": {
-    "minecraft:repair_with_xp": [
-      {
-        "effect": {
-          "type": "minecraft:multiply",
-          "factor": 2.0
-        }
-      }
-    ]
-  },
-  "max_cost": {
-    "base": 75,
-    "per_level_above_first": 25
-  },
-  "max_level": 1,
-  "min_cost": {
-    "base": 25,
-    "per_level_above_first": 25
-  },
-  "slots": [
-    "any"
-  ],
   "supported_items": "#minecraft:enchantable/durability",
-  "weight": 2,
-  "enchantment_slot": "util"
+  "weight": 2
 }

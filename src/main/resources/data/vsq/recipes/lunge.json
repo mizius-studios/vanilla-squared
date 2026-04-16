@@ -14,7 +14,7 @@
   },
   "ingredients": [
     {
-      "tag": "minecraft:spears"
+      "item": "#minecraft:spears"
     },
     {
       "item": "minecraft:wind_charge",
@@ -32,8 +32,8 @@
   "enchantment": "minecraft:lunge",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 6
+      "count": 6,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 3

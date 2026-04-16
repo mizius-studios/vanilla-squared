@@ -22,19 +22,19 @@
       "count": 1
     },
     {
-      "tag": "minecraft:pickaxes",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:pickaxes"
     },
     {
-      "tag": "minecraft:shovels",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:shovels"
     }
   ],
   "enchantment": "minecraft:efficiency",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 9
+      "count": 9,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 2

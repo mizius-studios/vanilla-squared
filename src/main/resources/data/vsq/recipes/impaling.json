@@ -14,8 +14,8 @@
   },
   "ingredients": [
     {
-      "tag": "minecraft:fishes",
-      "count": 3
+      "count": 3,
+      "item": "#minecraft:fishes"
     },
     {
       "item": "minecraft:prismarine_crystals",
@@ -33,8 +33,8 @@
   "enchantment": "minecraft:impaling",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 6
+      "count": 6,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 2
