@@ -273,7 +273,9 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
         EquipmentSlot slot = item.inSlot();
         if (slot != null) {
             Map<Enchantment, Set<EnchantmentLocationBasedEffect>> activeLocationDependentEffects = entity.activeLocationDependentEnchantments(slot);
-            if (!((Enchantment) (Object) this).matchingSlot(slot)) {
+            if (!VSQEnchantmentSlots.selectedProfile(item.itemStack(), (Enchantment) (Object) this)
+                    .map(profile -> profile.slots().stream().anyMatch(group -> group.test(slot)))
+                    .orElseGet(() -> ((Enchantment) (Object) this).matchingSlot(slot))) {
                 Set<EnchantmentLocationBasedEffect> activeEffects = activeLocationDependentEffects.remove((Enchantment) (Object) this);
                 if (activeEffects != null) {
                     activeEffects.forEach(effect -> effect.onDeactivated(item, entity, entity.position(), enchantmentLevel));
