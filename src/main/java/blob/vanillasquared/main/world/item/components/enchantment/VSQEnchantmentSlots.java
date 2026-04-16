@@ -142,7 +142,7 @@ public final class VSQEnchantmentSlots {
 
         ItemEnchantments aggregate = aggregate(stack);
         for (Holder<Enchantment> other : aggregate.keySet()) {
-            if (!other.equals(enchantment) && !Enchantment.areCompatible(enchantment, other)) {
+            if (!other.equals(enchantment) && !areCompatible(stack, enchantment, other)) {
                 return false;
             }
         }
@@ -236,6 +236,20 @@ public final class VSQEnchantmentSlots {
 
     public static int maxLevel(ItemStack stack, Holder<Enchantment> enchantment) {
         return selectedProfile(stack, enchantment).map(VSQEnchantmentProfile::maxLevel).orElse(enchantment.value().getMaxLevel());
+    }
+
+    public static boolean areCompatible(ItemStack stack, Holder<Enchantment> enchantment, Holder<Enchantment> other) {
+        if (enchantment.equals(other)) {
+            return false;
+        }
+
+        Optional<VSQEnchantmentProfile> leftProfile = selectedProfile(stack, enchantment);
+        Optional<VSQEnchantmentProfile> rightProfile = selectedProfile(stack, other);
+        if (leftProfile.isPresent() || rightProfile.isPresent()) {
+            return !leftProfile.map(profile -> profile.exclusiveSet().contains(other)).orElse(false)
+                    && !rightProfile.map(profile -> profile.exclusiveSet().contains(enchantment)).orElse(false);
+        }
+        return Enchantment.areCompatible(enchantment, other);
     }
 
     public static Optional<VSQEnchantmentProfile> selectedProfile(ItemStack stack, Holder<Enchantment> enchantment) {
