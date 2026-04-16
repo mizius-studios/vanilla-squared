@@ -14,16 +14,16 @@
   },
   "ingredients": [
     {
-      "tag": "minecraft:fishes",
-      "count": 4
+      "count": 4,
+      "item": "#minecraft:fishes"
     },
     {
       "item": "minecraft:book",
       "count": 3
     },
     {
-      "tag": "minecraft:nautilus_bucket_food",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:nautilus_bucket_food"
     },
     {
       "item": "minecraft:fishing_rod",
@@ -33,8 +33,8 @@
   "enchantment": "minecraft:lure",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 3
+      "count": 3,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 3

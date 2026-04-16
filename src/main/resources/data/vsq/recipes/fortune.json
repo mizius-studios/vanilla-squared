@@ -22,19 +22,19 @@
       "count": 2
     },
     {
-      "tag": "minecraft:pickaxes",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:pickaxes"
     },
     {
-      "tag": "minecraft:shovels",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:shovels"
     }
   ],
   "enchantment": "minecraft:fortune",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 3
+      "count": 3,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 3

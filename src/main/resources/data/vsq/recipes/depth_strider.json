@@ -26,15 +26,15 @@
       "count": 4
     },
     {
-      "tag": "minecraft:foot_armor",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:foot_armor"
     }
   ],
   "enchantment": "minecraft:depth_strider",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 3
+      "count": 3,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 2

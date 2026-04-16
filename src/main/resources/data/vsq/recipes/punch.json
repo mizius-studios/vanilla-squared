@@ -18,8 +18,8 @@
       "count": 1
     },
     {
-      "tag": "minecraft:swords",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:swords"
     },
     {
       "item": "minecraft:slime_ball",
@@ -33,8 +33,8 @@
   "enchantment": "minecraft:punch",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 6
+      "count": 6,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 3

@@ -1,35 +1,43 @@
-﻿{
+{
   "anvil_cost": 2,
+  "profiles": [
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#minecraft:enchantable/melee_weapon"
+      },
+      "enchantment_slot": "secondary",
+      "max_level": 2,
+      "effects": {
+        "minecraft:knockback": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 1,
+                "per_level_above_first": 1
+              }
+            }
+          }
+        ]
+      },
+      "slots": [
+        "mainhand"
+      ],
+      "max_cost": {
+        "base": 55,
+        "per_level_above_first": 20
+      },
+      "min_cost": {
+        "base": 5,
+        "per_level_above_first": 20
+      }
+    }
+  ],
   "description": {
     "translate": "enchantment.minecraft.knockback"
   },
-  "effects": {
-    "minecraft:knockback": [
-      {
-        "effect": {
-          "type": "minecraft:add",
-          "value": {
-            "type": "minecraft:linear",
-            "base": 1.0,
-            "per_level_above_first": 1.0
-          }
-        }
-      }
-    ]
-  },
-  "max_cost": {
-    "base": 55,
-    "per_level_above_first": 20
-  },
-  "max_level": 2,
-  "min_cost": {
-    "base": 5,
-    "per_level_above_first": 20
-  },
-  "slots": [
-    "mainhand"
-  ],
   "supported_items": "#minecraft:enchantable/melee_weapon",
-  "weight": 5,
-  "enchantment_slot": "secondary"
+  "weight": 5
 }

@@ -1,24 +1,32 @@
-﻿{
+{
   "anvil_cost": 8,
+  "profiles": [
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#minecraft:enchantable/vanishing"
+      },
+      "enchantment_slot": "curse",
+      "max_level": 1,
+      "effects": {
+        "minecraft:prevent_equipment_drop": {}
+      },
+      "slots": [
+        "any"
+      ],
+      "max_cost": {
+        "base": 50,
+        "per_level_above_first": 0
+      },
+      "min_cost": {
+        "base": 25,
+        "per_level_above_first": 0
+      }
+    }
+  ],
   "description": {
     "translate": "enchantment.minecraft.vanishing_curse"
   },
-  "effects": {
-    "minecraft:prevent_equipment_drop": {}
-  },
-  "max_cost": {
-    "base": 50,
-    "per_level_above_first": 0
-  },
-  "max_level": 1,
-  "min_cost": {
-    "base": 25,
-    "per_level_above_first": 0
-  },
-  "slots": [
-    "any"
-  ],
   "supported_items": "#minecraft:enchantable/vanishing",
-  "weight": 1,
-  "enchantment_slot": "curse"
+  "weight": 1
 }

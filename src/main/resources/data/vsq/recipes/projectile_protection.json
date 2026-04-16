@@ -26,15 +26,15 @@
       "count": 8
     },
     {
-      "tag": "minecraft:enchantable/armor",
-      "count": 1
+      "count": 1,
+      "item": "#minecraft:enchantable/armor"
     }
   ],
   "enchantment": "minecraft:projectile_protection",
   "blocks": [
     {
-      "tag": "vsq:enchantment_blocks",
-      "count": 6
+      "count": 6,
+      "block": "#vsq:enchantment_blocks"
     }
   ],
   "level_multiplier": 2

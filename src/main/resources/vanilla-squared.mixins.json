@@ -23,6 +23,7 @@
     "world.item.ItemPropertiesMixin",
     "world.item.ItemsMixin",
     "world.item.EnchantmentMixin",
+    "world.item.EnchantmentHelperMixin",
     "world.item.components.ItemAttributeModifiersDisplayDefaultMixin",
     "world.item.items.ArmorMaterialMixin",
     "world.item.items.AxeMixin",

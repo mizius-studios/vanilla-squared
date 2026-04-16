@@ -34,10 +34,6 @@ public abstract class EnchantCommandMixin {
     @Inject(method = "enchant", at = @At("HEAD"), cancellable = true)
     private static void vsq$enchantWithSlotRules(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Enchantment> enchantmentHolder, int level, CallbackInfoReturnable<Integer> cir) throws CommandSyntaxException {
         Enchantment enchantment = enchantmentHolder.value();
-        if (level > enchantment.getMaxLevel()) {
-            throw ERROR_LEVEL_TOO_HIGH.create(level, enchantment.getMaxLevel());
-        }
-
         int success = 0;
         for (Entity entity : targets) {
             if (!(entity instanceof LivingEntity target)) {
@@ -51,6 +47,14 @@ public abstract class EnchantCommandMixin {
             if (item.isEmpty()) {
                 if (targets.size() == 1) {
                     throw ERROR_NO_ITEM.create(target.getName().getString());
+                }
+                continue;
+            }
+
+            int maxLevel = VSQEnchantmentSlots.maxLevel(item, enchantmentHolder);
+            if (level > maxLevel) {
+                if (targets.size() == 1) {
+                    throw ERROR_LEVEL_TOO_HIGH.create(level, maxLevel);
                 }
                 continue;
             }
