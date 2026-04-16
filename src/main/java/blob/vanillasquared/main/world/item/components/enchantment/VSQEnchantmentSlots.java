@@ -262,9 +262,11 @@ public final class VSQEnchantmentSlots {
     }
 
     public static <T> T profileEffect(ItemStack stack, Holder<Enchantment> enchantment, DataComponentType<T> effectType) {
-        return selectedProfile(stack, enchantment)
-                .map(profile -> profile.effects().get(effectType))
-                .orElseGet(() -> enchantment.value().effects().get(effectType));
+        Optional<VSQEnchantmentProfile> profile = selectedProfile(stack, enchantment);
+        if (profile.isPresent()) {
+            return profile.get().effects().get(effectType);
+        }
+        return enchantment.value().effects().get(effectType);
     }
 
     public static Map<VSQEnchantmentSlotType, Integer> definedCapacities(ItemStack stack) {
