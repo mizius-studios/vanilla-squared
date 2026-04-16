@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
 import blob.vanillasquared.util.api.references.RegistryReference;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -224,7 +225,10 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
     }
 
     private static <T> T vsq$removeCount(DynamicOps<T> ops, T input) {
-        JsonObject json = (JsonObject) ops.convertTo(JsonOps.INSTANCE, input);
+        JsonElement element = ops.convertTo(JsonOps.INSTANCE, input);
+        if (!(element instanceof JsonObject json)) {
+            return input;
+        }
         JsonObject copy = json.deepCopy();
         copy.remove("count");
         return JsonOps.INSTANCE.convertTo(ops, copy);
