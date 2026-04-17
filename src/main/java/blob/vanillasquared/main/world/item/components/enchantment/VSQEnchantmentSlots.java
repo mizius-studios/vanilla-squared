@@ -215,10 +215,14 @@ public final class VSQEnchantmentSlots {
             }
 
             List<VSQEnchantmentSlotEntry> source = maybeEntries.get();
-            List<VSQEnchantmentSlotEntry> randomized = new ArrayList<>(source.size());
-            int nulls = Math.max(0, Math.min(entry.getValue(), source.size()));
-            for (int index = 0; index < source.size(); index++) {
-                randomized.add(index < nulls ? null : source.get(index));
+            List<VSQEnchantmentSlotEntry> randomized = new ArrayList<>(source.size() + Math.max(0, entry.getValue()));
+            for (VSQEnchantmentSlotEntry slotEntry : source) {
+                if (slotEntry != null) {
+                    randomized.add(slotEntry);
+                }
+            }
+            for (int index = 0; index < Math.max(0, entry.getValue()); index++) {
+                randomized.add(null);
             }
             updated = updated.withSlots(entry.getKey(), Optional.of(randomized));
         }
