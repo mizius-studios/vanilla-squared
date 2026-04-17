@@ -1,43 +1,20 @@
 {
-  "anvil_cost": 4,
-  "profiles": [
-    {
-      "requirement": {
-        "type": "ITEM",
-        "item": "#minecraft:enchantable/fishing"
-      },
-      "enchantment_slot": "secondary",
-      "max_level": 3,
-      "effects": {
-        "minecraft:fishing_luck_bonus": [
-          {
-            "effect": {
-              "type": "minecraft:add",
-              "value": {
-                "type": "minecraft:linear",
-                "base": 1,
-                "per_level_above_first": 1
-              }
-            }
-          }
-        ]
-      },
-      "slots": [
-        "mainhand"
-      ],
-      "max_cost": {
-        "base": 65,
-        "per_level_above_first": 9
-      },
-      "min_cost": {
-        "base": 15,
-        "per_level_above_first": 9
-      }
-    }
-  ],
   "description": {
-    "translate": "enchantment.minecraft.luck_of_the_sea"
+    "translate": "enchantment.minecraft.looting"
   },
-  "supported_items": "#minecraft:enchantable/fishing",
-  "weight": 2
+  "supported_items": "#vsq:enchanting/removed",
+  "weight": 1,
+  "anvil_cost": 1,
+  "max_level": 1,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 1,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "mainhand"
+  ]
 }
