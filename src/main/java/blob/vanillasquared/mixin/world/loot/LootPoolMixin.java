@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public abstract class LootPoolMixin {
 
     @ModifyVariable(method = "addRandomItems", at = @At("HEAD"), argsOnly = true)
+    // Mixin requires the captured variable followed by the original method arguments for this target signature.
     private Consumer<ItemStack> vsq$filterBooks(Consumer<ItemStack> original, Consumer<ItemStack> originalArgument, LootContext context) {
         return stack -> {
             // Enchanted books are intentionally suppressed; ItemStack also strips stored enchantments for deserialized books.

@@ -256,6 +256,7 @@ public final class VSQEnchantmentSlots {
         VSQEnchantmentComponent updated = component;
         for (VSQEnchantmentSlotType slotType : VSQEnchantmentSlotType.values()) {
             if (slotType == VSQEnchantmentSlotType.SPECIAL) {
+                // SPECIAL capacity is fixed by item type and is not randomized by loot generation.
                 continue;
             }
 
