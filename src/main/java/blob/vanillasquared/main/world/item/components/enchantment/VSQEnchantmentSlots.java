@@ -59,6 +59,7 @@ public final class VSQEnchantmentSlots {
             return;
         }
 
+        boolean alreadySeeded = stack.has(DataComponents.VSQ_ENCHANTMENT);
         ensureSeeded(stack);
         VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
         if (component == null || enchantments == null) {
@@ -69,6 +70,8 @@ public final class VSQEnchantmentSlots {
         if (migrated.isPresent()) {
             stack.set(DataComponents.VSQ_ENCHANTMENT, migrated.get());
             syncDerivedEnchantments(stack);
+        } else if (!alreadySeeded) {
+            stack.remove(DataComponents.VSQ_ENCHANTMENT);
         }
     }
 
