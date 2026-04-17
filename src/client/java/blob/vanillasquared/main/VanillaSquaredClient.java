@@ -1,6 +1,7 @@
 package blob.vanillasquared.main;
 
 import blob.vanillasquared.main.gui.enchantment.VSQEnchantmentScreen;
+import blob.vanillasquared.main.input.VSQKeyMappings;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayloadHandler;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeStatePayloadHandler;
 import blob.vanillasquared.main.world.inventory.VSQMenuTypes;
@@ -16,6 +17,7 @@ public class VanillaSquaredClient implements ClientModInitializer {
     public void onInitializeClient() {
         EnchantingRecipeStatePayloadHandler.register();
         EnchantingRecipeBookSyncPayloadHandler.register();
+        VSQKeyMappings.initialize();
         MenuScreens.register(VSQMenuTypes.ENCHANTING, VSQEnchantmentScreen::new);
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
                 EnchantingRecipeStatePayloadHandler.clearAll();

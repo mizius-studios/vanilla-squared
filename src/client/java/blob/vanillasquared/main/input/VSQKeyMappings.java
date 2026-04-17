@@ -17,13 +17,17 @@ public final class VSQKeyMappings {
             InputConstants.KEY_LALT,
             KeyMapping.Category.MISC
     );
+    private static boolean registered;
 
     private VSQKeyMappings() {
     }
 
     public static void initialize() {
-        vsq$registerKeyMapping(ENCHANTMENT_HOTKEY);
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (!registered && client.options != null) {
+                vsq$registerKeyMapping(client, ENCHANTMENT_HOTKEY);
+                registered = true;
+            }
             while (ENCHANTMENT_HOTKEY.consumeClick()) {
                 if (client.player != null && client.getConnection() != null) {
                     ClientPlayNetworking.send(SpecialEnchantmentHotkeyPayload.INSTANCE);
@@ -32,8 +36,7 @@ public final class VSQKeyMappings {
         });
     }
 
-    private static void vsq$registerKeyMapping(KeyMapping keyMapping) {
-        Minecraft client = Minecraft.getInstance();
+    private static void vsq$registerKeyMapping(Minecraft client, KeyMapping keyMapping) {
         KeyMapping[] keyMappings = Arrays.copyOf(client.options.keyMappings, client.options.keyMappings.length + 1);
         keyMappings[keyMappings.length - 1] = keyMapping;
         ((OptionsAccessor) client.options).vsq$setKeyMappings(keyMappings);

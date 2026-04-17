@@ -19,6 +19,7 @@
 		"gui.RecipeBookComponentMixin",
 		"gui.RecipeBookComponentAccessor",
 		"gui.SearchRecipeBookCategoryMixin",
+		"input.OptionsAccessor",
 		"world.ItemStackMixin",
       "world.entities.LocalPlayerMixin",
 		"world.entities.PlayerMixin"
