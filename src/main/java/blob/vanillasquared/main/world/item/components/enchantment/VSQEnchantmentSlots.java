@@ -344,6 +344,7 @@ public final class VSQEnchantmentSlots {
         Item item = stack.getItem();
         EnumMap<VSQEnchantmentSlotType, Integer> capacities = new EnumMap<>(VSQEnchantmentSlotType.class);
         String itemPath = BuiltInRegistries.ITEM.getKey(item).getPath();
+        // These suffix checks intentionally mirror vanilla-style item names; generic ENCHANTABLE items get fallback slots below.
         boolean armor = itemPath.endsWith("_helmet") || itemPath.endsWith("_chestplate") || itemPath.endsWith("_leggings") || itemPath.endsWith("_boots");
         boolean sword = itemPath.endsWith("_sword");
         boolean pickaxe = itemPath.endsWith("_pickaxe");

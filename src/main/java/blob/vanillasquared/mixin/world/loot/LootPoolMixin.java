@@ -15,8 +15,9 @@ import java.util.function.Consumer;
 public abstract class LootPoolMixin {
 
     @ModifyVariable(method = "addRandomItems", at = @At("HEAD"), argsOnly = true)
-    private Consumer<ItemStack> vsq$filterBooks(Consumer<ItemStack> original, Consumer<ItemStack> result, LootContext context) {
+    private Consumer<ItemStack> vsq$filterBooks(Consumer<ItemStack> original, Consumer<ItemStack> originalArgument, LootContext context) {
         return stack -> {
+            // Enchanted books are intentionally suppressed; ItemStack also strips stored enchantments for deserialized books.
             if (!stack.is(Items.ENCHANTED_BOOK)) {
                 original.accept(RandomizeEnchantmentSlotsFunction.DEFAULT_LOOT_RANDOMIZATION.apply(stack, context));
             }
