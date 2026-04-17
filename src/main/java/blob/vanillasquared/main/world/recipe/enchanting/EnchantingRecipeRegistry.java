@@ -130,6 +130,7 @@ public final class EnchantingRecipeRegistry {
         @Override
         public CompletableFuture<Void> apply(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> data, ResourceManager resourceManager, Executor executor) {
             return CompletableFuture.runAsync(() -> {
+                EnchantingIngredient.clearTagCache();
                 RECIPES = Map.copyOf(data);
                 VanillaSquared.LOGGER.info("Loaded {} Enchanting recipes", RECIPES.size());
             }, executor);

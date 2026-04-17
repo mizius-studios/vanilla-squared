@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public abstract class PlayerMixin {
 
     @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private float vsq$applyMaceProtection(float amount, ServerLevel level, DamageSource source) {
+    private float vsq$applyCustomProtections(float amount, ServerLevel level, DamageSource source) {
         return DamageUtil.applyCustomProtections((Player) (Object) this, source, amount);
     }
 }

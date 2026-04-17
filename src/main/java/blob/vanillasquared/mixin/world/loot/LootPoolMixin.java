@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public abstract class LootPoolMixin {
 
     @ModifyVariable(method = "addRandomItems", at = @At("HEAD"), argsOnly = true, name = "result")
-    private Consumer<ItemStack> vsq$filterBooks(Consumer<ItemStack> original, Consumer<ItemStack> result, LootContext context) {
+    private Consumer<ItemStack> vsq$filterBooks(Consumer<ItemStack> original, LootContext context) {
         return stack -> {
             if (!stack.is(Items.ENCHANTED_BOOK)) {
                 original.accept(RandomizeEnchantmentSlotsFunction.DEFAULT_LOOT_RANDOMIZATION.apply(stack, context));

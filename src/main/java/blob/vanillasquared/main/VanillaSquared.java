@@ -2,7 +2,6 @@ package blob.vanillasquared.main;
 
 import blob.vanillasquared.main.network.VSQNetworking;
 import blob.vanillasquared.main.world.inventory.VSQMenuTypes;
-import blob.vanillasquared.main.world.item.Items.TestItem;
 import blob.vanillasquared.main.world.loot.VSQLootFunctions;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
 import blob.vanillasquared.main.world.recipe.enchanting.VSQRecipeTypes;
@@ -20,7 +19,6 @@ public class VanillaSquared implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        TestItem.initialize();
         VSQMenuTypes.initialize();
         VSQRecipeTypes.initialize();
         VSQExperiments.initialize();
