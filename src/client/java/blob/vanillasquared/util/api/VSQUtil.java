@@ -6,8 +6,11 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VSQUtil {
-    public static class VSQ$Component {
+public final class VSQUtil {
+    private VSQUtil() {
+    }
+
+    public static final class VSQ$Component {
         public List<Component> expandTooltipLines(List<Component> components) {
             List<Component> expanded = new ArrayList<>();
             for (Component component : components) {
@@ -22,9 +25,9 @@ public class VSQUtil {
             }
             return expanded;
         }
+
         public List<Component> styleTooltipLines(List<Component> lines, ChatFormatting formatting) {
             return lines.stream().map(line -> (Component) line.copy().withStyle(formatting)).toList();
         }
-
     }
 }

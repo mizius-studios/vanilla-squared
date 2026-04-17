@@ -8,8 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 
-public class RegisterAttributes {
-
+public final class RegisterAttributes {
     public static final Holder<Attribute> maceProtectionAttribute = register(
             RegisterAttributes.UtilIdentifiers.maceProtectionAttribute.get(),
             new RangedAttribute(
@@ -47,6 +46,10 @@ public class RegisterAttributes {
         );
         return BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute);
     }
+
+    private RegisterAttributes() {
+    }
+
     public enum UtilIdentifiers {
         maceProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "mace_protection_attribute")),
         magicProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "magic_protection_attribute")),
@@ -54,10 +57,16 @@ public class RegisterAttributes {
         spearProtectionAttribute(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "spear_protection_attribute"));
 
         private final Identifier identifier;
-        UtilIdentifiers(Identifier identifier) { this.identifier = identifier; }
-        public Identifier get() { return this.identifier; }
-    }
-    public static void initialize() {
 
+        UtilIdentifiers(Identifier identifier) {
+            this.identifier = identifier;
+        }
+
+        public Identifier get() {
+            return this.identifier;
+        }
+    }
+
+    public static void initialize() {
     }
 }

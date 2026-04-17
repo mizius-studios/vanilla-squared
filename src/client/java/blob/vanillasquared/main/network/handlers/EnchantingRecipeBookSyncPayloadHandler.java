@@ -2,9 +2,9 @@ package blob.vanillasquared.main.network.handlers;
 
 import blob.vanillasquared.main.network.payload.EnchantingRecipeBookSyncPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
-import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplayId;
 

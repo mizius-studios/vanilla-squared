@@ -17,7 +17,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-          "blob.vanillasquared.main.VanillaSquared"
+			"blob.vanillasquared.main.VanillaSquared"
 		],
 		"client": [
 			"blob.vanillasquared.main.VanillaSquaredClient"
@@ -50,13 +50,13 @@
 			"links": {
 				"modmenu.discord": "https://discord.gg/pppHybq9xT"
 			},
-			"badges": [ ],
+			"badges": [],
 			"parent": {
 				"id": "vanilla-squared",
 				"name": "Vanilla²",
 				"description": "This Mod overhauls outdated systems!",
 				"icon": "assets/vsq/vsq.png",
-				"badges": [  ]
+				"badges": []
 			},
 			"update_checker": false
 		}

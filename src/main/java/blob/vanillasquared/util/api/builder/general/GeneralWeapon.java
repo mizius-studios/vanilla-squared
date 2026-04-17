@@ -24,6 +24,7 @@ public class GeneralWeapon {
 
         this.modifiers = builder.build();
     }
+
     public enum UtilIdentifiers {
         swordOverride(
                 Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "sword_attack_damage"),
@@ -46,6 +47,7 @@ public class GeneralWeapon {
             this.attackSpeed = attackSpeed;
             this.attackRange = attackRange;
         }
+
         public Identifier get(Type type) {
             return switch (type) {
                 case Type.ATTACK_DMG -> attackDMG;
@@ -70,6 +72,7 @@ public class GeneralWeapon {
             ATTACK_SPEED,
             ATTACK_RANGE
         }
+
         public enum Item {
             SWORD,
             AXE,

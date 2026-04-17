@@ -1,9 +1,10 @@
 package blob.vanillasquared.util.api.builder.components;
 
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.component.BlocksAttacks;
@@ -26,12 +27,14 @@ public class BlockBuilder {
         );
     }
 
-    private static Optional<net.minecraft.core.HolderSet<DamageType>> bypassesShieldTag() {
+    private static Optional<HolderSet<DamageType>> bypassesShieldTag() {
         return RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)
                 .lookup(Registries.DAMAGE_TYPE)
                 .flatMap(registry -> registry.get(DamageTypeTags.BYPASSES_SHIELD))
-                .map(holderSet -> (net.minecraft.core.HolderSet<DamageType>) holderSet);
+                .map(holderSet -> (HolderSet<DamageType>) holderSet);
     }
 
-    public BlocksAttacks build() { return blockComponent; }
+    public BlocksAttacks build() {
+        return blockComponent;
+    }
 }
