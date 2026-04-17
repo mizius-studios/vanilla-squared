@@ -1,6 +1,7 @@
 package blob.vanillasquared.util.api.builder.components;
 
 import blob.vanillasquared.main.world.item.components.dualwield.DualWieldComponent;
+import blob.vanillasquared.util.api.references.RegistryReference;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class DualWieldBuilder {
             List<String> identifiers,
             int cooldown,
             int criticalHits,
-            Identifier blockedEnchantmentsTag,
+            RegistryReference blockedEnchantments,
             int sweepingDamage,
             int criticalDamage
     ) {
@@ -20,10 +21,21 @@ public class DualWieldBuilder {
                 identifiers,
                 cooldown,
                 criticalHits,
-                blockedEnchantmentsTag,
+                blockedEnchantments,
                 sweepingDamage,
                 criticalDamage
         );
+    }
+
+    public DualWieldBuilder(
+            List<String> identifiers,
+            int cooldown,
+            int criticalHits,
+            Identifier blockedEnchantmentsTag,
+            int sweepingDamage,
+            int criticalDamage
+    ) {
+        this(identifiers, cooldown, criticalHits, RegistryReference.tag(blockedEnchantmentsTag), sweepingDamage, criticalDamage);
     }
 
     public DualWieldBuilder(

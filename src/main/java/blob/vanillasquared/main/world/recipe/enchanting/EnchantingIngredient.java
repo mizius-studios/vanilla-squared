@@ -1,5 +1,7 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
+import blob.vanillasquared.util.api.references.RegistryReference;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -53,15 +55,23 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
                 }
                 final int finalCount = count;
 
-                T tagValue = mapLike.get("tag");
-                if (tagValue != null) {
-                    var tagIdResult = Identifier.CODEC.parse(ops, tagValue).result();
-                    if (tagIdResult.isEmpty()) {
-                        return DataResult.error(() -> "Invalid item tag identifier");
+                T itemValue = mapLike.get("item");
+                if (itemValue != null) {
+                    var itemReferenceResult = RegistryReference.CODEC.parse(ops, itemValue).result();
+                    if (itemReferenceResult.isEmpty()) {
+                        return DataResult.error(() -> "Invalid item identifier");
                     }
 
-                    Identifier parsedTagId = tagIdResult.get();
-                    return DataResult.success(Pair.of(new EnchantingIngredient(null, finalCount, parsedTagId), input));
+                    RegistryReference itemReference = itemReferenceResult.get();
+                    if (itemReference.tag()) {
+                        return DataResult.success(Pair.of(new EnchantingIngredient(null, finalCount, itemReference.id()), input));
+                    }
+
+                    Item item = BuiltInRegistries.ITEM.getValue(itemReference.id());
+                    if (item == null) {
+                        return DataResult.error(() -> "Unknown item: " + itemReference.id());
+                    }
+                    return DataResult.success(Pair.of(new EnchantingIngredient(Ingredient.of(item), finalCount, null), input));
                 }
 
                 if (mapLike.get("fabric:type") != null) {
@@ -70,22 +80,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
                             .map(parsedIngredient -> Pair.of(new EnchantingIngredient(parsedIngredient, finalCount, null), input));
                 }
 
-                T itemValue = mapLike.get("item");
-                if (itemValue != null) {
-                    var itemIdResult = Identifier.CODEC.parse(ops, itemValue).result();
-                    if (itemIdResult.isEmpty()) {
-                        return DataResult.error(() -> "Invalid item identifier");
-                    }
-
-                    Identifier itemId = itemIdResult.get();
-                    Item item = BuiltInRegistries.ITEM.getValue(itemId);
-                    if (item == null) {
-                        return DataResult.error(() -> "Unknown item: " + itemId);
-                    }
-                    return DataResult.success(Pair.of(new EnchantingIngredient(Ingredient.of(item), finalCount, null), input));
-                }
-
-                return DataResult.error(() -> "Ingredient object must contain 'item', 'tag', or 'fabric:type'");
+                return DataResult.error(() -> "Ingredient object must contain 'item' or 'fabric:type'");
             });
         }
 
@@ -93,7 +88,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
         public <T> DataResult<T> encode(EnchantingIngredient input, DynamicOps<T> ops, T prefix) {
             if (input.tagId != null) {
                 var builder = ops.mapBuilder();
-                builder.add("tag", Identifier.CODEC.encodeStart(ops, input.tagId).getOrThrow());
+                builder.add("item", RegistryReference.CODEC.encodeStart(ops, RegistryReference.tag(input.tagId)).getOrThrow());
                 if (input.count != 1) {
                     builder.add("count", ops.createInt(input.count));
                 }
@@ -230,7 +225,10 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
     }
 
     private static <T> T vsq$removeCount(DynamicOps<T> ops, T input) {
-        JsonObject json = (JsonObject) ops.convertTo(JsonOps.INSTANCE, input);
+        JsonElement element = ops.convertTo(JsonOps.INSTANCE, input);
+        if (!(element instanceof JsonObject json)) {
+            return input;
+        }
         JsonObject copy = json.deepCopy();
         copy.remove("count");
         return JsonOps.INSTANCE.convertTo(ops, copy);

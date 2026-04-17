@@ -9,7 +9,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,10 +33,6 @@ public abstract class EnchantCommandMixin {
     @Inject(method = "enchant", at = @At("HEAD"), cancellable = true)
     private static void vsq$enchantWithSlotRules(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Enchantment> enchantmentHolder, int level, CallbackInfoReturnable<Integer> cir) throws CommandSyntaxException {
         Enchantment enchantment = enchantmentHolder.value();
-        if (level > enchantment.getMaxLevel()) {
-            throw ERROR_LEVEL_TOO_HIGH.create(level, enchantment.getMaxLevel());
-        }
-
         int success = 0;
         for (Entity entity : targets) {
             if (!(entity instanceof LivingEntity target)) {
@@ -55,8 +50,16 @@ public abstract class EnchantCommandMixin {
                 continue;
             }
 
+            int maxLevel = VSQEnchantmentSlots.maxLevel(item, enchantmentHolder);
+            if (level > maxLevel) {
+                if (targets.size() == 1) {
+                    throw ERROR_LEVEL_TOO_HIGH.create(level, maxLevel);
+                }
+                continue;
+            }
+
             boolean compatible = enchantment.canEnchant(item)
-                    && EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantmentsForCrafting(item).keySet(), enchantmentHolder)
+                    && VSQEnchantmentSlots.aggregate(item).keySet().stream().allMatch(other -> VSQEnchantmentSlots.areCompatible(item, other, enchantmentHolder))
                     && VSQEnchantmentSlots.canApplyInSlots(item, enchantmentHolder, level);
             if (!compatible) {
                 if (targets.size() == 1) {

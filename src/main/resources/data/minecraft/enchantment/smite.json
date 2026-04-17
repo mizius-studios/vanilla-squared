@@ -1,43 +1,145 @@
-﻿{
+{
   "anvil_cost": 2,
+  "profiles": [
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#minecraft:enchantable/mace"
+      },
+      "enchantment_slot": "damage",
+      "max_level": 5,
+      "effects": {
+        "minecraft:smash_damage_per_fallen_block": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 0.5,
+                "per_level_above_first": 0.5
+              }
+            },
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type": "#minecraft:sensitive_to_smite"
+              }
+            }
+          }
+        ]
+      },
+      "slots": [
+        "mainhand"
+      ],
+      "max_cost": {
+        "base": 25,
+        "per_level_above_first": 8
+      },
+      "min_cost": {
+        "base": 5,
+        "per_level_above_first": 8
+      }
+    },
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#vsq:enchanting/melee_weapon"
+      },
+      "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
+      "max_level": 5,
+      "effects": {
+        "minecraft:damage": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 2.5,
+                "per_level_above_first": 2.5
+              }
+            },
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type": "#minecraft:sensitive_to_smite"
+              }
+            }
+          }
+        ]
+      },
+      "slots": [
+        "mainhand"
+      ],
+      "max_cost": {
+        "base": 25,
+        "per_level_above_first": 8
+      },
+      "min_cost": {
+        "base": 5,
+        "per_level_above_first": 8
+      }
+    },
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#vsq:enchanting/ranged_weapon"
+      },
+      "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
+      "max_level": 5,
+      "effects": {
+        "minecraft:damage": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 2.5,
+                "per_level_above_first": 2.5
+              }
+            },
+            "requirements": {
+              "condition": "minecraft:all_of",
+              "terms": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "type": "#minecraft:sensitive_to_smite"
+                  }
+                },
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "direct_attacker",
+                  "predicate": {
+                    "type": "#minecraft:arrows"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "slots": [
+        "mainhand"
+      ],
+      "max_cost": {
+        "base": 25,
+        "per_level_above_first": 8
+      },
+      "min_cost": {
+        "base": 5,
+        "per_level_above_first": 8
+      }
+    }
+  ],
   "description": {
     "translate": "enchantment.minecraft.smite"
   },
-  "effects": {
-    "minecraft:damage": [
-      {
-        "effect": {
-          "type": "minecraft:add",
-          "value": {
-            "type": "minecraft:linear",
-            "base": 2.5,
-            "per_level_above_first": 2.5
-          }
-        },
-        "requirements": {
-          "condition": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "type": "#minecraft:sensitive_to_smite"
-          }
-        }
-      }
-    ]
-  },
-  "max_cost": {
-    "base": 25,
-    "per_level_above_first": 8
-  },
-  "max_level": 5,
-  "min_cost": {
-    "base": 5,
-    "per_level_above_first": 8
-  },
-  "primary_items": "#minecraft:enchantable/melee_weapon",
-  "slots": [
-    "mainhand"
-  ],
-  "supported_items": "#minecraft:enchantable/weapon",
-  "weight": 5,
-  "enchantment_slot": "damage"
+  "primary_items": "#vsq:enchanting/all_weapons",
+  "supported_items": "#vsq:enchanting/all_weapons",
+  "weight": 5
 }

@@ -1,42 +1,51 @@
-﻿{
+{
   "anvil_cost": 4,
+  "profiles": [
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "#vsq:enchanting/weapon"
+      },
+      "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
+      "max_level": 5,
+      "effects": {
+        "minecraft:damage": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 2.5,
+                "per_level_above_first": 2.5
+              }
+            },
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type": "#minecraft:sensitive_to_impaling"
+              }
+            }
+          }
+        ]
+      },
+      "slots": [
+        "mainhand"
+      ],
+      "max_cost": {
+        "base": 21,
+        "per_level_above_first": 8
+      },
+      "min_cost": {
+        "base": 1,
+        "per_level_above_first": 8
+      }
+    }
+  ],
   "description": {
     "translate": "enchantment.minecraft.impaling"
   },
-  "effects": {
-    "minecraft:damage": [
-      {
-        "effect": {
-          "type": "minecraft:add",
-          "value": {
-            "type": "minecraft:linear",
-            "base": 2.5,
-            "per_level_above_first": 2.5
-          }
-        },
-        "requirements": {
-          "condition": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "type": "#minecraft:sensitive_to_impaling"
-          }
-        }
-      }
-    ]
-  },
-  "max_cost": {
-    "base": 21,
-    "per_level_above_first": 8
-  },
-  "max_level": 5,
-  "min_cost": {
-    "base": 1,
-    "per_level_above_first": 8
-  },
-  "slots": [
-    "mainhand"
-  ],
   "supported_items": "#minecraft:enchantable/trident",
-  "weight": 2,
-  "enchantment_slot": "damage"
+  "weight": 2
 }
