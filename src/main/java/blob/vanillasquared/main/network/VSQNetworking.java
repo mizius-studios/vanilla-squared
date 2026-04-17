@@ -1,7 +1,5 @@
 package blob.vanillasquared.main.network;
 
-import blob.vanillasquared.main.VanillaSquared;
-import blob.vanillasquared.main.network.payload.DebugPayload;
 import blob.vanillasquared.main.network.payload.EnchantingBookClickPayload;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeBookSyncPayload;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeSelectionPayload;
@@ -16,27 +14,15 @@ public final class VSQNetworking {
     }
 
     public static void initialize() {
-        PayloadTypeRegistry.serverboundPlay().register(DebugPayload.TYPE, DebugPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(EnchantingBookClickPayload.TYPE, EnchantingBookClickPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(EnchantingRecipeSelectionPayload.TYPE, EnchantingRecipeSelectionPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(EnchantingRecipeStatePayload.TYPE, EnchantingRecipeStatePayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(EnchantingRecipeBookSyncPayload.TYPE, EnchantingRecipeBookSyncPayload.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(DebugPayload.TYPE, (payload, context) ->
-                context.server().execute(() -> vsq$handleDebugPayload(context.player()))
-        );
         ServerPlayNetworking.registerGlobalReceiver(EnchantingBookClickPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleEnchantingBookClick(payload, context.player()))
         );
         ServerPlayNetworking.registerGlobalReceiver(EnchantingRecipeSelectionPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleEnchantingRecipeSelection(payload, context.player()))
-        );
-    }
-
-    private static void vsq$handleDebugPayload(ServerPlayer player) {
-        VanillaSquared.LOGGER.info(
-                "[debug-key] {} ({}) pressed special effect key",
-                player.getGameProfile().name(),
-                player.getUUID()
         );
     }
 

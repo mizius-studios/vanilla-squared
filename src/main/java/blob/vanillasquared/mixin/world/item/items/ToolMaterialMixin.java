@@ -1,7 +1,6 @@
 package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.main.VanillaSquared;
-import blob.vanillasquared.util.api.builder.components.DualWieldBuilder;
 import blob.vanillasquared.util.api.builder.components.HitThroughBuilder;
 import blob.vanillasquared.util.api.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.api.builder.durability.Durability;
@@ -9,7 +8,6 @@ import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -17,7 +15,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Tool;
-import net.minecraft.world.item.component.UseCooldown;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -31,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Mixin(ToolMaterial.class)
 public abstract class ToolMaterialMixin {
@@ -76,31 +72,17 @@ public abstract class ToolMaterialMixin {
     );
 
     @Unique
-    private static final Map<ToolMaterial, DualWieldBuilder> DUAL_WIELD = Map.of(
-            ToolMaterial.WOOD, new DualWieldBuilder(List.of("vsq$swordWooden"), 700, 1, 20, 30, VanillaSquared.MOD_ID, "dual_wield_blocked"),
-            ToolMaterial.STONE, new DualWieldBuilder(List.of("vsq$swordStone"), 750, 1, 25, 40, VanillaSquared.MOD_ID, "dual_wield_blocked"),
-            ToolMaterial.COPPER, new DualWieldBuilder(List.of("vsq$swordCopper"), 775, 1, 35, 50, VanillaSquared.MOD_ID, "dual_wield_blocked"),
-            ToolMaterial.IRON, new DualWieldBuilder(List.of("vsq$swordIron"), 800, 1, 50, 75, VanillaSquared.MOD_ID, "dual_wield_blocked"),
-            ToolMaterial.GOLD, new DualWieldBuilder(List.of("vsq$swordGold"), 750, 3, 50, 55, VanillaSquared.MOD_ID, "dual_wield_blocked"),
-            ToolMaterial.DIAMOND, new DualWieldBuilder(List.of("vsq$swordDiamond"), 900, 1, 50, 100, VanillaSquared.MOD_ID, "dual_wield_blocked"),
-            ToolMaterial.NETHERITE, new DualWieldBuilder(List.of("vsq$swordNetherite"), 1000, 1, 50, 150, VanillaSquared.MOD_ID, "dual_wield_blocked")
-    );
-
-    @Unique
     private static final HitThroughBuilder HIT_THROUGH_PLANTS = new HitThroughBuilder(VanillaSquared.MOD_ID, "hit_through");
-    @Unique
-    private static final UseCooldown VSQ_SWORD_COOLDOWN = new UseCooldown(0.0F, Optional.of(Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "cooldown/sword")));
 
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         GeneralWeapon swordAttributes = SWORD.get(material);
-        DualWieldBuilder dualWieldSword = DUAL_WIELD.get(material);
-        if (swordAttributes == null || dualWieldSword == null) {
+        if (swordAttributes == null) {
             return;
         }
 
-        cir.setReturnValue(buildSwordProperties(properties, swordAttributes, dualWieldSword));
+        cir.setReturnValue(buildSwordProperties(properties, swordAttributes));
     }
 
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
@@ -111,7 +93,7 @@ public abstract class ToolMaterialMixin {
     }
 
     @Unique
-    private Item.Properties buildSwordProperties(Item.Properties properties, GeneralWeapon swordAttributes, DualWieldBuilder dualWieldSword) {
+    private Item.Properties buildSwordProperties(Item.Properties properties, GeneralWeapon swordAttributes) {
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         Tool toolComponent = new Tool(createSwordRules(holderGetter), 1.0F, 2, false);
 
@@ -119,9 +101,7 @@ public abstract class ToolMaterialMixin {
                 .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
                 .attributes(swordAttributes.build())
                 .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1))
-                .component(net.minecraft.core.component.DataComponents.USE_COOLDOWN, VSQ_SWORD_COOLDOWN)
-                .component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build())
-                .component(DataComponents.DUAL_WIELD, dualWieldSword.build());
+                .component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build());
     }
 
     @Unique
