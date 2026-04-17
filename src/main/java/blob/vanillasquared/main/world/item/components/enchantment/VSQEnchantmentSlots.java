@@ -7,6 +7,8 @@ import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
@@ -219,6 +221,59 @@ public final class VSQEnchantmentSlots {
                 randomized.add(index < nulls ? null : source.get(index));
             }
             updated = updated.withSlots(entry.getKey(), Optional.of(randomized));
+        }
+        return updated;
+    }
+
+    public static boolean randomizeSlotCapacities(ItemStack stack, RandomSource random, int minCapacity, int maxCapacity) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        ensureSeeded(stack);
+        VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
+        if (component == null) {
+            return false;
+        }
+
+        ItemEnchantments vanillaEnchantments = stack.getOrDefault(vanillaTargetComponent(stack), ItemEnchantments.EMPTY);
+        if (!vanillaEnchantments.isEmpty()) {
+            Optional<VSQEnchantmentComponent> migrated = tryPopulateFromVanilla(component, stack, vanillaEnchantments);
+            if (migrated.isEmpty()) {
+                return false;
+            }
+            component = migrated.get();
+        }
+
+        stack.set(DataComponents.VSQ_ENCHANTMENT, randomizeSlotCapacities(component, random, minCapacity, maxCapacity));
+        syncDerivedEnchantments(stack);
+        return true;
+    }
+
+    public static VSQEnchantmentComponent randomizeSlotCapacities(VSQEnchantmentComponent component, RandomSource random, int minCapacity, int maxCapacity) {
+        int min = Math.max(0, Math.min(minCapacity, maxCapacity));
+        int max = Math.max(0, Math.max(minCapacity, maxCapacity));
+        VSQEnchantmentComponent updated = component;
+        for (VSQEnchantmentSlotType slotType : VSQEnchantmentSlotType.values()) {
+            if (slotType == VSQEnchantmentSlotType.SPECIAL) {
+                continue;
+            }
+
+            Optional<List<VSQEnchantmentSlotEntry>> maybeEntries = updated.slots(slotType);
+            if (maybeEntries.isEmpty()) {
+                continue;
+            }
+
+            List<VSQEnchantmentSlotEntry> existingEnchantments = maybeEntries.get().stream()
+                    .filter(Objects::nonNull)
+                    .toList();
+            int targetCapacity = Math.max(Mth.nextInt(random, min, max), existingEnchantments.size());
+            List<VSQEnchantmentSlotEntry> resized = new ArrayList<>(targetCapacity);
+            resized.addAll(existingEnchantments);
+            while (resized.size() < targetCapacity) {
+                resized.add(null);
+            }
+            updated = updated.withSlots(slotType, Optional.of(resized));
         }
         return updated;
     }
