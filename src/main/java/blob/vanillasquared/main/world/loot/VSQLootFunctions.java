@@ -2,8 +2,8 @@ package blob.vanillasquared.main.world.loot;
 
 import blob.vanillasquared.main.VanillaSquared;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 

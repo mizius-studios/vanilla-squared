@@ -1,17 +1,20 @@
 package blob.vanillasquared.main.world.item.components.enchantment;
 
 import blob.vanillasquared.util.api.modules.components.DataComponents;
-import net.minecraft.core.Holder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.enchantment.Enchantable;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.FlintAndSteelItem;
 import net.minecraft.world.item.HoeItem;
@@ -19,12 +22,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.ShearsItem;
-import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TridentItem;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantable;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
