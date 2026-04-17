@@ -59,7 +59,6 @@ public abstract class EnchantCommandMixin {
             }
 
             boolean compatible = enchantment.canEnchant(item)
-                    && VSQEnchantmentSlots.aggregate(item).keySet().stream().allMatch(other -> other.equals(enchantmentHolder) || VSQEnchantmentSlots.areCompatible(item, other, enchantmentHolder))
                     && VSQEnchantmentSlots.canApplyInSlots(item, enchantmentHolder, level);
             if (!compatible) {
                 if (targets.size() == 1) {
