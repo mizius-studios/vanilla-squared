@@ -234,6 +234,7 @@ public final class VSQEnchantmentSlots {
             return false;
         }
 
+        boolean alreadySeeded = stack.has(DataComponents.VSQ_ENCHANTMENT);
         ensureSeeded(stack);
         VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
         if (component == null) {
@@ -244,6 +245,9 @@ public final class VSQEnchantmentSlots {
         if (!vanillaEnchantments.isEmpty()) {
             Optional<VSQEnchantmentComponent> migrated = tryPopulateFromVanilla(component, stack, vanillaEnchantments);
             if (migrated.isEmpty()) {
+                if (!alreadySeeded) {
+                    stack.remove(DataComponents.VSQ_ENCHANTMENT);
+                }
                 return false;
             }
             component = migrated.get();
