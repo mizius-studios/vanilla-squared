@@ -1,6 +1,6 @@
 {
   "description": {
-    "translate": "enchantment.minecraft.looting"
+    "translate": "enchantment.minecraft.luck_of_the_sea"
   },
   "supported_items": "#vsq:enchanting/removed",
   "weight": 1,

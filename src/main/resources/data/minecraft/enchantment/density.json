@@ -1,6 +1,6 @@
 {
   "description": {
-    "translate": "enchantment.minecraft.sharpness"
+    "translate": "enchantment.minecraft.density"
   },
   "supported_items": "#vsq:enchanting/removed",
   "weight": 1,

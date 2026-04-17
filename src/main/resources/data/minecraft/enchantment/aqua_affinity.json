@@ -4,7 +4,7 @@
     {
       "requirement": {
         "type": "ITEM",
-        "item": "#mineacraft:enchantable/head_armor"
+        "item": "#minecraft:enchantable/head_armor"
       },
       "enchantment_slot": "secondary",
       "max_level": 1,

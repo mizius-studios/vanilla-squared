@@ -1,6 +1,6 @@
 {
   "description": {
-    "translate": "enchantment.minecraft.punch"
+    "translate": "enchantment.minecraft.knockback"
   },
   "supported_items": "#vsq:enchanting/removed",
   "weight": 1,
