@@ -7,6 +7,7 @@
         "item": "#minecraft:enchantable/foot_armor"
       },
       "enchantment_slot": "secondary",
+      "exclusive_set": "#minecraft:exclusive_set/boots",
       "max_level": 2,
       "effects": {
         "minecraft:damage_immunity": [

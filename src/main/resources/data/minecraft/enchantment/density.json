@@ -7,6 +7,7 @@
         "item": "#minecraft:enchantable/mace"
       },
       "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
       "max_level": 5,
       "effects": {
         "minecraft:smash_damage_per_fallen_block": [

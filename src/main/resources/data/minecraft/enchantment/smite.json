@@ -47,6 +47,7 @@
         "item": "#vsq:enchanting/melee_weapon"
       },
       "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
       "max_level": 5,
       "effects": {
         "minecraft:damage": [
@@ -87,6 +88,7 @@
         "item": "#vsq:enchanting/ranged_weapon"
       },
       "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
       "max_level": 5,
       "effects": {
         "minecraft:damage": [
