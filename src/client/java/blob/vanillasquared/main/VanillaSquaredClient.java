@@ -1,10 +1,8 @@
 package blob.vanillasquared.main;
 
 import net.fabricmc.api.ClientModInitializer;
-import blob.vanillasquared.main.gui.settings.controls.VSQControls;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayloadHandler;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeStatePayloadHandler;
-import blob.vanillasquared.main.network.handlers.KeybindInputHandler;
 import blob.vanillasquared.main.world.inventory.VSQMenuTypes;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingIngredient;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -16,10 +14,8 @@ public class VanillaSquaredClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        VSQControls.initialize();
         EnchantingRecipeStatePayloadHandler.register();
         EnchantingRecipeBookSyncPayloadHandler.register();
-        KeybindInputHandler.register();
         MenuScreens.register(VSQMenuTypes.ENCHANTING, VSQEnchantmentScreen::new);
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
                 EnchantingRecipeStatePayloadHandler.clearAll();

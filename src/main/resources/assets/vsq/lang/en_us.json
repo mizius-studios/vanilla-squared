@@ -1,6 +1,5 @@
 {
   "key.category.vsq.controls": "Vanilla²",
-  "vsq.gui.controls.vsq.keybinds.special_effect": "Special Effect",
   "vsq.gui.experiments.vsq": "VSQ Preview",
   "vsq.gui.experiments.vsq.description": "Test out experimental features.",
   "vsq.gui.container.enchantment_table.xp": "%s",

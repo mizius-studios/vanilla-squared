@@ -18,7 +18,6 @@
     "world.inventory.ServerRecipeBookMixin",
     "world.inventory.MerchantMenuMixin",
     "world.inventory.AnvilMenuMixin",
-    "world.item.ItemCooldownsMixin",
     "world.item.ItemStackMixin",
     "world.item.ItemPropertiesMixin",
     "world.item.ItemsMixin",
