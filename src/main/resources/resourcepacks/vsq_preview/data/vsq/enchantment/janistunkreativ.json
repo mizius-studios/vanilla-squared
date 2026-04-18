@@ -10,11 +10,11 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 0
+          "cooldown": 10
         }
       },
       "slots": [
-        "offhand"
+        "hand"
       ],
       "max_cost": {
         "base": 20,
@@ -27,7 +27,7 @@
     }
   ],
   "description": {
-    "text": "TESTIFICATE"
+    "text": "Jan Ist Unkreativ"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

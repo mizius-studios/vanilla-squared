@@ -9,6 +9,7 @@
   "vsq.gui.container.enchantment_table.xp.none": "???",
   "vsq.gui.container.enchantment_table.blocks.none": "???",
   "key.vsq.enchantment_hotkey": "Enchantment Hotkey",
+  "vsq.chat.special_enchantment.used": "%s used %s",
   "vsq.attributes.mace_protection": "Mace Protection",
   "vsq.attributes.magic_protection": "Magic Protection",
   "vsq.attributes.dripstone_protection": "Dripstone Protection",

@@ -10,7 +10,7 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 0
+          "cooldown": 5
         }
       },
       "slots": [
@@ -27,7 +27,7 @@
     }
   ],
   "description": {
-    "text": "TESTIFICATE"
+    "translate": "enchantment.minecraft.testificate"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

@@ -4,19 +4,15 @@ import blob.vanillasquared.main.network.payload.EnchantingBookClickPayload;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeBookSyncPayload;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeSelectionPayload;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeStatePayload;
+import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentHotkeyPayload;
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentCooldowns;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public final class VSQNetworking {
     private VSQNetworking() {
@@ -28,6 +24,7 @@ public final class VSQNetworking {
         PayloadTypeRegistry.serverboundPlay().register(SpecialEnchantmentHotkeyPayload.TYPE, SpecialEnchantmentHotkeyPayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(EnchantingRecipeStatePayload.TYPE, EnchantingRecipeStatePayload.CODEC);
         PayloadTypeRegistry.clientboundPlay().register(EnchantingRecipeBookSyncPayload.TYPE, EnchantingRecipeBookSyncPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(SpecialEnchantmentCooldownPayload.TYPE, SpecialEnchantmentCooldownPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(EnchantingBookClickPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleEnchantingBookClick(payload, context.player()))
         );
@@ -37,6 +34,7 @@ public final class VSQNetworking {
         ServerPlayNetworking.registerGlobalReceiver(SpecialEnchantmentHotkeyPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleSpecialEnchantmentHotkey(context.player()))
         );
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> SpecialEnchantmentCooldowns.clear(handler.player));
     }
 
     private static void vsq$handleEnchantingBookClick(EnchantingBookClickPayload payload, ServerPlayer player) {
@@ -60,25 +58,13 @@ public final class VSQNetworking {
     }
 
     private static void vsq$handleSpecialEnchantmentHotkey(ServerPlayer player) {
-        if (vsq$hasSpecialEnchantmentEffect(player)) {
-            player.sendSystemMessage(Component.literal(player.getName().getString() + " used a special enchantment effect"));
-        }
-    }
-
-    private static boolean vsq$hasSpecialEnchantmentEffect(ServerPlayer player) {
-        for (EquipmentSlot slot : EquipmentSlot.VALUES) {
-            ItemStack stack = player.getItemBySlot(slot);
-            if (stack.isEmpty()) {
-                continue;
-            }
-
-            ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
-            for (Holder<Enchantment> enchantment : enchantments.keySet()) {
-                if (VSQEnchantmentSlots.profileEffect(stack, enchantment, DataComponents.SPECIAL_ENCHANTMENT_EFFECT) != null) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        SpecialEnchantmentCooldowns.selectUsable(player).ifPresent(use -> {
+            player.sendSystemMessage(Component.translatable(
+                    "vsq.chat.special_enchantment.used",
+                    player.getName(),
+                    Component.translatable("enchantment." + use.enchantmentId().getNamespace() + "." + use.enchantmentId().getPath())
+            ));
+            SpecialEnchantmentCooldowns.start(player, use);
+        });
     }
 }

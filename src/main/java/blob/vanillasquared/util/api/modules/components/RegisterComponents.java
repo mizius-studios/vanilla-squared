@@ -1,13 +1,13 @@
 package blob.vanillasquared.util.api.modules.components;
 
 import blob.vanillasquared.main.VanillaSquared;
+import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentEffect;
 import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.main.world.item.components.hitthrough.HitThroughComponent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Unit;
 
 public final class RegisterComponents {
     public static final DataComponentType<VSQEnchantmentComponent> enchantmentComponent = Registry.register(
@@ -30,12 +30,12 @@ public final class RegisterComponents {
                     .build()
     );
 
-    public static final DataComponentType<Unit> specialEnchantmentEffect = Registry.register(
+    public static final DataComponentType<SpecialEnchantmentEffect> specialEnchantmentEffect = Registry.register(
             BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE,
             Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "special"),
-            DataComponentType.<Unit>builder()
-                    .persistent(Unit.CODEC)
-                    .networkSynchronized(Unit.STREAM_CODEC)
+            DataComponentType.<SpecialEnchantmentEffect>builder()
+                    .persistent(SpecialEnchantmentEffect.CODEC)
+                    .networkSynchronized(SpecialEnchantmentEffect.STREAM_CODEC)
                     .cacheEncoding()
                     .build()
     );
