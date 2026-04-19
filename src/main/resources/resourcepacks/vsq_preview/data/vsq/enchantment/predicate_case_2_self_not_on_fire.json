@@ -10,22 +10,33 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 5,
+          "cooldown": 6,
+          "requirements": {
+            "condition": "minecraft:inverted",
+            "term": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "flags": {
+                  "is_on_fire": true
+                }
+              }
+            }
+          },
           "effect": [
             {
-              "id": "activation",
+              "id": "p2",
               "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "enchanted",
+              "trigger": "enchantment_effect_hotkey",
               "message": {
-                "text": "$e used $i"
+                "text": "[P2] self not on fire passed: $e used $i"
               }
             }
           ]
         }
       },
       "slots": [
-        "offhand"
+        "hand"
       ],
       "max_cost": {
         "base": 20,
@@ -38,7 +49,7 @@
     }
   ],
   "description": {
-    "translate": "enchantment.minecraft.testificate"
+    "text": "Predicate Case 2 - Self Not On Fire"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

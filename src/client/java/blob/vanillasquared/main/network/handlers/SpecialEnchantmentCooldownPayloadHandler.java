@@ -12,8 +12,12 @@ public final class SpecialEnchantmentCooldownPayloadHandler {
         ClientPlayNetworking.registerGlobalReceiver(SpecialEnchantmentCooldownPayload.TYPE, (payload, context) ->
                 context.client().execute(() -> SpecialEnchantmentCooldownClientState.apply(
                         payload.enchantmentId(),
-                        payload.remainingTicks(),
-                        payload.totalTicks()
+                        payload.barRemaining(),
+                        payload.barTotal(),
+                        payload.displayValue(),
+                        payload.displayKind(),
+                        payload.frozen(),
+                        payload.ticksDown()
                 ))
         );
     }

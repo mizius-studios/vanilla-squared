@@ -1,8 +1,9 @@
 {
 	"required": true,
 	"package": "blob.vanillasquared.mixin.client",
-	"compatibilityLevel": "JAVA_21",
+	"compatibilityLevel": "JAVA_25",
 	"client": [
+		"GLXMixin",
 		"gui.AbstractContainerScreenMixin",
 		"gui.AbstractContainerScreenAccessor",
 		"gui.AbstractRecipeBookScreenMixin",
@@ -23,7 +24,7 @@
 		"gui.SearchRecipeBookCategoryMixin",
 		"input.OptionsAccessor",
 		"world.ItemStackMixin",
-      "world.entities.LocalPlayerMixin",
+      	"world.entities.LocalPlayerMixin",
 		"world.entities.PlayerMixin"
 	],
 	"injectors": {

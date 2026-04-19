@@ -49,6 +49,6 @@ public class ExperienceBarRendererMixin {
         guiGraphics.text(font, text, x - 1, y, 0xFF000000, false);
         guiGraphics.text(font, text, x, y + 1, 0xFF000000, false);
         guiGraphics.text(font, text, x, y - 1, 0xFF000000, false);
-        guiGraphics.text(font, text, x, y, 0xFF6EE7FF, false);
+        guiGraphics.text(font, text, x, y, cooldown.textColor(), false);
     }
 }

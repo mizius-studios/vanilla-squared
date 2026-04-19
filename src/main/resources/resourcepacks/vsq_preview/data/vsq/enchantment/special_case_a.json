@@ -10,22 +10,24 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 5,
+          "cooldown": 6,
+          "cooldown_after_limit": "count",
+          "display_limit": "count",
           "effect": [
             {
-              "id": "activation",
+              "id": "count",
               "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "enchanted",
+              "trigger": "enchantment_effect_hotkey",
+              "limit": 3,
               "message": {
-                "text": "$e used $i"
+                "text": "A count $a $e $i"
               }
             }
           ]
         }
       },
       "slots": [
-        "offhand"
+        "hand"
       ],
       "max_cost": {
         "base": 20,
@@ -38,7 +40,7 @@
     }
   ],
   "description": {
-    "translate": "enchantment.minecraft.testificate"
+    "text": "Special Case A"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

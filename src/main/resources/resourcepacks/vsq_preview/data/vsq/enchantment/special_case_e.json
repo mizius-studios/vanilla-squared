@@ -10,22 +10,22 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 5,
+          "cooldown": 8,
           "effect": [
             {
-              "id": "activation",
+              "id": "gate",
               "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "enchanted",
+              "trigger": "enchantment_effect_hotkey",
+              "loop": "first_activation_toggle",
               "message": {
-                "text": "$e used $i"
+                "text": "E gate $e $i"
               }
             }
           ]
         }
       },
       "slots": [
-        "offhand"
+        "hand"
       ],
       "max_cost": {
         "base": 20,
@@ -38,7 +38,7 @@
     }
   ],
   "description": {
-    "translate": "enchantment.minecraft.testificate"
+    "text": "Special Case E"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

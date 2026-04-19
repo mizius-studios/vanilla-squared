@@ -10,22 +10,23 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 5,
+          "cooldown": 8,
+          "display_limit": "extra",
           "effect": [
             {
-              "id": "activation",
+              "id": "extra",
               "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "enchanted",
+              "trigger": "enchantment_effect_hotkey",
+              "limit": 4,
               "message": {
-                "text": "$e used $i"
+                "text": "C extra $a $e $i"
               }
             }
           ]
         }
       },
       "slots": [
-        "offhand"
+        "hand"
       ],
       "max_cost": {
         "base": 20,
@@ -38,7 +39,7 @@
     }
   ],
   "description": {
-    "translate": "enchantment.minecraft.testificate"
+    "text": "Special Case C"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

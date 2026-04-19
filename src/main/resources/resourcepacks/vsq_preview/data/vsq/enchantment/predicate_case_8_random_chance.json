@@ -10,22 +10,32 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 5,
+          "cooldown": 6,
+          "requirements": {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:player"
+            }
+          },
           "effect": [
             {
-              "id": "activation",
+              "id": "p8",
               "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "enchanted",
+              "trigger": "enchantment_effect_hotkey",
+              "requirements": {
+                "condition": "minecraft:random_chance",
+                "chance": 0.5
+              },
               "message": {
-                "text": "$e used $i"
+                "text": "[P8] random chance passed: $e used $i"
               }
             }
           ]
         }
       },
       "slots": [
-        "offhand"
+        "hand"
       ],
       "max_cost": {
         "base": 20,
@@ -38,7 +48,7 @@
     }
   ],
   "description": {
-    "translate": "enchantment.minecraft.testificate"
+    "text": "Predicate Case 8 - Random Chance"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

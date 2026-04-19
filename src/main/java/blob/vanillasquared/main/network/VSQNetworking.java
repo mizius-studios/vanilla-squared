@@ -8,10 +8,10 @@ import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayloa
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentHotkeyPayload;
 import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentCooldowns;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 public final class VSQNetworking {
@@ -35,6 +35,11 @@ public final class VSQNetworking {
                 context.server().execute(() -> vsq$handleSpecialEnchantmentHotkey(context.player()))
         );
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> SpecialEnchantmentCooldowns.clear(handler.player));
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                SpecialEnchantmentCooldowns.tickPlayer(player);
+            }
+        });
     }
 
     private static void vsq$handleEnchantingBookClick(EnchantingBookClickPayload payload, ServerPlayer player) {
@@ -58,13 +63,6 @@ public final class VSQNetworking {
     }
 
     private static void vsq$handleSpecialEnchantmentHotkey(ServerPlayer player) {
-        SpecialEnchantmentCooldowns.selectUsable(player).ifPresent(use -> {
-            player.sendSystemMessage(Component.translatable(
-                    "vsq.chat.special_enchantment.used",
-                    player.getName(),
-                    Component.translatable("enchantment." + use.enchantmentId().getNamespace() + "." + use.enchantmentId().getPath())
-            ));
-            SpecialEnchantmentCooldowns.start(player, use);
-        });
+        SpecialEnchantmentCooldowns.selectUsable(player).ifPresent(use -> SpecialEnchantmentCooldowns.processHotkey(player, use));
     }
 }

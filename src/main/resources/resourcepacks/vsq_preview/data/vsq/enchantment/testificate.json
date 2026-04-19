@@ -10,7 +10,26 @@
       "max_level": 1,
       "effects": {
         "vsq:special": {
-          "cooldown": 0
+          "cooldown": 5,
+          "effect": [
+            {
+              "id": "activation",
+              "type": "send_chat_msg",
+              "affected": "enchanted",
+              "enchanted": "enchanted",
+              "message": {
+                "text": "$e used $i"
+              }
+            },
+            {
+              "id": "display",
+              "type": "send_chat_msg",
+              "loop": "first_activation",
+              "message": {
+                "text": "loop"
+              }
+            }
+          ]
         }
       },
       "slots": [
