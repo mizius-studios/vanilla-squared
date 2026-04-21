@@ -43,8 +43,8 @@ Restart your server.
 
 ## 🔎 Technological Information 
 - Minecraft 26.1.2
-- Fabric Loader 0.18.4 or newer
-- Fabric API 0.145.4 plus 26.1.2
+- Fabric Loader 0.19.2 or newer
+- Fabric API 0.146.1 plus 26.1.2
 - Java 25
 - Gradle via wrapper scripts included in the repo
 
