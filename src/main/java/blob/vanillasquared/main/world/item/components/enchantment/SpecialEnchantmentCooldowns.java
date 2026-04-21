@@ -77,6 +77,18 @@ public final class SpecialEnchantmentCooldowns {
 
             Optional<SpecialEnchantmentUse> maybeUse = findUseInHands(player, enchantmentId);
             if (maybeUse.isEmpty()) {
+                ServerPlayNetworking.send(
+                        player,
+                        new SpecialEnchantmentCooldownPayload(
+                                enchantmentId,
+                                0L,
+                                0L,
+                                0,
+                                SpecialEnchantmentCooldownPayload.DISPLAY_NONE,
+                                false,
+                                false
+                        )
+                );
                 continue;
             }
             SpecialEnchantmentUse use = maybeUse.get();
