@@ -274,6 +274,8 @@ public final class SpecialEnchantmentCooldowns {
 
         long totalTicks = config.cooldownTicks();
         if (totalTicks <= 0L) {
+            state.cooldownStarted = true;
+            state.cooldownEndTick = level.getGameTime();
             return;
         }
 
