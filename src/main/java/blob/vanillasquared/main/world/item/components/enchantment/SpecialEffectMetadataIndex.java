@@ -3,10 +3,9 @@ package blob.vanillasquared.main.world.item.components.enchantment;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mojang.serialization.Codec;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -16,9 +15,6 @@ import java.util.Optional;
 
 public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>> byComponent) {
     public static final SpecialEffectMetadataIndex EMPTY = new SpecialEffectMetadataIndex(Map.of());
-    public static final Codec<SpecialEffectMetadataIndex> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.unboundedMap(Codec.STRING, Codec.STRING).optionalFieldOf("_noop", Map.of()).forGetter(index -> Map.of())
-    ).apply(instance, ignored -> EMPTY));
 
     public Optional<SpecialEffectMetadata> metadata(String componentKey, int index) {
         List<SpecialEffectMetadata> entries = this.byComponent.get(componentKey);
@@ -69,7 +65,11 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
                 continue;
             }
 
-            String id = entry.has("id") ? entry.get("id").getAsString().trim() : "";
+            JsonElement idElement = entry.get("id");
+            if (!(idElement instanceof JsonPrimitive primitive) || !primitive.isString()) {
+                continue;
+            }
+            String id = primitive.getAsString().trim();
             if (id.isEmpty()) {
                 continue;
             }

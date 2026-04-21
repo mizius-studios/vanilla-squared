@@ -229,6 +229,8 @@ public final class SpecialEnchantmentCooldowns {
         }
         long totalTicks = special.cooldownTicks();
         if (totalTicks <= 0L) {
+            state.cooldownStarted = true;
+            state.cooldownEndTick = gameTime;
             return;
         }
         state.cooldownStarted = true;
