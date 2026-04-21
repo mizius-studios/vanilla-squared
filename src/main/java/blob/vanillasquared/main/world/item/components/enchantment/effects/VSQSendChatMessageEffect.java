@@ -4,6 +4,8 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -33,17 +35,22 @@ public record VSQSendChatMessageEffect(
                 "e", enchantedResolved.getName().getString(),
                 "i", item.itemStack().getHoverName().getString()
         );
-        Matcher matcher = PLACEHOLDERS.matcher(this.message.getString());
-        StringBuffer text = new StringBuffer();
-        while (matcher.find()) {
-            matcher.appendReplacement(text, Matcher.quoteReplacement(replacements.get(matcher.group(1))));
-        }
-        matcher.appendTail(text);
+        MutableComponent text = Component.empty();
+        this.message.visit((Style style, String content) -> {
+            Matcher matcher = PLACEHOLDERS.matcher(content);
+            StringBuffer replaced = new StringBuffer();
+            while (matcher.find()) {
+                matcher.appendReplacement(replaced, Matcher.quoteReplacement(replacements.get(matcher.group(1))));
+            }
+            matcher.appendTail(replaced);
+            text.append(Component.literal(replaced.toString()).withStyle(style));
+            return java.util.Optional.empty();
+        }, Style.EMPTY);
 
         if (affectedResolved instanceof ServerPlayer target) {
-            target.sendSystemMessage(Component.literal(text.toString()));
+            target.sendSystemMessage(text);
         } else if (enchantedResolved instanceof ServerPlayer player) {
-            player.sendSystemMessage(Component.literal(text.toString()));
+            player.sendSystemMessage(text);
         }
     }
 

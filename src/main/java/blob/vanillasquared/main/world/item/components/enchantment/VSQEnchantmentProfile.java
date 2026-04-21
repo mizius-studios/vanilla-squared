@@ -35,6 +35,7 @@ public record VSQEnchantmentProfile(
             EnchantmentEffectComponents.CODEC.optionalFieldOf("effects", DataComponentMap.EMPTY).forGetter(VSQEnchantmentProfile::effects),
             Codec.PASSTHROUGH.optionalFieldOf("effects").forGetter(profile -> Optional.empty()),
             SpecialEnchantmentProfileConfig.CODEC.optionalFieldOf("special").forGetter(VSQEnchantmentProfile::special),
+            SpecialEffectMetadataIndex.CODEC.optionalFieldOf("special_effect_index").forGetter(profile -> Optional.of(profile.specialEffectIndex())),
             EquipmentSlotGroup.CODEC.listOf().fieldOf("slots").forGetter(VSQEnchantmentProfile::slots),
             Enchantment.Cost.CODEC.fieldOf("max_cost").forGetter(VSQEnchantmentProfile::maxCost),
             Enchantment.Cost.CODEC.fieldOf("min_cost").forGetter(VSQEnchantmentProfile::minCost)
@@ -48,6 +49,7 @@ public record VSQEnchantmentProfile(
             DataComponentMap effects,
             Optional<Dynamic<?>> rawEffects,
             Optional<SpecialEnchantmentProfileConfig> special,
+            Optional<SpecialEffectMetadataIndex> encodedSpecialEffectIndex,
             List<EquipmentSlotGroup> slots,
             Enchantment.Cost maxCost,
             Enchantment.Cost minCost
@@ -59,7 +61,7 @@ public record VSQEnchantmentProfile(
                 maxLevel,
                 effects,
                 special,
-                SpecialEffectMetadataIndex.fromDynamic(rawEffects),
+                encodedSpecialEffectIndex.orElseGet(() -> SpecialEffectMetadataIndex.fromDynamic(rawEffects)),
                 slots,
                 maxCost,
                 minCost

@@ -37,9 +37,6 @@ public abstract class GuiMixin {
     @Final
     private static Identifier ARMOR_FULL_SPRITE;
 
-    @Unique
-    private static final Object VSQ_CONTEXTUAL_INFO_EXPERIENCE = vsq$contextualInfo("EXPERIENCE");
-
     @Inject(method = "nextContextualInfoState", at = @At("RETURN"), cancellable = true)
     private void vsq$prioritizeSpecialEnchantmentCooldown(CallbackInfoReturnable<Object> cir) {
         Object current = cir.getReturnValue();
@@ -47,8 +44,9 @@ public abstract class GuiMixin {
             return;
         }
         if (SpecialEnchantmentCooldownClientState.hasVisibleCooldown(this.minecraft.player)) {
-            if (VSQ_CONTEXTUAL_INFO_EXPERIENCE != null) {
-                cir.setReturnValue(VSQ_CONTEXTUAL_INFO_EXPERIENCE);
+            Object experience = vsq$contextualInfo(current, "EXPERIENCE");
+            if (experience != null) {
+                cir.setReturnValue(experience);
             }
         }
     }
@@ -129,13 +127,15 @@ public abstract class GuiMixin {
     }
 
     @Unique
-    private static Object vsq$contextualInfo(String name) {
+    private static Object vsq$contextualInfo(Object value, String name) {
+        if (!(value instanceof Enum<?> contextualInfo)) {
+            return null;
+        }
         try {
-            Class<?> type = Class.forName("net.minecraft.client.gui.Gui$ContextualInfo");
             @SuppressWarnings({"unchecked", "rawtypes"})
-            Object value = Enum.valueOf((Class<? extends Enum>) type.asSubclass(Enum.class), name);
-            return value;
-        } catch (ClassNotFoundException | IllegalArgumentException exception) {
+            Object result = Enum.valueOf((Class<? extends Enum>) contextualInfo.getDeclaringClass(), name);
+            return result;
+        } catch (IllegalArgumentException exception) {
             return null;
         }
     }

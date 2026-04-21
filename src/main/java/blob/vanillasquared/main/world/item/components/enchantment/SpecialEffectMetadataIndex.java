@@ -1,5 +1,6 @@
 package blob.vanillasquared.main.world.item.components.enchantment;
 
+import com.mojang.serialization.Codec;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
@@ -15,6 +16,10 @@ import java.util.Optional;
 
 public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>> byComponent) {
     public static final SpecialEffectMetadataIndex EMPTY = new SpecialEffectMetadataIndex(Map.of());
+    public static final Codec<SpecialEffectMetadataIndex> CODEC = Codec.unboundedMap(
+            Codec.STRING,
+            SpecialEffectMetadata.CODEC.listOf()
+    ).xmap(SpecialEffectMetadataIndex::new, SpecialEffectMetadataIndex::byComponent);
 
     public Optional<SpecialEffectMetadata> metadata(String componentKey, int index) {
         List<SpecialEffectMetadata> entries = this.byComponent.get(componentKey);
@@ -62,15 +67,18 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
         List<SpecialEffectMetadata> parsed = new ArrayList<>(entries.size());
         for (JsonElement entryElement : entries) {
             if (!(entryElement instanceof JsonObject entry)) {
+                parsed.add(new SpecialEffectMetadata("", Optional.empty()));
                 continue;
             }
 
             JsonElement idElement = entry.get("id");
             if (!(idElement instanceof JsonPrimitive primitive) || !primitive.isString()) {
+                parsed.add(new SpecialEffectMetadata("", Optional.empty()));
                 continue;
             }
             String id = primitive.getAsString().trim();
             if (id.isEmpty()) {
+                parsed.add(new SpecialEffectMetadata("", Optional.empty()));
                 continue;
             }
             Optional<SpecialEffectSettings> special = parseSpecial(entry);
