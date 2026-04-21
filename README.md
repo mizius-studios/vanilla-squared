@@ -24,14 +24,8 @@ Restart your server.
 - Expands armor scaling so high armor values keep working past vanilla limits
 - Updates combat math to support higher armor and magic absorb values
 - Adds a custom mace protection attribute that reduces mace smash damage
-
-### 🤺 Dual wield system
-
-- Adds a dual wield data component and matching logic for compatible weapon pairs
-- Merges enchantments from offhand into mainhand during attacks with blocked enchant safeguards
-- Grants offhand powered bonus damage on strong hits
-- Supports charge based critical bonus behavior triggered through offhand use
-- Plays sweep and crit combat feedback for the dual wield flow
+- Completely new Enchantment Table System
+- Completely new Enchantment System
 
 ### 🧰 Item behavior updates
 
