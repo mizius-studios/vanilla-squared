@@ -77,20 +77,24 @@ public final class SpecialEnchantmentCooldowns {
 
             Optional<SpecialEnchantmentUse> maybeUse = findUseInHands(player, enchantmentId);
             if (maybeUse.isEmpty()) {
-                ServerPlayNetworking.send(
-                        player,
-                        new SpecialEnchantmentCooldownPayload(
-                                enchantmentId,
-                                0L,
-                                0L,
-                                0,
-                                SpecialEnchantmentCooldownPayload.DISPLAY_NONE,
-                                false,
-                                false
-                        )
-                );
+                if (!state.displayedNone) {
+                    state.displayedNone = true;
+                    ServerPlayNetworking.send(
+                            player,
+                            new SpecialEnchantmentCooldownPayload(
+                                    enchantmentId,
+                                    0L,
+                                    0L,
+                                    0,
+                                    SpecialEnchantmentCooldownPayload.DISPLAY_NONE,
+                                    false,
+                                    false
+                            )
+                    );
+                }
                 continue;
             }
+            state.displayedNone = false;
             SpecialEnchantmentUse use = maybeUse.get();
             sync(player, use);
         }
@@ -463,6 +467,7 @@ public final class SpecialEnchantmentCooldowns {
         private final Map<String, Integer> totalLimits = new HashMap<>();
         private boolean activatedByHotkey;
         private boolean cooldownStarted;
+        private boolean displayedNone;
         private long cooldownEndTick;
 
         private ActivationState(long cooldownTotalTicks) {

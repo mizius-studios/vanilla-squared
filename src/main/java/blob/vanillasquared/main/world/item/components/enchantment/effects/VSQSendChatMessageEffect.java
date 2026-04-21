@@ -30,20 +30,25 @@ public record VSQSendChatMessageEffect(
     public void apply(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity entity, Vec3 origin) {
         Entity affectedResolved = entity;
         Entity enchantedResolved = item.owner() != null ? item.owner() : entity;
-        Map<String, String> replacements = Map.of(
-                "a", affectedResolved.getName().getString(),
-                "e", enchantedResolved.getName().getString(),
-                "i", item.itemStack().getHoverName().getString()
+        Map<String, Component> replacements = Map.of(
+                "a", affectedResolved.getName(),
+                "e", enchantedResolved.getName(),
+                "i", item.itemStack().getHoverName()
         );
         MutableComponent text = Component.empty();
         this.message.visit((Style style, String content) -> {
             Matcher matcher = PLACEHOLDERS.matcher(content);
-            StringBuffer replaced = new StringBuffer();
+            int lastIndex = 0;
             while (matcher.find()) {
-                matcher.appendReplacement(replaced, Matcher.quoteReplacement(replacements.get(matcher.group(1))));
+                if (matcher.start() > lastIndex) {
+                    text.append(Component.literal(content.substring(lastIndex, matcher.start())).withStyle(style));
+                }
+                text.append(replacements.get(matcher.group(1)).copy().withStyle(style));
+                lastIndex = matcher.end();
             }
-            matcher.appendTail(replaced);
-            text.append(Component.literal(replaced.toString()).withStyle(style));
+            if (lastIndex < content.length()) {
+                text.append(Component.literal(content.substring(lastIndex)).withStyle(style));
+            }
             return java.util.Optional.empty();
         }, Style.EMPTY);
 

@@ -16,6 +16,9 @@
               "type": "vsq:send_chat_msg",
               "message": {
                 "text": "$e used $i"
+              },
+              "special": {
+                "limit": 1
               }
             }
           }
