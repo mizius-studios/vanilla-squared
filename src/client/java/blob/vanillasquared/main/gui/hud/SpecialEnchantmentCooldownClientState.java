@@ -1,9 +1,8 @@
 package blob.vanillasquared.main.gui.hud;
 
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
-import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentEffect;
 import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentProfile;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
@@ -73,8 +72,8 @@ public final class SpecialEnchantmentCooldownClientState {
 
         ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
-            SpecialEnchantmentEffect effect = VSQEnchantmentSlots.profileEffect(stack, enchantment, DataComponents.SPECIAL_ENCHANTMENT_EFFECT);
-            if (effect == null || !matchesSlot(stack, enchantment, slot)) {
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProfile(stack, enchantment);
+            if (profile.isEmpty() || profile.get().special().isEmpty() || !matchesSlot(stack, enchantment, slot)) {
                 continue;
             }
 

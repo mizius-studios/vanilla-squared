@@ -9,32 +9,35 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "effect": [
-            {
-              "id": "bundle",
-              "type": "send_chat_msg",
+        "minecraft:tick": [
+          {
+            "id": "bundle",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "B1 $e used $i"
               }
-            },
-            {
-              "id": "bundle",
-              "type": "send_chat_msg",
+            }
+          },
+          {
+            "id": "bundle",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "B2 $e used $i"
               }
-            },
-            {
-              "id": "bundle",
-              "type": "send_chat_msg",
+            }
+          },
+          {
+            "id": "bundle",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "B3 $e used $i"
               }
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -46,6 +49,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

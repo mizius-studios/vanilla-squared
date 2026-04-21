@@ -9,9 +9,7 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 10
-        }
+        "minecraft:tick": []
       },
       "slots": [
         "hand"
@@ -23,6 +21,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 10
       }
     }
   ],

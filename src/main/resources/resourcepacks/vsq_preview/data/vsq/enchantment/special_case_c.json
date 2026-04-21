@@ -9,21 +9,20 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 8,
-          "display_limit": "extra",
-          "effect": [
-            {
-              "id": "extra",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
-              "limit": 4,
+        "minecraft:tick": [
+          {
+            "id": "extra",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "C extra $a $e $i"
               }
+            },
+            "special": {
+              "limit": 4
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -35,6 +34,10 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 8,
+        "display_limit": "extra"
       }
     }
   ],

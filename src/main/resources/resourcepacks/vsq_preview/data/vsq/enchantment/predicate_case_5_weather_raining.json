@@ -9,23 +9,21 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "requirements": {
-            "condition": "minecraft:weather_check",
-            "raining": true
-          },
-          "effect": [
-            {
-              "id": "p5",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
+        "minecraft:tick": [
+          {
+            "id": "p5",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "[P5] weather raining passed: $e used $i"
               }
+            },
+            "requirements": {
+              "condition": "minecraft:weather_check",
+              "raining": true
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -37,6 +35,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

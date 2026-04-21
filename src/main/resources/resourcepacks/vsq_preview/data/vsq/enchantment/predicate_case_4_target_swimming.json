@@ -9,44 +9,40 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "effect": [
-            {
-              "id": "p4",
-              "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "closest_entity",
-              "trigger": "enchantment_effect_hotkey",
-              "requirements": {
-                "condition": "minecraft:any_of",
-                "terms": [
-                  {
-                    "condition": "minecraft:entity_properties",
-                    "entity": "attacker",
-                    "predicate": {
-                      "flags": {
-                        "is_swimming": true
-                      }
-                    }
-                  },
-                  {
-                    "condition": "minecraft:entity_properties",
-                    "entity": "attacker",
-                    "predicate": {
-                      "flags": {
-                        "is_in_water": true
-                      }
-                    }
-                  }
-                ]
-              },
+        "minecraft:tick": [
+          {
+            "id": "p4",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "[P4] closest swimming/in-water passed: $e used $i"
               }
+            },
+            "requirements": {
+              "condition": "minecraft:any_of",
+              "terms": [
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "flags": {
+                      "is_swimming": true
+                    }
+                  }
+                },
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "flags": {
+                      "is_in_water": true
+                    }
+                  }
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -58,6 +54,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

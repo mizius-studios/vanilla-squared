@@ -9,30 +9,36 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 8,
-          "display_limit": "display",
-          "effect": [
-            {
-              "id": "gate",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
-              "loop": "first_activation_toggle",
+        "minecraft:post_attack": [
+          {
+            "id": "gate",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "D gate $e $i"
               }
             },
-            {
-              "id": "display",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
-              "limit": 4,
+            "special": {
+              "loop": "toggle"
+            },
+            "affected": "attacker",
+            "enchanted": "attacker"
+          },
+          {
+            "id": "display",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "D display $a"
               }
-            }
-          ]
-        }
+            },
+            "special": {
+              "limit": 4
+            },
+            "affected": "attacker",
+            "enchanted": "attacker"
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -44,6 +50,10 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 8,
+        "display_limit": "display"
       }
     }
   ],

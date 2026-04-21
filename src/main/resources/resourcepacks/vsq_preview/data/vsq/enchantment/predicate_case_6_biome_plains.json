@@ -9,25 +9,23 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "requirements": {
-            "condition": "minecraft:location_check",
-            "predicate": {
-              "biomes": "minecraft:plains"
-            }
-          },
-          "effect": [
-            {
-              "id": "p6",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
+        "minecraft:tick": [
+          {
+            "id": "p6",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "[P6] biome plains passed: $e used $i"
               }
+            },
+            "requirements": {
+              "condition": "minecraft:location_check",
+              "predicate": {
+                "biomes": "minecraft:plains"
+              }
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -39,6 +37,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

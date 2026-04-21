@@ -11,11 +11,11 @@
       "effects": {
         "minecraft:tick": [
           {
-            "id": "p3",
+            "id": "p10",
             "effect": {
               "type": "vsq:send_chat_msg",
               "message": {
-                "text": "[P3] closest zombie passed: $e used $i"
+                "text": "[P10] any zombie passed: $e used $i"
               }
             },
             "requirements": {
@@ -45,7 +45,7 @@
     }
   ],
   "description": {
-    "text": "Predicate Case 3 - Target Zombie Only"
+    "text": "Predicate Case 10 - Target Zombie Any Entity"
   },
   "supported_items": "#minecraft:enchantable/weapon",
   "weight": 2

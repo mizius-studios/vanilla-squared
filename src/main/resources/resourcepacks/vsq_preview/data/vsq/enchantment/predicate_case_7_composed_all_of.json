@@ -9,37 +9,35 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "requirements": {
-            "condition": "minecraft:all_of",
-            "terms": [
-              {
-                "condition": "minecraft:weather_check",
-                "raining": true
-              },
-              {
-                "condition": "minecraft:entity_properties",
-                "entity": "this",
-                "predicate": {
-                  "flags": {
-                    "is_on_ground": true
-                  }
-                }
-              }
-            ]
-          },
-          "effect": [
-            {
-              "id": "p7",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
+        "minecraft:tick": [
+          {
+            "id": "p7",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "[P7] composed all_of passed: $e used $i"
               }
+            },
+            "requirements": {
+              "condition": "minecraft:all_of",
+              "terms": [
+                {
+                  "condition": "minecraft:weather_check",
+                  "raining": true
+                },
+                {
+                  "condition": "minecraft:entity_properties",
+                  "entity": "this",
+                  "predicate": {
+                    "flags": {
+                      "is_on_ground": true
+                    }
+                  }
+                }
+              ]
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -51,6 +49,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

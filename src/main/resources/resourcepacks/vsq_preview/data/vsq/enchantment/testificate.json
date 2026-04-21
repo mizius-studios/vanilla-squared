@@ -9,28 +9,29 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 5,
-          "effect": [
-            {
-              "id": "activation",
-              "type": "send_chat_msg",
-              "affected": "enchanted",
-              "enchanted": "enchanted",
+        "minecraft:tick": [
+          {
+            "id": "activation",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "$e used $i"
               }
-            },
-            {
-              "id": "display",
-              "type": "send_chat_msg",
-              "loop": "first_activation",
+            }
+          },
+          {
+            "id": "display",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "loop"
               }
+            },
+            "special": {
+              "loop": "first_activation"
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "offhand"
@@ -42,6 +43,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 5
       }
     }
   ],

@@ -9,30 +9,21 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "requirements": {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "type": "minecraft:player"
-            }
-          },
-          "effect": [
-            {
-              "id": "p8",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
-              "requirements": {
-                "condition": "minecraft:random_chance",
-                "chance": 0.5
-              },
+        "minecraft:tick": [
+          {
+            "id": "p8",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "[P8] random chance passed: $e used $i"
               }
+            },
+            "requirements": {
+              "condition": "minecraft:random_chance",
+              "chance": 0.5
             }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -44,6 +35,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

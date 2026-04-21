@@ -9,33 +9,31 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "requirements": {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "type_specific": {
-                "type": "minecraft:player",
-                "food": {
-                  "level": {
-                    "min": 7
+        "minecraft:tick": [
+          {
+            "id": "p1",
+            "effect": {
+              "type": "vsq:send_chat_msg",
+              "message": {
+                "text": "[P1] food predicate passed: $e used $i"
+              }
+            },
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type_specific": {
+                  "type": "minecraft:player",
+                  "food": {
+                    "level": {
+                      "min": 7
+                    }
                   }
                 }
               }
             }
-          },
-          "effect": [
-            {
-              "id": "p1",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
-              "message": {
-                "text": "[P1] food predicate passed: $e used $i"
-              }
-            }
-          ]
-        }
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -47,6 +45,9 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6
       }
     }
   ],

@@ -9,22 +9,22 @@
       "enchantment_slot": "special",
       "max_level": 1,
       "effects": {
-        "vsq:special": {
-          "cooldown": 6,
-          "cooldown_after_limit": "count",
-          "display_limit": "count",
-          "effect": [
-            {
-              "id": "count",
-              "type": "send_chat_msg",
-              "trigger": "enchantment_effect_hotkey",
-              "limit": 3,
+        "minecraft:post_attack": [
+          {
+            "id": "count",
+            "effect": {
+              "type": "vsq:send_chat_msg",
               "message": {
                 "text": "A count $a $e $i"
               }
-            }
-          ]
-        }
+            },
+            "special": {
+              "limit": 3
+            },
+            "affected": "attacker",
+            "enchanted": "attacker"
+          }
+        ]
       },
       "slots": [
         "hand"
@@ -36,6 +36,11 @@
       "min_cost": {
         "base": 5,
         "per_level_above_first": 0
+      },
+      "special": {
+        "cooldown": 6,
+        "display_limit": "count",
+        "cooldown_after_limit": "count"
       }
     }
   ],
