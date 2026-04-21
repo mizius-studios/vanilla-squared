@@ -132,11 +132,14 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
             return;
         }
 
+        var context = Enchantment.damageContext(serverLevel, enchantmentLevel, victim, damageSource);
         List<TargetedConditionalEffect<EnchantmentEntityEffect>> list = effects.get();
         for (int index = 0; index < list.size(); index++) {
             TargetedConditionalEffect<EnchantmentEntityEffect> effect = list.get(index);
-            if (forTarget == effect.enchanted() && vsq$allowSpecialEffect(serverLevel, item.itemStack(), EnchantmentEffectComponents.POST_ATTACK, index, item.owner())) {
-                Enchantment.doPostAttack(effect, serverLevel, enchantmentLevel, item, victim, damageSource);
+            if (forTarget == effect.enchanted()
+                    && effect.matches(context)
+                    && vsq$allowSpecialEffect(serverLevel, item.itemStack(), EnchantmentEffectComponents.POST_ATTACK, index, item.owner())) {
+                effect.effect().apply(serverLevel, enchantmentLevel, item, victim, victim.position());
             }
         }
         ci.cancel();

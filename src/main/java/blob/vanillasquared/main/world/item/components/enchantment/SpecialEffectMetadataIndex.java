@@ -1,7 +1,6 @@
 package blob.vanillasquared.main.world.item.components.enchantment;
 
 import com.mojang.serialization.Codec;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.google.gson.JsonElement;
@@ -10,6 +9,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
             return EMPTY;
         }
 
-        ImmutableMap.Builder<String, List<SpecialEffectMetadata>> builder = ImmutableMap.builder();
+        Map<String, List<SpecialEffectMetadata>> byComponent = new LinkedHashMap<>();
         for (Map.Entry<String, JsonElement> entry : effectsObject.entrySet()) {
             String componentKey = entry.getKey().trim();
             if (componentKey.isEmpty()) {
@@ -53,10 +54,15 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
             }
             List<SpecialEffectMetadata> list = parseEntries(entry.getValue());
             if (!list.isEmpty()) {
-                builder.put(componentKey, List.copyOf(list));
+                byComponent.merge(componentKey, List.copyOf(list), (existing, added) -> {
+                    ArrayList<SpecialEffectMetadata> merged = new ArrayList<>(existing.size() + added.size());
+                    merged.addAll(existing);
+                    merged.addAll(added);
+                    return List.copyOf(merged);
+                });
             }
         }
-        return new SpecialEffectMetadataIndex(builder.build());
+        return new SpecialEffectMetadataIndex(Collections.unmodifiableMap(byComponent));
     }
 
     private static List<SpecialEffectMetadata> parseEntries(JsonElement arrayElement) {
