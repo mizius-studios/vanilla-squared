@@ -3,7 +3,6 @@
 	"package": "blob.vanillasquared.mixin.client",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"GLXMixin",
 		"gui.AbstractContainerScreenMixin",
 		"gui.AbstractContainerScreenAccessor",
 		"gui.AbstractRecipeBookScreenMixin",

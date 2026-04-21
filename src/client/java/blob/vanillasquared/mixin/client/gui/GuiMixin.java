@@ -37,6 +37,9 @@ public abstract class GuiMixin {
     @Final
     private static Identifier ARMOR_FULL_SPRITE;
 
+    @Unique
+    private static final Object VSQ_CONTEXTUAL_INFO_EXPERIENCE = vsq$contextualInfo("EXPERIENCE");
+
     @Inject(method = "nextContextualInfoState", at = @At("RETURN"), cancellable = true)
     private void vsq$prioritizeSpecialEnchantmentCooldown(CallbackInfoReturnable<Object> cir) {
         Object current = cir.getReturnValue();
@@ -44,9 +47,8 @@ public abstract class GuiMixin {
             return;
         }
         if (SpecialEnchantmentCooldownClientState.hasVisibleCooldown(this.minecraft.player)) {
-            Object experience = vsq$contextualInfo("EXPERIENCE");
-            if (experience != null) {
-                cir.setReturnValue(experience);
+            if (VSQ_CONTEXTUAL_INFO_EXPERIENCE != null) {
+                cir.setReturnValue(VSQ_CONTEXTUAL_INFO_EXPERIENCE);
             }
         }
     }

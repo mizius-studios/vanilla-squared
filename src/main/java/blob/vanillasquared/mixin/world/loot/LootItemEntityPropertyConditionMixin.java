@@ -88,7 +88,8 @@ public abstract class LootItemEntityPropertyConditionMixin {
         var origin = context.getOptionalParameter(LootContextParams.ORIGIN);
         boolean matched = false;
         for (var entity : level.getAllEntities()) {
-            if (predicate.get().matches(level, origin, entity)) {
+            var resolvedOrigin = origin != null ? origin : entity.position();
+            if (predicate.get().matches(level, resolvedOrigin, entity)) {
                 matched = true;
                 break;
             }

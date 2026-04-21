@@ -21,7 +21,7 @@ public record VSQSendChatMessageEffect(
     @Override
     public void apply(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity entity, Vec3 origin) {
         Entity affectedResolved = entity;
-        Entity enchantedResolved = entity;
+        Entity enchantedResolved = item.owner() != null ? item.owner() : entity;
         String text = this.message.getString()
                 .replace("$a", affectedResolved.getName().getString())
                 .replace("$e", enchantedResolved.getName().getString())

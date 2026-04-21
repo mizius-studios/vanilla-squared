@@ -66,7 +66,7 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
         List<SpecialEffectMetadata> parsed = new ArrayList<>(entries.size());
         for (JsonElement entryElement : entries) {
             if (!(entryElement instanceof JsonObject entry)) {
-                return List.of();
+                continue;
             }
 
             String id = entry.has("id") ? entry.get("id").getAsString().trim() : "";

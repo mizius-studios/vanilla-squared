@@ -264,7 +264,11 @@ public final class SpecialEnchantmentCooldowns {
     }
 
     private static boolean isBlocked(VSQEnchantmentProfile profile, ActivationState state) {
-        return isCooldownAfterLimitBlocked(profile.special().orElseThrow(), state);
+        SpecialEnchantmentProfileConfig config = profile.special().orElse(null);
+        if (config == null) {
+            return false;
+        }
+        return isCooldownAfterLimitBlocked(config, state);
     }
 
     private static boolean isPreCooldownPhaseActive(VSQEnchantmentProfile profile, ActivationState state) {
@@ -309,7 +313,6 @@ public final class SpecialEnchantmentCooldowns {
     private static SpecialEnchantmentCooldownPayload snapshot(ServerPlayer player, SpecialEnchantmentUse use, ActivationState state) {
         SpecialEnchantmentProfileConfig config = use.special();
         boolean blockedByLimit = isCooldownAfterLimitBlocked(config, state);
-        boolean blocked = blockedByLimit;
         Optional<String> displayRef = config.displayLimit().filter(id -> state.totalLimits.getOrDefault(id, 0) > 0);
         int displayRemaining = displayRef.map(id -> state.remainingLimits.getOrDefault(id, 0)).orElse(0);
         int displayTotal = displayRef.map(id -> state.totalLimits.getOrDefault(id, 0)).orElse(0);
@@ -325,13 +328,13 @@ public final class SpecialEnchantmentCooldowns {
             return new SpecialEnchantmentCooldownPayload(use.enchantmentId(), remaining, state.cooldownTotalTicks, ticksToSeconds(remaining), SpecialEnchantmentCooldownPayload.DISPLAY_COOLDOWN, false, true);
         }
 
-        if (blocked && displayRemaining > 0 && config.cooldownAfterLimit().equals(displayRef) && blockedByLimit) {
+        if (blockedByLimit && displayRemaining > 0 && config.cooldownAfterLimit().equals(displayRef)) {
             return new SpecialEnchantmentCooldownPayload(use.enchantmentId(), displayRemaining, Math.max(1, displayTotal), displayRemaining, SpecialEnchantmentCooldownPayload.DISPLAY_LIMIT, false, false);
         }
-        if (blocked && displayRemaining > 0) {
+        if (blockedByLimit && displayRemaining > 0) {
             return new SpecialEnchantmentCooldownPayload(use.enchantmentId(), 1L, 1L, displayRemaining, SpecialEnchantmentCooldownPayload.DISPLAY_LIMIT, true, false);
         }
-        if (blocked) {
+        if (blockedByLimit) {
             return new SpecialEnchantmentCooldownPayload(use.enchantmentId(), 1L, 1L, ticksToSeconds(state.cooldownTotalTicks), SpecialEnchantmentCooldownPayload.DISPLAY_COOLDOWN, true, false);
         }
         return new SpecialEnchantmentCooldownPayload(use.enchantmentId(), 0L, 0L, 0, SpecialEnchantmentCooldownPayload.DISPLAY_NONE, false, false);
