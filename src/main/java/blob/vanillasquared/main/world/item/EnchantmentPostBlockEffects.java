@@ -1,0 +1,72 @@
+package blob.vanillasquared.main.world.item;
+
+import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentEffectComponents;
+import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentCooldowns;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+
+import java.util.List;
+
+public final class EnchantmentPostBlockEffects {
+    private EnchantmentPostBlockEffects() {
+    }
+
+    public static void run(ServerLevel serverLevel, Entity victim, DamageSource damageSource, ItemStack source) {
+        if (victim instanceof LivingEntity livingVictim) {
+            ItemStack blockingItem = livingVictim.getItemBlockingWith();
+            if (blockingItem != null && !blockingItem.isEmpty()) {
+                apply(serverLevel, blockingItem, livingVictim, EnchantmentTarget.VICTIM, victim, damageSource);
+            }
+        }
+
+        if (source != null && !source.isEmpty() && damageSource.getEntity() instanceof LivingEntity attacker) {
+            apply(serverLevel, source, attacker, EnchantmentTarget.ATTACKER, victim, damageSource);
+        }
+    }
+
+    private static void apply(ServerLevel serverLevel, ItemStack stack, LivingEntity owner, EnchantmentTarget forTarget, Entity victim, DamageSource damageSource) {
+        ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
+            Holder<Enchantment> enchantment = entry.getKey();
+            int enchantmentLevel = entry.getIntValue();
+            List<TargetedConditionalEffect<EnchantmentEntityEffect>> effects =
+                    VSQEnchantmentSlots.profileEffects(stack, enchantment, VSQEnchantmentEffectComponents.POST_BLOCK);
+            if (effects.isEmpty()) {
+                continue;
+            }
+
+            var context = Enchantment.damageContext(serverLevel, enchantmentLevel, victim, damageSource);
+            for (int index = 0; index < effects.size(); index++) {
+                TargetedConditionalEffect<EnchantmentEntityEffect> effect = effects.get(index);
+                if (forTarget == effect.enchanted()
+                        && effect.matches(context)
+                        && SpecialEnchantmentCooldowns.shouldRunSpecialEffect(serverLevel, stack, enchantment.value(), VSQEnchantmentEffectComponents.POST_BLOCK, index, owner)) {
+                    net.minecraft.world.item.enchantment.EnchantedItemInUse item = new net.minecraft.world.item.enchantment.EnchantedItemInUse(stack, null, owner);
+                    Entity affected = resolveAffectedEntity(effect, victim, damageSource);
+                    if (affected != null) {
+                        effect.effect().apply(serverLevel, enchantmentLevel, item, affected, affected.position());
+                    }
+                }
+            }
+        }
+    }
+
+    private static Entity resolveAffectedEntity(TargetedConditionalEffect<EnchantmentEntityEffect> effect, Entity victim, DamageSource damageSource) {
+        return switch (effect.affected()) {
+            case ATTACKER -> damageSource.getEntity();
+            case DAMAGING_ENTITY -> damageSource.getDirectEntity();
+            case VICTIM -> victim;
+        };
+    }
+}
