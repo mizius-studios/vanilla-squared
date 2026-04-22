@@ -277,9 +277,12 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
         ItemStack current = this.menu.getSlot(VSQEnchantmentMenu.INPUT_SLOT).getItem();
         if (!ItemStack.matches(current, this.last)) {
             this.last = current;
-            do {
+            for (int retries = 0; retries < 10; retries++) {
                 this.flipT += (float) (this.random.nextInt(4) - this.random.nextInt(4));
-            } while (this.flip <= this.flipT + 1.0F && this.flip >= this.flipT - 1.0F);
+                if (this.flip < this.flipT - 1.0F || this.flip > this.flipT + 1.0F) {
+                    break;
+                }
+            }
         }
 
         this.oFlip = this.flip;

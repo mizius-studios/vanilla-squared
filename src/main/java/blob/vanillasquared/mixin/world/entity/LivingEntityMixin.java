@@ -4,6 +4,7 @@ import blob.vanillasquared.main.world.util.DamageUtil;
 import blob.vanillasquared.main.world.item.EnchantmentPostBlockEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
     @Unique
     private ItemStack vsq$blockingItem;
+    @Unique
+    private EquipmentSlot vsq$blockingSlot;
 
     @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true, name = "dmg")
     private float vsq$applyAttributeProtections(float dmg, ServerLevel level, DamageSource source) {
@@ -32,6 +35,7 @@ public abstract class LivingEntityMixin {
     )
     private void vsq$captureBlockingItem(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Float> cir) {
         vsq$blockingItem = ((LivingEntity) (Object) this).getItemBlockingWith();
+        vsq$blockingSlot = ((LivingEntity) (Object) this).getUsedItemHand().asEquipmentSlot();
     }
 
     @Inject(
@@ -44,7 +48,8 @@ public abstract class LivingEntityMixin {
     )
     private void vsq$applyPostBlockEffects(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Float> cir) {
         ItemStack sourceItem = source.getEntity() instanceof LivingEntity attacker ? attacker.getWeaponItem() : null;
-        EnchantmentPostBlockEffects.run(level, (LivingEntity) (Object) this, source, sourceItem, vsq$blockingItem);
+        EnchantmentPostBlockEffects.run(level, (LivingEntity) (Object) this, source, sourceItem, vsq$blockingItem, vsq$blockingSlot);
         vsq$blockingItem = null;
+        vsq$blockingSlot = null;
     }
 }

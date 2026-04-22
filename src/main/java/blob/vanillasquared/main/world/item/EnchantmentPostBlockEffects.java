@@ -8,6 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -23,19 +24,19 @@ public final class EnchantmentPostBlockEffects {
     private EnchantmentPostBlockEffects() {
     }
 
-    public static void run(ServerLevel serverLevel, Entity victim, DamageSource damageSource, ItemStack itemStack, ItemStack blockingItem) {
+    public static void run(ServerLevel serverLevel, Entity victim, DamageSource damageSource, ItemStack itemStack, ItemStack blockingItem, EquipmentSlot blockingSlot) {
         if (victim instanceof LivingEntity livingVictim) {
             if (blockingItem != null && !blockingItem.isEmpty()) {
-                apply(serverLevel, blockingItem, livingVictim, EnchantmentTarget.VICTIM, victim, damageSource);
+                apply(serverLevel, blockingItem, blockingSlot, livingVictim, EnchantmentTarget.VICTIM, victim, damageSource);
             }
         }
 
         if (itemStack != null && !itemStack.isEmpty() && damageSource.getEntity() instanceof LivingEntity attacker) {
-            apply(serverLevel, itemStack, attacker, EnchantmentTarget.ATTACKER, victim, damageSource);
+            apply(serverLevel, itemStack, null, attacker, EnchantmentTarget.ATTACKER, victim, damageSource);
         }
     }
 
-    private static void apply(ServerLevel serverLevel, ItemStack stack, LivingEntity owner, EnchantmentTarget forTarget, Entity victim, DamageSource damageSource) {
+    private static void apply(ServerLevel serverLevel, ItemStack stack, EquipmentSlot slot, LivingEntity owner, EnchantmentTarget forTarget, Entity victim, DamageSource damageSource) {
         ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
             Holder<Enchantment> enchantment = entry.getKey();
@@ -52,7 +53,7 @@ public final class EnchantmentPostBlockEffects {
                 if (forTarget == effect.enchanted()
                         && effect.matches(context)
                         && SpecialEnchantmentCooldowns.shouldRunSpecialEffect(serverLevel, stack, enchantment.value(), VSQEnchantmentEffectComponents.POST_BLOCK, index, owner)) {
-                    EnchantedItemInUse item = new EnchantedItemInUse(stack, null, owner);
+                    EnchantedItemInUse item = new EnchantedItemInUse(stack, slot, owner);
                     Entity affected = resolveAffectedEntity(effect, victim, damageSource);
                     if (affected != null) {
                         effect.effect().apply(serverLevel, enchantmentLevel, item, affected, affected.position());
