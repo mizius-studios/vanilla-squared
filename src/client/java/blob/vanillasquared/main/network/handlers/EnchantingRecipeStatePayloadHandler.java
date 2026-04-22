@@ -9,7 +9,6 @@ import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public final class EnchantingRecipeStatePayloadHandler {
     private static final Map<Integer, CachedRecipeState> PENDING_RECIPE_STATES = new HashMap<>();
@@ -34,7 +33,7 @@ public final class EnchantingRecipeStatePayloadHandler {
                     if (context.client().player == null) {
                         return;
                     }
-                    if (!(Objects.requireNonNull(context.client().player).containerMenu instanceof VSQEnchantmentMenuProperties properties)) {
+                    if (!(context.client().player.containerMenu instanceof VSQEnchantmentMenuProperties properties)) {
                         return;
                     }
 
