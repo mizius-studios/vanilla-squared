@@ -41,6 +41,6 @@
   "description": {
     "translate": "enchantment.minecraft.infinity"
   },
-  "supported_items": "#minecraft:enchantable/bow",
+  "supported_items": "#vsq:enchanting/ranged_weapon",
   "weight": 1
 }

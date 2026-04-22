@@ -95,7 +95,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
 
     @Inject(method = "modifyDamageProtection", at = @At("HEAD"), cancellable = true)
     private void vsq$useSelectedProfileDamageProtection(
-            ServerLevel level,
+            ServerLevel serverLevel,
             int enchantmentLevel,
             ItemStack item,
             Entity victim,
@@ -110,7 +110,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
 
         Enchantment.applyEffects(
                 effects.get(),
-                Enchantment.damageContext(level, enchantmentLevel, victim, source),
+                Enchantment.damageContext(serverLevel, enchantmentLevel, victim, source),
                 protection,
                 (effect, currentValue) -> effect.process(enchantmentLevel, victim.getRandom(), currentValue)
         );
@@ -139,8 +139,10 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
             if (forTarget == effect.enchanted()
                     && effect.matches(context)
                     && vsq$allowSpecialEffect(serverLevel, item.itemStack(), EnchantmentEffectComponents.POST_ATTACK, index, item.owner())) {
-                Entity affected = effect.affected() == EnchantmentTarget.ATTACKER && item.owner() != null ? item.owner() : victim;
-                effect.effect().apply(serverLevel, enchantmentLevel, item, affected, affected.position());
+                Entity affected = vsq$resolveAffectedEntity(effect, victim, damageSource);
+                if (affected != null) {
+                    effect.effect().apply(serverLevel, enchantmentLevel, item, affected, affected.position());
+                }
             }
         }
         ci.cancel();
@@ -440,5 +442,14 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
     @Override
     public void vsq$setProfiles(List<VSQEnchantmentProfile> profiles) {
         this.vsq$profiles = List.copyOf(profiles);
+    }
+
+    @Unique
+    private static Entity vsq$resolveAffectedEntity(TargetedConditionalEffect<EnchantmentEntityEffect> effect, Entity victim, DamageSource damageSource) {
+        return switch (effect.affected()) {
+            case ATTACKER -> damageSource.getEntity();
+            case DAMAGING_ENTITY -> damageSource.getDirectEntity();
+            case VICTIM -> victim;
+        };
     }
 }

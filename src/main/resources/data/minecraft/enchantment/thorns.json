@@ -44,7 +44,61 @@
         ]
       },
       "slots": [
-        "any"
+        "armor"
+      ],
+      "max_cost": {
+        "base": 60,
+        "per_level_above_first": 20
+      },
+      "min_cost": {
+        "base": 10,
+        "per_level_above_first": 20
+      }
+    },
+    {
+      "requirement": {
+        "type": "ITEM",
+        "item": "minecraft:shield"
+      },
+      "enchantment_slot": "secondary",
+      "max_level": 3,
+      "effects": {
+        "vsq:post_block": [
+          {
+            "affected": "attacker",
+            "effect": {
+              "type": "minecraft:all_of",
+              "effects": [
+                {
+                  "type": "minecraft:damage_entity",
+                  "damage_type": "vsq:thorns_bypass",
+                  "max_damage": 5,
+                  "min_damage": 1
+                },
+                {
+                  "type": "minecraft:change_item_damage",
+                  "amount": 2
+                }
+              ]
+            },
+            "enchanted": "victim",
+            "requirements": {
+              "chance": {
+                "type": "minecraft:enchantment_level",
+                "amount": {
+                  "type": "minecraft:linear",
+                  "base": 0.15,
+                  "per_level_above_first": 0.15
+                }
+              },
+              "condition": "minecraft:random_chance"
+            },
+            "id": "vsq_post_block_0"
+          }
+        ]
+      },
+      "slots": [
+        "hand"
       ],
       "max_cost": {
         "base": 60,
@@ -59,7 +113,7 @@
   "description": {
     "translate": "enchantment.minecraft.thorns"
   },
-  "primary_items": "#minecraft:enchantable/chest_armor",
-  "supported_items": "#minecraft:enchantable/armor",
+  "primary_items": "#vsq:enchanting/thorns",
+  "supported_items": "#vsq:enchanting/thorns",
   "weight": 1
 }
