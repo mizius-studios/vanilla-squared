@@ -21,6 +21,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplayId;
 import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,27 +48,27 @@ public class VSQEnchantmentRecipeBookComponent extends RecipeBookComponent<VSQEn
     }
 
     @Override
-    protected WidgetSprites getFilterButtonTextures() {
+    protected @NonNull WidgetSprites getFilterButtonTextures() {
         return FILTER_BUTTON_SPRITES;
     }
 
     @Override
-    protected boolean isCraftingSlot(net.minecraft.world.inventory.Slot slot) {
+    protected boolean isCraftingSlot(net.minecraft.world.inventory.@NonNull Slot slot) {
         return this.menu.vsq$getEnchantingSlots().contains(slot);
     }
 
     @Override
-    protected void selectMatchingRecipes(RecipeCollection recipeCollection, StackedItemContents stackedItemContents) {
+    protected void selectMatchingRecipes(RecipeCollection recipeCollection, @NonNull StackedItemContents stackedItemContents) {
         recipeCollection.selectRecipes(stackedItemContents, display -> display instanceof ShapelessCraftingRecipeDisplay shapeless && shapeless.ingredients().size() == VSQEnchantmentMenu.TABLE_SLOT_COUNT);
     }
 
     @Override
-    protected Component getRecipeFilterName() {
+    protected @NonNull Component getRecipeFilterName() {
         return Component.translatable("gui.recipebook.toggleRecipes.craftable");
     }
 
     @Override
-    protected void fillGhostRecipe(GhostSlots ghostSlots, RecipeDisplay recipeDisplay, ContextMap contextMap) {
+    protected void fillGhostRecipe(GhostSlots ghostSlots, @NonNull RecipeDisplay recipeDisplay, @NonNull ContextMap contextMap) {
         ghostSlots.clear();
         if (!(recipeDisplay instanceof ShapelessCraftingRecipeDisplay shapeless)) {
             return;
@@ -87,7 +88,7 @@ public class VSQEnchantmentRecipeBookComponent extends RecipeBookComponent<VSQEn
     }
 
     @Override
-    public void recipeShown(RecipeDisplayId recipeDisplayId) {
+    public void recipeShown(@NonNull RecipeDisplayId recipeDisplayId) {
         super.recipeShown(recipeDisplayId);
         ClientPlayNetworking.send(new EnchantingRecipeSelectionPayload(this.menu.containerId, recipeDisplayId.index()));
     }

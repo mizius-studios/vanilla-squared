@@ -15,6 +15,7 @@ import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public final class EnchantmentPostBlockEffects {
                 if (forTarget == effect.enchanted()
                         && effect.matches(context)
                         && SpecialEnchantmentCooldowns.shouldRunSpecialEffect(serverLevel, stack, enchantment.value(), VSQEnchantmentEffectComponents.POST_BLOCK, index, owner)) {
-                    net.minecraft.world.item.enchantment.EnchantedItemInUse item = new net.minecraft.world.item.enchantment.EnchantedItemInUse(stack, null, owner);
+                    EnchantedItemInUse item = new EnchantedItemInUse(stack, null, owner);
                     Entity affected = resolveAffectedEntity(effect, victim, damageSource);
                     if (affected != null) {
                         effect.effect().apply(serverLevel, enchantmentLevel, item, affected, affected.position());
