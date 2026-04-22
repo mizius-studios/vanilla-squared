@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 public final class VSQEnchantmentSlots {
@@ -89,7 +88,7 @@ public final class VSQEnchantmentSlots {
         for (VSQEnchantmentSlotType slotType : VSQEnchantmentSlotType.values()) {
             component.slots(slotType).ifPresent(entries -> {
                 for (VSQEnchantmentSlotEntry entry : entries) {
-                    if (entry != null) {
+                    if (!entry.isEmpty()) {
                         mutable.set(entry.enchantment(), entry.level());
                     }
                 }
@@ -112,7 +111,7 @@ public final class VSQEnchantmentSlots {
 
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
         for (VSQEnchantmentSlotType slotType : VSQEnchantmentSlotType.values()) {
-            component.slots(slotType).ifPresent(entries -> entries.stream().filter(Objects::nonNull).forEach(entry -> mutable.set(entry.enchantment(), entry.level())));
+            component.slots(slotType).ifPresent(entries -> entries.stream().filter(entry -> !entry.isEmpty()).forEach(entry -> mutable.set(entry.enchantment(), entry.level())));
         }
         return mutable.toImmutable();
     }
@@ -140,7 +139,7 @@ public final class VSQEnchantmentSlots {
 
         List<VSQEnchantmentSlotEntry> entries = maybeEntries.get();
         for (VSQEnchantmentSlotEntry entry : entries) {
-            if (entry != null && entry.enchantment().equals(enchantment)) {
+            if (!entry.isEmpty() && entry.enchantment().equals(enchantment)) {
                 return true;
             }
         }
@@ -153,7 +152,7 @@ public final class VSQEnchantmentSlots {
         }
 
         for (VSQEnchantmentSlotEntry entry : entries) {
-            if (entry == null) {
+            if (entry.isEmpty()) {
                 return level > 0;
             }
         }
@@ -184,8 +183,8 @@ public final class VSQEnchantmentSlots {
         List<VSQEnchantmentSlotEntry> updated = new ArrayList<>(maybeEntries.get());
         for (int index = 0; index < updated.size(); index++) {
             VSQEnchantmentSlotEntry entry = updated.get(index);
-            if (entry != null && entry.enchantment().equals(enchantment)) {
-                updated.set(index, new VSQEnchantmentSlotEntry(enchantment, level));
+            if (!entry.isEmpty() && entry.enchantment().equals(enchantment)) {
+                updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
                 stack.set(DataComponents.VSQ_ENCHANTMENT, component.withSlots(slotType, Optional.of(updated)));
                 syncDerivedEnchantments(stack);
                 return true;
@@ -193,8 +192,8 @@ public final class VSQEnchantmentSlots {
         }
 
         for (int index = 0; index < updated.size(); index++) {
-            if (updated.get(index) == null) {
-                updated.set(index, new VSQEnchantmentSlotEntry(enchantment, level));
+            if (updated.get(index).isEmpty()) {
+                updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
                 stack.set(DataComponents.VSQ_ENCHANTMENT, component.withSlots(slotType, Optional.of(updated)));
                 syncDerivedEnchantments(stack);
                 return true;
@@ -220,12 +219,12 @@ public final class VSQEnchantmentSlots {
             List<VSQEnchantmentSlotEntry> source = maybeEntries.get();
             List<VSQEnchantmentSlotEntry> randomized = new ArrayList<>(source.size() + Math.max(0, entry.getValue()));
             for (VSQEnchantmentSlotEntry slotEntry : source) {
-                if (slotEntry != null) {
+                if (!slotEntry.isEmpty()) {
                     randomized.add(slotEntry);
                 }
             }
             for (int index = 0; index < Math.max(0, entry.getValue()); index++) {
-                randomized.add(null);
+                randomized.add(VSQEnchantmentSlotEntry.empty());
             }
             updated = updated.withSlots(entry.getKey(), Optional.of(randomized));
         }
@@ -277,13 +276,13 @@ public final class VSQEnchantmentSlots {
             }
 
             List<VSQEnchantmentSlotEntry> existingEnchantments = maybeEntries.get().stream()
-                    .filter(Objects::nonNull)
+                    .filter(entry -> !entry.isEmpty())
                     .toList();
             int targetCapacity = Math.max(Mth.nextInt(random, min, max), existingEnchantments.size());
             List<VSQEnchantmentSlotEntry> resized = new ArrayList<>(targetCapacity);
             resized.addAll(existingEnchantments);
             while (resized.size() < targetCapacity) {
-                resized.add(null);
+                resized.add(VSQEnchantmentSlotEntry.empty());
             }
             updated = updated.withSlots(slotType, Optional.of(resized));
         }
@@ -413,7 +412,7 @@ public final class VSQEnchantmentSlots {
         for (Map.Entry<VSQEnchantmentSlotType, Integer> entry : capacities.entrySet()) {
             List<VSQEnchantmentSlotEntry> slots = new ArrayList<>(entry.getValue());
             for (int index = 0; index < entry.getValue(); index++) {
-                slots.add(null);
+                slots.add(VSQEnchantmentSlotEntry.empty());
             }
             component = component.withSlots(entry.getKey(), Optional.of(slots));
         }
@@ -448,16 +447,16 @@ public final class VSQEnchantmentSlots {
             boolean inserted = false;
             for (int index = 0; index < updated.size(); index++) {
                 VSQEnchantmentSlotEntry existing = updated.get(index);
-                if (existing != null && existing.enchantment().equals(enchantment)) {
-                    updated.set(index, new VSQEnchantmentSlotEntry(enchantment, level));
+                if (!existing.isEmpty() && existing.enchantment().equals(enchantment)) {
+                    updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
                     inserted = true;
                     break;
                 }
             }
             if (!inserted) {
                 for (int index = 0; index < updated.size(); index++) {
-                    if (updated.get(index) == null) {
-                        updated.set(index, new VSQEnchantmentSlotEntry(enchantment, level));
+                    if (updated.get(index).isEmpty()) {
+                        updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
                         inserted = true;
                         break;
                     }
@@ -500,7 +499,7 @@ public final class VSQEnchantmentSlots {
         for (int index = 0; index < slotTypes.size(); index++) {
             VSQEnchantmentSlotType slotType = slotTypes.get(index);
             List<VSQEnchantmentSlotEntry> entries = component.slots(slotType).orElse(List.of());
-            long filled = entries.stream().filter(Objects::nonNull).count();
+            long filled = entries.stream().filter(entry -> !entry.isEmpty()).count();
             boolean selected = index == selectedIndex;
             lines.add(Component.translatable(
                     selected ? "vsq.tooltip.enchantment_slots.slot.selected" : "vsq.tooltip.enchantment_slots.slot",
@@ -510,7 +509,7 @@ public final class VSQEnchantmentSlots {
             ).withStyle(selected ? ChatFormatting.GOLD : ChatFormatting.DARK_AQUA));
             if (selected && expandSelected) {
                 for (VSQEnchantmentSlotEntry entry : entries) {
-                    Component entryLine = entry == null
+                    Component entryLine = entry.isEmpty()
                             ? Component.translatable("vsq.tooltip.enchantment_slots.empty").withStyle(ChatFormatting.DARK_GRAY)
                             : Enchantment.getFullname(entry.enchantment(), entry.level()).copy().withStyle(ChatFormatting.GRAY);
                     lines.add(Component.literal("  ").append(entryLine));

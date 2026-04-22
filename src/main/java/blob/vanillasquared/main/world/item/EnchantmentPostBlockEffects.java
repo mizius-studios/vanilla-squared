@@ -23,7 +23,7 @@ public final class EnchantmentPostBlockEffects {
     private EnchantmentPostBlockEffects() {
     }
 
-    public static void run(ServerLevel serverLevel, Entity victim, DamageSource damageSource, ItemStack source) {
+    public static void run(ServerLevel serverLevel, Entity victim, DamageSource damageSource, ItemStack itemStack) {
         if (victim instanceof LivingEntity livingVictim) {
             ItemStack blockingItem = livingVictim.getItemBlockingWith();
             if (blockingItem != null && !blockingItem.isEmpty()) {
@@ -31,8 +31,8 @@ public final class EnchantmentPostBlockEffects {
             }
         }
 
-        if (source != null && !source.isEmpty() && damageSource.getEntity() instanceof LivingEntity attacker) {
-            apply(serverLevel, source, attacker, EnchantmentTarget.ATTACKER, victim, damageSource);
+        if (itemStack != null && !itemStack.isEmpty() && damageSource.getEntity() instanceof LivingEntity attacker) {
+            apply(serverLevel, itemStack, attacker, EnchantmentTarget.ATTACKER, victim, damageSource);
         }
     }
 

@@ -24,7 +24,7 @@ public final class SpecialEnchantmentCooldownClientState {
     }
 
     public static void initialize() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> tick());
+        ClientTickEvents.END_CLIENT_TICK.register(_ -> tick());
     }
 
     public static void apply(Identifier enchantmentId, long barRemaining, long barTotal, int displayValue, int displayKind, boolean frozen, boolean ticksDown) {
@@ -93,7 +93,7 @@ public final class SpecialEnchantmentCooldownClientState {
 
     private static void tick() {
         ENTRIES.entrySet().removeIf(entry -> entry.getValue().ticksDown() && entry.getValue().barRemaining <= 1L);
-        ENTRIES.replaceAll((id, entry) -> entry.ticksDown() ? entry.tick() : entry);
+        ENTRIES.replaceAll((_, entry) -> entry.ticksDown() ? entry.tick() : entry);
     }
 
     private record HudEntry(long barRemaining, long barTotal, int displayValue, int displayKind, boolean frozen, boolean ticksDown) {

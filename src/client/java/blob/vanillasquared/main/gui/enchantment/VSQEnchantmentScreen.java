@@ -220,7 +220,7 @@ public class VSQEnchantmentScreen extends AbstractRecipeBookScreen<VSQEnchantmen
     }
 
     @Override
-    protected void slotClicked(@NonNull Slot slot, int slotId, int mouseButton, @NonNull ContainerInput containerInput) {
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, @NonNull ContainerInput containerInput) {
         super.slotClicked(slot, slotId, mouseButton, containerInput);
         if (this.menu.vsq$getEnchantingSlots().contains(slot)) {
             this.vsq$recipeBookComponent.vsq$clearSelection();

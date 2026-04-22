@@ -15,16 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private float vsq$applyAttributeProtections(float amount, ServerLevel level, DamageSource source) {
-        return DamageUtil.applyCustomProtections((LivingEntity) (Object) this, source, amount);
+    @ModifyVariable(method = "actuallyHurt", at = @At("HEAD"), argsOnly = true, name = "dmg")
+    private float vsq$applyAttributeProtections(float dmg, ServerLevel level, DamageSource source) {
+        return DamageUtil.applyCustomProtections((LivingEntity) (Object) this, source, dmg);
     }
 
     @Inject(
             method = "applyItemBlocking",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/component/BlocksAttacks;hurtBlockingItem(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;F)V"
+                    target = "Lnet/minecraft/world/item/component/BlocksAttacks;hurtBlockingItem(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;F)V",
+                    shift = At.Shift.AFTER
             )
     )
     private void vsq$applyPostBlockEffects(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Float> cir) {

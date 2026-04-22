@@ -5,7 +5,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,7 +13,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public record VSQEnchantmentComponent(
@@ -25,31 +23,6 @@ public record VSQEnchantmentComponent(
         Optional<List<VSQEnchantmentSlotEntry>> util,
         Optional<List<VSQEnchantmentSlotEntry>> curse
 ) {
-    private static final Codec<VSQEnchantmentSlotEntry> NULLABLE_ENTRY_CODEC = new Codec<>() {
-        @Override
-        public <T> DataResult<com.mojang.datafixers.util.Pair<VSQEnchantmentSlotEntry, T>> decode(DynamicOps<T> ops, T input) {
-            if (Objects.equals(input, ops.empty())) {
-                return DataResult.success(com.mojang.datafixers.util.Pair.of(null, input));
-            }
-            var mapValues = ops.getMapValues(input).result();
-            if (mapValues.isPresent() && mapValues.get().findAny().isEmpty()) {
-                return DataResult.success(com.mojang.datafixers.util.Pair.of(null, input));
-            }
-            return VSQEnchantmentSlotEntry.CODEC.decode(ops, input);
-        }
-
-        @Override
-        public <T> DataResult<T> encode(VSQEnchantmentSlotEntry input, DynamicOps<T> ops, T prefix) {
-            if (input == null) {
-                if (ops == JsonOps.INSTANCE) {
-                    return DataResult.success(ops.empty());
-                }
-                return DataResult.success(ops.emptyMap());
-            }
-            return VSQEnchantmentSlotEntry.CODEC.encode(input, ops, prefix);
-        }
-    };
-
     private static final Codec<List<VSQEnchantmentSlotEntry>> SLOT_LIST_CODEC = new Codec<>() {
         @Override
         public <T> DataResult<Pair<List<VSQEnchantmentSlotEntry>, T>> decode(DynamicOps<T> ops, T input) {
@@ -58,7 +31,7 @@ public record VSQEnchantmentComponent(
                 listInput.accept(rawEntries::add);
                 List<VSQEnchantmentSlotEntry> entries = new ArrayList<>();
                 for (T element : rawEntries) {
-                    DataResult<Pair<VSQEnchantmentSlotEntry, T>> decoded = NULLABLE_ENTRY_CODEC.decode(ops, element);
+                    DataResult<Pair<VSQEnchantmentSlotEntry, T>> decoded = VSQEnchantmentSlotEntry.CODEC.decode(ops, element);
                     var result = decoded.result();
                     if (result.isEmpty()) {
                         String message = decoded.error().map(DataResult.Error::message).orElse("Failed to decode slotted enchantment entry");
@@ -74,7 +47,7 @@ public record VSQEnchantmentComponent(
         public <T> DataResult<T> encode(List<VSQEnchantmentSlotEntry> input, DynamicOps<T> ops, T prefix) {
             List<T> encoded = new ArrayList<>(input.size());
             for (VSQEnchantmentSlotEntry entry : input) {
-                DataResult<T> entryResult = NULLABLE_ENTRY_CODEC.encodeStart(ops, entry);
+                DataResult<T> entryResult = VSQEnchantmentSlotEntry.CODEC.encodeStart(ops, entry);
                 var result = entryResult.result();
                 if (result.isEmpty()) {
                     return entryResult;
@@ -93,22 +66,7 @@ public record VSQEnchantmentComponent(
             SLOT_LIST_CODEC.optionalFieldOf("curse").forGetter(VSQEnchantmentComponent::curse)
     ).apply(instance, VSQEnchantmentComponent::new));
 
-    private static final StreamCodec<RegistryFriendlyByteBuf, VSQEnchantmentSlotEntry> NULLABLE_ENTRY_STREAM_CODEC = new StreamCodec<>() {
-        @Override
-        public VSQEnchantmentSlotEntry decode(RegistryFriendlyByteBuf buf) {
-            return buf.readBoolean() ? VSQEnchantmentSlotEntry.STREAM_CODEC.decode(buf) : null;
-        }
-
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, VSQEnchantmentSlotEntry value) {
-            buf.writeBoolean(value != null);
-            if (value != null) {
-                VSQEnchantmentSlotEntry.STREAM_CODEC.encode(buf, value);
-            }
-        }
-    };
-
-    private static final StreamCodec<RegistryFriendlyByteBuf, List<VSQEnchantmentSlotEntry>> SLOT_LIST_STREAM_CODEC = NULLABLE_ENTRY_STREAM_CODEC.apply(ByteBufCodecs.list());
+    private static final StreamCodec<RegistryFriendlyByteBuf, List<VSQEnchantmentSlotEntry>> SLOT_LIST_STREAM_CODEC = VSQEnchantmentSlotEntry.STREAM_CODEC.apply(ByteBufCodecs.list());
     public static final StreamCodec<RegistryFriendlyByteBuf, VSQEnchantmentComponent> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public VSQEnchantmentComponent decode(RegistryFriendlyByteBuf buf) {
@@ -178,6 +136,10 @@ public record VSQEnchantmentComponent(
             return Optional.empty();
         }
 
-        return Optional.of(Collections.unmodifiableList(new ArrayList<>(entries.get())));
+        List<VSQEnchantmentSlotEntry> normalized = new ArrayList<>(entries.get().size());
+        for (VSQEnchantmentSlotEntry entry : entries.get()) {
+            normalized.add(entry == null ? VSQEnchantmentSlotEntry.empty() : entry);
+        }
+        return Optional.of(Collections.unmodifiableList(normalized));
     }
 }
