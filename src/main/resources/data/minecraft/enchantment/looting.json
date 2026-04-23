@@ -96,6 +96,49 @@
         "base": 15,
         "per_level_above_first": 9
       }
+    },
+    {
+      "requirement": {
+        "type": "projectile_takeover",
+        "item": "#vsq:enchanting/projectile_source"
+      },
+      "enchantment_slot": "secondary",
+      "max_level": 3,
+      "effects": {
+        "minecraft:equipment_drops": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 0.01,
+                "per_level_above_first": 0.01
+              }
+            },
+            "enchanted": "attacker",
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "attacker",
+              "predicate": {
+                "type": "minecraft:player"
+              }
+            },
+            "id": "minecraft_equipment_drops_0"
+          }
+        ]
+      },
+      "slots": [
+        "mainhand",
+        "offhand"
+      ],
+      "max_cost": {
+        "base": 65,
+        "per_level_above_first": 9
+      },
+      "min_cost": {
+        "base": 15,
+        "per_level_above_first": 9
+      }
     }
   ],
   "description": {

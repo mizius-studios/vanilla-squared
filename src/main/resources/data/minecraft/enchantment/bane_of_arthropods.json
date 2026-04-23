@@ -287,11 +287,11 @@
               "max_amplifier": 3,
               "max_duration": {
                 "type": "minecraft:linear",
-                "base": 20,
-                "per_level_above_first": 10
+                "base": 1.5,
+                "per_level_above_first": 0.5
               },
               "min_amplifier": 3,
-              "min_duration": 20,
+              "min_duration": 1.5,
               "to_apply": "minecraft:slowness"
             },
             "enchanted": "attacker",

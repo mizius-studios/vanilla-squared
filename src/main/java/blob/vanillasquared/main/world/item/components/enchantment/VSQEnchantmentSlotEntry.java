@@ -64,11 +64,7 @@ public record VSQEnchantmentSlotEntry(Holder<Enchantment> enchantment, int level
     public static final StreamCodec<RegistryFriendlyByteBuf, VSQEnchantmentSlotEntry> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public VSQEnchantmentSlotEntry decode(RegistryFriendlyByteBuf buf) {
-            if (buf.readBoolean()) {
-                String marker = ByteBufCodecs.STRING_UTF8.decode(buf);
-                if (!EMPTY_MARKER.equals(marker)) {
-                    throw new IllegalStateException("Expected empty enchantment slot marker \"" + EMPTY_MARKER + "\" but found \"" + marker + "\"");
-                }
+            if (!buf.readBoolean()) {
                 return EMPTY;
             }
             return PRESENT_STREAM_CODEC.decode(buf);
@@ -77,12 +73,11 @@ public record VSQEnchantmentSlotEntry(Holder<Enchantment> enchantment, int level
         @Override
         public void encode(RegistryFriendlyByteBuf buf, VSQEnchantmentSlotEntry value) {
             if (value == null || value.isEmpty()) {
-                buf.writeBoolean(true);
-                ByteBufCodecs.STRING_UTF8.encode(buf, EMPTY_MARKER);
+                buf.writeBoolean(false);
                 return;
             }
 
-            buf.writeBoolean(false);
+            buf.writeBoolean(true);
             PRESENT_STREAM_CODEC.encode(buf, value);
         }
     };

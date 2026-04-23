@@ -54,24 +54,18 @@ public record VSQEnchantmentProfileRequirement(Type type, Optional<Identifier> i
         ).apply(instance, Raw::new));
 
         private DataResult<VSQEnchantmentProfileRequirement> decodeRequirement() {
-            Type requirementType = switch (this.type.trim()) {
-                case "item" -> Type.ITEM;
-                case "projectile_takeover", "PROJECTILE_TAKEOVER" -> Type.PROJECTILE_TAKEOVER;
-                default -> null;
-            };
-            if (requirementType == null) {
-                return DataResult.error(() -> "Unknown enchantment profile requirement type: " + this.type);
-            }
-            if (this.item.isEmpty()) {
-                return DataResult.error(() -> "Enchantment profile requirement must define an item reference");
-            }
+            return Type.decode(this.type).flatMap(requirementType -> {
+                if (this.item.isEmpty()) {
+                    return DataResult.error(() -> "Enchantment profile requirement must define an item reference");
+                }
 
-            RegistryReference reference = this.item.get();
-            return new VSQEnchantmentProfileRequirement(
-                    requirementType,
-                    reference.tag() ? Optional.empty() : Optional.of(reference.id()),
-                    reference.tag() ? Optional.of(reference.id()) : Optional.empty()
-            ).validate();
+                RegistryReference reference = this.item.get();
+                return new VSQEnchantmentProfileRequirement(
+                        requirementType,
+                        reference.tag() ? Optional.empty() : Optional.of(reference.id()),
+                        reference.tag() ? Optional.of(reference.id()) : Optional.empty()
+                ).validate();
+            });
         }
 
         private static Raw encodeRequirement(VSQEnchantmentProfileRequirement requirement) {
@@ -105,7 +99,7 @@ public record VSQEnchantmentProfileRequirement(Type type, Optional<Identifier> i
     }
 
     private boolean matchesReference(@Nullable ItemStack stack) {
-        if (stack.isEmpty()) {
+        if (stack == null || stack.isEmpty()) {
             return false;
         }
         if (this.item.isPresent()) {
