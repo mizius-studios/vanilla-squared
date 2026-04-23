@@ -97,6 +97,7 @@ public final class EnchantmentProjectileTakeoverEffects {
         }
 
         EnchantmentHelper.runIterationOnEquipment(owner, (enchantment, enchantmentLevel, item) -> {
+            // Skip the item that is the projectile source itself; reference identity is intentional.
             if (item.itemStack() == sourceStack) {
                 return;
             }
@@ -128,6 +129,7 @@ public final class EnchantmentProjectileTakeoverEffects {
         }
 
         EnchantmentHelper.runIterationOnEquipment(owner, (enchantment, enchantmentLevel, item) -> {
+            // Skip the item that is the projectile source itself; reference identity is intentional.
             if (item.itemStack() == sourceStack) {
                 return;
             }
@@ -162,6 +164,7 @@ public final class EnchantmentProjectileTakeoverEffects {
         }
 
         EnchantmentHelper.runIterationOnEquipment(owner, (enchantment, enchantmentLevel, item) -> {
+            // Skip the item that is the projectile source itself; reference identity is intentional.
             if (item.itemStack() == sourceStack) {
                 return;
             }
@@ -195,6 +198,7 @@ public final class EnchantmentProjectileTakeoverEffects {
         }
 
         EnchantmentHelper.runIterationOnEquipment(owner, (enchantment, enchantmentLevel, item) -> {
+            // Skip the item that is the projectile source itself; reference identity is intentional.
             if (item.itemStack() == sourceStack) {
                 return;
             }

@@ -360,12 +360,6 @@ public final class VSQEnchantmentSlots {
                 .orElseGet(() -> enchantment.value().getEffects(effectType));
     }
 
-    public static <T> List<T> projectileTakeoverProfileEffects(ItemStack sourceStack, Holder<Enchantment> enchantment, DataComponentType<List<T>> effectType) {
-        return selectedProjectileTakeoverProfile(sourceStack, enchantment)
-                .map(profile -> profile.effects().getOrDefault(effectType, List.<T>of()))
-                .orElseGet(() -> List.of());
-    }
-
     public static <T> T profileEffect(ItemStack stack, Holder<Enchantment> enchantment, DataComponentType<T> effectType) {
         Optional<VSQEnchantmentProfile> profile = selectedProfile(stack, enchantment);
         if (profile.isPresent()) {

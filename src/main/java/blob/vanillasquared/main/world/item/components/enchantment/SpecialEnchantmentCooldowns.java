@@ -142,6 +142,10 @@ public final class SpecialEnchantmentCooldowns {
         if (state == null || !state.activatedByHotkey) {
             return false;
         }
+        if (metadata.isEmpty() || metadata.get().special().isEmpty()) {
+            return state.cooldownStarted || isPreCooldownPhaseActive(profile.get(), state);
+        }
+
         Holder<Enchantment> enchantmentHolder = enchantmentRegistry.getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, enchantmentId));
         int enchantmentLevel = VSQEnchantmentSlots.aggregate(stack).getLevel(enchantmentHolder);
         EquipmentSlot slot = player.getOffhandItem() == stack ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
@@ -154,10 +158,6 @@ public final class SpecialEnchantmentCooldowns {
                 profile.get(),
                 profile.get().special().orElseThrow()
         );
-
-        if (metadata.isEmpty() || metadata.get().special().isEmpty()) {
-            return state.cooldownStarted || isPreCooldownPhaseActive(profile.get(), state);
-        }
 
         boolean allowed = allowSpecialEffect(level, use, state, metadata.get());
         updateCooldownStart(level.getGameTime(), profile.get(), state);
