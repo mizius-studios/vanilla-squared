@@ -7,6 +7,7 @@ import blob.vanillasquared.main.world.recipe.enchanting.EnchantingIngredient;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipe;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeInput;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -25,8 +26,10 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -92,7 +95,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     @Override
-    public PostPlaceAction handlePlacement(boolean placeAll, boolean creative, RecipeHolder<?> recipe, net.minecraft.server.level.ServerLevel level, Inventory inventory) {
+    public PostPlaceAction handlePlacement(boolean placeAll, boolean creative, RecipeHolder<?> recipe, ServerLevel level, Inventory inventory) {
         if (!(this.player instanceof ServerPlayer serverPlayer)) {
             return PostPlaceAction.NOTHING;
         }
@@ -295,6 +298,8 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
         if (xpCost > 0) {
             player.giveExperienceLevels(-xpCost);
         }
+        player.awardStat(Stats.ENCHANT_ITEM);
+        CriteriaTriggers.ENCHANTED_ITEM.trigger(player, result, xpCost);
         this.getSlot(EnchantingSlotLayout.INPUT_SLOT).set(result);
         this.access.execute((level, tablePos) ->
                 level.playSound(null, tablePos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F)
