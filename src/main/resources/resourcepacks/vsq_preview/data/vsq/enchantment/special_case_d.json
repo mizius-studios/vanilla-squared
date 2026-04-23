@@ -33,7 +33,10 @@
               }
             },
             "special": {
-              "limit": 4
+              "limit": {
+                "type": "minecraft:constant",
+                "value": 4
+              }
             },
             "affected": "attacker",
             "enchanted": "attacker"

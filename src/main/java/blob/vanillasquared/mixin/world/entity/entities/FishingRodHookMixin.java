@@ -111,6 +111,9 @@ public abstract class FishingRodHookMixin extends Projectile {
         if (main.getItem() instanceof FishingRodItem) {
             return off;
         }
+        if (off.getItem() instanceof FishingRodItem) {
+            return main;
+        }
         return main;
     }
 }
