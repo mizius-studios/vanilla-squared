@@ -1,6 +1,7 @@
 package blob.vanillasquared.mixin.world.item;
 
 import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentProfile;
+import blob.vanillasquared.main.world.item.EnchantmentProjectileTakeoverEffects;
 import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
 import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentCooldowns;
 import com.mojang.datafixers.util.Pair;
@@ -14,10 +15,12 @@ import net.minecraft.util.Util;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
@@ -28,7 +31,9 @@ import net.minecraft.world.item.enchantment.ConditionalEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 import net.minecraft.world.item.enchantment.effects.DamageImmunity;
 import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -43,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @Mixin(EnchantmentHelper.class)
@@ -191,6 +197,79 @@ public abstract class EnchantmentHelperMixin {
             }
         });
         cir.setReturnValue(Math.max(0.0F, modifiedTime.floatValue()));
+    }
+
+    @Inject(method = "modifyDamage", at = @At("RETURN"), cancellable = true)
+    private static void vsq$applyProjectileTakeoverDamage(
+            ServerLevel level,
+            ItemStack sourceStack,
+            Entity victim,
+            DamageSource damageSource,
+            float baseDamage,
+            CallbackInfoReturnable<Float> cir
+    ) {
+        if (!(damageSource.getEntity() instanceof LivingEntity owner)) {
+            return;
+        }
+        cir.setReturnValue(EnchantmentProjectileTakeoverEffects.modifyDamage(level, owner, sourceStack, victim, damageSource, cir.getReturnValueF()));
+    }
+
+    @Inject(method = "modifyKnockback", at = @At("RETURN"), cancellable = true)
+    private static void vsq$applyProjectileTakeoverKnockback(
+            ServerLevel level,
+            ItemStack sourceStack,
+            Entity victim,
+            DamageSource damageSource,
+            float baseKnockback,
+            CallbackInfoReturnable<Float> cir
+    ) {
+        if (!(damageSource.getEntity() instanceof LivingEntity owner)) {
+            return;
+        }
+        cir.setReturnValue(EnchantmentProjectileTakeoverEffects.modifyKnockback(level, owner, sourceStack, victim, damageSource, cir.getReturnValueF()));
+    }
+
+    @Inject(method = "doPostAttackEffectsWithItemSource", at = @At("RETURN"))
+    private static void vsq$applyProjectileTakeoverPostAttack(
+            ServerLevel level,
+            Entity victim,
+            DamageSource damageSource,
+            ItemStack sourceStack,
+            CallbackInfo ci
+    ) {
+        if (!(damageSource.getEntity() instanceof LivingEntity owner)) {
+            return;
+        }
+        EnchantmentProjectileTakeoverEffects.runPostAttackEffects(level, owner, sourceStack, victim, damageSource);
+    }
+
+    @Inject(method = "onProjectileSpawned", at = @At("RETURN"))
+    private static void vsq$applyProjectileTakeoverProjectileSpawned(
+            ServerLevel level,
+            ItemStack sourceStack,
+            Projectile projectile,
+            Consumer<ItemStack> onBreak,
+            CallbackInfo ci
+    ) {
+        if (!(projectile.getOwner() instanceof LivingEntity owner)) {
+            return;
+        }
+        EnchantmentProjectileTakeoverEffects.runProjectileSpawnedEffects(level, owner, sourceStack, projectile);
+    }
+
+    @Inject(method = "onHitBlock", at = @At("RETURN"))
+    private static void vsq$applyProjectileTakeoverHitBlock(
+            ServerLevel level,
+            ItemStack sourceStack,
+            LivingEntity owner,
+            Entity projectile,
+            EquipmentSlot slot,
+            Vec3 position,
+            BlockState hitBlock,
+            Consumer<ItemStack> onBreak,
+            CallbackInfo ci
+    ) {
+        EnchantmentProjectileTakeoverEffects.runHitBlockEffects(level, owner, sourceStack, projectile, position, hitBlock);
     }
 
     @Inject(method = "getTridentSpinAttackStrength", at = @At("HEAD"), cancellable = true)

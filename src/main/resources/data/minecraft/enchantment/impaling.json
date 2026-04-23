@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/weapon"
       },
       "enchantment_slot": "damage",

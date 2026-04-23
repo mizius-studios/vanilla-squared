@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -113,5 +114,13 @@ public record VSQEnchantmentProfile(
 
     public boolean matches(ItemStack stack) {
         return this.requirement.map(requirement -> requirement.matches(stack)).orElse(true);
+    }
+
+    public boolean matchesProjectileTakeover(ItemStack stack) {
+        return this.requirement.map(requirement -> requirement.matchesProjectileTakeover(stack)).orElse(false);
+    }
+
+    public boolean matches(ItemStack stack, @Nullable ItemStack projectileTakeoverStack) {
+        return this.requirement.map(requirement -> requirement.matches(stack, projectileTakeoverStack)).orElse(true);
     }
 }

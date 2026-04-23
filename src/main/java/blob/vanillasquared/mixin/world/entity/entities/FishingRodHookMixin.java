@@ -1,15 +1,10 @@
 package blob.vanillasquared.mixin.world.entity.entities;
 
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
+import blob.vanillasquared.main.world.item.EnchantmentProjectileTakeoverEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.EntityTypeTags;
-import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,21 +13,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SimpleExplosionDamageCalculator;
 import net.minecraft.world.phys.EntityHitResult;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-
-import java.util.Optional;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FishingHook.class)
 public abstract class FishingRodHookMixin extends Projectile {
@@ -56,8 +46,8 @@ public abstract class FishingRodHookMixin extends Projectile {
         }
 
         ItemStack main = player.getMainHandItem();
-        ItemStack off  = player.getOffhandItem();
-        ItemStack weapon = main.getItem() instanceof FishingRodItem ? off : main;
+        ItemStack off = player.getOffhandItem();
+        ItemStack fishingRod = resolveFishingRod(main, off);
 
         Entity target = hit.getEntity();
         if (!(target instanceof LivingEntity living)) {
@@ -66,37 +56,11 @@ public abstract class FishingRodHookMixin extends Projectile {
 
         DamageSource source = serverLevel.damageSources().playerAttack(player);
         float damage = BASE_DAMAGE;
-        var enchants = serverLevel.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-
-        int fire  = EnchantmentHelper.getItemEnchantmentLevel(enchants.getOrThrow(Enchantments.FIRE_ASPECT), weapon);
-        int smite = EnchantmentHelper.getItemEnchantmentLevel(enchants.getOrThrow(Enchantments.SMITE), weapon);
-        int bane  = EnchantmentHelper.getItemEnchantmentLevel(enchants.getOrThrow(Enchantments.BANE_OF_ARTHROPODS), weapon);
-
-        if (smite > 0 && living.getType().builtInRegistryHolder().is(EntityTypeTags.UNDEAD)) {
-            damage += smite * 2.5F;
-        }
-
-        if (bane > 0 && living.getType().builtInRegistryHolder().is(EntityTypeTags.ARTHROPOD)) {
-            damage += bane * 2.5F;
-
-            int duration = 20 + serverLevel.getRandom().nextInt(10 * bane);
-            living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, duration, 3));
-        }
-
-        if (fire > 0) {
-            living.igniteForSeconds(4 * fire);
-
-            serverLevel.playSound(
-                    null, living.getX(), living.getY(), living.getZ(),
-                    SoundEvents.FIRECHARGE_USE,
-                    SoundSource.PLAYERS,
-                    0.7F, 1.0F + serverLevel.getRandom().nextFloat() * 0.4F
-            );
-        }
+        damage = EnchantmentProjectileTakeoverEffects.modifyDamage(serverLevel, player, fishingRod, living, source, damage);
 
         living.hurtServer(serverLevel, source, damage);
 
-        float kb = EnchantmentHelper.modifyKnockback(serverLevel, weapon, living, source, BASE_KNOCKBACK);
+        float kb = EnchantmentProjectileTakeoverEffects.modifyKnockback(serverLevel, player, fishingRod, living, source, BASE_KNOCKBACK);
         if (kb > 0) {
             double yaw = Math.toRadians(player.getYRot());
 
@@ -105,26 +69,9 @@ public abstract class FishingRodHookMixin extends Projectile {
             living.hurtMarked = true;
         }
 
-        int wind = EnchantmentHelper.getItemEnchantmentLevel(enchants.getOrThrow(Enchantments.WIND_BURST), weapon);
-        if (wind > 0) {
-            serverLevel.explode(
-                    null,
-                    null,
-                    new SimpleExplosionDamageCalculator(false, false, Optional.of(1.0F * wind), Optional.empty()),
-                    player.getX(),
-                    player.getY(),
-                    player.getZ(),
-                    1.2F + 0.35F * wind,
-                    false,
-                    Level.ExplosionInteraction.TRIGGER,
-                    ParticleTypes.GUST_EMITTER_SMALL,
-                    ParticleTypes.GUST_EMITTER_LARGE,
-                    WeightedList.of(),
-                    SoundEvents.WIND_CHARGE_BURST
-            );
-        }
+        EnchantmentProjectileTakeoverEffects.runPostAttackEffects(serverLevel, player, fishingRod, living, source);
 
-        if (living instanceof Player playerTarget && weapon.getItem() instanceof AxeItem && playerTarget.isBlocking()) {
+        if (living instanceof Player playerTarget && resolveWeapon(main, off).getItem() instanceof AxeItem && playerTarget.isBlocking()) {
             ItemStack using = playerTarget.getUseItem();
 
             if (!using.isEmpty() && using.is(Items.SHIELD)) {
@@ -146,5 +93,24 @@ public abstract class FishingRodHookMixin extends Projectile {
                 );
             }
         }
+    }
+
+    @Unique
+    private static ItemStack resolveFishingRod(ItemStack main, ItemStack off) {
+        if (main.getItem() instanceof FishingRodItem) {
+            return main;
+        }
+        if (off.getItem() instanceof FishingRodItem) {
+            return off;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Unique
+    private static ItemStack resolveWeapon(ItemStack main, ItemStack off) {
+        if (main.getItem() instanceof FishingRodItem) {
+            return off;
+        }
+        return main;
     }
 }

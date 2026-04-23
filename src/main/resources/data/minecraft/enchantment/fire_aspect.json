@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/weapon"
       },
       "enchantment_slot": "secondary",
@@ -45,7 +45,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/ranged_weapon"
       },
       "enchantment_slot": "secondary",
@@ -63,6 +63,43 @@
       },
       "slots": [
         "mainhand"
+      ],
+      "max_cost": {
+        "base": 50,
+        "per_level_above_first": 0
+      },
+      "min_cost": {
+        "base": 20,
+        "per_level_above_first": 0
+      }
+    },
+    {
+      "requirement": {
+        "type": "projectile_takeover",
+        "item": "#vsq:enchanting/projectile_source"
+      },
+      "enchantment_slot": "secondary",
+      "max_level": 2,
+      "effects": {
+        "minecraft:post_attack": [
+          {
+            "effect": {
+              "type": "minecraft:ignite",
+              "duration": {
+                "type": "minecraft:linear",
+                "base": 4,
+                "per_level_above_first": 4
+              }
+            },
+            "affected": "victim",
+            "enchanted": "attacker",
+            "id": "minecraft_post_attack_fishing_0"
+          }
+        ]
+      },
+      "slots": [
+        "mainhand",
+        "offhand"
       ],
       "max_cost": {
         "base": 50,
