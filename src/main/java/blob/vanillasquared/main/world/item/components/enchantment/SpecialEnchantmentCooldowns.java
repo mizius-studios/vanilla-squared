@@ -130,8 +130,8 @@ public final class SpecialEnchantmentCooldowns {
 
         String componentKey = componentKey(componentType);
         Optional<SpecialEffectMetadata> metadata = profile.get().specialEffectIndex().metadata(componentKey, effectIndex);
-        Identifier enchantmentId = level.registryAccess()
-                .lookupOrThrow(Registries.ENCHANTMENT)
+        var enchantmentRegistry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        Identifier enchantmentId = enchantmentRegistry
                 .getResourceKey(enchantment)
                 .map(ResourceKey::identifier)
                 .orElse(null);
@@ -142,16 +142,15 @@ public final class SpecialEnchantmentCooldowns {
         if (state == null || !state.activatedByHotkey) {
             return false;
         }
-        Holder<Enchantment> enchantmentHolder = level.registryAccess()
-                .lookupOrThrow(Registries.ENCHANTMENT)
-                .getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, enchantmentId));
+        Holder<Enchantment> enchantmentHolder = enchantmentRegistry.getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, enchantmentId));
         int enchantmentLevel = VSQEnchantmentSlots.aggregate(stack).getLevel(enchantmentHolder);
+        EquipmentSlot slot = player.getOffhandItem() == stack ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
         SpecialEnchantmentUse use = new SpecialEnchantmentUse(
                 enchantmentId,
                 enchantmentHolder,
                 enchantmentLevel,
                 stack,
-                EquipmentSlot.MAINHAND,
+                slot,
                 profile.get(),
                 profile.get().special().orElseThrow()
         );

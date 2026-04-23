@@ -37,6 +37,7 @@ public record VSQEnchantmentProfileRequirement(Type type, Optional<Identifier> i
 
             return switch (value.trim()) {
                 case "item" -> DataResult.success(ITEM);
+                case "ITEM" -> DataResult.error(() -> "Use lowercase \"item\" (renamed from \"ITEM\" in 2.11.0)");
                 case "projectile_takeover", "PROJECTILE_TAKEOVER" -> DataResult.success(PROJECTILE_TAKEOVER);
                 default -> DataResult.error(() -> "Unknown enchantment profile requirement type: " + value);
             };
