@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/ranged_weapon"
       },
       "enchantment_slot": "secondary",
@@ -44,7 +44,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/weapon"
       },
       "enchantment_slot": "secondary",
@@ -73,6 +73,41 @@
       },
       "min_cost": {
         "base": 5,
+        "per_level_above_first": 20
+      }
+    },
+    {
+      "requirement": {
+        "type": "projectile_takeover",
+        "item": "#vsq:enchanting/projectile_source"
+      },
+      "enchantment_slot": "secondary",
+      "max_level": 2,
+      "effects": {
+        "minecraft:knockback": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 1,
+                "per_level_above_first": 1
+              }
+            },
+            "id": "minecraft_knockback_takeover_0"
+          }
+        ]
+      },
+      "slots": [
+        "mainhand",
+        "offhand"
+      ],
+      "max_cost": {
+        "base": 37,
+        "per_level_above_first": 20
+      },
+      "min_cost": {
+        "base": 12,
         "per_level_above_first": 20
       }
     }

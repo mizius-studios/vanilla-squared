@@ -8,19 +8,44 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
-public record VSQEnchantmentProfileRequirement(Optional<Identifier> item, Optional<Identifier> tag) {
+public record VSQEnchantmentProfileRequirement(Type type, Optional<Identifier> item, Optional<Identifier> tag) {
     public static final Codec<VSQEnchantmentProfileRequirement> CODEC = Raw.CODEC.flatXmap(
             raw -> {
-                if (!"ITEM".equals(raw.type())) {
-                    return DataResult.error(() -> "Unknown enchantment profile requirement type: " + raw.type());
-                }
                 return raw.decodeRequirement();
             },
             requirement -> DataResult.success(Raw.encodeRequirement(requirement))
     );
+
+    public enum Type {
+        ITEM("item"),
+        PROJECTILE_TAKEOVER("projectile_takeover");
+
+        private final String serializedName;
+
+        Type(String serializedName) {
+            this.serializedName = serializedName;
+        }
+
+        public static DataResult<Type> decode(String value) {
+            if (value == null) {
+                return DataResult.error(() -> "Enchantment profile requirement type cannot be null");
+            }
+
+            return switch (value.trim()) {
+                case "item" -> DataResult.success(ITEM);
+                case "projectile_takeover", "PROJECTILE_TAKEOVER" -> DataResult.success(PROJECTILE_TAKEOVER);
+                default -> DataResult.error(() -> "Unknown enchantment profile requirement type: " + value);
+            };
+        }
+
+        public String serializedName() {
+            return this.serializedName;
+        }
+    }
 
     private record Raw(String type, Optional<RegistryReference> item) {
         private static final Codec<Raw> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -29,12 +54,21 @@ public record VSQEnchantmentProfileRequirement(Optional<Identifier> item, Option
         ).apply(instance, Raw::new));
 
         private DataResult<VSQEnchantmentProfileRequirement> decodeRequirement() {
+            Type requirementType = switch (this.type.trim()) {
+                case "item" -> Type.ITEM;
+                case "projectile_takeover", "PROJECTILE_TAKEOVER" -> Type.PROJECTILE_TAKEOVER;
+                default -> null;
+            };
+            if (requirementType == null) {
+                return DataResult.error(() -> "Unknown enchantment profile requirement type: " + this.type);
+            }
             if (this.item.isEmpty()) {
                 return DataResult.error(() -> "Enchantment profile requirement must define an item reference");
             }
 
             RegistryReference reference = this.item.get();
             return new VSQEnchantmentProfileRequirement(
+                    requirementType,
                     reference.tag() ? Optional.empty() : Optional.of(reference.id()),
                     reference.tag() ? Optional.of(reference.id()) : Optional.empty()
             ).validate();
@@ -44,7 +78,7 @@ public record VSQEnchantmentProfileRequirement(Optional<Identifier> item, Option
             Optional<RegistryReference> itemReference = requirement.item
                     .map(RegistryReference::value)
                     .or(() -> requirement.tag.map(RegistryReference::tag));
-            return new Raw("ITEM", itemReference);
+            return new Raw(requirement.type.serializedName(), itemReference);
         }
     }
 
@@ -56,6 +90,21 @@ public record VSQEnchantmentProfileRequirement(Optional<Identifier> item, Option
     }
 
     public boolean matches(ItemStack stack) {
+        return this.type == Type.ITEM && this.matchesReference(stack);
+    }
+
+    public boolean matchesProjectileTakeover(ItemStack stack) {
+        return this.type == Type.PROJECTILE_TAKEOVER && this.matchesReference(stack);
+    }
+
+    public boolean matches(ItemStack stack, @Nullable ItemStack projectileTakeoverStack) {
+        return switch (this.type) {
+            case ITEM -> this.matchesReference(stack);
+            case PROJECTILE_TAKEOVER -> projectileTakeoverStack != null && this.matchesReference(projectileTakeoverStack);
+        };
+    }
+
+    private boolean matchesReference(@Nullable ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         }

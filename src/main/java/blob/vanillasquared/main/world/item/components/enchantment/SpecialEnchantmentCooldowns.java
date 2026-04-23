@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
@@ -141,12 +142,25 @@ public final class SpecialEnchantmentCooldowns {
         if (state == null || !state.activatedByHotkey) {
             return false;
         }
+        Holder<Enchantment> enchantmentHolder = level.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, enchantmentId));
+        int enchantmentLevel = VSQEnchantmentSlots.aggregate(stack).getLevel(enchantmentHolder);
+        SpecialEnchantmentUse use = new SpecialEnchantmentUse(
+                enchantmentId,
+                enchantmentHolder,
+                enchantmentLevel,
+                stack,
+                EquipmentSlot.MAINHAND,
+                profile.get(),
+                profile.get().special().orElseThrow()
+        );
 
         if (metadata.isEmpty() || metadata.get().special().isEmpty()) {
             return state.cooldownStarted || isPreCooldownPhaseActive(profile.get(), state);
         }
 
-        boolean allowed = allowSpecialEffect(level, profile.get(), state, metadata.get());
+        boolean allowed = allowSpecialEffect(level, use, state, metadata.get());
         updateCooldownStart(level.getGameTime(), profile.get(), state);
         if (!state.cooldownStarted && !isBlocked(profile.get(), state)) {
             removeState(player, enchantmentId);
@@ -157,14 +171,14 @@ public final class SpecialEnchantmentCooldowns {
 
     private static boolean allowSpecialEffect(
             ServerLevel level,
-            VSQEnchantmentProfile profile,
+            SpecialEnchantmentUse use,
             ActivationState state,
             SpecialEffectMetadata metadata
     ) {
         String id = metadata.id();
         SpecialEffectSettings settings = metadata.special().orElseThrow();
 
-        int limit = settings.limit();
+        int limit = resolvedLimit(use, settings);
         if (limit == 0) {
             return false;
         }
@@ -180,9 +194,13 @@ public final class SpecialEnchantmentCooldowns {
         remaining--;
         state.remainingLimits.put(id, remaining);
         if (remaining <= 0) {
-            maybeStartCooldownAfterLimit(level, profile, state, id);
+            maybeStartCooldownAfterLimit(level, use.profile(), state, id);
         }
         return true;
+    }
+
+    private static int resolvedLimit(SpecialEnchantmentUse use, SpecialEffectSettings settings) {
+        return Mth.floor(settings.limit().calculate(use.level()));
     }
 
     private static Optional<ServerPlayer> findPlayerContext(@Nullable Entity entity) {
@@ -226,9 +244,10 @@ public final class SpecialEnchantmentCooldowns {
         ActivationState state = new ActivationState(use.special().cooldownTicks());
         for (SpecialEffectMetadata metadata : use.profile().specialEffectIndex().all()) {
             metadata.special().ifPresent(settings -> {
-                if (settings.limit() > 0) {
-                    state.remainingLimits.put(metadata.id(), settings.limit());
-                    state.totalLimits.put(metadata.id(), settings.limit());
+                int limit = resolvedLimit(use, settings);
+                if (limit > 0) {
+                    state.remainingLimits.put(metadata.id(), limit);
+                    state.totalLimits.put(metadata.id(), limit);
                 }
             });
         }

@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/all_weapons"
       },
       "enchantment_slot": "secondary",
@@ -45,7 +45,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/fishing"
       },
       "enchantment_slot": "secondary",
@@ -79,7 +79,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/mining_loot"
       },
       "enchantment_slot": "secondary",

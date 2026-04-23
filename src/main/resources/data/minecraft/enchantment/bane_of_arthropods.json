@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/mace"
       },
       "enchantment_slot": "damage",
@@ -81,7 +81,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/melee_weapon"
       },
       "enchantment_slot": "damage",
@@ -160,7 +160,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/ranged_weapon"
       },
       "enchantment_slot": "damage",
@@ -240,6 +240,75 @@
       },
       "slots": [
         "mainhand"
+      ],
+      "max_cost": {
+        "base": 25,
+        "per_level_above_first": 8
+      },
+      "min_cost": {
+        "base": 5,
+        "per_level_above_first": 8
+      }
+    },
+    {
+      "requirement": {
+        "type": "projectile_takeover",
+        "item": "#vsq:enchanting/projectile_source"
+      },
+      "enchantment_slot": "damage",
+      "exclusive_set": "#minecraft:exclusive_set/damage",
+      "max_level": 5,
+      "effects": {
+        "minecraft:damage": [
+          {
+            "effect": {
+              "type": "minecraft:add",
+              "value": {
+                "type": "minecraft:linear",
+                "base": 2.5,
+                "per_level_above_first": 2.5
+              }
+            },
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type": "#minecraft:sensitive_to_bane_of_arthropods"
+              }
+            },
+            "id": "minecraft_damage_fishing_0"
+          }
+        ],
+        "minecraft:post_attack": [
+          {
+            "affected": "victim",
+            "effect": {
+              "type": "minecraft:apply_mob_effect",
+              "max_amplifier": 3,
+              "max_duration": {
+                "type": "minecraft:linear",
+                "base": 20,
+                "per_level_above_first": 10
+              },
+              "min_amplifier": 3,
+              "min_duration": 20,
+              "to_apply": "minecraft:slowness"
+            },
+            "enchanted": "attacker",
+            "requirements": {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type": "#minecraft:sensitive_to_bane_of_arthropods"
+              }
+            },
+            "id": "minecraft_post_attack_fishing_0"
+          }
+        ]
+      },
+      "slots": [
+        "mainhand",
+        "offhand"
       ],
       "max_cost": {
         "base": 25,
