@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/armor"
       },
       "enchantment_slot": "secondary",
@@ -57,7 +57,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "minecraft:shield"
       },
       "enchantment_slot": "secondary",

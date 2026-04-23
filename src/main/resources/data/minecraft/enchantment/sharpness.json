@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/mace"
       },
       "enchantment_slot": "damage",
@@ -37,7 +37,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#vsq:enchanting/melee_weapon"
       },
       "enchantment_slot": "damage",
@@ -72,7 +72,7 @@
     },
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/bow"
       },
       "enchantment_slot": "damage",

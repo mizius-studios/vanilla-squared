@@ -337,6 +337,23 @@ public final class VSQEnchantmentSlots {
         return Optional.empty();
     }
 
+    public static Optional<VSQEnchantmentProfile> selectedProjectileTakeoverProfile(ItemStack sourceStack, Holder<Enchantment> enchantment) {
+        return selectedProjectileTakeoverProfile(sourceStack, enchantment.value());
+    }
+
+    public static Optional<VSQEnchantmentProfile> selectedProjectileTakeoverProfile(ItemStack sourceStack, Enchantment enchantment) {
+        if (!((Object) enchantment instanceof VSQEnchantmentAccess access)) {
+            return Optional.empty();
+        }
+
+        for (VSQEnchantmentProfile profile : access.vsq$getProfiles()) {
+            if (profile.matchesProjectileTakeover(sourceStack)) {
+                return Optional.of(profile);
+            }
+        }
+        return Optional.empty();
+    }
+
     public static <T> List<T> profileEffects(ItemStack stack, Holder<Enchantment> enchantment, DataComponentType<List<T>> effectType) {
         return selectedProfile(stack, enchantment)
                 .map(profile -> profile.effects().getOrDefault(effectType, List.<T>of()))

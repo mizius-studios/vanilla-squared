@@ -3,7 +3,7 @@
   "profiles": [
     {
       "requirement": {
-        "type": "ITEM",
+        "type": "item",
         "item": "#minecraft:enchantable/weapon"
       },
       "enchantment_slot": "special",
@@ -33,7 +33,10 @@
               }
             },
             "special": {
-              "limit": 4
+              "limit": {
+                "type": "minecraft:constant",
+                "value": 4
+              }
             },
             "affected": "attacker",
             "enchanted": "attacker"
