@@ -376,8 +376,8 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
 
     private void vsq$refresh(ServerPlayer player) {
         this.playerLevel = player.experienceLevel;
-        this.vsq$sendRecipeBookSync(player, true);
         Map<Identifier, Integer> detectedBlocks = this.vsq$collectDetectedBlocks();
+        this.vsq$sendRecipeBookSync(player, true, detectedBlocks);
         EnchantingRecipeInput input = this.vsq$createRecipeInput();
         int previousSelectedId = this.selectedDisplayId;
         Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = this.vsq$getPreviewRecipe(input, player.registryAccess());
@@ -452,12 +452,15 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
         }
     }
 
-    private void vsq$sendRecipeBookSync(ServerPlayer player, boolean replace) {
+    private void vsq$sendRecipeBookSync(ServerPlayer player, boolean replace, Map<Identifier, Integer> detectedBlocks) {
         this.vsq$rebuildRecipeBookIndex();
         List<EnchantingRecipeBookSyncPayload.RecipeView> recipeViews = new ArrayList<>(this.displayRecipes.size());
         for (RecipeHolder<EnchantingRecipe> holder : this.displayRecipes.values()) {
             PlannedRecipePlacement plannedPlacement = this.vsq$planRecipePlacement(holder.value(), player.registryAccess());
-            recipeViews.add(new EnchantingRecipeBookSyncPayload.RecipeView(holder, Optional.of(plannedPlacement.input()), plannedPlacement.fullyPlaced()));
+            boolean craftable = plannedPlacement.fullyPlaced()
+                    && holder.value().canPlayerCraft(plannedPlacement.input(), player.experienceLevel, player.registryAccess())
+                    && holder.value().hasRequiredBlocks(detectedBlocks);
+            recipeViews.add(new EnchantingRecipeBookSyncPayload.RecipeView(holder, Optional.of(plannedPlacement.input()), craftable));
         }
         ServerPlayNetworking.send(player, EnchantingRecipeBookSyncPayload.create(this.containerId, replace, recipeViews, player.registryAccess()));
     }
