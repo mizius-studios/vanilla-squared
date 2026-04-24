@@ -27,6 +27,10 @@ public abstract class BonusLevelTableConditionMixin {
         int level = tool != null
                 ? EnchantmentHelper.getItemEnchantmentLevel(LootingFortuneBridge.remapFortuneToLooting(this.enchantment, context), tool)
                 : 0;
+        if (this.values.isEmpty()) {
+            cir.setReturnValue(false);
+            return;
+        }
         float chance = this.values.get(Math.min(level, this.values.size() - 1));
         cir.setReturnValue(context.getRandom().nextFloat() < chance);
     }

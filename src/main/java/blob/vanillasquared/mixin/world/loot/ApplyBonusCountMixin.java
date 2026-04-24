@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ApplyBonusCount.class)
 public abstract class ApplyBonusCountMixin {
+    // `stack` is captured first so `context` stays in the correct local slot for the redirect.
     @Redirect(
             method = "run",
             at = @At(
