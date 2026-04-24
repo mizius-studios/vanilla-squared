@@ -18,6 +18,8 @@ public final class LootingFortuneBridge {
         return context.getLevel()
                 .registryAccess()
                 .lookupOrThrow(Registries.ENCHANTMENT)
-                .getOrThrow(Enchantments.LOOTING);
+                .get(Enchantments.LOOTING)
+                .map(Holder.class::cast)
+                .orElse(enchantment);
     }
 }

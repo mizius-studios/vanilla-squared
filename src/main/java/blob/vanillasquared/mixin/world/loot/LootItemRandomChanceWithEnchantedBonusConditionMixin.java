@@ -24,6 +24,9 @@ public abstract class LootItemRandomChanceWithEnchantedBonusConditionMixin {
 
     @Inject(method = "test(Lnet/minecraft/world/level/storage/loot/LootContext;)Z", at = @At("HEAD"), cancellable = true)
     private void vsq$useLootingForFortune(LootContext context, CallbackInfoReturnable<Boolean> cir) {
+        if (!this.enchantment.is(net.minecraft.world.item.enchantment.Enchantments.FORTUNE)) {
+            return;
+        }
         Entity attacker = context.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ATTACKING_ENTITY);
         int level = attacker instanceof LivingEntity living
                 ? EnchantmentHelper.getEnchantmentLevel(LootingFortuneBridge.remapFortuneToLooting(this.enchantment, context), living)

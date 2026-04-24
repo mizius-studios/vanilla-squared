@@ -5,7 +5,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +25,10 @@ public abstract class BonusLevelTableConditionMixin {
 
     @Inject(method = "test(Lnet/minecraft/world/level/storage/loot/LootContext;)Z", at = @At("HEAD"), cancellable = true)
     private void vsq$useLootingForFortune(LootContext context, CallbackInfoReturnable<Boolean> cir) {
-        ItemInstance tool = context.getOptionalParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.TOOL);
+        if (!this.enchantment.is(Enchantments.FORTUNE)) {
+            return;
+        }
+        ItemInstance tool = context.getOptionalParameter(LootContextParams.TOOL);
         int level = tool != null
                 ? EnchantmentHelper.getItemEnchantmentLevel(LootingFortuneBridge.remapFortuneToLooting(this.enchantment, context), tool)
                 : 0;
