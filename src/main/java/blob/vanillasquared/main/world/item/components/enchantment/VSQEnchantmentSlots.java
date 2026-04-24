@@ -6,7 +6,9 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.AxeItem;
@@ -25,17 +27,32 @@ import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.TridentItem;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.lang.reflect.Field;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public final class VSQEnchantmentSlots {
     private static final ThreadLocal<Boolean> DERIVED_SYNC_GUARD = ThreadLocal.withInitial(() -> false);
+    private static final Field HOLDER_REFERENCE_OWNER_FIELD = vsq$holderReferenceOwnerField();
 
     private VSQEnchantmentSlots() {
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Field vsq$holderReferenceOwnerField() {
+        try {
+            Field field = Holder.Reference.class.getDeclaredField("owner");
+            field.setAccessible(true);
+            return field;
+        } catch (ReflectiveOperationException e) {
+            throw new ExceptionInInitializerError(e);
+        }
     }
 
     public static boolean isDerivedSyncInProgress() {
@@ -117,7 +134,31 @@ public final class VSQEnchantmentSlots {
     }
 
     public static int currentLevel(ItemStack stack, Holder<Enchantment> enchantment) {
+        if (enchantment.is(Enchantments.FORTUNE)) {
+            ItemEnchantments enchantments = stack.getOrDefault(vanillaTargetComponent(stack), ItemEnchantments.EMPTY);
+            return enchantments.entrySet().stream()
+                    .filter(entry -> entry.getKey().is(Enchantments.LOOTING))
+                    .mapToInt(it.unimi.dsi.fastutil.objects.Object2IntMap.Entry::getIntValue)
+                    .findFirst()
+                    .orElse(0);
+        }
         return aggregate(stack).getLevel(enchantment);
+    }
+
+    public static int vanillaEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment) {
+        ItemEnchantments enchantments = stack.getOrDefault(vanillaTargetComponent(stack), ItemEnchantments.EMPTY);
+        if (enchantment.is(Enchantments.FORTUNE)) {
+            return enchantments.entrySet().stream()
+                    .filter(entry -> entry.getKey().is(Enchantments.LOOTING))
+                    .mapToInt(it.unimi.dsi.fastutil.objects.Object2IntMap.Entry::getIntValue)
+                    .findFirst()
+                    .orElse(0);
+        }
+        return enchantments.getLevel(enchantment);
+    }
+
+    public static int rawVanillaEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment) {
+        return stack.getOrDefault(vanillaTargetComponent(stack), ItemEnchantments.EMPTY).getLevel(enchantment);
     }
 
     public static boolean canApplyInSlots(ItemStack stack, Holder<Enchantment> enchantment, int level) {
@@ -447,9 +488,36 @@ public final class VSQEnchantmentSlots {
 
     public static Optional<VSQEnchantmentComponent> tryPopulateFromVanilla(VSQEnchantmentComponent base, ItemStack stack, ItemEnchantments enchantments) {
         VSQEnchantmentComponent working = base;
+        Map<ResourceKey<Enchantment>, Integer> normalized = new LinkedHashMap<>();
         for (it.unimi.dsi.fastutil.objects.Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
-            Holder<Enchantment> enchantment = entry.getKey();
-            int level = entry.getIntValue();
+            ResourceKey<Enchantment> enchantment = entry.getKey().unwrapKey().orElse(null);
+            if (enchantment == null) {
+                continue;
+            }
+            if (enchantment.equals(Enchantments.FORTUNE)) {
+                enchantment = Enchantments.LOOTING;
+            }
+            normalized.merge(enchantment, entry.getIntValue(), Math::max);
+        }
+
+        Holder.Reference<Enchantment> lootingHolder = null;
+        for (Map.Entry<ResourceKey<Enchantment>, Integer> entry : normalized.entrySet()) {
+            Holder<Enchantment> enchantment;
+            if (entry.getKey().equals(Enchantments.LOOTING)) {
+                if (lootingHolder == null) {
+                    lootingHolder = lootingHolder(enchantments);
+                }
+                enchantment = lootingHolder;
+            } else {
+                enchantment = enchantments.keySet().stream()
+                        .filter(holder -> holder.unwrapKey().map(entry.getKey()::equals).orElse(false))
+                        .findFirst()
+                        .orElse(null);
+                if (enchantment == null) {
+                    continue;
+                }
+            }
+            int level = entry.getValue();
             VSQEnchantmentSlotType slotType = slotType(stack, enchantment);
             if (slotType == null) {
                 continue;
@@ -486,6 +554,25 @@ public final class VSQEnchantmentSlots {
             working = working.withSlots(slotType, Optional.of(updated));
         }
         return Optional.of(working);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Holder.Reference<Enchantment> lootingHolder(ItemEnchantments sourceEnchantments) {
+        HolderOwner<Enchantment> owner = null;
+        for (Holder<Enchantment> holder : sourceEnchantments.keySet()) {
+            if (holder instanceof Holder.Reference<?> reference) {
+                try {
+                    owner = (HolderOwner<Enchantment>) HOLDER_REFERENCE_OWNER_FIELD.get(reference);
+                    break;
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException("Unable to read enchantment holder owner", e);
+                }
+            }
+        }
+        if (owner == null) {
+            throw new IllegalStateException("Unable to resolve enchantment holder owner");
+        }
+        return Holder.Reference.createStandAlone(owner, Enchantments.LOOTING);
     }
 
     public static TypedDataComponent<VSQEnchantmentComponent> componentFor(ItemStack stack) {
