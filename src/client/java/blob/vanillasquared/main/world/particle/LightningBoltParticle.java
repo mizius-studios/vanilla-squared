@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.state.level.ParticleGroupRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.AABB;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
@@ -56,7 +57,7 @@ public class LightningBoltParticle extends Particle {
         this.gravity = 0.0F;
         this.friction = 1.0F;
         this.lifetime = 2;
-        this.setSize(1.0F, 1.0F);
+        this.setBoundingBox(new AABB(x - 0.5D, y - 0.5D, z - 0.5D, x + 0.5D, y + 0.5D, z + 0.5D));
     }
 
     @Override
@@ -72,8 +73,7 @@ public class LightningBoltParticle extends Particle {
 
         PoseStack poseStack = new PoseStack();
         poseStack.translate(renderX, renderY, renderZ);
-        poseStack.mulPose(new Quaternionf().rotationY(this.yaw * Mth.DEG_TO_RAD));
-        poseStack.mulPose(new Quaternionf().rotationX(this.pitch * Mth.DEG_TO_RAD));
+        poseStack.mulPose(new Quaternionf().rotationYXZ(this.yaw * Mth.DEG_TO_RAD, this.pitch * Mth.DEG_TO_RAD, 0.0F));
         poseStack.scale(LIGHTNING_SCALE, LIGHTNING_SCALE, LIGHTNING_SCALE);
         return new LightningBoltParticleRenderState(poseStack, this.seed, this.variant);
     }
