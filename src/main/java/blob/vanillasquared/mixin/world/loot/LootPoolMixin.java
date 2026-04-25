@@ -2,14 +2,12 @@ package blob.vanillasquared.mixin.world.loot;
 
 import blob.vanillasquared.main.world.loot.RandomizeEnchantmentSlotsFunction;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -53,22 +51,13 @@ public abstract class LootPoolMixin {
 
     @Unique
     private static Optional<Identifier> vsq$findCurrentLootTableId(LootContext context) {
-        if (!(context.getResolver() instanceof HolderLookup.Provider provider)) {
-            return Optional.empty();
-        }
-
-        LootTable activeTable = null;
-        for (LootContext.VisitedEntry<?> visitedEntry : ((LootContextAccessor) context).vsq$visitedElements()) {
-            if (visitedEntry.type() == LootDataType.TABLE && visitedEntry.value() instanceof LootTable table) {
-                activeTable = table;
-            }
-        }
-        if (activeTable == null) {
+        LootTable activeTable = ((LootContextAccessor) context).vsq$lootTableStack().peekLast();
+        if (activeTable == null || !(context.getResolver() instanceof net.minecraft.core.HolderLookup.Provider provider)) {
             return Optional.empty();
         }
 
         LootTable targetTable = activeTable;
-        return provider.lookupOrThrow(Registries.LOOT_TABLE)
+        return provider.lookupOrThrow(net.minecraft.core.registries.Registries.LOOT_TABLE)
                 .listElements()
                 .filter(holder -> holder.value() == targetTable)
                 .map(holder -> holder.key().identifier())

@@ -47,8 +47,8 @@ public final class EnchantingRecipeRegistry {
 
     public static Collection<RecipeHolder<?>> recipeHolders() {
         return RECIPES.values().stream()
-                .<RecipeHolder<?>>map(holder -> holder)
-                .toList();
+                .map(holder -> (RecipeHolder<?>) holder)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     public static java.util.stream.Stream<Identifier> recipeIds() {

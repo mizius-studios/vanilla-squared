@@ -34,7 +34,7 @@ public abstract class ItemStackMixin {
         }
 
         List<Component> tooltip = new ArrayList<>(cir.getReturnValue());
-        tooltip.add(vsq$slotTooltipInsertionIndex(tooltip), Component.literal(vsq$recipeDisplayName(recipeKey)).withStyle(ChatFormatting.GRAY));
+        tooltip.add(vsq$slotTooltipInsertionIndex(tooltip), Component.translatable(vsq$recipeDisplayNameKey(recipeKey)).withStyle(ChatFormatting.GRAY));
         cir.setReturnValue(List.copyOf(tooltip));
     }
 
@@ -90,24 +90,7 @@ public abstract class ItemStackMixin {
         return line.getStyle().getColor().getValue() == formatting.getColor();
     }
 
-    private static String vsq$recipeDisplayName(ResourceKey<Recipe<?>> recipeKey) {
-        String path = recipeKey.identifier().getPath();
-        int slash = path.lastIndexOf('/');
-        String name = slash == -1 ? path : path.substring(slash + 1);
-        String[] words = name.split("_");
-        StringBuilder builder = new StringBuilder();
-        for (String word : words) {
-            if (word.isEmpty()) {
-                continue;
-            }
-            if (!builder.isEmpty()) {
-                builder.append(' ');
-            }
-            builder.append(Character.toUpperCase(word.charAt(0)));
-            if (word.length() > 1) {
-                builder.append(word.substring(1));
-            }
-        }
-        return builder.isEmpty() ? recipeKey.identifier().toString() : builder.toString();
+    private static String vsq$recipeDisplayNameKey(ResourceKey<Recipe<?>> recipeKey) {
+        return "vsq.recipe." + recipeKey.identifier().getPath().replace('/', '.');
     }
 }

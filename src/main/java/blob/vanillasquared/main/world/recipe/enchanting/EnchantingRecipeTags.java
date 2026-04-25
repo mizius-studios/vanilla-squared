@@ -99,7 +99,7 @@ public final class EnchantingRecipeTags {
     }
 
     public static Identifier lootTagForTable(Identifier lootTableId) {
-        return LOOT_TABLE_TO_TAG.getOrDefault(lootTableId.getPath(), DEFAULT_LOOT_TAG);
+        return "minecraft".equals(lootTableId.getNamespace()) ? LOOT_TABLE_TO_TAG.getOrDefault(lootTableId.getPath(), DEFAULT_LOOT_TAG) : DEFAULT_LOOT_TAG;
     }
 
     public static Identifier librarianTagForVariant(Identifier villagerVariantId) {

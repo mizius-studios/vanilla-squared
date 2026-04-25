@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(ResourceKeyArgument.class)
@@ -43,10 +44,10 @@ public abstract class ResourceKeyArgumentMixin {
             return;
         }
 
-        String remaining = builder.getRemaining().toLowerCase();
+        String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
         EnchantingRecipeRegistry.recipeIds().forEach(id -> {
             String suggestion = id.toString();
-            if (SharedSuggestionProvider.matchesSubStr(remaining, suggestion.toLowerCase())) {
+            if (SharedSuggestionProvider.matchesSubStr(remaining, suggestion.toLowerCase(Locale.ROOT))) {
                 builder.suggest(suggestion);
             }
         });

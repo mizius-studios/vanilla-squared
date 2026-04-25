@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -67,6 +68,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     private List<Component> detectedBlockTooltipLines = List.of();
     private List<Component> bookTooltipLines = List.of();
     private int selectedDisplayId = -1;
+    private ResourceKey<net.minecraft.world.item.crafting.Recipe<?>> selectedRecipeId;
     private boolean selectionCleared;
     private final Map<Integer, RecipeHolder<EnchantingRecipe>> displayRecipes = new LinkedHashMap<>();
 
@@ -310,7 +312,14 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     public void vsq$setSelectedDisplayId(int selectedDisplayId) {
-        this.selectedDisplayId = selectedDisplayId;
+        RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(selectedDisplayId);
+        if (selected == null) {
+            this.selectedDisplayId = -1;
+            this.selectedRecipeId = null;
+        } else {
+            this.selectedDisplayId = selectedDisplayId;
+            this.selectedRecipeId = selected.id();
+        }
         if (this.player instanceof ServerPlayer serverPlayer) {
             this.vsq$refresh(serverPlayer);
         }
@@ -407,12 +416,9 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     private Optional<RecipeHolder<EnchantingRecipe>> vsq$getPreviewRecipe(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
-        if (this.selectedDisplayId != -1) {
-            RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(this.selectedDisplayId);
-            if (selected != null) {
-                return Optional.of(selected);
-            }
-            this.selectedDisplayId = -1;
+        Optional<RecipeHolder<EnchantingRecipe>> selected = this.vsq$getSelectedRecipe();
+        if (selected.isPresent()) {
+            return selected;
         }
         return this.displayRecipes.values().stream()
                 .filter(holder -> holder.value().findMatch(input, registries).isPresent())
@@ -423,18 +429,26 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     private Optional<RecipeHolder<EnchantingRecipe>> vsq$getCraftingRecipe(EnchantingRecipeInput input, Map<Identifier, Integer> detectedBlocks, net.minecraft.core.HolderLookup.Provider registries, int playerLevel) {
-        if (this.selectedDisplayId != -1) {
+        if (this.selectedDisplayId != -1 && this.selectedRecipeId != null) {
             RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(this.selectedDisplayId);
-            if (selected != null
-                    && selected.value().findMatch(input, registries).isPresent()
-                    && selected.value().isBelowMaximumEnchantmentLevel(input, registries)
-                    && selected.value().wouldModifyInput(input, registries)
-                    && selected.value().respectsVanillaEnchantmentIncompatibilities(input, registries)
-                    && selected.value().canPlayerCraft(input, playerLevel, registries)
-                    && selected.value().hasRequiredBlocks(detectedBlocks)) {
-                return Optional.of(selected);
+            if (selected != null) {
+                if (!selected.id().equals(this.selectedRecipeId)) {
+                    this.selectedDisplayId = -1;
+                    this.selectedRecipeId = null;
+                } else if (selected.value().findMatch(input, registries).isPresent()
+                        && selected.value().isBelowMaximumEnchantmentLevel(input, registries)
+                        && selected.value().wouldModifyInput(input, registries)
+                        && selected.value().respectsVanillaEnchantmentIncompatibilities(input, registries)
+                        && selected.value().canPlayerCraft(input, playerLevel, registries)
+                        && selected.value().hasRequiredBlocks(detectedBlocks)) {
+                    return Optional.of(selected);
+                } else {
+                    return Optional.empty();
+                }
+            } else {
+                this.selectedDisplayId = -1;
+                this.selectedRecipeId = null;
             }
-            return Optional.empty();
         }
 
         return this.displayRecipes.values().stream()
@@ -445,6 +459,21 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
                 .filter(holder -> holder.value().canPlayerCraft(input, playerLevel, registries))
                 .filter(holder -> holder.value().hasRequiredBlocks(detectedBlocks))
                 .findFirst();
+    }
+
+    private Optional<RecipeHolder<EnchantingRecipe>> vsq$getSelectedRecipe() {
+        if (this.selectedDisplayId == -1 || this.selectedRecipeId == null) {
+            return Optional.empty();
+        }
+
+        RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(this.selectedDisplayId);
+        if (selected == null || !selected.id().equals(this.selectedRecipeId)) {
+            this.selectedDisplayId = -1;
+            this.selectedRecipeId = null;
+            return Optional.empty();
+        }
+
+        return Optional.of(selected);
     }
 
     private Map<Identifier, Integer> vsq$collectDetectedBlocks() {
@@ -478,8 +507,20 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
                 this.displayRecipes.put(displayId++, holder);
             }
         }
-        if (this.selectedDisplayId != -1 && !this.displayRecipes.containsKey(this.selectedDisplayId)) {
+
+        if (this.selectedRecipeId == null) {
+            return;
+        }
+
+        Optional<Integer> selectedDisplayId = this.displayRecipes.entrySet().stream()
+                .filter(entry -> entry.getValue().id().equals(this.selectedRecipeId))
+                .map(Map.Entry::getKey)
+                .findFirst();
+        if (selectedDisplayId.isPresent()) {
+            this.selectedDisplayId = selectedDisplayId.get();
+        } else {
             this.selectedDisplayId = -1;
+            this.selectedRecipeId = null;
         }
     }
 
