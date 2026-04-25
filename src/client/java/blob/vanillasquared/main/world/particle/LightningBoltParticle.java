@@ -19,6 +19,7 @@ import org.joml.Quaternionf;
 
 public class LightningBoltParticle extends Particle {
     private static final float LIGHTNING_SCALE = 1.0F / 16.0F;
+    private static final double BOUNDS_RADIUS = 0.75D;
     private static final int LAYER_COUNT = 4;
     private static final int SPINE_POINTS = 8;
     private static final int SPINE_SEGMENTS = SPINE_POINTS - 1;
@@ -57,7 +58,7 @@ public class LightningBoltParticle extends Particle {
         this.gravity = 0.0F;
         this.friction = 1.0F;
         this.lifetime = 2;
-        this.setBoundingBox(new AABB(x - 0.5D, y - 0.5D, z - 0.5D, x + 0.5D, y + 0.5D, z + 0.5D));
+        this.setBoundingBox(new AABB(x - BOUNDS_RADIUS, y - BOUNDS_RADIUS, z - BOUNDS_RADIUS, x + BOUNDS_RADIUS, y + BOUNDS_RADIUS, z + BOUNDS_RADIUS));
     }
 
     @Override
