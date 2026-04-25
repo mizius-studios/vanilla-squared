@@ -12,8 +12,8 @@ import net.minecraft.network.codec.StreamCodec;
 
 import java.util.List;
 
-public record LightningBoltParticleOptions(double yaw, double pitch, int variant) implements ParticleOptions {
-    public static final LightningBoltParticleOptions DEFAULT = new LightningBoltParticleOptions(0.0D, 0.0D, 0);
+public record LightningBoltParticleOptions(float yaw, float pitch, int variant) implements ParticleOptions {
+    public static final LightningBoltParticleOptions DEFAULT = new LightningBoltParticleOptions(0.0F, 0.0F, 0);
     public static final int MIN_VARIANT = 0;
     public static final int MAX_VARIANT = 3;
 
@@ -23,9 +23,9 @@ public record LightningBoltParticleOptions(double yaw, double pitch, int variant
     ).apply(instance, LightningBoltParticleOptions::fromCodecValues));
 
     public static final StreamCodec<ByteBuf, LightningBoltParticleOptions> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.DOUBLE,
+            ByteBufCodecs.FLOAT,
             LightningBoltParticleOptions::yaw,
-            ByteBufCodecs.DOUBLE,
+            ByteBufCodecs.FLOAT,
             LightningBoltParticleOptions::pitch,
             ByteBufCodecs.VAR_INT,
             LightningBoltParticleOptions::variant,
@@ -43,7 +43,7 @@ public record LightningBoltParticleOptions(double yaw, double pitch, int variant
         return VSQParticleTypes.LIGHTNING_BOLT;
     }
 
-    public List<Double> rotationValues() {
+    public List<Float> rotationValues() {
         return List.of(this.yaw, this.pitch);
     }
 
@@ -58,16 +58,16 @@ public record LightningBoltParticleOptions(double yaw, double pitch, int variant
         return Codec.INT.comapFlatMap(LightningBoltParticleOptions::validateVariant, value -> value);
     }
 
-    private static Codec<List<Double>> rotationCodec() {
-        return Codec.DOUBLE.listOf().comapFlatMap(values -> {
+    private static Codec<List<Float>> rotationCodec() {
+        return Codec.FLOAT.listOf().comapFlatMap(values -> {
             if (values.size() != 2) {
-                return DataResult.error(() -> "Lightning bolt particle rotation must contain exactly 2 doubles [yaw, pitch], got " + values.size());
+                return DataResult.error(() -> "Lightning bolt particle rotation must contain exactly 2 floats [yaw, pitch], got " + values.size());
             }
             return DataResult.success(values);
         }, values -> values);
     }
 
-    private static LightningBoltParticleOptions fromCodecValues(List<Double> rotation, int variant) {
+    private static LightningBoltParticleOptions fromCodecValues(List<Float> rotation, int variant) {
         return new LightningBoltParticleOptions(rotation.get(0), rotation.get(1), variant);
     }
 }

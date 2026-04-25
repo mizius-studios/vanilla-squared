@@ -18,6 +18,7 @@ import org.joml.Quaternionf;
 
 public class LightningBoltParticle extends Particle {
     private static final float LIGHTNING_SCALE = 1.0F / 16.0F;
+    private static final int LAYER_COUNT = 4;
     private static final int SPINE_POINTS = 8;
     private static final int SPINE_SEGMENTS = SPINE_POINTS - 1;
     private static final float HALF_BLOCK_PIXELS = 7.45F;
@@ -50,8 +51,8 @@ public class LightningBoltParticle extends Particle {
     protected LightningBoltParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, LightningBoltParticleOptions options) {
         super(level, x, y, z, xd, yd, zd);
         this.seed = this.random.nextLong();
-        this.yaw = (float) options.yaw();
-        this.pitch = (float) options.pitch();
+        this.yaw = options.yaw();
+        this.pitch = options.pitch();
         this.variant = options.variant();
         this.hasPhysics = false;
         this.gravity = 0.0F;
@@ -72,7 +73,6 @@ public class LightningBoltParticle extends Particle {
         float renderZ = (float) (Mth.lerp(tickDelta, this.zo, this.z) - cameraPosition.z);
 
         PoseStack poseStack = new PoseStack();
-        poseStack.pushPose();
         poseStack.translate(renderX, renderY, renderZ);
         poseStack.mulPose(new Quaternionf().rotationY(this.yaw * Mth.DEG_TO_RAD));
         poseStack.mulPose(new Quaternionf().rotationX(this.pitch * Mth.DEG_TO_RAD));
@@ -86,7 +86,7 @@ public class LightningBoltParticle extends Particle {
         float[] zs = new float[SPINE_POINTS];
         buildSpine(seed + variant * 31L, preset, xs, zs);
 
-        for (int layer = 0; layer < 4; layer++) {
+        for (int layer = 0; layer < LAYER_COUNT; layer++) {
             for (int segment = SPINE_SEGMENTS - 1; segment >= 0; segment--) {
                 float lowerX = xs[segment + 1];
                 float lowerZ = zs[segment + 1];
@@ -132,7 +132,7 @@ public class LightningBoltParticle extends Particle {
 
         float center = (min + max) * 0.5F;
         for (int index = 0; index < values.length; index++) {
-            values[index] = clampToBlock(values[index] - center);
+            values[index] = values[index] - center;
         }
     }
 
