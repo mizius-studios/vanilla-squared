@@ -21,7 +21,6 @@ public class LightningBoltParticle extends Particle {
     private static final int LAYER_COUNT = 4;
     private static final int SPINE_POINTS = 8;
     private static final int SPINE_SEGMENTS = SPINE_POINTS - 1;
-    private static final float HALF_BLOCK_PIXELS = 7.45F;
     private static final float CORE_START_Y = -7.45F;
     private static final float CORE_END_Y = 7.45F;
     private static final float VANILLA_BLUE = 0.5F;
@@ -108,8 +107,8 @@ public class LightningBoltParticle extends Particle {
         float z = 0.0F;
 
         for (int index = SPINE_POINTS - 1; index >= 0; index--) {
-            xs[index] = clampToBlock(x);
-            zs[index] = clampToBlock(z);
+            xs[index] = x;
+            zs[index] = z;
             float t = 1.0F - index / (float) SPINE_SEGMENTS;
             float profile = 0.45F + (float) Math.sin(t * Math.PI) * 0.55F;
             x += (random.nextInt(11) - 5) * preset.jitterScale() * profile;
@@ -189,12 +188,8 @@ public class LightningBoltParticle extends Particle {
         return positive ? radius : -radius;
     }
 
-    private static float clampToBlock(float value) {
-        return Mth.clamp(value, -HALF_BLOCK_PIXELS, HALF_BLOCK_PIXELS);
-    }
-
     private static void addVertex(Matrix4f matrix, VertexConsumer consumer, float x, float y, float z) {
-        consumer.addVertex(matrix, clampToBlock(x), clampToBlock(y), clampToBlock(z)).setColor(BASE_RED, BASE_GREEN, BASE_BLUE, BASE_ALPHA);
+        consumer.addVertex(matrix, x, y, z).setColor(BASE_RED, BASE_GREEN, BASE_BLUE, BASE_ALPHA);
     }
 
     private record LightningShapePreset(
@@ -213,7 +208,7 @@ public class LightningBoltParticle extends Particle {
         }
     }
 
-    public record LightningBoltParticleRenderState(PoseStack poseStack, long seed, int variant) implements ParticleGroupRenderState {
+    record LightningBoltParticleRenderState(PoseStack poseStack, long seed, int variant) implements ParticleGroupRenderState {
         @Override
         public void submit(SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
             submitNodeCollector.submitCustomGeometry(this.poseStack, RenderTypes.lightning(), (pose, consumer) -> renderBolt(pose.pose(), consumer, this.seed, this.variant));
