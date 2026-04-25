@@ -47,12 +47,8 @@ public final class EnchantingRecipeBookNotifier {
     }
 
     private static RecipeDisplayId displayId(ResourceKey<Recipe<?>> recipeKey) {
-        int displayIndex = 0;
-        for (var holder : EnchantingRecipeRegistry.recipes()) {
-            if (holder.id().equals(recipeKey)) {
-                return new RecipeDisplayId(displayIndex);
-            }
-            displayIndex++;
+        if (EnchantingRecipeRegistry.contains(recipeKey)) {
+            return new RecipeDisplayId(recipeKey.identifier().hashCode());
         }
         throw new IllegalArgumentException("Unknown enchanting recipe: " + recipeKey.identifier());
     }
