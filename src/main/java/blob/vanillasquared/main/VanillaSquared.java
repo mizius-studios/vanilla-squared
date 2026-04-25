@@ -3,6 +3,7 @@ package blob.vanillasquared.main;
 import blob.vanillasquared.main.network.VSQNetworking;
 import blob.vanillasquared.main.world.inventory.VSQMenuTypes;
 import blob.vanillasquared.main.world.loot.VSQLootFunctions;
+import blob.vanillasquared.main.world.particle.VSQParticleTypes;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
 import blob.vanillasquared.main.world.recipe.enchanting.VSQRecipeTypes;
 import blob.vanillasquared.main.world.VSQExperiments;
@@ -25,6 +26,7 @@ public class VanillaSquared implements ModInitializer {
         VSQRecipeTypes.initialize();
         VSQExperiments.initialize();
         EnchantingRecipeRegistry.initialize();
+        VSQParticleTypes.initialize();
         RegisterComponents.initialize();
         VSQEnchantmentEffectComponents.initialize();
         VSQEnchantmentEntityEffects.initialize();
