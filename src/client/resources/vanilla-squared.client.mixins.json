@@ -20,7 +20,6 @@
 		"gui.RecipeButtonMixin",
 		"gui.RecipeBookComponentMixin",
 		"gui.RecipeBookComponentAccessor",
-		"gui.SearchRecipeBookCategoryMixin",
 		"world.ItemStackMixin",
 		"world.particle.ParticleEngineMixin",
       	"world.entities.LocalPlayerMixin",

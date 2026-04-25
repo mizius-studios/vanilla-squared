@@ -33,7 +33,6 @@
     "world.loot.ApplyBonusCountMixin",
     "world.loot.BonusLevelTableConditionMixin",
     "world.loot.LootContextMixin",
-    "world.loot.LootContextAccessor",
     "world.loot.LootPoolMixin",
     "world.loot.LootItemRandomChanceWithEnchantedBonusConditionMixin",
     "world.item.CreativeInventoryMixin",

@@ -6,7 +6,9 @@ import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantment
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -34,7 +36,7 @@ public abstract class ItemStackMixin {
         }
 
         List<Component> tooltip = new ArrayList<>(cir.getReturnValue());
-        tooltip.add(vsq$slotTooltipInsertionIndex(tooltip), Component.translatable(vsq$recipeDisplayNameKey(recipeKey)).withStyle(ChatFormatting.GRAY));
+        tooltip.add(vsq$slotTooltipInsertionIndex(tooltip), vsq$recipeDisplayName(recipeKey).withStyle(ChatFormatting.GRAY));
         cir.setReturnValue(List.copyOf(tooltip));
     }
 
@@ -90,7 +92,19 @@ public abstract class ItemStackMixin {
         return line.getStyle().getColor().getValue() == formatting.getColor();
     }
 
-    private static String vsq$recipeDisplayNameKey(ResourceKey<Recipe<?>> recipeKey) {
-        return "vsq.recipe." + recipeKey.identifier().getPath().replace('/', '.');
+    private static MutableComponent vsq$recipeDisplayName(ResourceKey<Recipe<?>> recipeKey) {
+        String namespace = recipeKey.identifier().getNamespace();
+        String path = recipeKey.identifier().getPath().replace('/', '.');
+        String namespacedKey = "vsq.recipe." + namespace + "." + path;
+        String legacyKey = "vsq.recipe." + path;
+        Language language = Language.getInstance();
+
+        if (language.has(namespacedKey)) {
+            return Component.translatable(namespacedKey);
+        }
+        if (language.has(legacyKey)) {
+            return Component.translatable(legacyKey);
+        }
+        return Component.literal(recipeKey.identifier().toString());
     }
 }

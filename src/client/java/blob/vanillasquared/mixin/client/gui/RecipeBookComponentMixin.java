@@ -1,5 +1,6 @@
 package blob.vanillasquared.mixin.client.gui;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
+import blob.vanillasquared.main.world.recipe.enchanting.VSQEnchantmentRecipeBookCategories;
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.gui.components.EditBox;
@@ -55,7 +56,9 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
             return;
         }
 
-        List<RecipeCollection> collections = Lists.newArrayList(this.book.getCollection(this.selectedTab.getCategory()));
+        List<RecipeCollection> collections = this.selectedTab.getCategory() == VSQEnchantmentRecipeBookCategories.ALL
+                ? vsq$allEnchantingCollections()
+                : Lists.newArrayList(this.book.getCollection(this.selectedTab.getCategory()));
         collections.removeIf(collection -> !collection.hasAnySelected());
 
         String query = this.searchBox.getValue().toLowerCase(Locale.ROOT);
@@ -70,6 +73,15 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
 
         this.recipeBookPage.updateCollections(collections, resetCurrentPage, filtering);
         ci.cancel();
+    }
+
+    private List<RecipeCollection> vsq$allEnchantingCollections() {
+        List<RecipeCollection> collections = Lists.newArrayList();
+        collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.WEAPONS));
+        collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.TOOLS));
+        collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.ARMOR));
+        collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.UTIL));
+        return collections;
     }
 
     private static boolean vsq$matchesSearch(RecipeCollection collection, String query, ContextMap contextMap) {

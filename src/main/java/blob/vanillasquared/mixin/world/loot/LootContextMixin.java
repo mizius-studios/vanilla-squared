@@ -1,5 +1,7 @@
 package blob.vanillasquared.mixin.world.loot;
 
+import blob.vanillasquared.main.world.loot.LootContextBridge;
+import blob.vanillasquared.main.world.loot.LootTableIdResolver;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -12,9 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Optional;
 
 @Mixin(LootContext.class)
-public abstract class LootContextMixin {
+public abstract class LootContextMixin implements LootContextBridge {
     @Unique
     private final Deque<LootTable> vsq$lootTableStack = new ArrayDeque<>();
 
@@ -33,5 +36,14 @@ public abstract class LootContextMixin {
                 && this.vsq$lootTableStack.peekLast() == table) {
             this.vsq$lootTableStack.removeLast();
         }
+    }
+
+    @Override
+    public Optional<net.minecraft.resources.Identifier> vsq$currentLootTableId() {
+        LootTable table = this.vsq$lootTableStack.peekLast();
+        if (table == null) {
+            return Optional.empty();
+        }
+        return LootTableIdResolver.lookup((LootContext) (Object) this, table);
     }
 }

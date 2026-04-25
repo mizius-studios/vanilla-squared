@@ -390,11 +390,11 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
 
     private void vsq$refresh(ServerPlayer player) {
         this.playerLevel = player.experienceLevel;
+        int previousSelectedId = this.selectedDisplayId;
         this.vsq$rebuildRecipeBookIndex(player);
         Map<Identifier, Integer> detectedBlocks = this.vsq$collectDetectedBlocks();
         this.vsq$sendRecipeBookSync(player, true, detectedBlocks);
         EnchantingRecipeInput input = this.vsq$createRecipeInput();
-        int previousSelectedId = this.selectedDisplayId;
         Optional<RecipeHolder<EnchantingRecipe>> recipeHolder = this.vsq$getPreviewRecipe(input, player.registryAccess());
         boolean selectionWasCleared = previousSelectedId != -1 && this.selectedDisplayId == -1;
         if (recipeHolder.isEmpty()) {
