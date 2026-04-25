@@ -1,6 +1,7 @@
 package blob.vanillasquared.mixin.world.loot;
 
 import blob.vanillasquared.main.world.loot.RandomizeEnchantmentSlotsFunction;
+import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,6 +21,10 @@ public abstract class LootPoolMixin {
     private Consumer<ItemStack> vsq$sanitizeLootEnchantments(Consumer<ItemStack> original, Consumer<ItemStack> originalArgument, LootContext context) {
         return stack -> {
             if (stack.is(Items.ENCHANTED_BOOK)) {
+                ItemStack recipeStack = EnchantingRecipeTags.createRandomStack(EnchantingRecipeTags.DEFAULT_LOOT_TAG, context.getRandom());
+                if (!recipeStack.isEmpty()) {
+                    original.accept(recipeStack);
+                }
                 return;
             }
             stack.remove(DataComponents.ENCHANTMENTS);

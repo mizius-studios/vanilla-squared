@@ -14,6 +14,7 @@
   "vsq.attributes.magic_protection": "Magic Protection",
   "vsq.attributes.dripstone_protection": "Dripstone Protection",
   "vsq.attributes.spear_protection": "Spear Protection",
+  "item.vsq.enchant_recipe": "Enchant Recipe",
   "enchantment.minecraft.testificate": "Testificate",
   "vsq.enchantment.aqua_affinity.description": "Increases mining speed underwater.",
   "vsq.enchantment.bane_of_arthropods.description": "Increases damage dealt to arthropods.",

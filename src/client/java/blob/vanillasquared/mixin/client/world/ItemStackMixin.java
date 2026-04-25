@@ -12,6 +12,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.resources.ResourceKey;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,6 +25,19 @@ import java.util.List;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
+    @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
+    private void vsq$addEnchantRecipeTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
+        ItemStack stack = (ItemStack) (Object) this;
+        ResourceKey<Recipe<?>> recipeKey = stack.get(DataComponents.ENCHANT_RECIPE);
+        if (recipeKey == null) {
+            return;
+        }
+
+        List<Component> tooltip = new ArrayList<>(cir.getReturnValue());
+        tooltip.add(vsq$slotTooltipInsertionIndex(tooltip), Component.literal(vsq$recipeDisplayName(recipeKey)).withStyle(ChatFormatting.GRAY));
+        cir.setReturnValue(List.copyOf(tooltip));
+    }
+
     @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceVanillaEnchantTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         ItemStack stack = (ItemStack) (Object) this;
@@ -73,5 +88,26 @@ public abstract class ItemStackMixin {
             return false;
         }
         return line.getStyle().getColor().getValue() == formatting.getColor();
+    }
+
+    private static String vsq$recipeDisplayName(ResourceKey<Recipe<?>> recipeKey) {
+        String path = recipeKey.identifier().getPath();
+        int slash = path.lastIndexOf('/');
+        String name = slash == -1 ? path : path.substring(slash + 1);
+        String[] words = name.split("_");
+        StringBuilder builder = new StringBuilder();
+        for (String word : words) {
+            if (word.isEmpty()) {
+                continue;
+            }
+            if (!builder.isEmpty()) {
+                builder.append(' ');
+            }
+            builder.append(Character.toUpperCase(word.charAt(0)));
+            if (word.length() > 1) {
+                builder.append(word.substring(1));
+            }
+        }
+        return builder.isEmpty() ? recipeKey.identifier().toString() : builder.toString();
     }
 }

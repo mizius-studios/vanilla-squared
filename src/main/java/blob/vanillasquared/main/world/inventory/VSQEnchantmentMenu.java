@@ -381,6 +381,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
 
     private void vsq$refresh(ServerPlayer player) {
         this.playerLevel = player.experienceLevel;
+        this.vsq$rebuildRecipeBookIndex(player);
         Map<Identifier, Integer> detectedBlocks = this.vsq$collectDetectedBlocks();
         this.vsq$sendRecipeBookSync(player, true, detectedBlocks);
         EnchantingRecipeInput input = this.vsq$createRecipeInput();
@@ -413,7 +414,12 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
             }
             this.selectedDisplayId = -1;
         }
-        return EnchantingRecipeRegistry.findFirstStructuralMatch(input, registries);
+        return this.displayRecipes.values().stream()
+                .filter(holder -> holder.value().findMatch(input, registries).isPresent())
+                .filter(holder -> holder.value().isBelowMaximumEnchantmentLevel(input, registries))
+                .filter(holder -> holder.value().wouldModifyInput(input, registries))
+                .filter(holder -> holder.value().respectsVanillaEnchantmentIncompatibilities(input, registries))
+                .findFirst();
     }
 
     private Optional<RecipeHolder<EnchantingRecipe>> vsq$getCraftingRecipe(EnchantingRecipeInput input, Map<Identifier, Integer> detectedBlocks, net.minecraft.core.HolderLookup.Provider registries, int playerLevel) {
@@ -431,7 +437,14 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
             return Optional.empty();
         }
 
-        return EnchantingRecipeRegistry.findFirstCraftableMatch(input, playerLevel, detectedBlocks, registries);
+        return this.displayRecipes.values().stream()
+                .filter(holder -> holder.value().findMatch(input, registries).isPresent())
+                .filter(holder -> holder.value().isBelowMaximumEnchantmentLevel(input, registries))
+                .filter(holder -> holder.value().wouldModifyInput(input, registries))
+                .filter(holder -> holder.value().respectsVanillaEnchantmentIncompatibilities(input, registries))
+                .filter(holder -> holder.value().canPlayerCraft(input, playerLevel, registries))
+                .filter(holder -> holder.value().hasRequiredBlocks(detectedBlocks))
+                .findFirst();
     }
 
     private Map<Identifier, Integer> vsq$collectDetectedBlocks() {
@@ -457,8 +470,20 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
         }
     }
 
+    private void vsq$rebuildRecipeBookIndex(ServerPlayer player) {
+        this.displayRecipes.clear();
+        int displayId = 0;
+        for (RecipeHolder<EnchantingRecipe> holder : EnchantingRecipeRegistry.recipes()) {
+            if (player.getRecipeBook().contains(holder.id())) {
+                this.displayRecipes.put(displayId++, holder);
+            }
+        }
+        if (this.selectedDisplayId != -1 && !this.displayRecipes.containsKey(this.selectedDisplayId)) {
+            this.selectedDisplayId = -1;
+        }
+    }
+
     private void vsq$sendRecipeBookSync(ServerPlayer player, boolean replace, Map<Identifier, Integer> detectedBlocks) {
-        this.vsq$rebuildRecipeBookIndex();
         List<EnchantingRecipeBookSyncPayload.RecipeView> recipeViews = new ArrayList<>(this.displayRecipes.size());
         for (RecipeHolder<EnchantingRecipe> holder : this.displayRecipes.values()) {
             PlannedRecipePlacement plannedPlacement = this.vsq$planRecipePlacement(holder.value(), player.registryAccess());
