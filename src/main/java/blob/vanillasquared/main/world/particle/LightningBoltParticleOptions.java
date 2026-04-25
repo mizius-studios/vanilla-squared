@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public record LightningBoltParticleOptions(float yaw, float pitch, int variant) 
             LightningBoltParticleOptions::pitch,
             ByteBufCodecs.VAR_INT,
             LightningBoltParticleOptions::variant,
-            LightningBoltParticleOptions::new
+            (yaw, pitch, variant) -> new LightningBoltParticleOptions(yaw, pitch, Mth.clamp(variant, MIN_VARIANT, MAX_VARIANT))
     );
 
     public LightningBoltParticleOptions {

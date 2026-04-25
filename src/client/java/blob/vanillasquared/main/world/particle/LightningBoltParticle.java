@@ -23,10 +23,9 @@ public class LightningBoltParticle extends Particle {
     private static final int SPINE_SEGMENTS = SPINE_POINTS - 1;
     private static final float CORE_START_Y = -7.45F;
     private static final float CORE_END_Y = 7.45F;
-    private static final float VANILLA_BLUE = 0.5F;
     private static final float BASE_RED = 0.45F;
     private static final float BASE_GREEN = 0.45F;
-    private static final float BASE_BLUE = VANILLA_BLUE;
+    private static final float BASE_BLUE = 0.5F;
     private static final float BASE_ALPHA = 0.3F;
     private static final int EXPECTED_VARIANT_PRESET_COUNT = LightningBoltParticleOptions.MAX_VARIANT - LightningBoltParticleOptions.MIN_VARIANT + 1;
     private static final LightningShapePreset[] VARIANT_PRESETS = new LightningShapePreset[]{
@@ -109,6 +108,9 @@ public class LightningBoltParticle extends Particle {
         for (int index = SPINE_POINTS - 1; index >= 0; index--) {
             xs[index] = x;
             zs[index] = z;
+            if (index == 0) {
+                break;
+            }
             float t = 1.0F - index / (float) SPINE_SEGMENTS;
             float profile = 0.45F + (float) Math.sin(t * Math.PI) * 0.55F;
             x += (random.nextInt(11) - 5) * preset.jitterScale() * profile;
