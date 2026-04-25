@@ -47,10 +47,11 @@ public final class EnchantingRecipeBookNotifier {
     }
 
     private static RecipeDisplayId displayId(ResourceKey<Recipe<?>> recipeKey) {
-        if (EnchantingRecipeRegistry.contains(recipeKey)) {
-            return new RecipeDisplayId(recipeKey.identifier().hashCode());
-        }
-        throw new IllegalArgumentException("Unknown enchanting recipe: " + recipeKey.identifier());
+        return EnchantingRecipeRegistry.displayId(recipeKey)
+                .stream()
+                .mapToObj(RecipeDisplayId::new)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown enchanting recipe: " + recipeKey.identifier()));
     }
 
     private static OptionalInt group(EnchantingRecipe recipe) {

@@ -32,6 +32,7 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
     @Shadow @Final protected T menu;
     @Shadow protected Minecraft minecraft;
     @Shadow private ClientRecipeBook book;
+    @Final
     @Shadow private RecipeBookPage recipeBookPage;
     @Shadow private RecipeBookTabButton selectedTab;
     @Shadow private EditBox searchBox;
