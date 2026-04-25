@@ -87,25 +87,9 @@ public abstract class VillagerTradeMixin {
         if (replacement.isEmpty()) {
             return;
         }
-        int additionalTradeCost = 5 + context.getRandom().nextInt(15);
-        ItemCost itemCost = this.wants.toItemCost(context, additionalTradeCost);
-        if (itemCost.count() < 1) {
-            return;
-        }
 
-        Optional<ItemCost> additionalItemCost = this.additionalWants.map(tradeCost -> tradeCost.toItemCost(context, 0));
-        if (additionalItemCost.isPresent() && additionalItemCost.get().count() < 1) {
-            return;
-        }
-
-        cir.setReturnValue(new MerchantOffer(
-                itemCost,
-                additionalItemCost,
-                replacement,
-                offer.getMaxUses(),
-                offer.getXp(),
-                offer.getPriceMultiplier()
-        ));
+        ((MerchantOfferAccessor) (Object) offer).vsq$setResult(replacement);
+        cir.setReturnValue(offer);
     }
 
     private static Identifier vsq$resolveLibrarianTag(LootContext context) {

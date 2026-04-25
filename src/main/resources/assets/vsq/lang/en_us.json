@@ -15,6 +15,7 @@
   "vsq.attributes.dripstone_protection": "Dripstone Protection",
   "vsq.attributes.spear_protection": "Spear Protection",
   "item.vsq.enchant_recipe": "Enchanting Recipe Book",
+  "item.vsq.enchant_recipe.already_known": "You already know this enchanting recipe.",
   "vsq.recipe.aqua_affinity": "Aqua Affinity",
   "vsq.recipe.bane_of_arthropods": "Bane Of Arthropods",
   "vsq.recipe.binding_curse": "Binding Curse",

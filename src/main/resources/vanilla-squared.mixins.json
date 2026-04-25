@@ -37,6 +37,7 @@
     "world.loot.LootItemRandomChanceWithEnchantedBonusConditionMixin",
     "world.item.CreativeInventoryMixin",
     "world.item.EnchantedBookEliminatorMixin",
+    "world.item.trading.MerchantOfferAccessor",
     "world.item.trading.MerchantOffersPacketMixin",
     "world.item.trading.VillagerTradeMixin",
     "world.loot.LootItemEntityPropertyConditionMixin",

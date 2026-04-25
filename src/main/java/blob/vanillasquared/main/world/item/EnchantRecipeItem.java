@@ -3,6 +3,8 @@ package blob.vanillasquared.main.world.item;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeBookNotifier;
 import blob.vanillasquared.util.api.modules.components.DataComponents;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -26,20 +28,21 @@ public class EnchantRecipeItem extends Item {
             return InteractionResult.PASS;
         }
 
+        if (!EnchantingRecipeTags.isValidRecipe(recipeKey)) {
+            return InteractionResult.FAIL;
+        }
+
         if (level.isClientSide()) {
-            return InteractionResult.PASS;
+            return InteractionResult.SUCCESS;
         }
 
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.PASS;
         }
 
-        if (!EnchantingRecipeTags.isValidRecipe(recipeKey)) {
-            return InteractionResult.FAIL;
-        }
-
         if (serverPlayer.getRecipeBook().contains(recipeKey)) {
-            return InteractionResult.PASS;
+            serverPlayer.sendSystemMessage(Component.translatable("item.vsq.enchant_recipe.already_known").withStyle(ChatFormatting.RED));
+            return InteractionResult.FAIL;
         }
 
         EnchantingRecipeBookNotifier.unlock(serverPlayer, recipeKey);

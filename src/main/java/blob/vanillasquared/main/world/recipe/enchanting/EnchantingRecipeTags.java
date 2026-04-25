@@ -24,12 +24,15 @@ import net.minecraft.world.item.crafting.Recipe;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 public final class EnchantingRecipeTags {
@@ -49,14 +52,14 @@ public final class EnchantingRecipeTags {
             Map.entry("chests/woodland_mansion", tag("woodland_mansion_chest")),
             Map.entry("chests/bastion_other", tag("bastion_remnant_generic_chest")),
             Map.entry("chests/bastion_remnant_generic", tag("bastion_remnant_generic_chest")),
-            Map.entry("chests/trial_chambers/reward", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_common", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_rare", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_unique", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_ominous", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_ominous_common", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_ominous_rare", tag("trial_chamber_ominous_vault")),
-            Map.entry("chests/trial_chambers/reward_ominous_unique", tag("trial_chamber_ominous_vault")),
+            Map.entry("chests/trial_chambers/reward", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_common", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_rare", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_unique", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous_common", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous_rare", tag("trial_chamber_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous_unique", tag("trial_chamber_vault")),
             Map.entry("gameplay/fishing/treasure", tag("fishing")),
             Map.entry("gameplay/fishing", tag("fishing")),
             Map.entry("gameplay/piglin_bartering", tag("piglin_bartering")),
@@ -65,6 +68,7 @@ public final class EnchantingRecipeTags {
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_tag_loader");
     private static final FileToIdConverter TAG_CONVERTER = FileToIdConverter.json("tags/recipes");
     private static volatile Map<Identifier, List<ResourceKey<Recipe<?>>>> TAGS = Map.of();
+    private static final Set<Identifier> WARNED_EMPTY_TAGS = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private EnchantingRecipeTags() {
     }
@@ -82,7 +86,9 @@ public final class EnchantingRecipeTags {
                 .filter(EnchantingRecipeRegistry::contains)
                 .toList();
         if (entries.isEmpty()) {
-            VanillaSquared.LOGGER.warn("Enchant recipe tag {} is missing, empty, or contains no valid enchanting recipes", tagId);
+            if (WARNED_EMPTY_TAGS.add(tagId)) {
+                VanillaSquared.LOGGER.warn("Enchant recipe tag {} is missing, empty, or contains no valid enchanting recipes", tagId);
+            }
             return Optional.empty();
         }
         return Optional.of(entries.get(random.nextInt(entries.size())));
@@ -197,6 +203,7 @@ public final class EnchantingRecipeTags {
             return CompletableFuture.runAsync(() -> {
                 LootTableIdResolver.clearCache();
                 TAGS = Map.copyOf(data);
+                WARNED_EMPTY_TAGS.clear();
                 VanillaSquared.LOGGER.info("Loaded {} enchant recipe tags", TAGS.size());
             }, executor);
         }
