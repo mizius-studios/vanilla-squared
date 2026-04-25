@@ -45,6 +45,20 @@ public final class EnchantingRecipeRegistry {
         return RECIPES.values();
     }
 
+    public static Collection<RecipeHolder<?>> recipeHolders() {
+        return RECIPES.values().stream()
+                .<RecipeHolder<?>>map(holder -> holder)
+                .toList();
+    }
+
+    public static java.util.stream.Stream<Identifier> recipeIds() {
+        return RECIPES.keySet().stream().map(ResourceKey::identifier);
+    }
+
+    public static Optional<RecipeHolder<?>> byKey(ResourceKey<Recipe<?>> recipeKey) {
+        return Optional.ofNullable(RECIPES.get(recipeKey));
+    }
+
     public static boolean contains(ResourceKey<Recipe<?>> recipeKey) {
         return RECIPES.containsKey(recipeKey);
     }

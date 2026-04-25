@@ -25,19 +25,25 @@ public class EnchantRecipeItem extends Item {
             return InteractionResult.PASS;
         }
 
+        if (level.isClientSide()) {
+            return InteractionResult.PASS;
+        }
+
         if (!(player instanceof ServerPlayer serverPlayer)) {
-            return InteractionResult.SUCCESS;
+            return InteractionResult.PASS;
         }
 
         if (!EnchantingRecipeTags.isValidRecipe(recipeKey)) {
             return InteractionResult.FAIL;
         }
 
-        if (!serverPlayer.getRecipeBook().contains(recipeKey)) {
-            serverPlayer.getRecipeBook().add(recipeKey);
-            if (!serverPlayer.getAbilities().instabuild) {
-                stack.shrink(1);
-            }
+        if (serverPlayer.getRecipeBook().contains(recipeKey)) {
+            return InteractionResult.PASS;
+        }
+
+        serverPlayer.getRecipeBook().add(recipeKey);
+        if (!serverPlayer.getAbilities().instabuild) {
+            stack.shrink(1);
         }
 
         return InteractionResult.SUCCESS_SERVER;
