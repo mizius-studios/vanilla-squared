@@ -68,6 +68,7 @@ public final class EnchantingRecipeTags {
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_tag_loader");
     private static final FileToIdConverter TAG_CONVERTER = FileToIdConverter.json("tags/recipes");
     private static volatile Map<Identifier, List<ResourceKey<Recipe<?>>>> TAGS = Map.of();
+    private static final Map<Identifier, List<ResourceKey<Recipe<?>>>> VALID_RECIPE_CACHE = new ConcurrentHashMap<>();
     private static final Set<Identifier> WARNED_EMPTY_TAGS = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private EnchantingRecipeTags() {
@@ -82,9 +83,9 @@ public final class EnchantingRecipeTags {
     }
 
     public static Optional<ResourceKey<Recipe<?>>> randomRecipe(Identifier tagId, RandomSource random) {
-        List<ResourceKey<Recipe<?>>> entries = TAGS.getOrDefault(tagId, List.of()).stream()
+        List<ResourceKey<Recipe<?>>> entries = VALID_RECIPE_CACHE.computeIfAbsent(tagId, id -> TAGS.getOrDefault(id, List.of()).stream()
                 .filter(EnchantingRecipeRegistry::contains)
-                .toList();
+                .toList());
         if (entries.isEmpty()) {
             if (WARNED_EMPTY_TAGS.add(tagId)) {
                 VanillaSquared.LOGGER.warn("Enchant recipe tag {} is missing, empty, or contains no valid enchanting recipes", tagId);
@@ -203,6 +204,7 @@ public final class EnchantingRecipeTags {
             return CompletableFuture.runAsync(() -> {
                 LootTableIdResolver.clearCache();
                 TAGS = Map.copyOf(data);
+                VALID_RECIPE_CACHE.clear();
                 WARNED_EMPTY_TAGS.clear();
                 VanillaSquared.LOGGER.info("Loaded {} enchant recipe tags", TAGS.size());
             }, executor);

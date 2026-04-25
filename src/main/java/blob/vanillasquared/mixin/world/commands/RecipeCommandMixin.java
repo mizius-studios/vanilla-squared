@@ -12,12 +12,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.commands.RecipeCommand;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -74,6 +74,7 @@ public abstract class RecipeCommandMixin {
         );
     }
 
+    @Unique
     private static Collection<RecipeHolder<?>> vsq$allRecipes(CommandSourceStack source) {
         List<RecipeHolder<?>> recipes = new ArrayList<>(source.getServer().getRecipeManager().getRecipes());
         recipes.addAll(EnchantingRecipeRegistry.recipeHolders());

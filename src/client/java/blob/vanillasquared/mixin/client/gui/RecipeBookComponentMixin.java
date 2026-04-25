@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -31,6 +32,7 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
     @Shadow @Final protected T menu;
     @Shadow protected Minecraft minecraft;
     @Shadow private ClientRecipeBook book;
+    @Final
     @Shadow private RecipeBookPage recipeBookPage;
     @Shadow private RecipeBookTabButton selectedTab;
     @Shadow private EditBox searchBox;
@@ -47,7 +49,7 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
     }
 
     @Inject(method = "updateCollections", at = @At("HEAD"), cancellable = true)
-    private void vsq$updateEnchantingCollections(boolean resetCurrentPage, boolean filtering, CallbackInfo ci) {
+    private void vsq$updateEnchantingCollections(boolean resetPage, boolean isFiltering, CallbackInfo ci) {
         if (!(this.menu instanceof VSQEnchantmentMenu)) {
             return;
         }
@@ -67,14 +69,15 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
             collections.removeIf(collection -> !vsq$matchesSearch(collection, query, contextMap));
         }
 
-        if (filtering) {
+        if (isFiltering) {
             collections.removeIf(collection -> !collection.hasCraftable());
         }
 
-        this.recipeBookPage.updateCollections(collections, resetCurrentPage, filtering);
+        this.recipeBookPage.updateCollections(collections, resetPage, isFiltering);
         ci.cancel();
     }
 
+    @Unique
     private List<RecipeCollection> vsq$allEnchantingCollections() {
         List<RecipeCollection> collections = Lists.newArrayList();
         collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.WEAPONS));
@@ -84,6 +87,7 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
         return collections;
     }
 
+    @Unique
     private static boolean vsq$matchesSearch(RecipeCollection collection, String query, ContextMap contextMap) {
         for (RecipeDisplayEntry entry : collection.getRecipes()) {
             if (entry.resultItems(contextMap).stream().anyMatch(stack -> stack.getHoverName().getString().toLowerCase(Locale.ROOT).contains(query))) {

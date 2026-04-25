@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.resources.ResourceKey;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -62,6 +63,7 @@ public abstract class ItemStackMixin {
         cir.setReturnValue(List.copyOf(filtered));
     }
 
+    @Unique
     private static int vsq$slotTooltipInsertionIndex(List<Component> tooltipLines) {
         int insertionIndex = tooltipLines.size();
         for (int index = tooltipLines.size() - 1; index >= 0; index--) {
@@ -74,6 +76,7 @@ public abstract class ItemStackMixin {
         return insertionIndex;
     }
 
+    @Unique
     private static boolean vsq$isBottomInfoLine(Component line) {
         if (line.getContents() instanceof TranslatableContents translatableContents) {
             String key = translatableContents.getKey();
@@ -85,6 +88,7 @@ public abstract class ItemStackMixin {
         return vsq$hasColor(line, ChatFormatting.DARK_GRAY);
     }
 
+    @Unique
     private static boolean vsq$hasColor(Component line, ChatFormatting formatting) {
         if (line.getStyle().getColor() == null || formatting.getColor() == null) {
             return false;
@@ -92,6 +96,7 @@ public abstract class ItemStackMixin {
         return line.getStyle().getColor().getValue() == formatting.getColor();
     }
 
+    @Unique
     private static MutableComponent vsq$recipeDisplayName(ResourceKey<Recipe<?>> recipeKey) {
         String namespace = recipeKey.identifier().getNamespace();
         String path = recipeKey.identifier().getPath().replace('/', '.');

@@ -34,7 +34,7 @@ public abstract class ResourceKeyArgumentMixin {
         }
 
         rawKey.cast(Registries.RECIPE)
-                .flatMap((ResourceKey<Recipe<?>> recipeKey) -> EnchantingRecipeRegistry.byKey(recipeKey))
+                .flatMap(EnchantingRecipeRegistry::byKey)
                 .ifPresent(cir::setReturnValue);
     }
 

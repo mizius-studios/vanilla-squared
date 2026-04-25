@@ -18,6 +18,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -92,6 +93,7 @@ public abstract class VillagerTradeMixin {
         cir.setReturnValue(offer);
     }
 
+    @Unique
     private static Identifier vsq$resolveLibrarianTag(LootContext context) {
         Entity merchant = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (merchant instanceof Villager villager) {
