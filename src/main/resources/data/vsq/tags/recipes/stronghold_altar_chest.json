@@ -1,5 +1,11 @@
 {
   "values": [
-    "vsq:mending"
+    "vsq:unbreaking",
+    "vsq:sharpness",
+    "vsq:infinity",
+    "vsq:multishot",
+    "vsq:quick_charge",
+    "vsq:punch",
+    "vsq:piercing"
   ]
 }

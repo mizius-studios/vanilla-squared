@@ -3,6 +3,7 @@ package blob.vanillasquared.main.world.item;
 import blob.vanillasquared.main.VanillaSquared;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -13,11 +14,11 @@ import net.minecraft.world.item.Item;
 import java.util.function.Function;
 
 public final class VSQItems {
-    public static final Item ENCHANT_RECIPE = register("enchant_recipe", EnchantRecipeItem::new, new Item.Properties().stacksTo(16));
+    public static final Item ENCHANT_RECIPE = register("enchant_recipe", EnchantRecipeItem::new, new Item.Properties().stacksTo(16).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
 
     private VSQItems() {
     }
-
+    // this class will be reused for all items of this mod in the future
     private static <T extends Item> T register(String name, Function<Item.Properties, T> factory, Item.Properties properties) {
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, name));
         T item = factory.apply(properties.setId(key));

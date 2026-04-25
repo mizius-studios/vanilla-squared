@@ -33,6 +33,29 @@ import java.util.concurrent.Executor;
 public final class EnchantingRecipeTags {
     public static final Identifier DEFAULT_LOOT_TAG = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "default");
     public static final Identifier DEFAULT_LIBRARIAN_TAG = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "villager/librarian/default");
+    private static final Map<String, Identifier> LOOT_TABLE_TO_TAG = Map.ofEntries(
+            Map.entry("chests/jungle_temple", tag("jungle_temple_chest")),
+            Map.entry("chests/stronghold_crossing", tag("stronghold_storeroom_chest")),
+            Map.entry("chests/stronghold_library", tag("stronghold_library_chest")),
+            Map.entry("chests/stronghold_corridor", tag("stronghold_altar_chest")),
+            Map.entry("chests/simple_dungeon", tag("monster_room_chest")),
+            Map.entry("chests/abandoned_mineshaft", tag("mineshaft_chest")),
+            Map.entry("chests/ancient_city", tag("ancient_city_chest")),
+            Map.entry("chests/desert_pyramid", tag("desert_pyramid_chest")),
+            Map.entry("chests/pillager_outpost", tag("pillager_outpost_chest")),
+            Map.entry("chests/underwater_ruin_big", tag("ocean_ruins_big_ruins_chest")),
+            Map.entry("chests/woodland_mansion", tag("woodland_mansion_chest")),
+            Map.entry("chests/bastion_other", tag("bastion_remnant_generic_chest")),
+            Map.entry("chests/bastion_remnant_generic", tag("bastion_remnant_generic_chest")),
+            Map.entry("chests/trial_chambers/reward_ominous", tag("trial_chamber_ominous_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous_common", tag("trial_chamber_ominous_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous_rare", tag("trial_chamber_ominous_vault")),
+            Map.entry("chests/trial_chambers/reward_ominous_unique", tag("trial_chamber_ominous_vault")),
+            Map.entry("gameplay/fishing/treasure", tag("fishing")),
+            Map.entry("gameplay/fishing", tag("fishing")),
+            Map.entry("gameplay/piglin_bartering", tag("piglin_bartering")),
+            Map.entry("chests/end_city_treasure", tag("end_city_treasure_chest"))
+    );
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_tag_loader");
     private static final FileToIdConverter TAG_CONVERTER = FileToIdConverter.json("tags/recipes");
     private static volatile Map<Identifier, List<ResourceKey<Recipe<?>>>> TAGS = Map.of();
@@ -73,6 +96,21 @@ public final class EnchantingRecipeTags {
 
     public static Identifier tag(String path) {
         return Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, path);
+    }
+
+    public static Identifier lootTagForTable(Identifier lootTableId) {
+        return LOOT_TABLE_TO_TAG.getOrDefault(lootTableId.getPath(), DEFAULT_LOOT_TAG);
+    }
+
+    public static Identifier librarianTagForVariant(Identifier villagerVariantId) {
+        if (!"minecraft".equals(villagerVariantId.getNamespace())) {
+            return DEFAULT_LIBRARIAN_TAG;
+        }
+        return switch (villagerVariantId.getPath()) {
+            case "desert", "jungle", "plains", "savanna", "snow", "swamp", "taiga" ->
+                    tag("villager/librarian/" + villagerVariantId.getPath());
+            default -> DEFAULT_LIBRARIAN_TAG;
+        };
     }
 
     private static final class ReloadListener implements SimpleResourceReloadListener<Map<Identifier, List<ResourceKey<Recipe<?>>>>>, IdentifiableResourceReloadListener {

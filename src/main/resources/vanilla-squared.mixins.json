@@ -32,6 +32,7 @@
     "world.item.items.TridentItemMixin",
     "world.loot.ApplyBonusCountMixin",
     "world.loot.BonusLevelTableConditionMixin",
+    "world.loot.LootContextAccessor",
     "world.loot.LootPoolMixin",
     "world.loot.LootItemRandomChanceWithEnchantedBonusConditionMixin",
     "world.item.CreativeInventoryMixin",

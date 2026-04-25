@@ -2,15 +2,22 @@ package blob.vanillasquared.mixin.world.loot;
 
 import blob.vanillasquared.main.world.loot.RandomizeEnchantmentSlotsFunction;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Mixin(LootPool.class)
@@ -21,7 +28,8 @@ public abstract class LootPoolMixin {
     private Consumer<ItemStack> vsq$sanitizeLootEnchantments(Consumer<ItemStack> original, Consumer<ItemStack> originalArgument, LootContext context) {
         return stack -> {
             if (stack.is(Items.ENCHANTED_BOOK)) {
-                ItemStack recipeStack = EnchantingRecipeTags.createRandomStack(EnchantingRecipeTags.DEFAULT_LOOT_TAG, context.getRandom());
+                Identifier tagId = vsq$resolveLootTag(context);
+                ItemStack recipeStack = EnchantingRecipeTags.createRandomStack(tagId, context.getRandom());
                 if (!recipeStack.isEmpty()) {
                     original.accept(recipeStack);
                 }
@@ -34,5 +42,36 @@ public abstract class LootPoolMixin {
             }
             original.accept(stack);
         };
+    }
+
+    @Unique
+    private static Identifier vsq$resolveLootTag(LootContext context) {
+        return vsq$findCurrentLootTableId(context)
+                .map(EnchantingRecipeTags::lootTagForTable)
+                .orElse(EnchantingRecipeTags.DEFAULT_LOOT_TAG);
+    }
+
+    @Unique
+    private static Optional<Identifier> vsq$findCurrentLootTableId(LootContext context) {
+        if (!(context.getResolver() instanceof HolderLookup.Provider provider)) {
+            return Optional.empty();
+        }
+
+        LootTable activeTable = null;
+        for (LootContext.VisitedEntry<?> visitedEntry : ((LootContextAccessor) context).vsq$visitedElements()) {
+            if (visitedEntry.type() == LootDataType.TABLE && visitedEntry.value() instanceof LootTable table) {
+                activeTable = table;
+            }
+        }
+        if (activeTable == null) {
+            return Optional.empty();
+        }
+
+        LootTable targetTable = activeTable;
+        return provider.lookupOrThrow(Registries.LOOT_TABLE)
+                .listElements()
+                .filter(holder -> holder.value() == targetTable)
+                .map(holder -> holder.key().identifier())
+                .findFirst();
     }
 }

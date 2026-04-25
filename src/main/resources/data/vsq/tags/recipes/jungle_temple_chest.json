@@ -1,13 +1,14 @@
 {
   "values": [
     "vsq:mending",
+    "vsq:bane_of_arthropods",
     "vsq:unbreaking",
-    "vsq:infinity",
     "vsq:looting",
-    "vsq:efficiency",
+    "vsq:infinity",
     "vsq:feather_falling",
-    "vsq:silk_touch",
     "vsq:lunge",
-    "vsq:sweeping_edge"
+    "vsq:projectile_protection",
+    "vsq:protection",
+    "vsq:punch"
   ]
 }
