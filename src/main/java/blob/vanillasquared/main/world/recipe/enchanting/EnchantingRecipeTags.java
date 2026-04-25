@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
 import blob.vanillasquared.main.VanillaSquared;
+import blob.vanillasquared.main.world.loot.LootTableIdResolver;
 import blob.vanillasquared.main.world.item.VSQItems;
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import com.google.gson.JsonElement;
@@ -194,6 +195,7 @@ public final class EnchantingRecipeTags {
         @Override
         public CompletableFuture<Void> apply(Map<Identifier, List<ResourceKey<Recipe<?>>>> data, ResourceManager resourceManager, Executor executor) {
             return CompletableFuture.runAsync(() -> {
+                LootTableIdResolver.clearCache();
                 TAGS = Map.copyOf(data);
                 VanillaSquared.LOGGER.info("Loaded {} enchant recipe tags", TAGS.size());
             }, executor);

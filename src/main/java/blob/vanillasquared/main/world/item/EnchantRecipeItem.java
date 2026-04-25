@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.world.item;
 
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
+import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeBookNotifier;
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -41,7 +42,7 @@ public class EnchantRecipeItem extends Item {
             return InteractionResult.PASS;
         }
 
-        serverPlayer.getRecipeBook().add(recipeKey);
+        EnchantingRecipeBookNotifier.unlock(serverPlayer, recipeKey);
         if (!serverPlayer.getAbilities().instabuild) {
             stack.shrink(1);
         }

@@ -18,6 +18,10 @@ public final class LootTableIdResolver {
     private LootTableIdResolver() {
     }
 
+    public static void clearCache() {
+        LOOKUP_CACHE.clear();
+    }
+
     public static Optional<Identifier> lookup(LootContext context, LootTable targetTable) {
         if (!(context.getResolver() instanceof HolderLookup.Provider provider)) {
             return Optional.empty();

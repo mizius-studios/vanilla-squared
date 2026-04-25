@@ -1,6 +1,7 @@
 package blob.vanillasquared.mixin.world.commands;
 
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
+import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeBookNotifier;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
@@ -93,8 +94,7 @@ public abstract class RecipeCommandMixin {
             changed += player.awardRecipes(vanillaRecipes);
             for (RecipeHolder<?> recipe : recipes) {
                 if (EnchantingRecipeRegistry.contains(recipe.id()) && !player.getRecipeBook().contains(recipe.id())) {
-                    player.getRecipeBook().add(recipe.id());
-                    changed++;
+                    changed += EnchantingRecipeBookNotifier.unlock(player, recipe.id());
                 }
             }
         }
@@ -125,8 +125,7 @@ public abstract class RecipeCommandMixin {
             changed += player.resetRecipes(vanillaRecipes);
             for (RecipeHolder<?> recipe : recipes) {
                 if (EnchantingRecipeRegistry.contains(recipe.id()) && player.getRecipeBook().contains(recipe.id())) {
-                    player.getRecipeBook().remove(recipe.id());
-                    changed++;
+                    changed += EnchantingRecipeBookNotifier.revoke(player, recipe.id());
                 }
             }
         }
