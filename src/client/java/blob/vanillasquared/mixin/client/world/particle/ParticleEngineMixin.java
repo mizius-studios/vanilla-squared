@@ -27,8 +27,11 @@ public abstract class ParticleEngineMixin {
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void vsq$addLightningRenderType(CallbackInfo ci) {
         List<ParticleRenderType> updated = new ArrayList<>(RENDER_ORDER);
-        updated.add(VSQParticleRenderTypes.LIGHTNING_BOLT);
-        RENDER_ORDER = List.copyOf(updated);
+        if (!updated.contains(VSQParticleRenderTypes.LIGHTNING_BOLT)) {
+            updated.add(VSQParticleRenderTypes.LIGHTNING_BOLT);
+        }
+        // Keep this list mutable because Fabric sorts render order during client init.
+        RENDER_ORDER = updated;
     }
 
     @Inject(method = "createParticleGroup", at = @At("HEAD"), cancellable = true)
