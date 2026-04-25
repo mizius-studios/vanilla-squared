@@ -2,24 +2,23 @@ package blob.vanillasquared.mixin.world.commands;
 
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeRegistry;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeBookNotifier;
+import com.mojang.brigadier.Command;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceKeyArgument;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.commands.RecipeCommand;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -34,44 +33,18 @@ public abstract class RecipeCommandMixin {
     @Shadow private static int giveRecipes(CommandSourceStack source, Collection<ServerPlayer> players, Collection<RecipeHolder<?>> recipes) throws CommandSyntaxException { throw new AssertionError(); }
     @Shadow private static int takeRecipes(CommandSourceStack source, Collection<ServerPlayer> players, Collection<RecipeHolder<?>> recipes) throws CommandSyntaxException { throw new AssertionError(); }
 
-    /**
-     * @author Codex
-     * @reason Include custom enchanting recipes in `/recipe give|take *`.
-     */
-    @Overwrite
-    public static void register(final CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(
-                Commands.literal("recipe")
-                        .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                        .then(
-                                Commands.literal("give")
-                                        .then(
-                                                Commands.argument("targets", EntityArgument.players())
-                                                        .then(
-                                                                Commands.argument("recipe", ResourceKeyArgument.key(Registries.RECIPE))
-                                                                        .executes(c -> giveRecipes(c.getSource(), EntityArgument.getPlayers(c, "targets"), java.util.Collections.singleton(ResourceKeyArgument.getRecipe(c, "recipe"))))
-                                                        )
-                                                        .then(
-                                                                Commands.literal("*")
-                                                                        .executes(c -> giveRecipes(c.getSource(), EntityArgument.getPlayers(c, "targets"), vsq$allRecipes(c.getSource())))
-                                                        )
-                                        )
-                        )
-                        .then(
-                                Commands.literal("take")
-                                        .then(
-                                                Commands.argument("targets", EntityArgument.players())
-                                                        .then(
-                                                                Commands.argument("recipe", ResourceKeyArgument.key(Registries.RECIPE))
-                                                                        .executes(c -> takeRecipes(c.getSource(), EntityArgument.getPlayers(c, "targets"), java.util.Collections.singleton(ResourceKeyArgument.getRecipe(c, "recipe"))))
-                                                        )
-                                                        .then(
-                                                                Commands.literal("*")
-                                                                        .executes(c -> takeRecipes(c.getSource(), EntityArgument.getPlayers(c, "targets"), vsq$allRecipes(c.getSource())))
-                                                        )
-                                        )
-                        )
-        );
+    @Inject(method = "register", at = @At("TAIL"))
+    private static void vsq$extendWildcardRecipeTargets(CommandDispatcher<CommandSourceStack> dispatcher, CallbackInfo ci) {
+        vsq$replaceWildcardExecutor(dispatcher, "give", context -> giveRecipes(
+                context.getSource(),
+                EntityArgument.getPlayers(context, "targets"),
+                vsq$allRecipes(context.getSource())
+        ));
+        vsq$replaceWildcardExecutor(dispatcher, "take", context -> takeRecipes(
+                context.getSource(),
+                EntityArgument.getPlayers(context, "targets"),
+                vsq$allRecipes(context.getSource())
+        ));
     }
 
     @Unique
@@ -79,6 +52,16 @@ public abstract class RecipeCommandMixin {
         List<RecipeHolder<?>> recipes = new ArrayList<>(source.getServer().getRecipeManager().getRecipes());
         recipes.addAll(EnchantingRecipeRegistry.recipeHolders());
         return List.copyOf(recipes);
+    }
+
+    @Unique
+    private static void vsq$replaceWildcardExecutor(CommandDispatcher<CommandSourceStack> dispatcher, String action, Command<CommandSourceStack> command) {
+        CommandNode<CommandSourceStack> targetsNode = dispatcher.getRoot()
+                .getChild("recipe")
+                .getChild(action)
+                .getChild("targets");
+        CommandNode<CommandSourceStack> wildcardNode = targetsNode.getChild("*");
+        ((CommandNodeAccessor<CommandSourceStack>) wildcardNode).vsq$setCommand(command);
     }
 
     @Inject(method = "giveRecipes", at = @At("HEAD"), cancellable = true)

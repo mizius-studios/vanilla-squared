@@ -21,7 +21,7 @@ public final class EnchantingRecipeBookNotifier {
     public static int unlock(ServerPlayer player, ResourceKey<Recipe<?>> recipeKey) {
         return EnchantingRecipeRegistry.byKey(recipeKey)
                 .map(holder -> {
-                    EnchantingRecipe recipe = (EnchantingRecipe) holder.value();
+                    EnchantingRecipe recipe = holder.value();
                     player.getRecipeBook().add(recipeKey);
                     player.connection.send(new ClientboundRecipeBookAddPacket(
                             List.of(new ClientboundRecipeBookAddPacket.Entry(
@@ -57,7 +57,7 @@ public final class EnchantingRecipeBookNotifier {
     private static OptionalInt group(EnchantingRecipe recipe) {
         return recipe.group().isBlank()
                 ? OptionalInt.empty()
-                : OptionalInt.of(recipe.group().hashCode());
+                : EnchantingRecipeRegistry.groupId(recipe.group());
     }
 
     private static RecipeDisplayEntry createDisplayEntry(ResourceKey<Recipe<?>> recipeKey, EnchantingRecipe recipe, ServerPlayer player) {

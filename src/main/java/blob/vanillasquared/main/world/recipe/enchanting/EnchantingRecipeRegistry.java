@@ -36,6 +36,7 @@ public final class EnchantingRecipeRegistry {
     private static final FileToIdConverter RECIPE_CONVERTER = FileToIdConverter.json("recipes");
     private static volatile Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> RECIPES = Map.of();
     private static volatile Map<ResourceKey<Recipe<?>>, Integer> RECIPE_DISPLAY_IDS = Map.of();
+    private static volatile Map<String, Integer> RECIPE_GROUP_IDS = Map.of();
 
     private EnchantingRecipeRegistry() {
     }
@@ -58,7 +59,7 @@ public final class EnchantingRecipeRegistry {
         return RECIPES.keySet().stream().map(ResourceKey::identifier);
     }
 
-    public static Optional<RecipeHolder<?>> byKey(ResourceKey<Recipe<?>> recipeKey) {
+    public static Optional<RecipeHolder<EnchantingRecipe>> byKey(ResourceKey<Recipe<?>> recipeKey) {
         return Optional.ofNullable(RECIPES.get(recipeKey));
     }
 
@@ -69,6 +70,11 @@ public final class EnchantingRecipeRegistry {
     public static OptionalInt displayId(ResourceKey<Recipe<?>> recipeKey) {
         Integer displayId = RECIPE_DISPLAY_IDS.get(recipeKey);
         return displayId != null ? OptionalInt.of(displayId) : OptionalInt.empty();
+    }
+
+    public static OptionalInt groupId(String group) {
+        Integer groupId = RECIPE_GROUP_IDS.get(group);
+        return groupId != null ? OptionalInt.of(groupId) : OptionalInt.empty();
     }
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstMatch(EnchantingRecipeInput input, Level level) {
@@ -155,6 +161,7 @@ public final class EnchantingRecipeRegistry {
                 EnchantingIngredient.clearTagCache();
                 RECIPES = Map.copyOf(data);
                 RECIPE_DISPLAY_IDS = vsq$createDisplayIds(data);
+                RECIPE_GROUP_IDS = vsq$createGroupIds(data);
                 VanillaSquared.LOGGER.info("Loaded {} Enchanting recipes", RECIPES.size());
             }, executor);
         }
@@ -166,6 +173,19 @@ public final class EnchantingRecipeRegistry {
                 displayIds.put(recipeKey, nextDisplayId++);
             }
             return Map.copyOf(displayIds);
+        }
+
+        private static Map<String, Integer> vsq$createGroupIds(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> recipes) {
+            Map<String, Integer> groupIds = new LinkedHashMap<>();
+            int nextGroupId = 0;
+            for (RecipeHolder<EnchantingRecipe> holder : recipes.values()) {
+                String group = holder.value().group();
+                if (group.isBlank() || groupIds.containsKey(group)) {
+                    continue;
+                }
+                groupIds.put(group, nextGroupId++);
+            }
+            return Map.copyOf(groupIds);
         }
     }
 }
