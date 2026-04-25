@@ -1,6 +1,6 @@
 {
   "type": "vsq:enchanting",
-  "category": "weapons",
+  "category": "tools",
   "group": "lure",
   "name": {
     "translate": "enchantment.minecraft.lure"

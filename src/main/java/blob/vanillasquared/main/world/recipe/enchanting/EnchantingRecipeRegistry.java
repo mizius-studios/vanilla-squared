@@ -22,10 +22,12 @@ import net.minecraft.world.level.Level;
 
 import java.io.Reader;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.TreeMap;
 
 public final class EnchantingRecipeRegistry {
@@ -33,6 +35,8 @@ public final class EnchantingRecipeRegistry {
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_loader");
     private static final FileToIdConverter RECIPE_CONVERTER = FileToIdConverter.json("recipes");
     private static volatile Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> RECIPES = Map.of();
+    private static volatile Map<ResourceKey<Recipe<?>>, Integer> RECIPE_DISPLAY_IDS = Map.of();
+    private static volatile Map<String, Integer> RECIPE_GROUP_IDS = Map.of();
 
     private EnchantingRecipeRegistry() {
     }
@@ -45,8 +49,30 @@ public final class EnchantingRecipeRegistry {
         return RECIPES.values();
     }
 
+    public static Collection<RecipeHolder<?>> recipeHolders() {
+        return new java.util.ArrayList<>(RECIPES.values());
+    }
+
+    public static java.util.stream.Stream<Identifier> recipeIds() {
+        return RECIPES.keySet().stream().map(ResourceKey::identifier);
+    }
+
+    public static Optional<RecipeHolder<EnchantingRecipe>> byKey(ResourceKey<Recipe<?>> recipeKey) {
+        return Optional.ofNullable(RECIPES.get(recipeKey));
+    }
+
     public static boolean contains(ResourceKey<Recipe<?>> recipeKey) {
         return RECIPES.containsKey(recipeKey);
+    }
+
+    public static OptionalInt displayId(ResourceKey<Recipe<?>> recipeKey) {
+        Integer displayId = RECIPE_DISPLAY_IDS.get(recipeKey);
+        return displayId != null ? OptionalInt.of(displayId) : OptionalInt.empty();
+    }
+
+    public static OptionalInt groupId(String group) {
+        Integer groupId = RECIPE_GROUP_IDS.get(group);
+        return groupId != null ? OptionalInt.of(groupId) : OptionalInt.empty();
     }
 
     public static Optional<RecipeHolder<EnchantingRecipe>> findFirstMatch(EnchantingRecipeInput input, Level level) {
@@ -132,8 +158,32 @@ public final class EnchantingRecipeRegistry {
             return CompletableFuture.runAsync(() -> {
                 EnchantingIngredient.clearTagCache();
                 RECIPES = Map.copyOf(data);
+                RECIPE_DISPLAY_IDS = vsq$createDisplayIds(data);
+                RECIPE_GROUP_IDS = vsq$createGroupIds(data);
                 VanillaSquared.LOGGER.info("Loaded {} Enchanting recipes", RECIPES.size());
             }, executor);
+        }
+
+        private static Map<ResourceKey<Recipe<?>>, Integer> vsq$createDisplayIds(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> recipes) {
+            Map<ResourceKey<Recipe<?>>, Integer> displayIds = new LinkedHashMap<>(recipes.size());
+            int nextDisplayId = 0;
+            for (ResourceKey<Recipe<?>> recipeKey : recipes.keySet()) {
+                displayIds.put(recipeKey, nextDisplayId++);
+            }
+            return Map.copyOf(displayIds);
+        }
+
+        private static Map<String, Integer> vsq$createGroupIds(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> recipes) {
+            Map<String, Integer> groupIds = new LinkedHashMap<>();
+            int nextGroupId = 0;
+            for (RecipeHolder<EnchantingRecipe> holder : recipes.values()) {
+                String group = holder.value().group();
+                if (group.isBlank() || groupIds.containsKey(group)) {
+                    continue;
+                }
+                groupIds.put(group, nextGroupId++);
+            }
+            return Map.copyOf(groupIds);
         }
     }
 }
