@@ -50,9 +50,7 @@ public final class EnchantingRecipeRegistry {
     }
 
     public static Collection<RecipeHolder<?>> recipeHolders() {
-        return RECIPES.values().stream()
-                .map(holder -> (RecipeHolder<?>) holder)
-                .collect(java.util.stream.Collectors.toList());
+        return new java.util.ArrayList<>(RECIPES.values());
     }
 
     public static java.util.stream.Stream<Identifier> recipeIds() {

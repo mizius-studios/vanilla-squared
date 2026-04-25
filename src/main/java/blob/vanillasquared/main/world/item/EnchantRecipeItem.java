@@ -28,12 +28,12 @@ public class EnchantRecipeItem extends Item {
             return InteractionResult.PASS;
         }
 
-        if (!EnchantingRecipeTags.isValidRecipe(recipeKey)) {
-            return InteractionResult.FAIL;
-        }
-
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
+        }
+
+        if (!EnchantingRecipeTags.isValidRecipe(recipeKey)) {
+            return InteractionResult.FAIL;
         }
 
         if (!(player instanceof ServerPlayer serverPlayer)) {

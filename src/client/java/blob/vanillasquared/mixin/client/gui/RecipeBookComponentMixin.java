@@ -4,6 +4,7 @@ import blob.vanillasquared.main.world.recipe.enchanting.VSQEnchantmentRecipeBook
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookPage;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
@@ -29,13 +30,21 @@ import java.util.Locale;
 
 @Mixin(RecipeBookComponent.class)
 public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
+    @Unique private static final int VSQ$RECIPE_BOOK_WIDTH = 147;
+    @Unique private static final int VSQ$RECIPE_BOOK_HEIGHT = 166;
+    @Unique private static final int VSQ$TAB_HEIGHT = 27;
+
     @Shadow @Final protected T menu;
     @Shadow protected Minecraft minecraft;
     @Shadow private ClientRecipeBook book;
+    @Shadow private int xOffset;
+    @Shadow private int width;
+    @Shadow private int height;
     @Final
     @Shadow private RecipeBookPage recipeBookPage;
     @Shadow private RecipeBookTabButton selectedTab;
     @Shadow private EditBox searchBox;
+    @Shadow @Final private List<RecipeBookTabButton> tabButtons;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void vsq$ignoreVerticalArrowsOnSearchBox(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
@@ -77,6 +86,34 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
         ci.cancel();
     }
 
+    @Inject(method = "updateTabs", at = @At("HEAD"), cancellable = true)
+    private void vsq$updateEnchantingTabs(boolean isFiltering, CallbackInfo ci) {
+        if (!(this.menu instanceof VSQEnchantmentMenu)) {
+            return;
+        }
+
+        int left = (this.width - VSQ$RECIPE_BOOK_WIDTH) / 2 - this.xOffset - 30;
+        int top = (this.height - VSQ$RECIPE_BOOK_HEIGHT) / 2 + 3;
+        int visibleRow = 0;
+
+        for (RecipeBookTabButton button : this.tabButtons) {
+            boolean visible = button.getCategory() instanceof SearchRecipeBookCategory
+                    || (button.getCategory() == VSQEnchantmentRecipeBookCategories.ALL
+                    ? vsq$hasAnyEnchantingCollections()
+                    : button.updateVisibility(this.book));
+            ((AbstractWidgetAccessor) button).vsq$setVisible(visible);
+            if (!visible) {
+                continue;
+            }
+
+            button.setPosition(left, top + VSQ$TAB_HEIGHT * visibleRow++);
+            if (button.getCategory() != VSQEnchantmentRecipeBookCategories.ALL) {
+                button.startAnimation(this.book, isFiltering);
+            }
+        }
+        ci.cancel();
+    }
+
     @Unique
     private List<RecipeCollection> vsq$allEnchantingCollections() {
         List<RecipeCollection> collections = Lists.newArrayList();
@@ -85,6 +122,11 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
         collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.ARMOR));
         collections.addAll(this.book.getCollection(VSQEnchantmentRecipeBookCategories.UTIL));
         return collections;
+    }
+
+    @Unique
+    private boolean vsq$hasAnyEnchantingCollections() {
+        return vsq$allEnchantingCollections().stream().anyMatch(RecipeCollection::hasAnySelected);
     }
 
     @Unique

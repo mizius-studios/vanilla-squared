@@ -56,11 +56,22 @@ public abstract class RecipeCommandMixin {
 
     @Unique
     private static void vsq$replaceWildcardExecutor(CommandDispatcher<CommandSourceStack> dispatcher, String action, Command<CommandSourceStack> command) {
-        CommandNode<CommandSourceStack> targetsNode = dispatcher.getRoot()
-                .getChild("recipe")
-                .getChild(action)
-                .getChild("targets");
+        CommandNode<CommandSourceStack> recipeNode = dispatcher.getRoot().getChild("recipe");
+        if (recipeNode == null) {
+            return;
+        }
+        CommandNode<CommandSourceStack> actionNode = recipeNode.getChild(action);
+        if (actionNode == null) {
+            return;
+        }
+        CommandNode<CommandSourceStack> targetsNode = actionNode.getChild("targets");
+        if (targetsNode == null) {
+            return;
+        }
         CommandNode<CommandSourceStack> wildcardNode = targetsNode.getChild("*");
+        if (wildcardNode == null) {
+            return;
+        }
         ((CommandNodeAccessor<CommandSourceStack>) wildcardNode).vsq$setCommand(command);
     }
 

@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_25",
 	"client": [
 		"gui.AbstractContainerScreenMixin",
+		"gui.AbstractWidgetAccessor",
 		"gui.AbstractContainerScreenAccessor",
 		"gui.AbstractRecipeBookScreenMixin",
 		"gui.AbstractRecipeBookScreenAccessor",
