@@ -101,7 +101,7 @@ public abstract class RecipeCommandMixin {
         if (changed == 0) {
             throw ERROR_GIVE_FAILED.create();
         }
-        int recipeCount = recipes.size();
+        int recipeCount = changed;
         int targetCount = players.size();
         source.sendSuccess(() -> Component.translatable(
                 targetCount == 1 ? "commands.recipe.give.success.single" : "commands.recipe.give.success.multiple",
@@ -133,7 +133,7 @@ public abstract class RecipeCommandMixin {
         if (changed == 0) {
             throw ERROR_TAKE_FAILED.create();
         }
-        int recipeCount = recipes.size();
+        int recipeCount = changed;
         int targetCount = players.size();
         source.sendSuccess(() -> Component.translatable(
                 targetCount == 1 ? "commands.recipe.take.success.single" : "commands.recipe.take.success.multiple",

@@ -6,15 +6,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.WeakHashMap;
 
 public final class LootTableIdResolver {
     private static final Map<HolderLookup.Provider, IdentityHashMap<LootTable, Identifier>> LOOKUP_CACHE =
-            Collections.synchronizedMap(new WeakHashMap<>());
+            new ConcurrentHashMap<>();
 
     private LootTableIdResolver() {
     }

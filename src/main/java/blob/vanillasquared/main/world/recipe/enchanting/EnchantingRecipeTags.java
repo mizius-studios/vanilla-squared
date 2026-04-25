@@ -151,7 +151,7 @@ public final class EnchantingRecipeTags {
                             if (!json.has("values") || !json.get("values").isJsonArray()) {
                                 continue;
                             }
-                            mergedValues.addAll(vsq$parseValues(json.getAsJsonArray("values")));
+                            mergedValues.addAll(vsq$parseValues(tagId, json.getAsJsonArray("values")));
                         } catch (Exception exception) {
                             VanillaSquared.LOGGER.error("Failed to load enchant recipe tag {} from {}", tagId, fileId, exception);
                         }
@@ -163,20 +163,27 @@ public final class EnchantingRecipeTags {
             }, executor);
         }
 
-        private static List<ResourceKey<Recipe<?>>> vsq$parseValues(com.google.gson.JsonArray values) {
+        private static List<ResourceKey<Recipe<?>>> vsq$parseValues(Identifier tagId, com.google.gson.JsonArray values) {
             List<ResourceKey<Recipe<?>>> parsed = new ArrayList<>(values.size());
             for (JsonElement value : values) {
+                String rawId = null;
                 Identifier recipeId = null;
                 if (value.isJsonPrimitive()) {
-                    recipeId = Identifier.tryParse(value.getAsString());
+                    rawId = value.getAsString();
                 } else if (value.isJsonObject()) {
                     JsonObject entry = value.getAsJsonObject();
                     if (entry.has("id") && entry.get("id").isJsonPrimitive()) {
-                        recipeId = Identifier.tryParse(entry.get("id").getAsString());
+                        rawId = entry.get("id").getAsString();
                     }
                 }
 
-                if (recipeId == null || recipeId.getPath().startsWith("#")) {
+                if (rawId != null && rawId.startsWith("#")) {
+                    VanillaSquared.LOGGER.warn("Ignoring unsupported enchant recipe tag reference {} in tag {}", rawId, tagId);
+                    continue;
+                }
+
+                recipeId = rawId == null ? null : Identifier.tryParse(rawId);
+                if (recipeId == null) {
                     continue;
                 }
                 parsed.add(ResourceKey.create(Registries.RECIPE, recipeId));
