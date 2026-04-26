@@ -69,10 +69,9 @@ public final class VoidedEffectState {
         State previousState = STATES.get(entity);
         int initialDuration = effect.getDuration();
         int stepCount = effect.getAmplifier() + 1;
-        int computedInterval = initialDuration < 0
+        int incrementInterval = initialDuration < 0
                 ? INFINITE_DURATION_INCREMENT_INTERVAL
                 : Math.max(initialDuration / stepCount, 1);
-        int incrementInterval = computedInterval;
         float maxMultiplier = 1.0F + (stepCount * 0.1F);
         float previousMultiplier = previousState == null ? 1.0F : previousState.multiplier;
         float multiplier = Math.min(Math.max(1.1F, previousMultiplier), maxMultiplier);

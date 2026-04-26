@@ -123,8 +123,7 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
 
     private static void warnInvalidSpecial(String componentKey, String effectId, String reason) {
         VanillaSquared.LOGGER.warn(
-                "Invalid special effect metadata for enchantment={}, component={}, effect_id={}: {}",
-                "<unknown>",
+                "Invalid special effect metadata for component={}, effect_id={}: {}",
                 componentKey,
                 effectId,
                 reason
