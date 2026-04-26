@@ -74,7 +74,7 @@ public final class DamageUtil {
         }
 
         float multiplier = VoidedEffectState.consume(entity);
-        entity.removeEffect(VSQMobEffects.VOIDED);
+        VoidedEffectState.scheduleRemoveEffect(entity);
         return Math.max(amount * multiplier, 0.0F);
     }
 
