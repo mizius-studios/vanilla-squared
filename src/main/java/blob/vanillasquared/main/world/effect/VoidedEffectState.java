@@ -1,9 +1,7 @@
 package blob.vanillasquared.main.world.effect;
 
-import net.minecraft.core.particles.ColorParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
+import blob.vanillasquared.main.world.particle.VSQParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.ARGB;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -12,9 +10,10 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class VoidedEffectState {
-    private static final int BURST_PARTICLE_COUNT = 10;
+    private static final int ACTIVE_CLOUD_PARTICLE_INTERVAL = 14;
+    private static final int ACTIVE_PIXEL_PARTICLE_INTERVAL = 3;
+    private static final int INCREMENT_CLOUD_PARTICLE_COUNT = 5;
     private static final int INFINITE_DURATION_INCREMENT_INTERVAL = 100;
-    private static final int VOIDED_BLUE = 0x2B6CFF;
     private static final Map<LivingEntity, State> STATES = new WeakHashMap<>();
 
     private VoidedEffectState() {
@@ -35,6 +34,10 @@ public final class VoidedEffectState {
         if (state == null) {
             refresh(entity, effect);
             return;
+        }
+
+        if (effect.isVisible()) {
+            spawnActiveParticles(serverLevel, entity);
         }
 
         if (state.multiplier >= state.maxMultiplier) {
@@ -98,16 +101,46 @@ public final class VoidedEffectState {
 
     private static void spawnBurst(ServerLevel level, LivingEntity entity) {
         level.sendParticles(
-                ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, ARGB.color(255, VOIDED_BLUE)),
+                VSQParticleTypes.VOID_CLOUD,
                 entity.getX(),
-                entity.getY(0.5),
+                entity.getY(0.18),
                 entity.getZ(),
-                BURST_PARTICLE_COUNT,
-                entity.getBbWidth() * 0.35,
-                entity.getBbHeight() * 0.3,
-                entity.getBbWidth() * 0.35,
+                INCREMENT_CLOUD_PARTICLE_COUNT,
+                entity.getBbWidth() * 0.24,
+                entity.getBbHeight() * 0.14,
+                entity.getBbWidth() * 0.24,
                 0.01
         );
+    }
+
+    private static void spawnActiveParticles(ServerLevel level, LivingEntity entity) {
+        if (entity.tickCount % ACTIVE_CLOUD_PARTICLE_INTERVAL == 0) {
+            level.sendParticles(
+                    VSQParticleTypes.VOID_CLOUD,
+                    entity.getX(),
+                    entity.getY(0.08),
+                    entity.getZ(),
+                    1,
+                    entity.getBbWidth() * 0.14,
+                    entity.getBbHeight() * 0.12,
+                    entity.getBbWidth() * 0.14,
+                    0.006
+            );
+        }
+
+        if (entity.tickCount % ACTIVE_PIXEL_PARTICLE_INTERVAL == 0) {
+            level.sendParticles(
+                    VSQParticleTypes.VOID_PIXEL,
+                    entity.getX(),
+                    entity.getY(0.5),
+                    entity.getZ(),
+                    1,
+                    entity.getBbWidth() * 0.55,
+                    entity.getBbHeight() * 0.4,
+                    entity.getBbWidth() * 0.55,
+                    0.015
+            );
+        }
     }
 
     private static final class State {
