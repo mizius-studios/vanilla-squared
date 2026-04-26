@@ -58,6 +58,14 @@ public abstract class EnchantCommandMixin {
                 continue;
             }
 
+            int currentLevel = VSQEnchantmentSlots.currentLevel(item, enchantmentHolder);
+            if (currentLevel >= level) {
+                if (targets.size() == 1) {
+                    throw ERROR_NOTHING_HAPPENED.create();
+                }
+                continue;
+            }
+
             boolean compatible = enchantment.canEnchant(item)
                     && VSQEnchantmentSlots.aggregate(item).keySet().stream().allMatch(other -> other.equals(enchantmentHolder) || VSQEnchantmentSlots.areCompatible(item, other, enchantmentHolder))
                     && VSQEnchantmentSlots.canApplyInSlots(item, enchantmentHolder, level);
@@ -71,7 +79,7 @@ public abstract class EnchantCommandMixin {
             if (VSQEnchantmentSlots.setEnchantmentLevel(item, enchantmentHolder, level)) {
                 success++;
             } else if (targets.size() == 1) {
-                throw ERROR_INCOMPATIBLE.create(item.getHoverName().getString());
+                throw ERROR_NOTHING_HAPPENED.create();
             }
         }
 
