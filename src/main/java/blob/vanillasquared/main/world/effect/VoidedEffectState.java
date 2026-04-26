@@ -23,6 +23,7 @@ public final class VoidedEffectState {
     private static final int INFINITE_DURATION_INCREMENT_INTERVAL = 100;
     private static final Map<LivingEntity, State> STATES = new WeakHashMap<>();
     private static final Map<LivingEntity, Boolean> PENDING_REMOVALS = new WeakHashMap<>();
+    private static final Map<LivingEntity, Boolean> LOADING_FROM_NBT = new WeakHashMap<>();
 
     private VoidedEffectState() {
     }
@@ -71,7 +72,7 @@ public final class VoidedEffectState {
         int computedInterval = initialDuration < 0
                 ? INFINITE_DURATION_INCREMENT_INTERVAL
                 : Math.max(initialDuration / stepCount, 1);
-        int incrementInterval = previousState == null ? computedInterval : previousState.incrementInterval;
+        int incrementInterval = computedInterval;
         float maxMultiplier = 1.0F + (stepCount * 0.1F);
         float previousMultiplier = previousState == null ? 1.0F : previousState.multiplier;
         float multiplier = Math.min(Math.max(1.1F, previousMultiplier), maxMultiplier);
@@ -81,7 +82,10 @@ public final class VoidedEffectState {
 
         STATES.put(entity, new State(multiplier, incrementInterval, ticksUntilNextIncrement, maxMultiplier));
 
-        if (entity.level() instanceof ServerLevel serverLevel && multiplier > previousMultiplier && effect.isVisible()) {
+        if (entity.level() instanceof ServerLevel serverLevel
+                && multiplier > previousMultiplier
+                && effect.isVisible()
+                && LOADING_FROM_NBT.get(entity) == null) {
             spawnBurst(serverLevel, entity);
         }
     }
@@ -97,6 +101,7 @@ public final class VoidedEffectState {
     public static void clear(LivingEntity entity) {
         STATES.remove(entity);
         PENDING_REMOVALS.remove(entity);
+        LOADING_FROM_NBT.remove(entity);
     }
 
     public static void clearRemoved(LivingEntity entity, Collection<MobEffectInstance> effects) {
@@ -134,6 +139,14 @@ public final class VoidedEffectState {
         float maxMultiplier = Math.max(stateTag.getFloatOr(MAX_MULTIPLIER_TAG, Math.max(multiplier, 1.1F)), multiplier);
 
         STATES.put(entity, new State(multiplier, incrementInterval, ticksUntilNextIncrement, maxMultiplier));
+    }
+
+    public static void beginLoadFromNbt(LivingEntity entity) {
+        LOADING_FROM_NBT.put(entity, true);
+    }
+
+    public static void endLoadFromNbt(LivingEntity entity) {
+        LOADING_FROM_NBT.remove(entity);
     }
 
     public static void scheduleRemoveEffect(LivingEntity entity) {

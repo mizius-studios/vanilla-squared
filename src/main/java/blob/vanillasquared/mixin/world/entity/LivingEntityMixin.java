@@ -69,9 +69,15 @@ public abstract class LivingEntityMixin {
         VoidedEffectState.writeToNbt((LivingEntity) (Object) this, output);
     }
 
+    @Inject(method = "readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V", at = @At("HEAD"))
+    private void vsq$beginLoadVoidedState(ValueInput input, CallbackInfo ci) {
+        VoidedEffectState.beginLoadFromNbt((LivingEntity) (Object) this);
+    }
+
     @Inject(method = "readAdditionalSaveData(Lnet/minecraft/world/level/storage/ValueInput;)V", at = @At("TAIL"))
     private void vsq$loadVoidedState(ValueInput input, CallbackInfo ci) {
         VoidedEffectState.readFromNbt((LivingEntity) (Object) this, input);
+        VoidedEffectState.endLoadFromNbt((LivingEntity) (Object) this);
     }
 
     @Inject(
