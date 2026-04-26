@@ -64,7 +64,7 @@ public final class VoidedEffectState {
                 : Math.max(initialDuration / stepCount, 1);
         float maxMultiplier = 1.0F + (stepCount * 0.1F);
         float previousMultiplier = getMultiplier(entity);
-        float multiplier = Math.min(1.1F, maxMultiplier);
+        float multiplier = Math.min(Math.max(1.1F, previousMultiplier), maxMultiplier);
 
         STATES.put(entity, new State(multiplier, incrementInterval, incrementInterval, maxMultiplier));
 

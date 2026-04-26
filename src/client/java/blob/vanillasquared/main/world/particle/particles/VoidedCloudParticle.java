@@ -10,8 +10,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
 public class VoidedCloudParticle extends SingleQuadParticle {
-    private VoidedCloudParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites) {
-        super(level, x, y, z, sprites.get(RandomSource.create()));
+    private VoidedCloudParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites, RandomSource random) {
+        super(level, x, y, z, sprites.get(random));
         this.hasPhysics = false;
         this.gravity = 0.0F;
         this.friction = 1.0F;
@@ -52,7 +52,7 @@ public class VoidedCloudParticle extends SingleQuadParticle {
                 double zd,
                 RandomSource random
         ) {
-            return new VoidedCloudParticle(level, x, y, z, xd, yd, zd, this.sprites);
+            return new VoidedCloudParticle(level, x, y, z, xd, yd, zd, this.sprites, random);
         }
     }
 }
