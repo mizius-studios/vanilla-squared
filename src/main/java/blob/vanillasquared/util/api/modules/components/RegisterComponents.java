@@ -5,8 +5,11 @@ import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantment
 import blob.vanillasquared.main.world.item.components.hitthrough.HitThroughComponent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.crafting.Recipe;
 
 public final class RegisterComponents {
     public static final DataComponentType<VSQEnchantmentComponent> enchantmentComponent = Registry.register(
@@ -25,6 +28,16 @@ public final class RegisterComponents {
             DataComponentType.<HitThroughComponent>builder()
                     .persistent(HitThroughComponent.CODEC)
                     .networkSynchronized(HitThroughComponent.STREAM_CODEC)
+                    .cacheEncoding()
+                    .build()
+    );
+
+    public static final DataComponentType<ResourceKey<Recipe<?>>> enchantRecipeComponent = Registry.register(
+            BuiltInRegistries.DATA_COMPONENT_TYPE,
+            Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchant_recipe"),
+            DataComponentType.<ResourceKey<Recipe<?>>>builder()
+                    .persistent(ResourceKey.codec(Registries.RECIPE))
+                    .networkSynchronized(ResourceKey.streamCodec(Registries.RECIPE))
                     .cacheEncoding()
                     .build()
     );

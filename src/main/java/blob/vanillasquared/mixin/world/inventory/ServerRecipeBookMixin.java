@@ -28,7 +28,7 @@ public abstract class ServerRecipeBookMixin {
                 continue;
             }
             if (EnchantingRecipeRegistry.contains(recipe)) {
-                continue;
+                recipeAddingMethod.accept(recipe);
             }
         }
         ci.cancel();

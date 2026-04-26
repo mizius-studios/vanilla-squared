@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.recipebook.GhostSlots;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
-import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.context.ContextMap;
@@ -36,7 +35,7 @@ public class VSQEnchantmentRecipeBookComponent extends RecipeBookComponent<VSQEn
     );
 
     private static final List<TabInfo> TABS = List.of(
-            new TabInfo(vsq$enchanted(Items.COMPASS), Optional.empty(), SearchRecipeBookCategory.CRAFTING),
+            new TabInfo(vsq$enchanted(Items.COMPASS), Optional.empty(), VSQEnchantmentRecipeBookCategories.ALL),
             new TabInfo(vsq$enchanted(Items.IRON_SWORD), Optional.empty(), VSQEnchantmentRecipeBookCategories.WEAPONS),
             new TabInfo(vsq$enchanted(Items.IRON_PICKAXE), Optional.empty(), VSQEnchantmentRecipeBookCategories.TOOLS),
             new TabInfo(vsq$enchanted(Items.IRON_CHESTPLATE), Optional.empty(), VSQEnchantmentRecipeBookCategories.ARMOR),

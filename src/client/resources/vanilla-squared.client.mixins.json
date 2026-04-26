@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_25",
 	"client": [
 		"gui.AbstractContainerScreenMixin",
+		"gui.AbstractWidgetAccessor",
 		"gui.AbstractContainerScreenAccessor",
 		"gui.AbstractRecipeBookScreenMixin",
 		"gui.AbstractRecipeBookScreenAccessor",
@@ -20,7 +21,6 @@
 		"gui.RecipeButtonMixin",
 		"gui.RecipeBookComponentMixin",
 		"gui.RecipeBookComponentAccessor",
-		"gui.SearchRecipeBookCategoryMixin",
 		"world.ItemStackMixin",
 		"world.particle.ParticleEngineMixin",
       	"world.entities.LocalPlayerMixin",
