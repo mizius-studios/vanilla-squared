@@ -7,13 +7,17 @@ import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.resources.ResourceKey;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -23,6 +27,19 @@ import java.util.List;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
+    @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
+    private void vsq$addEnchantRecipeTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
+        ItemStack stack = (ItemStack) (Object) this;
+        ResourceKey<Recipe<?>> recipeKey = stack.get(DataComponents.ENCHANT_RECIPE);
+        if (recipeKey == null) {
+            return;
+        }
+
+        List<Component> tooltip = new ArrayList<>(cir.getReturnValue());
+        tooltip.add(vsq$slotTooltipInsertionIndex(tooltip), vsq$recipeDisplayName(recipeKey).withStyle(ChatFormatting.GRAY));
+        cir.setReturnValue(List.copyOf(tooltip));
+    }
+
     @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceVanillaEnchantTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         ItemStack stack = (ItemStack) (Object) this;
@@ -45,6 +62,7 @@ public abstract class ItemStackMixin {
         cir.setReturnValue(List.copyOf(filtered));
     }
 
+    @Unique
     private static int vsq$slotTooltipInsertionIndex(List<Component> tooltipLines) {
         int insertionIndex = tooltipLines.size();
         for (int index = tooltipLines.size() - 1; index >= 0; index--) {
@@ -57,6 +75,7 @@ public abstract class ItemStackMixin {
         return insertionIndex;
     }
 
+    @Unique
     private static boolean vsq$isBottomInfoLine(Component line) {
         if (line.getContents() instanceof TranslatableContents translatableContents) {
             String key = translatableContents.getKey();
@@ -68,10 +87,19 @@ public abstract class ItemStackMixin {
         return vsq$hasColor(line, ChatFormatting.DARK_GRAY);
     }
 
+    @Unique
     private static boolean vsq$hasColor(Component line, ChatFormatting formatting) {
         if (line.getStyle().getColor() == null || formatting.getColor() == null) {
             return false;
         }
         return line.getStyle().getColor().getValue() == formatting.getColor();
+    }
+
+    @Unique
+    private static MutableComponent vsq$recipeDisplayName(ResourceKey<Recipe<?>> recipeKey) {
+        String namespace = recipeKey.identifier().getNamespace();
+        String path = recipeKey.identifier().getPath().replace('/', '.');
+        String namespacedKey = "vsq.recipe." + namespace + "." + path;
+        return Component.translatableWithFallback(namespacedKey, recipeKey.identifier().toString());
     }
 }
