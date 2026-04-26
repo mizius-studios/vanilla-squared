@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>> byComponent) {
+    // Keep this allow-list aligned with the fields accepted by SpecialEffectSettings.CODEC.
     private static final Set<String> SUPPORTED_SPECIAL_KEYS = Set.of("limit");
 
     public static final SpecialEffectMetadataIndex EMPTY = new SpecialEffectMetadataIndex(Map.of());

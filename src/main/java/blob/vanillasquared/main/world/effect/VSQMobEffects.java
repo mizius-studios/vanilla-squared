@@ -14,8 +14,11 @@ public final class VSQMobEffects {
     }
 
     private static Holder<MobEffect> register(String name, MobEffect effect) {
-        Registry.register(BuiltInRegistries.MOB_EFFECT, Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, name), effect);
-        return BuiltInRegistries.MOB_EFFECT.wrapAsHolder(effect);
+        return Registry.registerForHolder(
+                BuiltInRegistries.MOB_EFFECT,
+                Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, name),
+                effect
+        );
     }
 
     public static void initialize() {

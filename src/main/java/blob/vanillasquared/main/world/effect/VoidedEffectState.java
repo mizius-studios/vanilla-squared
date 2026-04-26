@@ -41,6 +41,9 @@ public final class VoidedEffectState {
 
         State state = STATES.get(entity);
         if (state == null) {
+            if (PENDING_REMOVALS.containsKey(entity)) {
+                return;
+            }
             refresh(entity, effect);
             return;
         }
