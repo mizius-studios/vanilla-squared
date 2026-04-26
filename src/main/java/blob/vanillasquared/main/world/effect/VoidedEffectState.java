@@ -108,11 +108,6 @@ public final class VoidedEffectState {
         }
     }
 
-    public static float getMultiplier(LivingEntity entity) {
-        State state = STATES.get(entity);
-        return state == null ? 1.0F : state.multiplier;
-    }
-
     public static void writeToNbt(LivingEntity entity, ValueOutput output) {
         State state = STATES.get(entity);
         if (state == null) {
@@ -133,10 +128,10 @@ public final class VoidedEffectState {
             return;
         }
 
-        float multiplier = stateTag.getFloatOr(MULTIPLIER_TAG, 1.0F);
+        float multiplier = Math.max(stateTag.getFloatOr(MULTIPLIER_TAG, 1.0F), 1.0F);
         int incrementInterval = Math.max(stateTag.getIntOr(INCREMENT_INTERVAL_TAG, 1), 1);
         int ticksUntilNextIncrement = Math.max(stateTag.getIntOr(TICKS_UNTIL_INCREMENT_TAG, 1), 1);
-        float maxMultiplier = stateTag.getFloatOr(MAX_MULTIPLIER_TAG, Math.max(multiplier, 1.1F));
+        float maxMultiplier = Math.max(stateTag.getFloatOr(MAX_MULTIPLIER_TAG, Math.max(multiplier, 1.1F)), multiplier);
 
         STATES.put(entity, new State(multiplier, incrementInterval, ticksUntilNextIncrement, maxMultiplier));
     }
