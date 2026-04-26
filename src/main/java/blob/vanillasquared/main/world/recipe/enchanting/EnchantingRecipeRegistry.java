@@ -157,6 +157,7 @@ public final class EnchantingRecipeRegistry {
         public CompletableFuture<Void> apply(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> data, ResourceManager resourceManager, Executor executor) {
             return CompletableFuture.runAsync(() -> {
                 EnchantingIngredient.clearTagCache();
+                EnchantingRecipeTags.invalidateValidRecipeCache();
                 RECIPES = Map.copyOf(data);
                 RECIPE_DISPLAY_IDS = vsq$createDisplayIds(data);
                 RECIPE_GROUP_IDS = vsq$createGroupIds(data);

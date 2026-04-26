@@ -95,6 +95,11 @@ public final class EnchantingRecipeTags {
         return Optional.of(entries.get(random.nextInt(entries.size())));
     }
 
+    static void invalidateValidRecipeCache() {
+        VALID_RECIPE_CACHE.clear();
+        WARNED_EMPTY_TAGS.clear();
+    }
+
     public static ItemStack createStack(ResourceKey<Recipe<?>> recipeKey) {
         ItemStack stack = new ItemStack(VSQItems.ENCHANT_RECIPE);
         stack.set(DataComponents.ENCHANT_RECIPE, recipeKey);
@@ -204,8 +209,7 @@ public final class EnchantingRecipeTags {
             return CompletableFuture.runAsync(() -> {
                 LootTableIdResolver.clearCache();
                 TAGS = Map.copyOf(data);
-                VALID_RECIPE_CACHE.clear();
-                WARNED_EMPTY_TAGS.clear();
+                invalidateValidRecipeCache();
                 VanillaSquared.LOGGER.info("Loaded {} enchant recipe tags", TAGS.size());
             }, executor);
         }
