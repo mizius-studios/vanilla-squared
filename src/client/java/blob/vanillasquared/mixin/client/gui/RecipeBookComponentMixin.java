@@ -4,7 +4,6 @@ import blob.vanillasquared.main.world.recipe.enchanting.VSQEnchantmentRecipeBook
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.recipebook.SearchRecipeBookCategory;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookPage;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
@@ -97,8 +96,7 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
         int visibleRow = 0;
 
         for (RecipeBookTabButton button : this.tabButtons) {
-            boolean visible = button.getCategory() instanceof SearchRecipeBookCategory
-                    || (button.getCategory() == VSQEnchantmentRecipeBookCategories.ALL
+            boolean visible = (button.getCategory() == VSQEnchantmentRecipeBookCategories.ALL
                     ? vsq$hasAnyEnchantingCollections()
                     : button.updateVisibility(this.book));
             ((AbstractWidgetAccessor) button).vsq$setVisible(visible);
@@ -107,9 +105,7 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
             }
 
             button.setPosition(left, top + VSQ$TAB_HEIGHT * visibleRow++);
-            if (button.getCategory() != VSQEnchantmentRecipeBookCategories.ALL) {
-                button.startAnimation(this.book, isFiltering);
-            }
+            button.startAnimation(this.book, isFiltering);
         }
         ci.cancel();
     }
