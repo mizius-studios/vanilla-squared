@@ -1,8 +1,8 @@
 package blob.vanillasquared.main.gui.hud;
 
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentProfile;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;

@@ -1,6 +1,6 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Holder;

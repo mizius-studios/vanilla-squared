@@ -72,7 +72,7 @@
     {
       "requirement": {
         "type": "projectile_takeover",
-        "item": "#vsq:enchanting/projectile_source"
+        "item": "#vsq:enchantable/projectile_source"
       },
       "enchantment_slot": "secondary",
       "max_level": 3,

@@ -4,7 +4,7 @@
     {
       "requirement": {
         "type": "item",
-        "item": "#vsq:enchanting/ranged_weapon"
+        "item": "#vsq:enchantable/ranged_weapon"
       },
       "enchantment_slot": "secondary",
       "max_level": 1,
@@ -41,6 +41,6 @@
   "description": {
     "translate": "enchantment.minecraft.infinity"
   },
-  "supported_items": "#vsq:enchanting/ranged_weapon",
+  "supported_items": "#vsq:enchantable/ranged_weapon",
   "weight": 1
 }

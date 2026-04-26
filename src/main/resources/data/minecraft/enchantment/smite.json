@@ -45,7 +45,7 @@
     {
       "requirement": {
         "type": "item",
-        "item": "#vsq:enchanting/melee_weapon"
+        "item": "#vsq:enchantable/melee_weapon"
       },
       "enchantment_slot": "damage",
       "exclusive_set": "#minecraft:exclusive_set/damage",
@@ -87,7 +87,7 @@
     {
       "requirement": {
         "type": "item",
-        "item": "#vsq:enchanting/ranged_weapon"
+        "item": "#vsq:enchantable/ranged_weapon"
       },
       "enchantment_slot": "damage",
       "exclusive_set": "#minecraft:exclusive_set/damage",
@@ -141,7 +141,7 @@
     {
       "requirement": {
         "type": "projectile_takeover",
-        "item": "#vsq:enchanting/projectile_source"
+        "item": "#vsq:enchantable/projectile_source"
       },
       "enchantment_slot": "damage",
       "exclusive_set": "#minecraft:exclusive_set/damage",
@@ -185,7 +185,7 @@
   "description": {
     "translate": "enchantment.minecraft.smite"
   },
-  "primary_items": "#vsq:enchanting/all_weapons",
-  "supported_items": "#vsq:enchanting/all_weapons",
+  "primary_items": "#vsq:enchantable/all_weapons",
+  "supported_items": "#vsq:enchantable/all_weapons",
   "weight": 5
 }

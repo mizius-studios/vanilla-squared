@@ -4,7 +4,7 @@
     {
       "requirement": {
         "type": "item",
-        "item": "#vsq:enchanting/weapon"
+        "item": "#vsq:enchantable/weapon"
       },
       "enchantment_slot": "secondary",
       "max_level": 2,
@@ -46,7 +46,7 @@
     {
       "requirement": {
         "type": "item",
-        "item": "#vsq:enchanting/ranged_weapon"
+        "item": "#vsq:enchantable/ranged_weapon"
       },
       "enchantment_slot": "secondary",
       "max_level": 1,
@@ -76,7 +76,7 @@
     {
       "requirement": {
         "type": "projectile_takeover",
-        "item": "#vsq:enchanting/projectile_source"
+        "item": "#vsq:enchantable/projectile_source"
       },
       "enchantment_slot": "secondary",
       "max_level": 2,
@@ -114,7 +114,7 @@
   "description": {
     "translate": "enchantment.minecraft.fire_aspect"
   },
-  "primary_items": "#vsq:enchanting/all_weapons",
-  "supported_items": "#vsq:enchanting/all_weapons",
+  "primary_items": "#vsq:enchantable/all_weapons",
+  "supported_items": "#vsq:enchantable/all_weapons",
   "weight": 2
 }

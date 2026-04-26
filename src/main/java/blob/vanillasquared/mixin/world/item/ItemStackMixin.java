@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.world.item;
 
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;

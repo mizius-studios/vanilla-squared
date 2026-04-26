@@ -4,7 +4,7 @@
     {
       "requirement": {
         "type": "item",
-        "item": "#vsq:enchanting/all_weapons"
+        "item": "#vsq:enchantable/all_weapons"
       },
       "enchantment_slot": "secondary",
       "max_level": 3,
@@ -100,7 +100,7 @@
     {
       "requirement": {
         "type": "projectile_takeover",
-        "item": "#vsq:enchanting/projectile_source"
+        "item": "#vsq:enchantable/projectile_source"
       },
       "enchantment_slot": "secondary",
       "max_level": 3,
@@ -144,6 +144,6 @@
   "description": {
     "translate": "enchantment.minecraft.looting"
   },
-  "supported_items": "#vsq:enchanting/looting",
+  "supported_items": "#vsq:enchantable/looting",
   "weight": 2
 }
