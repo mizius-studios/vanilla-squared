@@ -33,11 +33,6 @@ public class VoidedCloudParticle extends SingleQuadParticle {
         return this.quadSize * fadeIn * Mth.clamp(sizeFalloff, 0.0F, 1.0F);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-    }
-
     public static class Provider implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet sprites;
 

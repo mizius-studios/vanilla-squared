@@ -69,7 +69,7 @@ public final class DamageUtil {
     }
 
     public static float applyVoided(LivingEntity entity, DamageSource source, float amount) {
-        if (!entity.hasEffect(VSQMobEffects.VOIDED) || source.is(BYPASSES_VOIDED)) {
+        if (!entity.hasEffect(VSQMobEffects.VOIDED) || source.is(BYPASSES_VOIDED) || amount <= 0.0F) {
             return Math.max(amount, 0.0F);
         }
 

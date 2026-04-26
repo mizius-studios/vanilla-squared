@@ -66,7 +66,7 @@ public final class VoidedEffectState {
         float previousMultiplier = getMultiplier(entity);
         float multiplier = Math.min(1.1F, maxMultiplier);
 
-        STATES.put(entity, new State(initialDuration, multiplier, incrementInterval, incrementInterval, maxMultiplier));
+        STATES.put(entity, new State(multiplier, incrementInterval, incrementInterval, maxMultiplier));
 
         if (entity.level() instanceof ServerLevel serverLevel && multiplier > previousMultiplier && effect.isVisible()) {
             spawnBurst(serverLevel, entity);
@@ -144,14 +144,12 @@ public final class VoidedEffectState {
     }
 
     private static final class State {
-        private final int initialDuration;
         private float multiplier;
         private final int incrementInterval;
         private int ticksUntilNextIncrement;
         private final float maxMultiplier;
 
-        private State(int initialDuration, float multiplier, int incrementInterval, int ticksUntilNextIncrement, float maxMultiplier) {
-            this.initialDuration = initialDuration;
+        private State(float multiplier, int incrementInterval, int ticksUntilNextIncrement, float maxMultiplier) {
             this.multiplier = multiplier;
             this.incrementInterval = incrementInterval;
             this.ticksUntilNextIncrement = ticksUntilNextIncrement;
