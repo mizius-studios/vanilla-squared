@@ -53,12 +53,13 @@ public abstract class VillagerTradeMixin {
             return;
         }
 
-        int additionalTradeCost = 5 + context.getRandom().nextInt(15);
-        ItemCost itemCost = this.wants.toItemCost(context, additionalTradeCost);
+        ItemCost itemCost = this.wants.toItemCost(context, 0);
         if (itemCost.count() < 1) {
             cir.setReturnValue(null);
             return;
         }
+        int additionalTradeCost = 5 + context.getRandom().nextInt(15);
+        itemCost = this.wants.toItemCost(context, additionalTradeCost);
 
         Optional<ItemCost> additionalItemCost = this.additionalWants.map(tradeCost -> tradeCost.toItemCost(context, 0));
         if (additionalItemCost.isPresent() && additionalItemCost.get().count() < 1) {

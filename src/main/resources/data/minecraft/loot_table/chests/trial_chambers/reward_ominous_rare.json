@@ -69,47 +69,17 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly",
-              "options": [
-                "minecraft:knockback",
-                "minecraft:punch",
-                "minecraft:smite",
-                "minecraft:looting",
-                "minecraft:multishot"
-              ]
-            }
-          ],
-          "name": "minecraft:book",
+          "name": "minecraft:enchanted_book",
           "weight": 2
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly",
-              "options": [
-                "minecraft:breach",
-                "minecraft:density"
-              ]
-            }
-          ],
-          "name": "minecraft:book",
+          "name": "minecraft:enchanted_book",
           "weight": 2
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "enchantments": {
-                "minecraft:wind_burst": 1.0
-              },
-              "function": "minecraft:set_enchantments"
-            }
-          ],
-          "name": "minecraft:book",
+          "name": "minecraft:enchanted_book",
           "weight": 2
         },
         {

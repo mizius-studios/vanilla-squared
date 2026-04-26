@@ -416,6 +416,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     private Optional<RecipeHolder<EnchantingRecipe>> vsq$getPreviewRecipe(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+        this.vsq$validateAndClearSelection();
         Optional<RecipeHolder<EnchantingRecipe>> selected = this.vsq$getSelectedRecipe();
         if (selected.isPresent()) {
             return selected;
@@ -468,12 +469,22 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
 
         RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(this.selectedDisplayId);
         if (selected == null || !selected.id().equals(this.selectedRecipeId)) {
-            this.selectedDisplayId = -1;
-            this.selectedRecipeId = null;
             return Optional.empty();
         }
 
         return Optional.of(selected);
+    }
+
+    private void vsq$validateAndClearSelection() {
+        if (this.selectedDisplayId == -1 || this.selectedRecipeId == null) {
+            return;
+        }
+
+        RecipeHolder<EnchantingRecipe> selected = this.displayRecipes.get(this.selectedDisplayId);
+        if (selected == null || !selected.id().equals(this.selectedRecipeId)) {
+            this.selectedDisplayId = -1;
+            this.selectedRecipeId = null;
+        }
     }
 
     private Map<Identifier, Integer> vsq$collectDetectedBlocks() {
