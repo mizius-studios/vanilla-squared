@@ -6,7 +6,6 @@ import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantment
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -101,15 +100,6 @@ public abstract class ItemStackMixin {
         String namespace = recipeKey.identifier().getNamespace();
         String path = recipeKey.identifier().getPath().replace('/', '.');
         String namespacedKey = "vsq.recipe." + namespace + "." + path;
-        String legacyKey = "vsq.recipe." + path;
-        Language language = Language.getInstance();
-
-        if (language.has(namespacedKey)) {
-            return Component.translatable(namespacedKey);
-        }
-        if (language.has(legacyKey)) {
-            return Component.translatable(legacyKey);
-        }
-        return Component.literal(recipeKey.identifier().toString());
+        return Component.translatableWithFallback(namespacedKey, recipeKey.identifier().toString());
     }
 }
