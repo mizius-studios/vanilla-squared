@@ -6,7 +6,7 @@ import blob.vanillasquared.main.network.payload.EnchantingRecipeSelectionPayload
 import blob.vanillasquared.main.network.payload.EnchantingRecipeStatePayload;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentHotkeyPayload;
-import blob.vanillasquared.main.world.item.components.enchantment.SpecialEnchantmentCooldowns;
+import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;

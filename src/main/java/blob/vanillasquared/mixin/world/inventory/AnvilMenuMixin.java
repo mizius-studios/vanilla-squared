@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.inventory;
 
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentComponent;
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AnvilMenu;

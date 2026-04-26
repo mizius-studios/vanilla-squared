@@ -1,5 +1,6 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
+import blob.vanillasquared.main.world.recipe.VSQRecipeTypes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

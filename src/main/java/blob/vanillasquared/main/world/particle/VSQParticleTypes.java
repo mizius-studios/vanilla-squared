@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.world.particle;
 
 import blob.vanillasquared.main.VanillaSquared;
+import blob.vanillasquared.main.world.particle.particles.LightningBoltParticleOptions;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;

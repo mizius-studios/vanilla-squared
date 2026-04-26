@@ -1,6 +1,6 @@
 package blob.vanillasquared.main.world.loot;
 
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

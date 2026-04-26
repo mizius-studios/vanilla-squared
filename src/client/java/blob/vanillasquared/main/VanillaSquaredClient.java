@@ -2,12 +2,12 @@ package blob.vanillasquared.main;
 
 import blob.vanillasquared.main.gui.enchantment.VSQEnchantmentScreen;
 import blob.vanillasquared.main.gui.hud.SpecialEnchantmentCooldownClientState;
-import blob.vanillasquared.main.input.VSQKeyMappings;
+import blob.vanillasquared.main.gui.controls.VSQKeyMappings;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeBookSyncPayloadHandler;
 import blob.vanillasquared.main.network.handlers.EnchantingRecipeStatePayloadHandler;
 import blob.vanillasquared.main.network.handlers.SpecialEnchantmentCooldownPayloadHandler;
 import blob.vanillasquared.main.world.inventory.VSQMenuTypes;
-import blob.vanillasquared.main.world.particle.LightningBoltParticle;
+import blob.vanillasquared.main.world.particle.particles.LightningBoltParticle;
 import blob.vanillasquared.main.world.particle.VSQParticleTypes;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingIngredient;
 import net.fabricmc.api.ClientModInitializer;

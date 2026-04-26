@@ -1,6 +1,6 @@
 package blob.vanillasquared.util.api.modules.components;
 
-import blob.vanillasquared.main.world.item.components.enchantment.VSQEnchantmentComponent;
+import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.main.world.item.components.hitthrough.HitThroughComponent;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceKey;

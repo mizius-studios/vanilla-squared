@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.entity;
 
 import blob.vanillasquared.main.world.util.DamageUtil;
-import blob.vanillasquared.main.world.item.EnchantmentPostBlockEffects;
+import blob.vanillasquared.main.world.item.enchantment.effects.EnchantmentPostBlockEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;

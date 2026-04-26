@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.world.entity.entities;
 
-import blob.vanillasquared.main.world.item.EnchantmentProjectileTakeoverEffects;
+import blob.vanillasquared.main.world.item.enchantment.effects.EnchantmentProjectileTakeoverEffects;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

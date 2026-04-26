@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.client.world.particle;
 
-import blob.vanillasquared.main.world.particle.LightningBoltParticleGroup;
+import blob.vanillasquared.main.world.particle.particles.LightningBoltParticleGroup;
 import blob.vanillasquared.main.world.particle.VSQParticleRenderTypes;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleGroup;
