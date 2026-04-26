@@ -17,10 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>> byComponent) {
-    // Keep this allow-list aligned with the fields accepted by SpecialEffectSettings.CODEC.
-    private static final Set<String> SUPPORTED_SPECIAL_KEYS = Set.of("limit");
+    private static final Set<String> SUPPORTED_SPECIAL_KEYS = SpecialEffectSettings.MAP_CODEC.keys(JsonOps.INSTANCE)
+            .map(JsonElement::getAsString)
+            .collect(Collectors.toUnmodifiableSet());
 
     public static final SpecialEffectMetadataIndex EMPTY = new SpecialEffectMetadataIndex(Map.of());
     public static final Codec<SpecialEffectMetadataIndex> CODEC = Codec.unboundedMap(
@@ -113,7 +115,8 @@ public record SpecialEffectMetadataIndex(Map<String, List<SpecialEffectMetadata>
         Set<String> unknownKeys = new HashSet<>(object.keySet());
         unknownKeys.removeAll(SUPPORTED_SPECIAL_KEYS);
         if (!unknownKeys.isEmpty()) {
-            warnInvalidSpecial(componentKey, effectId, "unsupported keys " + unknownKeys);
+            warnInvalidSpecial(componentKey, effectId,
+                    "unsupported keys " + unknownKeys + "; supported keys: " + SUPPORTED_SPECIAL_KEYS);
             return Optional.empty();
         }
 
