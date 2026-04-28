@@ -1,6 +1,5 @@
 package blob.vanillasquared.main.sound;
 
-import blob.vanillasquared.main.world.effect.VSQMobEffects;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -8,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -18,7 +16,6 @@ import java.util.HashMap;
 
 @Environment(EnvType.CLIENT)
 public final class VoidedSoundController {
-    private static final int INFINITE_DURATION_INCREMENT_INTERVAL = 100;
     private static final int PASSIVE_FADE_TICKS = 20;
     private static final float PASSIVE_START_VOLUME = 0.03F;
     private static final float PASSIVE_VOLUME = 0.55F;
@@ -35,9 +32,6 @@ public final class VoidedSoundController {
         State state = STATES.computeIfAbsent(entityId, State::new);
         state.active = active;
         state.pendingMultiplierIncrease |= playIncrease;
-    }
-
-    public static void tickEntity(LivingEntity entity) {
     }
 
     public static void tick() {
@@ -97,14 +91,12 @@ public final class VoidedSoundController {
     }
 
     private static final class State {
-        private final int entityId;
         private boolean active;
         private boolean pendingMultiplierIncrease;
         private int passiveFadeTicks;
         private VoidedPassiveSoundInstance passiveSound;
 
         private State(int entityId) {
-            this.entityId = entityId;
         }
 
         private void ensurePassive(LivingEntity entity, SoundManager soundManager) {
