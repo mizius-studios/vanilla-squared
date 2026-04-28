@@ -184,6 +184,9 @@ public final class VSQEnchantmentSlots {
         for (int index = 0; index < updated.size(); index++) {
             VSQEnchantmentSlotEntry entry = updated.get(index);
             if (!entry.isEmpty() && entry.enchantment().equals(enchantment)) {
+                if (entry.level() == level) {
+                    return false;
+                }
                 updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
                 stack.set(DataComponents.VSQ_ENCHANTMENT, component.withSlots(slotType, Optional.of(updated)));
                 syncDerivedEnchantments(stack);
