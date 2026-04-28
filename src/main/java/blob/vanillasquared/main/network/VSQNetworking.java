@@ -7,15 +7,18 @@ import blob.vanillasquared.main.network.payload.EnchantingRecipeStatePayload;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentHotkeyPayload;
 import blob.vanillasquared.main.network.payload.VoidedSoundPayload;
+import blob.vanillasquared.main.world.effect.VoidedEffectState;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
 import blob.vanillasquared.main.world.inventory.VSQEnchantmentMenu;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.LinkedHashSet;
@@ -42,6 +45,17 @@ public final class VSQNetworking {
         ServerPlayNetworking.registerGlobalReceiver(SpecialEnchantmentHotkeyPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> vsq$handleSpecialEnchantmentHotkey(context.player()))
         );
+        EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> {
+            if (trackedEntity instanceof LivingEntity livingEntity) {
+                vsq$sendCurrentVoidedStateToPlayer(livingEntity, player);
+            }
+        });
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayer player = handler.player;
+            if (player instanceof LivingEntity livingEntity) {
+                vsq$sendCurrentVoidedStateToPlayer(livingEntity, player);
+            }
+        });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> SpecialEnchantmentCooldowns.clear(handler.player));
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
@@ -64,6 +78,13 @@ public final class VSQNetworking {
         for (ServerPlayer recipient : recipients) {
             ServerPlayNetworking.send(recipient, payload);
         }
+    }
+
+    private static void vsq$sendCurrentVoidedStateToPlayer(LivingEntity entity, ServerPlayer player) {
+        if (!VoidedEffectState.isActive(entity)) {
+            return;
+        }
+        ServerPlayNetworking.send(player, new VoidedSoundPayload(entity.getId(), true, false));
     }
 
     private static void vsq$handleEnchantingBookClick(EnchantingBookClickPayload payload, ServerPlayer player) {

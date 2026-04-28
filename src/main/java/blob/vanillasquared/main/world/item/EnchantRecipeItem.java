@@ -5,6 +5,7 @@ import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeBookNoti
 import blob.vanillasquared.util.api.modules.components.DataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -41,7 +42,9 @@ public class EnchantRecipeItem extends Item {
         }
 
         if (serverPlayer.getRecipeBook().contains(recipeKey)) {
-            serverPlayer.sendSystemMessage(Component.translatable("item.vsq.enchant_recipe.already_known").withStyle(ChatFormatting.RED));
+            serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(
+                    Component.translatable("item.vsq.enchant_recipe.already_known").withStyle(ChatFormatting.RED)
+            ));
             return InteractionResult.FAIL;
         }
 

@@ -169,6 +169,10 @@ public final class VoidedEffectState {
         }
     }
 
+    public static boolean isActive(LivingEntity entity) {
+        return STATES.containsKey(entity);
+    }
+
     private static void spawnBurst(ServerLevel level, LivingEntity entity) {
         level.sendParticles(
                 VSQParticleTypes.VOID_CLOUD,
