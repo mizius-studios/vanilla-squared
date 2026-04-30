@@ -30,15 +30,6 @@ public final class VSQEnchantmentEffects {
             LootContextParamSets.ENCHANTED_DAMAGE
     );
 
-    public static final MapCodec<? extends EnchantmentEntityEffect> CHANNELING = registerEntityEffect(
-            Identifier.fromNamespaceAndPath("vsq", "channeling"),
-            VSQChannelingEffect.MAP_CODEC
-    );
-    public static final MapCodec<? extends EnchantmentEntityEffect> SEND_CHAT_MESSAGE = registerEntityEffect(
-            Identifier.fromNamespaceAndPath("vsq", "send_chat_msg"),
-            VSQSendChatMessageEffect.MAP_CODEC
-    );
-
     private VSQEnchantmentEffects() {
     }
 
