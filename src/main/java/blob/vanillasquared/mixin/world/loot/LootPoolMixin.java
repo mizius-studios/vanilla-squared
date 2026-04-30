@@ -3,6 +3,7 @@ package blob.vanillasquared.mixin.world.loot;
 import blob.vanillasquared.main.world.loot.RandomizeEnchantmentSlotsFunction;
 import blob.vanillasquared.main.world.loot.LootContextBridge;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
@@ -30,11 +31,10 @@ public abstract class LootPoolMixin {
                 }
                 return;
             }
+            stack = RandomizeEnchantmentSlotsFunction.DEFAULT_LOOT_RANDOMIZATION.apply(stack, context);
             stack.remove(DataComponents.ENCHANTMENTS);
             stack.remove(DataComponents.STORED_ENCHANTMENTS);
-            if (!blob.vanillasquared.util.api.modules.components.VSQItemComponents.hasEnchantmentComponent(stack)) {
-                stack = RandomizeEnchantmentSlotsFunction.DEFAULT_LOOT_RANDOMIZATION.apply(stack, context);
-            }
+            VSQEnchantments.syncDerivedEnchantments(stack);
             original.accept(stack);
         };
     }
