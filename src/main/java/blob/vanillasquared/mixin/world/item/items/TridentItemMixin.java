@@ -2,7 +2,6 @@ package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder;
 import blob.vanillasquared.util.api.combat.VSQCombatPresets;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.spongepowered.asm.mixin.Mixin;
