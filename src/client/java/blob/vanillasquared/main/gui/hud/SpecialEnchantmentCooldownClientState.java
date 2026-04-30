@@ -4,6 +4,7 @@ import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayloa
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
@@ -24,7 +25,7 @@ public final class SpecialEnchantmentCooldownClientState {
     }
 
     public static void initialize() {
-        ClientTickEvents.END_CLIENT_TICK.register(_ -> tick());
+        ClientTickEvents.END_CLIENT_TICK.register(SpecialEnchantmentCooldownClientState::tick);
     }
 
     public static void apply(Identifier enchantmentId, long barRemaining, long barTotal, int displayValue, int displayKind, boolean frozen, boolean ticksDown) {
@@ -91,7 +92,10 @@ public final class SpecialEnchantmentCooldownClientState {
                 .orElseGet(() -> enchantment.value().matchingSlot(slot));
     }
 
-    private static void tick() {
+    private static void tick(Minecraft client) {
+        if (client.isPaused()) {
+            return;
+        }
         ENTRIES.entrySet().removeIf(entry -> entry.getValue().ticksDown() && entry.getValue().barRemaining <= 1L);
         ENTRIES.replaceAll((_, entry) -> entry.ticksDown() ? entry.tick() : entry);
     }
