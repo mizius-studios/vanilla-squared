@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.client.world.entities;
 
 import blob.vanillasquared.main.world.item.components.hitthrough.HitThroughComponent;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.player.LocalPlayer;
@@ -32,7 +32,7 @@ public abstract class LocalPlayerMixin {
         }
 
         LocalPlayer player = (LocalPlayer) (Object) this;
-        HitThroughComponent hitThrough = player.getMainHandItem().get(DataComponents.HIT_THROUGH);
+        HitThroughComponent hitThrough = player.getMainHandItem().get(VSQDataComponents.HIT_THROUGH);
         if (hitThrough == null) {
             return;
         }

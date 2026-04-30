@@ -2,7 +2,7 @@ package blob.vanillasquared.mixin.world.inventory;
 
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.DataSlot;
@@ -50,7 +50,7 @@ public abstract class AnvilMenuMixin extends AbstractContainerMenu {
         }
 
         VSQEnchantmentSlots.ensureSeeded(result);
-        VSQEnchantmentComponent component = result.get(DataComponents.VSQ_ENCHANTMENT);
+        VSQEnchantmentComponent component = result.get(VSQDataComponents.ENCHANTMENT);
         if (component == null) {
             return;
         }
@@ -62,7 +62,7 @@ public abstract class AnvilMenuMixin extends AbstractContainerMenu {
             return;
         }
 
-        result.set(DataComponents.VSQ_ENCHANTMENT, migrated.get());
+        result.set(VSQDataComponents.ENCHANTMENT, migrated.get());
         VSQEnchantmentSlots.syncDerivedEnchantments(result);
         if (!inputSlot.getItem().isEmpty()) {
             resultSlot.set(result);

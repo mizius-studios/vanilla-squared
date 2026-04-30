@@ -3,7 +3,7 @@ package blob.vanillasquared.main.world.recipe.enchanting;
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.world.loot.LootTableIdResolver;
 import blob.vanillasquared.main.world.item.VSQItems;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -102,7 +102,7 @@ public final class EnchantingRecipeTags {
 
     public static ItemStack createStack(ResourceKey<Recipe<?>> recipeKey) {
         ItemStack stack = new ItemStack(VSQItems.ENCHANT_RECIPE);
-        stack.set(DataComponents.ENCHANT_RECIPE, recipeKey);
+        stack.set(VSQDataComponents.ENCHANT_RECIPE, recipeKey);
         return stack;
     }
 

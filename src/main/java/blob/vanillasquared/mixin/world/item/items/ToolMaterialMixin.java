@@ -4,7 +4,7 @@ import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.util.api.builder.components.HitThroughBuilder;
 import blob.vanillasquared.util.api.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.api.builder.durability.Durability;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -101,7 +101,7 @@ public abstract class ToolMaterialMixin {
                 .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
                 .attributes(swordAttributes.build())
                 .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1))
-                .component(DataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build());
+                .component(VSQDataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build());
     }
 
     @Unique

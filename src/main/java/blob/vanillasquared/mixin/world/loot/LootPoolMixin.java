@@ -32,7 +32,7 @@ public abstract class LootPoolMixin {
             }
             stack.remove(DataComponents.ENCHANTMENTS);
             stack.remove(DataComponents.STORED_ENCHANTMENTS);
-            if (!stack.has(blob.vanillasquared.util.api.modules.components.DataComponents.VSQ_ENCHANTMENT)) {
+            if (!stack.has(blob.vanillasquared.util.api.modules.components.VSQDataComponents.ENCHANTMENT)) {
                 stack = RandomizeEnchantmentSlotsFunction.DEFAULT_LOOT_RANDOMIZATION.apply(stack, context);
             }
             original.accept(stack);

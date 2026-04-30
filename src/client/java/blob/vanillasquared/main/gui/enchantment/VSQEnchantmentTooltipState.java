@@ -2,7 +2,7 @@ package blob.vanillasquared.main.gui.enchantment;
 
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
-import blob.vanillasquared.util.api.modules.components.DataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public final class VSQEnchantmentTooltipState {
             return false;
         }
 
-        VSQEnchantmentComponent component = stack.get(DataComponents.VSQ_ENCHANTMENT);
+        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
         if (component == null) {
             return false;
         }
