@@ -3,7 +3,7 @@ package blob.vanillasquared.mixin.client.world.item;
 import blob.vanillasquared.main.gui.enchantment.VSQEnchantmentTooltipState;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
-import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
@@ -31,7 +31,7 @@ public abstract class ItemStackMixin {
     @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
     private void vsq$addEnchantRecipeTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         ItemStack stack = (ItemStack) (Object) this;
-        ResourceKey<Recipe<?>> recipeKey = stack.get(VSQDataComponents.ENCHANT_RECIPE);
+        ResourceKey<Recipe<?>> recipeKey = VSQItemComponents.getEnchantRecipe(stack);
         if (recipeKey == null) {
             return;
         }
@@ -44,7 +44,7 @@ public abstract class ItemStackMixin {
     @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceVanillaEnchantTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         ItemStack stack = (ItemStack) (Object) this;
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
             return;
         }

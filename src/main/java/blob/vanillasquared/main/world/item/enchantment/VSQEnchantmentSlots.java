@@ -1,6 +1,7 @@
 package blob.vanillasquared.main.world.item.enchantment;
 
 import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
@@ -43,13 +44,13 @@ public final class VSQEnchantmentSlots {
     }
 
     public static void ensureSeeded(ItemStack stack) {
-        if (stack.isEmpty() || stack.has(VSQDataComponents.ENCHANTMENT) || !supportsSlotComponent(stack)) {
+        if (stack.isEmpty() || VSQItemComponents.hasEnchantmentComponent(stack) || !supportsSlotComponent(stack)) {
             return;
         }
 
         VSQEnchantmentComponent seeded = createSeededComponent(stack);
         if (hasAnySlots(seeded)) {
-            stack.set(VSQDataComponents.ENCHANTMENT, seeded);
+            VSQItemComponents.setEnchantmentComponent(stack, seeded);
         }
     }
 
@@ -58,19 +59,19 @@ public final class VSQEnchantmentSlots {
             return;
         }
 
-        boolean alreadySeeded = stack.has(VSQDataComponents.ENCHANTMENT);
+        boolean alreadySeeded = VSQItemComponents.hasEnchantmentComponent(stack);
         ensureSeeded(stack);
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null || enchantments == null) {
             return;
         }
 
         Optional<VSQEnchantmentComponent> migrated = tryPopulateFromVanilla(component, stack, enchantments);
         if (migrated.isPresent()) {
-            stack.set(VSQDataComponents.ENCHANTMENT, migrated.get());
+            VSQItemComponents.setEnchantmentComponent(stack, migrated.get());
             syncDerivedEnchantments(stack);
         } else if (!alreadySeeded) {
-            stack.remove(VSQDataComponents.ENCHANTMENT);
+            VSQItemComponents.removeEnchantmentComponent(stack);
         }
     }
 
@@ -79,7 +80,7 @@ public final class VSQEnchantmentSlots {
             return;
         }
 
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
             return;
         }
@@ -104,7 +105,7 @@ public final class VSQEnchantmentSlots {
     }
 
     public static ItemEnchantments aggregate(ItemStack stack) {
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
             return stack.getOrDefault(vanillaTargetComponent(stack), ItemEnchantments.EMPTY);
         }
@@ -122,7 +123,7 @@ public final class VSQEnchantmentSlots {
 
     public static boolean canApplyInSlots(ItemStack stack, Holder<Enchantment> enchantment, int level) {
         ensureSeeded(stack);
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
             return false;
         }
@@ -169,7 +170,7 @@ public final class VSQEnchantmentSlots {
 
     public static boolean setEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment, int level) {
         ensureSeeded(stack);
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         VSQEnchantmentSlotType slotType = slotType(stack, enchantment);
         if (component == null || slotType == null) {
             return false;
@@ -188,7 +189,7 @@ public final class VSQEnchantmentSlots {
                     return false;
                 }
                 updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
-                stack.set(VSQDataComponents.ENCHANTMENT, component.withSlots(slotType, Optional.of(updated)));
+                VSQItemComponents.setEnchantmentComponent(stack, component.withSlots(slotType, Optional.of(updated)));
                 syncDerivedEnchantments(stack);
                 return true;
             }
@@ -197,7 +198,7 @@ public final class VSQEnchantmentSlots {
         for (int index = 0; index < updated.size(); index++) {
             if (updated.get(index).isEmpty()) {
                 updated.set(index, VSQEnchantmentSlotEntry.of(enchantment, level));
-                stack.set(VSQDataComponents.ENCHANTMENT, component.withSlots(slotType, Optional.of(updated)));
+                VSQItemComponents.setEnchantmentComponent(stack, component.withSlots(slotType, Optional.of(updated)));
                 syncDerivedEnchantments(stack);
                 return true;
             }
@@ -239,9 +240,9 @@ public final class VSQEnchantmentSlots {
             return false;
         }
 
-        boolean alreadySeeded = stack.has(VSQDataComponents.ENCHANTMENT);
+        boolean alreadySeeded = VSQItemComponents.hasEnchantmentComponent(stack);
         ensureSeeded(stack);
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
             return false;
         }
@@ -251,14 +252,14 @@ public final class VSQEnchantmentSlots {
             Optional<VSQEnchantmentComponent> migrated = tryPopulateFromVanilla(component, stack, vanillaEnchantments);
             if (migrated.isEmpty()) {
                 if (!alreadySeeded) {
-                    stack.remove(VSQDataComponents.ENCHANTMENT);
+                    VSQItemComponents.removeEnchantmentComponent(stack);
                 }
                 return false;
             }
             component = migrated.get();
         }
 
-        stack.set(VSQDataComponents.ENCHANTMENT, randomizeSlotCapacities(component, random, minCapacity, maxCapacity));
+        VSQItemComponents.setEnchantmentComponent(stack, randomizeSlotCapacities(component, random, minCapacity, maxCapacity));
         syncDerivedEnchantments(stack);
         return true;
     }
@@ -493,7 +494,7 @@ public final class VSQEnchantmentSlots {
 
     public static TypedDataComponent<VSQEnchantmentComponent> componentFor(ItemStack stack) {
         ensureSeeded(stack);
-        VSQEnchantmentComponent component = stack.get(VSQDataComponents.ENCHANTMENT);
+        VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         return component == null ? null : new TypedDataComponent<>(VSQDataComponents.ENCHANTMENT, component);
     }
 
