@@ -29,12 +29,6 @@
                   "damage_type": "minecraft:lightning_bolt",
                   "max_damage": 5,
                   "min_damage": 5
-                },
-                {
-                  "type": "minecraft:play_sound",
-                  "pitch": 1,
-                  "sound": "minecraft:item.trident.thunder",
-                  "volume": 1.5
                 }
               ]
             },
@@ -137,7 +131,7 @@
     {
       "requirement": {
         "type": "projectile_takeover",
-        "item": "#vsq:enchantable/ranged_weapon"
+        "item": "#vsq:enchantable/projectile_source"
       },
       "enchantment_slot": "secondary",
       "exclusive_set": "#minecraft:exclusive_set/riptide",
@@ -162,12 +156,6 @@
                   "damage_type": "minecraft:lightning_bolt",
                   "max_damage": 5,
                   "min_damage": 5
-                },
-                {
-                  "type": "minecraft:play_sound",
-                  "pitch": 1,
-                  "sound": "minecraft:item.trident.thunder",
-                  "volume": 1.5
                 }
               ]
             },
