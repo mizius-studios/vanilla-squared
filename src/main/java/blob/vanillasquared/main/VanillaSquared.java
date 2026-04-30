@@ -12,7 +12,6 @@ import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
 import blob.vanillasquared.main.world.recipe.VSQRecipeTypes;
 import blob.vanillasquared.main.world.VSQExperiments;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
-import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
 import blob.vanillasquared.util.api.modules.attributes.VSQAttributes;
 import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.fabricmc.api.ModInitializer;
