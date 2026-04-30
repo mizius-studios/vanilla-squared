@@ -1,5 +1,7 @@
 package blob.vanillasquared.util.api.enchantment;
 
+import blob.vanillasquared.main.world.item.enchantment.effects.VSQChannelingEffect;
+import blob.vanillasquared.main.world.item.enchantment.effects.VSQSendChatMessageEffect;
 import blob.vanillasquared.util.api.modules.components.ComponentRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -26,6 +28,15 @@ public final class VSQEnchantmentEffects {
             Identifier.fromNamespaceAndPath("vsq", "channeling_path"),
             TargetedConditionalEffect.codec(EnchantmentLocationBasedEffect.CODEC),
             LootContextParamSets.ENCHANTED_DAMAGE
+    );
+
+    public static final MapCodec<? extends EnchantmentEntityEffect> CHANNELING = registerEntityEffect(
+            Identifier.fromNamespaceAndPath("vsq", "channeling"),
+            VSQChannelingEffect.MAP_CODEC
+    );
+    public static final MapCodec<? extends EnchantmentEntityEffect> SEND_CHAT_MESSAGE = registerEntityEffect(
+            Identifier.fromNamespaceAndPath("vsq", "send_chat_msg"),
+            VSQSendChatMessageEffect.MAP_CODEC
     );
 
     private VSQEnchantmentEffects() {
