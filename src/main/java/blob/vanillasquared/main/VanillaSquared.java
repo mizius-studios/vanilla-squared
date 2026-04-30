@@ -13,7 +13,7 @@ import blob.vanillasquared.main.world.recipe.VSQRecipeTypes;
 import blob.vanillasquared.main.world.VSQExperiments;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentEffectComponents;
 import blob.vanillasquared.main.world.item.enchantment.effects.VSQEnchantmentEntityEffects;
-import blob.vanillasquared.util.api.modules.attributes.RegisterAttributes;
+import blob.vanillasquared.util.api.modules.attributes.VSQAttributes;
 import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,7 +39,7 @@ public class VanillaSquared implements ModInitializer {
         VSQEnchantmentEffectComponents.initialize();
         VSQEnchantmentEntityEffects.initialize();
         VSQNetworking.initialize();
-        RegisterAttributes.initialize();
+        VSQAttributes.initialize();
         VSQLootFunctions.initialize();
 
         LOGGER.info("Blob");
