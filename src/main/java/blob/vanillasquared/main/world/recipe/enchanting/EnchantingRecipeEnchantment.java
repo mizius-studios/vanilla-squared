@@ -1,6 +1,6 @@
 package blob.vanillasquared.main.world.recipe.enchanting;
 
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Holder;
@@ -43,10 +43,10 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     public ItemStack apply(ItemStack originalStack, HolderLookup.Provider registries) {
         Holder.Reference<Enchantment> enchantment = this.vsq$enchantmentHolder(registries);
         int nextLevel = this.nextLevel(originalStack, registries);
-        if (!this.canApplyNextLevel(originalStack, registries) || !VSQEnchantmentSlots.canApplyInSlots(originalStack, enchantment, nextLevel)) {
+        if (!this.canApplyNextLevel(originalStack, registries) || !VSQEnchantments.canApply(originalStack, enchantment, nextLevel)) {
             return originalStack.copy();
         }
-        return VSQEnchantmentSlots.applyEnchant(originalStack, enchantment, nextLevel);
+        return VSQEnchantments.apply(originalStack, enchantment, nextLevel);
     }
 
     public Ingredient supportedItemsIngredient(HolderLookup.Provider registries) {
@@ -87,7 +87,7 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
 
     public int currentLevel(ItemStack originalStack, HolderLookup.Provider registries) {
         Holder.Reference<Enchantment> enchantment = this.vsq$enchantmentHolder(registries);
-        return Math.max(VSQEnchantmentSlots.currentLevel(originalStack, enchantment), 0);
+        return Math.max(VSQEnchantments.currentLevel(originalStack, enchantment), 0);
     }
 
     public int nextLevel(ItemStack originalStack, HolderLookup.Provider registries) {
@@ -100,7 +100,7 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     }
 
     public int maxLevel(ItemStack originalStack, HolderLookup.Provider registries) {
-        return Math.max(VSQEnchantmentSlots.maxLevel(originalStack, this.vsq$enchantmentHolder(registries)), 1);
+        return Math.max(VSQEnchantments.maxLevel(originalStack, this.vsq$enchantmentHolder(registries)), 1);
     }
 
     public int xpCost(ItemStack originalStack, HolderLookup.Provider registries) {
@@ -126,12 +126,12 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     }
 
     public boolean respectsVanillaEnchantmentIncompatibilities(ItemStack originalStack, HolderLookup.Provider registries) {
-        var entries = VSQEnchantmentSlots.aggregate(this.apply(originalStack, registries)).entrySet().stream().toList();
+        var entries = VSQEnchantments.aggregate(this.apply(originalStack, registries)).entrySet().stream().toList();
         for (int leftIndex = 0; leftIndex < entries.size(); leftIndex++) {
             var left = entries.get(leftIndex).getKey();
             for (int rightIndex = leftIndex + 1; rightIndex < entries.size(); rightIndex++) {
                 var right = entries.get(rightIndex).getKey();
-                if (!VSQEnchantmentSlots.areCompatible(originalStack, left, right)) {
+                if (!VSQEnchantments.areCompatible(originalStack, left, right)) {
                     return false;
                 }
             }

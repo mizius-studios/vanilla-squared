@@ -1,7 +1,7 @@
 package blob.vanillasquared.main.gui.enchantment;
 
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import net.minecraft.world.item.ItemStack;
 
@@ -49,7 +49,7 @@ public final class VSQEnchantmentTooltipState {
     }
 
     public static int selectedIndex(VSQEnchantmentComponent component) {
-        List<?> slotTypes = VSQEnchantmentSlots.definedSlotTypes(component);
+        List<?> slotTypes = VSQEnchantments.definedSlotTypes(component);
         if (slotTypes.isEmpty()) {
             selectedIndex = 0;
             return 0;
@@ -61,7 +61,7 @@ public final class VSQEnchantmentTooltipState {
     }
 
     public static boolean cycle(VSQEnchantmentComponent component, int delta) {
-        List<?> slotTypes = VSQEnchantmentSlots.definedSlotTypes(component);
+        List<?> slotTypes = VSQEnchantments.definedSlotTypes(component);
         if (slotTypes.isEmpty()) {
             selectedIndex = 0;
             return false;

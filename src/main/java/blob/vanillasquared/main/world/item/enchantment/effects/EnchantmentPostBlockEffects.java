@@ -1,7 +1,7 @@
 package blob.vanillasquared.main.world.item.enchantment.effects;
 
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentEffectComponents;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
@@ -37,12 +37,12 @@ public final class EnchantmentPostBlockEffects {
     }
 
     private static void apply(ServerLevel serverLevel, ItemStack stack, EquipmentSlot slot, LivingEntity owner, EnchantmentTarget forTarget, Entity victim, DamageSource damageSource) {
-        ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
+        ItemEnchantments enchantments = VSQEnchantments.aggregate(stack);
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
             Holder<Enchantment> enchantment = entry.getKey();
             int enchantmentLevel = entry.getIntValue();
             List<TargetedConditionalEffect<EnchantmentEntityEffect>> effects =
-                    VSQEnchantmentSlots.profileEffects(stack, enchantment, VSQEnchantmentEffectComponents.POST_BLOCK);
+                    VSQEnchantments.profileEffects(stack, enchantment, VSQEnchantmentEffects.POST_BLOCK);
             if (effects.isEmpty()) {
                 continue;
             }
@@ -52,7 +52,7 @@ public final class EnchantmentPostBlockEffects {
                 TargetedConditionalEffect<EnchantmentEntityEffect> effect = effects.get(index);
                 if (forTarget == effect.enchanted()
                         && effect.matches(context)
-                        && SpecialEnchantmentCooldowns.shouldRunSpecialEffect(serverLevel, stack, enchantment.value(), VSQEnchantmentEffectComponents.POST_BLOCK, index, owner)) {
+                        && SpecialEnchantmentCooldowns.shouldRunSpecialEffect(serverLevel, stack, enchantment.value(), VSQEnchantmentEffects.POST_BLOCK, index, owner)) {
                     EnchantedItemInUse item = new EnchantedItemInUse(stack, slot, owner);
                     Entity affected = resolveAffectedEntity(effect, victim, damageSource);
                     if (affected != null) {

@@ -2,7 +2,7 @@ package blob.vanillasquared.mixin.client.world.item;
 
 import blob.vanillasquared.main.gui.enchantment.VSQEnchantmentTooltipState;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -54,12 +54,12 @@ public abstract class ItemStackMixin {
                 && org.lwjgl.glfw.GLFW.glfwGetKey(Minecraft.getInstance().getWindow().handle(), GLFW.GLFW_KEY_LEFT_ALT) == GLFW.GLFW_PRESS;
 
         List<Component> filtered = new ArrayList<>(cir.getReturnValue());
-        for (Component enchantLine : VSQEnchantmentSlots.aggregate(stack).entrySet().stream().map(entry -> net.minecraft.world.item.enchantment.Enchantment.getFullname(entry.getKey(), entry.getIntValue())).toList()) {
+        for (Component enchantLine : VSQEnchantments.aggregate(stack).entrySet().stream().map(entry -> net.minecraft.world.item.enchantment.Enchantment.getFullname(entry.getKey(), entry.getIntValue())).toList()) {
             filtered.removeIf(line -> line.getString().equals(enchantLine.getString()));
         }
 
         int insertionIndex = vsq$slotTooltipInsertionIndex(filtered);
-        filtered.addAll(insertionIndex, VSQEnchantmentSlots.buildTooltipLines(component, VSQEnchantmentTooltipState.selectedIndex(component), leftAltHeld));
+        filtered.addAll(insertionIndex, VSQEnchantments.buildTooltipLines(component, VSQEnchantmentTooltipState.selectedIndex(component), leftAltHeld));
         cir.setReturnValue(List.copyOf(filtered));
     }
 

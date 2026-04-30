@@ -1,6 +1,6 @@
 package blob.vanillasquared.mixin.commands;
 
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
@@ -60,7 +60,7 @@ public abstract class EnchantCommandMixin {
                 continue;
             }
 
-            int maxLevel = VSQEnchantmentSlots.maxLevel(item, enchantmentHolder);
+            int maxLevel = VSQEnchantments.maxLevel(item, enchantmentHolder);
             if (level > maxLevel) {
                 if (targets.size() == 1) {
                     throw ERROR_LEVEL_TOO_HIGH.create(level, maxLevel);
@@ -68,7 +68,7 @@ public abstract class EnchantCommandMixin {
                 continue;
             }
 
-            int currentLevel = VSQEnchantmentSlots.currentLevel(item, enchantmentHolder);
+            int currentLevel = VSQEnchantments.currentLevel(item, enchantmentHolder);
             if (currentLevel >= level) {
                 if (targets.size() == 1) {
                     throw ERROR_NOTHING_HAPPENED.create();
@@ -77,8 +77,8 @@ public abstract class EnchantCommandMixin {
             }
 
             boolean compatible = enchantment.canEnchant(item)
-                    && VSQEnchantmentSlots.aggregate(item).keySet().stream().allMatch(other -> other.equals(enchantmentHolder) || VSQEnchantmentSlots.areCompatible(item, other, enchantmentHolder))
-                    && VSQEnchantmentSlots.canApplyInSlots(item, enchantmentHolder, level);
+                    && VSQEnchantments.aggregate(item).keySet().stream().allMatch(other -> other.equals(enchantmentHolder) || VSQEnchantments.areCompatible(item, other, enchantmentHolder))
+                    && VSQEnchantments.canApply(item, enchantmentHolder, level);
             if (!compatible) {
                 if (targets.size() == 1) {
                     throw ERROR_INCOMPATIBLE.create(item.getHoverName().getString());
@@ -86,7 +86,7 @@ public abstract class EnchantCommandMixin {
                 continue;
             }
 
-            if (VSQEnchantmentSlots.setEnchantmentLevel(item, enchantmentHolder, level)) {
+            if (VSQEnchantments.setLevel(item, enchantmentHolder, level)) {
                 success++;
             } else if (targets.size() == 1) {
                 throw ERROR_NOTHING_HAPPENED.create();

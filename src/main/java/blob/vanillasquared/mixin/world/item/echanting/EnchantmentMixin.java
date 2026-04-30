@@ -4,7 +4,7 @@ import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentAccess;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEffectMetadataIndex;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlotType;
 import blob.vanillasquared.main.world.effect.ChannelingState;
 import com.mojang.serialization.Codec;
@@ -71,7 +71,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
         }
 
         Enchantment enchantment = (Enchantment) (Object) this;
-        return VSQEnchantmentSlots.selectedProfile(stack, enchantment)
+        return VSQEnchantments.selectedProfile(stack, enchantment)
                 .map(profile -> profile.effects().getOrDefault(effectType, List.of()));
     }
 
@@ -319,7 +319,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
         EquipmentSlot slot = item.inSlot();
         if (slot != null) {
             Map<Enchantment, Set<EnchantmentLocationBasedEffect>> activeLocationDependentEffects = entity.activeLocationDependentEnchantments(slot);
-            if (!VSQEnchantmentSlots.selectedProfile(item.itemStack(), (Enchantment) (Object) this)
+            if (!VSQEnchantments.selectedProfile(item.itemStack(), (Enchantment) (Object) this)
                     .map(profile -> profile.slots().stream().anyMatch(group -> group.test(slot)))
                     .orElseGet(() -> ((Enchantment) (Object) this).matchingSlot(slot))) {
                 Set<EnchantmentLocationBasedEffect> activeEffects = activeLocationDependentEffects.remove((Enchantment) (Object) this);

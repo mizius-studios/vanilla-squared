@@ -1,6 +1,6 @@
 package blob.vanillasquared.main.world.loot;
 
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -35,7 +35,7 @@ public class RandomizeEnchantmentSlotsFunction extends LootItemConditionalFuncti
 
     @Override
     protected ItemStack run(ItemStack itemStack, LootContext context) {
-        VSQEnchantmentSlots.randomizeSlotCapacities(itemStack, context.getRandom(), this.minCapacity, this.maxCapacity);
+        VSQEnchantments.randomizeSlotCapacities(itemStack, context.getRandom(), this.minCapacity, this.maxCapacity);
         return itemStack;
     }
 }

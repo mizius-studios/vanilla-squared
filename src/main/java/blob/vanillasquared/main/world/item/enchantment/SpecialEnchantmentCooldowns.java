@@ -1,5 +1,7 @@
 package blob.vanillasquared.main.world.item.enchantment;
 
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
+
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -123,7 +125,7 @@ public final class SpecialEnchantmentCooldowns {
         }
         ServerPlayer player = maybePlayer.get();
 
-        Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProfile(stack, enchantment);
+        Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProfile(stack, enchantment);
         if (profile.isEmpty() || profile.get().special().isEmpty()) {
             return true;
         }
@@ -144,7 +146,7 @@ public final class SpecialEnchantmentCooldowns {
         }
 
         Holder<Enchantment> enchantmentHolder = enchantmentRegistry.getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, enchantmentId));
-        int enchantmentLevel = VSQEnchantmentSlots.aggregate(stack).getLevel(enchantmentHolder);
+        int enchantmentLevel = VSQEnchantments.aggregate(stack).getLevel(enchantmentHolder);
         EquipmentSlot slot = player.getOffhandItem() == stack ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
         SpecialEnchantmentUse use = new SpecialEnchantmentUse(
                 enchantmentId,
@@ -361,9 +363,9 @@ public final class SpecialEnchantmentCooldowns {
             return Optional.empty();
         }
 
-        ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
+        ItemEnchantments enchantments = VSQEnchantments.aggregate(stack);
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProfile(stack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProfile(stack, enchantment);
             if (profile.isEmpty() || profile.get().special().isEmpty() || !matchesSlot(stack, enchantment, slot)) {
                 continue;
             }
@@ -427,9 +429,9 @@ public final class SpecialEnchantmentCooldowns {
             return Optional.empty();
         }
 
-        ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
+        ItemEnchantments enchantments = VSQEnchantments.aggregate(stack);
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProfile(stack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProfile(stack, enchantment);
             if (profile.isEmpty() || profile.get().special().isEmpty()) {
                 continue;
             }
@@ -450,7 +452,7 @@ public final class SpecialEnchantmentCooldowns {
     }
 
     private static boolean matchesSlot(ItemStack stack, Holder<Enchantment> enchantment, EquipmentSlot slot) {
-        return VSQEnchantmentSlots.selectedProfile(stack, enchantment)
+        return VSQEnchantments.selectedProfile(stack, enchantment)
                 .map(profile -> profile.slots().stream().anyMatch(group -> group.test(slot)))
                 .orElseGet(() -> enchantment.value().matchingSlot(slot));
     }

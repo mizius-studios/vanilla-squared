@@ -1,7 +1,7 @@
 package blob.vanillasquared.main.world.item.enchantment.effects;
 
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -102,7 +102,7 @@ public final class EnchantmentProjectileTakeoverEffects {
                 return;
             }
 
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProjectileTakeoverProfile(sourceStack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProjectileTakeoverProfile(sourceStack, enchantment);
             if (profile.isEmpty() || !matchesSlot(profile.get(), item.inSlot())) {
                 return;
             }
@@ -134,7 +134,7 @@ public final class EnchantmentProjectileTakeoverEffects {
                 return;
             }
 
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProjectileTakeoverProfile(sourceStack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProjectileTakeoverProfile(sourceStack, enchantment);
             if (profile.isEmpty() || !matchesSlot(profile.get(), item.inSlot())) {
                 return;
             }
@@ -169,7 +169,7 @@ public final class EnchantmentProjectileTakeoverEffects {
                 return;
             }
 
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProjectileTakeoverProfile(sourceStack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProjectileTakeoverProfile(sourceStack, enchantment);
             if (profile.isEmpty() || !matchesSlot(profile.get(), item.inSlot())) {
                 return;
             }
@@ -203,7 +203,7 @@ public final class EnchantmentProjectileTakeoverEffects {
                 return;
             }
 
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProjectileTakeoverProfile(sourceStack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProjectileTakeoverProfile(sourceStack, enchantment);
             if (profile.isEmpty() || !matchesSlot(profile.get(), item.inSlot())) {
                 return;
             }

@@ -1,7 +1,7 @@
 package blob.vanillasquared.main.gui.hud;
 
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.player.LocalPlayer;
@@ -70,9 +70,9 @@ public final class SpecialEnchantmentCooldownClientState {
             return Optional.empty();
         }
 
-        ItemEnchantments enchantments = VSQEnchantmentSlots.aggregate(stack);
+        ItemEnchantments enchantments = VSQEnchantments.aggregate(stack);
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
-            Optional<VSQEnchantmentProfile> profile = VSQEnchantmentSlots.selectedProfile(stack, enchantment);
+            Optional<VSQEnchantmentProfile> profile = VSQEnchantments.selectedProfile(stack, enchantment);
             if (profile.isEmpty() || profile.get().special().isEmpty() || !matchesSlot(stack, enchantment, slot)) {
                 continue;
             }
@@ -86,7 +86,7 @@ public final class SpecialEnchantmentCooldownClientState {
     }
 
     private static boolean matchesSlot(ItemStack stack, Holder<Enchantment> enchantment, EquipmentSlot slot) {
-        return VSQEnchantmentSlots.selectedProfile(stack, enchantment)
+        return VSQEnchantments.selectedProfile(stack, enchantment)
                 .map(profile -> profile.slots().stream().anyMatch(group -> group.test(slot)))
                 .orElseGet(() -> enchantment.value().matchingSlot(slot));
     }

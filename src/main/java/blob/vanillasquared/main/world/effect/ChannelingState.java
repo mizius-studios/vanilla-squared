@@ -2,8 +2,8 @@ package blob.vanillasquared.main.world.effect;
 
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentEffectComponents;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.main.world.item.enchantment.effects.VSQChannelingEffect;
 import blob.vanillasquared.main.world.particle.particles.LightningBoltParticleOptions;
 import blob.vanillasquared.util.api.references.RegistryReference;
@@ -105,7 +105,7 @@ public final class ChannelingState {
                 passThrough,
                 algorithm,
                 directHitEffects,
-                VSQEnchantmentSlots.profileEffects(item.itemStack(), enchantment, VSQEnchantmentEffectComponents.CHANNELING_PATH)
+                VSQEnchantments.profileEffects(item.itemStack(), enchantment, VSQEnchantmentEffects.CHANNELING_PATH)
         );
         applyDirectHitEffects(level, activation, originalVictim);
         chainFrom(level, activation, originalVictim);
@@ -757,7 +757,7 @@ public final class ChannelingState {
                     level,
                     this.stackSnapshot,
                     this.enchantment.value(),
-                    VSQEnchantmentEffectComponents.CHANNELING_PATH,
+                    VSQEnchantmentEffects.CHANNELING_PATH,
                     effectIndex,
                     owner
             );

@@ -2,7 +2,7 @@ package blob.vanillasquared.main.world.item.enchantment.effects;
 
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.world.effect.ChannelingState;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.util.api.references.RegistryReference;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -101,10 +101,10 @@ public record VSQChannelingEffect(
     }
 
     private static Holder<Enchantment> resolveEnchantment(EnchantedItemInUse item, VSQChannelingEffect effect) {
-        for (var entry : VSQEnchantmentSlots.aggregate(item.itemStack()).entrySet()) {
+        for (var entry : VSQEnchantments.aggregate(item.itemStack()).entrySet()) {
             Holder<Enchantment> enchantment = entry.getKey();
             List<TargetedConditionalEffect<EnchantmentEntityEffect>> effects =
-                    VSQEnchantmentSlots.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.POST_ATTACK);
+                    VSQEnchantments.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.POST_ATTACK);
             for (TargetedConditionalEffect<EnchantmentEntityEffect> conditional : effects) {
                 if (containsEffect(conditional.effect(), effect)) {
                     return enchantment;
@@ -116,7 +116,7 @@ public record VSQChannelingEffect(
 
     public static List<IndexedDirectHitEffect> indexedDirectHitEffects(ItemStack stack, Holder<Enchantment> enchantment, VSQChannelingEffect effect) {
         List<TargetedConditionalEffect<EnchantmentEntityEffect>> effects =
-                VSQEnchantmentSlots.profileEffects(stack, enchantment, EnchantmentEffectComponents.POST_ATTACK);
+                VSQEnchantments.profileEffects(stack, enchantment, EnchantmentEffectComponents.POST_ATTACK);
         List<IndexedDirectHitEffect> resolved = new java.util.ArrayList<>(effects.size());
         for (int index = 0; index < effects.size(); index++) {
             int effectIndex = index;

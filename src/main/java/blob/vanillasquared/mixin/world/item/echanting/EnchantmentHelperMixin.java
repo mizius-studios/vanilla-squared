@@ -2,7 +2,7 @@ package blob.vanillasquared.mixin.world.item.echanting;
 
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
 import blob.vanillasquared.main.world.item.enchantment.effects.EnchantmentProjectileTakeoverEffects;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -73,7 +73,7 @@ public abstract class EnchantmentHelperMixin {
                 return;
             }
             LootContext context = Enchantment.damageContext(serverLevel, enchantmentLevel, victim, source);
-            List<ConditionalEffect<DamageImmunity>> effects = VSQEnchantmentSlots.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.DAMAGE_IMMUNITY);
+            List<ConditionalEffect<DamageImmunity>> effects = VSQEnchantments.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.DAMAGE_IMMUNITY);
             for (int index = 0; index < effects.size(); index++) {
                 ConditionalEffect<DamageImmunity> effect = effects.get(index);
                 if (effect.matches(context) && vsq$allowSpecialEffect(serverLevel, item.itemStack(), enchantment, EnchantmentEffectComponents.DAMAGE_IMMUNITY, index, item.owner())) {
@@ -89,7 +89,7 @@ public abstract class EnchantmentHelperMixin {
     private static void vsq$useSelectedProfileAmmoUse(ServerLevel level, ItemStack weapon, ItemStack ammo, int amount, CallbackInfoReturnable<Integer> cir) {
         MutableFloat modifiedAmount = new MutableFloat(amount);
         EnchantmentHelper.runIterationOnItem(weapon, (enchantment, enchantmentLevel) -> Enchantment.applyEffects(
-                VSQEnchantmentSlots.profileEffects(weapon, enchantment, EnchantmentEffectComponents.AMMO_USE),
+                VSQEnchantments.profileEffects(weapon, enchantment, EnchantmentEffectComponents.AMMO_USE),
                 Enchantment.itemContext(level, enchantmentLevel, ammo),
                 modifiedAmount,
                 (effect, currentValue) -> effect.process(enchantmentLevel, level.getRandom(), currentValue)
@@ -101,7 +101,7 @@ public abstract class EnchantmentHelperMixin {
     private static void vsq$useSelectedProfilePiercingCount(ServerLevel level, ItemStack weapon, ItemStack ammo, CallbackInfoReturnable<Integer> cir) {
         MutableFloat modifiedAmount = new MutableFloat(0.0F);
         EnchantmentHelper.runIterationOnItem(weapon, (enchantment, enchantmentLevel) -> Enchantment.applyEffects(
-                VSQEnchantmentSlots.profileEffects(weapon, enchantment, EnchantmentEffectComponents.PROJECTILE_PIERCING),
+                VSQEnchantments.profileEffects(weapon, enchantment, EnchantmentEffectComponents.PROJECTILE_PIERCING),
                 Enchantment.itemContext(level, enchantmentLevel, ammo),
                 modifiedAmount,
                 (effect, currentValue) -> effect.process(enchantmentLevel, level.getRandom(), currentValue)
@@ -122,7 +122,7 @@ public abstract class EnchantmentHelperMixin {
         EnchantmentHelper.runIterationOnEquipment(entity, (enchantment, enchantmentLevel, item) -> {
             LootContext context = Enchantment.damageContext(serverLevel, enchantmentLevel, entity, killingBlow);
             List<net.minecraft.world.item.enchantment.TargetedConditionalEffect<EnchantmentValueEffect>> effects =
-                    VSQEnchantmentSlots.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.EQUIPMENT_DROPS);
+                    VSQEnchantments.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.EQUIPMENT_DROPS);
             for (int index = 0; index < effects.size(); index++) {
                 net.minecraft.world.item.enchantment.TargetedConditionalEffect<EnchantmentValueEffect> effect = effects.get(index);
                 if (effect.enchanted() == EnchantmentTarget.VICTIM
@@ -137,7 +137,7 @@ public abstract class EnchantmentHelperMixin {
             EnchantmentHelper.runIterationOnEquipment(attacker, (enchantment, enchantmentLevel, item) -> {
                 LootContext context = Enchantment.damageContext(serverLevel, enchantmentLevel, entity, killingBlow);
                 List<net.minecraft.world.item.enchantment.TargetedConditionalEffect<EnchantmentValueEffect>> effects =
-                        VSQEnchantmentSlots.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.EQUIPMENT_DROPS);
+                        VSQEnchantments.profileEffects(item.itemStack(), enchantment, EnchantmentEffectComponents.EQUIPMENT_DROPS);
                 for (int index = 0; index < effects.size(); index++) {
                     net.minecraft.world.item.enchantment.TargetedConditionalEffect<EnchantmentValueEffect> effect = effects.get(index);
                     if (effect.enchanted() == EnchantmentTarget.ATTACKER
@@ -162,7 +162,7 @@ public abstract class EnchantmentHelperMixin {
     ) {
         EnchantmentHelper.runIterationOnItem(itemStack, (enchantment, level) -> {
             if (vsq$matchingSlotGroup(itemStack, enchantment, slot)) {
-                for (EnchantmentAttributeEffect effect : VSQEnchantmentSlots.profileEffects(itemStack, enchantment, EnchantmentEffectComponents.ATTRIBUTES)) {
+                for (EnchantmentAttributeEffect effect : VSQEnchantments.profileEffects(itemStack, enchantment, EnchantmentEffectComponents.ATTRIBUTES)) {
                     consumer.accept(effect.attribute(), effect.getModifier(level, slot));
                 }
             }
@@ -179,7 +179,7 @@ public abstract class EnchantmentHelperMixin {
     ) {
         EnchantmentHelper.runIterationOnItem(itemStack, (enchantment, level) -> {
             if (vsq$matchingSlot(itemStack, enchantment, slot)) {
-                for (EnchantmentAttributeEffect effect : VSQEnchantmentSlots.profileEffects(itemStack, enchantment, EnchantmentEffectComponents.ATTRIBUTES)) {
+                for (EnchantmentAttributeEffect effect : VSQEnchantments.profileEffects(itemStack, enchantment, EnchantmentEffectComponents.ATTRIBUTES)) {
                     consumer.accept(effect.attribute(), effect.getModifier(level, slot));
                 }
             }
@@ -191,7 +191,7 @@ public abstract class EnchantmentHelperMixin {
     private static void vsq$useSelectedProfileCrossbowChargeTime(ItemStack crossbow, LivingEntity holder, float time, CallbackInfoReturnable<Float> cir) {
         MutableFloat modifiedTime = new MutableFloat(time);
         EnchantmentHelper.runIterationOnItem(crossbow, (enchantment, level) -> {
-            EnchantmentValueEffect effect = VSQEnchantmentSlots.profileEffect(crossbow, enchantment, EnchantmentEffectComponents.CROSSBOW_CHARGE_TIME);
+            EnchantmentValueEffect effect = VSQEnchantments.profileEffect(crossbow, enchantment, EnchantmentEffectComponents.CROSSBOW_CHARGE_TIME);
             if (effect != null) {
                 modifiedTime.setValue(effect.process(level, holder.getRandom(), modifiedTime.floatValue()));
             }
@@ -276,7 +276,7 @@ public abstract class EnchantmentHelperMixin {
     private static void vsq$useSelectedProfileTridentSpinStrength(ItemStack trident, LivingEntity holder, CallbackInfoReturnable<Float> cir) {
         MutableFloat strength = new MutableFloat(0.0F);
         EnchantmentHelper.runIterationOnItem(trident, (enchantment, level) -> {
-            EnchantmentValueEffect effect = VSQEnchantmentSlots.profileEffect(trident, enchantment, EnchantmentEffectComponents.TRIDENT_SPIN_ATTACK_STRENGTH);
+            EnchantmentValueEffect effect = VSQEnchantments.profileEffect(trident, enchantment, EnchantmentEffectComponents.TRIDENT_SPIN_ATTACK_STRENGTH);
             if (effect != null) {
                 strength.setValue(effect.process(level, holder.getRandom(), strength.floatValue()));
             }
@@ -288,7 +288,7 @@ public abstract class EnchantmentHelperMixin {
     private static void vsq$useSelectedProfileHas(ItemStack item, DataComponentType<?> effectType, CallbackInfoReturnable<Boolean> cir) {
         MutableBoolean found = new MutableBoolean(false);
         EnchantmentHelper.runIterationOnItem(item, (enchantment, level) -> {
-            if (VSQEnchantmentSlots.profileEffect(item, enchantment, effectType) != null) {
+            if (VSQEnchantments.profileEffect(item, enchantment, effectType) != null) {
                 found.setTrue();
             }
         });
@@ -336,7 +336,7 @@ public abstract class EnchantmentHelperMixin {
             ItemEnchantments enchantments = item.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
             for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
                 Holder<Enchantment> enchantment = entry.getKey();
-                if (VSQEnchantmentSlots.profileEffect(item, enchantment, componentType) != null && vsq$matchingSlot(item, enchantment, slot)) {
+                if (VSQEnchantments.profileEffect(item, enchantment, componentType) != null && vsq$matchingSlot(item, enchantment, slot)) {
                     items.add(new EnchantedItemInUse(item, slot, source));
                 }
             }
@@ -350,7 +350,7 @@ public abstract class EnchantmentHelperMixin {
         MutableObject<Pair<T, Integer>> found = new MutableObject<>();
         EnchantmentHelper.runIterationOnItem(item, (enchantment, level) -> {
             if (found.get() == null || found.get().getSecond() < level) {
-                T effect = VSQEnchantmentSlots.profileEffect(item, enchantment, effectType);
+                T effect = VSQEnchantments.profileEffect(item, enchantment, effectType);
                 if (effect != null) {
                     found.setValue(Pair.of(effect, level));
                 }
@@ -361,14 +361,14 @@ public abstract class EnchantmentHelperMixin {
 
     @Unique
     private static boolean vsq$matchingSlot(ItemStack stack, Holder<Enchantment> enchantment, EquipmentSlot slot) {
-        return VSQEnchantmentSlots.selectedProfile(stack, enchantment)
+        return VSQEnchantments.selectedProfile(stack, enchantment)
                 .map(profile -> profile.slots().stream().anyMatch(group -> group.test(slot)))
                 .orElseGet(() -> enchantment.value().matchingSlot(slot));
     }
 
     @Unique
     private static boolean vsq$matchingSlotGroup(ItemStack stack, Holder<Enchantment> enchantment, EquipmentSlotGroup slot) {
-        return VSQEnchantmentSlots.selectedProfile(stack, enchantment)
+        return VSQEnchantments.selectedProfile(stack, enchantment)
                 .map(VSQEnchantmentProfile::slots)
                 .map(slots -> slots.contains(slot))
                 .orElseGet(() -> enchantment.value().definition().slots().contains(slot));

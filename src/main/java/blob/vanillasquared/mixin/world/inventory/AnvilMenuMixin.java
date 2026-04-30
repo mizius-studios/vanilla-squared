@@ -1,7 +1,7 @@
 package blob.vanillasquared.mixin.world.inventory;
 
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentSlots;
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -51,13 +51,13 @@ public abstract class AnvilMenuMixin extends AbstractContainerMenu {
             return;
         }
 
-        VSQEnchantmentSlots.ensureSeeded(result);
+        VSQEnchantments.ensureSeeded(result);
         VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(result);
         if (component == null) {
             return;
         }
 
-        var migrated = VSQEnchantmentSlots.tryPopulateFromVanilla(component, result, EnchantmentHelper.getEnchantmentsForCrafting(result));
+        var migrated = VSQEnchantments.tryPopulateFromVanilla(component, result, EnchantmentHelper.getEnchantmentsForCrafting(result));
         if (migrated.isEmpty()) {
             resultSlot.set(ItemStack.EMPTY);
             this.cost.set(0);
@@ -65,7 +65,7 @@ public abstract class AnvilMenuMixin extends AbstractContainerMenu {
         }
 
         VSQItemComponents.setEnchantmentComponent(result, migrated.get());
-        VSQEnchantmentSlots.syncDerivedEnchantments(result);
+        VSQEnchantments.syncDerivedEnchantments(result);
         if (!inputSlot.getItem().isEmpty()) {
             resultSlot.set(result);
         }
