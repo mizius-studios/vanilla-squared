@@ -2,7 +2,7 @@ package blob.vanillasquared.main.world.item;
 
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeBookNotifier;
-import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
+import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -24,7 +24,7 @@ public class EnchantRecipeItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        ResourceKey<Recipe<?>> recipeKey = stack.get(VSQDataComponents.ENCHANT_RECIPE);
+        ResourceKey<Recipe<?>> recipeKey = VSQItemComponents.getEnchantRecipe(stack);
         if (recipeKey == null) {
             return InteractionResult.PASS;
         }
