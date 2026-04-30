@@ -1,7 +1,5 @@
 package blob.vanillasquared.util.api.enchantment;
 
-import blob.vanillasquared.main.world.item.enchantment.effects.VSQChannelingEffect;
-import blob.vanillasquared.main.world.item.enchantment.effects.VSQSendChatMessageEffect;
 import blob.vanillasquared.util.api.modules.components.ComponentRegistry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
