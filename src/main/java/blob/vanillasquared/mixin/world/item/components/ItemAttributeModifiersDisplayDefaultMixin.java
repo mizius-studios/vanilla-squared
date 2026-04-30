@@ -1,7 +1,9 @@
 package blob.vanillasquared.mixin.world.item.components;
 
-import blob.vanillasquared.util.api.modules.attributes.RegisterAttributes;
-import blob.vanillasquared.util.api.builder.general.GeneralWeapon.UtilIdentifiers;
+import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder.ModifierIds;
+import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder.ItemType;
+import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder.ModifierType;
+import blob.vanillasquared.util.api.modules.attributes.VSQAttributes;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -33,12 +35,12 @@ public class ItemAttributeModifiersDisplayDefaultMixin {
         modifier = attributeModifier;
         attributeHolder = holder;
         player_ = player;
-        if (UtilIdentifiers.swordOverride.isItem(modifier, UtilIdentifiers.Item.SWORD)
-            || UtilIdentifiers.axeOverride.isItem(modifier, UtilIdentifiers.Item.AXE)
-            || UtilIdentifiers.tridentOverride.isItem(modifier, UtilIdentifiers.Item.TRIDENT)) {
-            return !modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_RANGE))
-                    && !modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_RANGE))
-                    && !modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_RANGE));
+        if (ModifierIds.SWORD.isItem(modifier, ItemType.SWORD)
+            || ModifierIds.AXE.isItem(modifier, ItemType.AXE)
+            || ModifierIds.TRIDENT.isItem(modifier, ItemType.TRIDENT)) {
+            return !modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_RANGE))
+                    && !modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_RANGE))
+                    && !modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_RANGE));
         } return bl;
     }
 
@@ -48,18 +50,18 @@ public class ItemAttributeModifiersDisplayDefaultMixin {
             double playerBaseAttackDMG = player_.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
             double playerBaseAttackSpeed = player_.getAttributeBaseValue(Attributes.ATTACK_SPEED);
 
-            if (attributeHolder.is(RegisterAttributes.UtilIdentifiers.maceProtectionAttribute.get())
-                    || attributeHolder.is(RegisterAttributes.UtilIdentifiers.magicProtectionAttribute.get())
-                    || attributeHolder.is(RegisterAttributes.UtilIdentifiers.dripstoneProtectionAttribute.get())
-                    || attributeHolder.is(RegisterAttributes.UtilIdentifiers.spearProtectionAttribute.get())) {
+            if (attributeHolder.is(VSQAttributes.Keys.MACE_PROTECTION.id())
+                    || attributeHolder.is(VSQAttributes.Keys.MAGIC_PROTECTION.id())
+                    || attributeHolder.is(VSQAttributes.Keys.DRIPSTONE_PROTECTION.id())
+                    || attributeHolder.is(VSQAttributes.Keys.SPEAR_PROTECTION.id())) {
                 return value * 10;
-            } else if (modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_DMG))
-                    || modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_DMG))
-                    || modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_DMG))) {
+            } else if (modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_DAMAGE))
+                    || modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_DAMAGE))
+                    || modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_DAMAGE))) {
                 return value + playerBaseAttackDMG;
-            } else if (modifier.is(UtilIdentifiers.swordOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))
-                    || modifier.is(UtilIdentifiers.axeOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))
-                    || modifier.is(UtilIdentifiers.tridentOverride.get(UtilIdentifiers.Type.ATTACK_SPEED))) {
+            } else if (modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_SPEED))
+                    || modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_SPEED))
+                    || modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_SPEED))) {
                 return playerBaseAttackSpeed + value;
             }
         }

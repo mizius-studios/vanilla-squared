@@ -3,7 +3,7 @@ package blob.vanillasquared.main.world.util;
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.world.effect.VSQMobEffects;
 import blob.vanillasquared.main.world.effect.VoidedEffectState;
-import blob.vanillasquared.util.api.modules.attributes.RegisterAttributes;
+import blob.vanillasquared.util.api.modules.attributes.VSQAttributes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -41,7 +41,7 @@ public final class DamageUtil {
             return Math.max(amount, 0.0F);
         }
 
-        return applyPercentageProtection(entity, RegisterAttributes.maceProtectionAttribute, amount);
+        return applyPercentageProtection(entity, VSQAttributes.MACE_PROTECTION, amount);
     }
 
     public static float applyMagicProtection(LivingEntity entity, DamageSource source, float amount) {
@@ -49,7 +49,7 @@ public final class DamageUtil {
             return Math.max(amount, 0.0F);
         }
 
-        return applyPercentageProtection(entity, RegisterAttributes.magicProtectionAttribute, amount);
+        return applyPercentageProtection(entity, VSQAttributes.MAGIC_PROTECTION, amount);
     }
 
     public static float applyDripstoneProtection(LivingEntity entity, DamageSource source, float amount) {
@@ -57,7 +57,7 @@ public final class DamageUtil {
             return Math.max(amount, 0.0F);
         }
 
-        return applyPercentageProtection(entity, RegisterAttributes.dripstoneProtectionAttribute, amount);
+        return applyPercentageProtection(entity, VSQAttributes.DRIPSTONE_PROTECTION, amount);
     }
 
     public static float applySpearProtection(LivingEntity entity, DamageSource source, float amount) {
@@ -65,7 +65,7 @@ public final class DamageUtil {
             return Math.max(amount, 0.0F);
         }
 
-        return applyPercentageProtection(entity, RegisterAttributes.spearProtectionAttribute, amount);
+        return applyPercentageProtection(entity, VSQAttributes.SPEAR_PROTECTION, amount);
     }
 
     public static float applyVoided(LivingEntity entity, DamageSource source, float amount) {

@@ -1,9 +1,8 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.main.VanillaSquared;
-import blob.vanillasquared.util.api.builder.components.HitThroughBuilder;
-import blob.vanillasquared.util.api.builder.general.GeneralWeapon;
 import blob.vanillasquared.util.api.builder.durability.Durability;
+import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder;
+import blob.vanillasquared.util.api.combat.VSQCombatPresets;
 import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -27,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.Map;
-
 @Mixin(ToolMaterial.class)
 public abstract class ToolMaterialMixin {
 
@@ -49,35 +46,10 @@ public abstract class ToolMaterialMixin {
         throw new AssertionError();
     }
 
-    @Unique
-    private static final Map<ToolMaterial, GeneralWeapon> SWORD = Map.of(
-            ToolMaterial.WOOD, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
-            ToolMaterial.STONE, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
-            ToolMaterial.COPPER, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
-            ToolMaterial.IRON, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
-            ToolMaterial.GOLD, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
-            ToolMaterial.DIAMOND, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 7.0D, -2.4D, 0.0D),
-            ToolMaterial.NETHERITE, new GeneralWeapon(GeneralWeapon.UtilIdentifiers.swordOverride, EquipmentSlotGroup.MAINHAND, 10.0D, -2.4D, 0.0D)
-    );
-
-    @Unique
-    private static final Map<ToolMaterial, Durability> DURABILITY = Map.of(
-            ToolMaterial.WOOD, new Durability(75),
-            ToolMaterial.STONE, new Durability(150),
-            ToolMaterial.COPPER, new Durability(200),
-            ToolMaterial.IRON, new Durability(250),
-            ToolMaterial.GOLD, new Durability(100),
-            ToolMaterial.DIAMOND, new Durability(1550),
-            ToolMaterial.NETHERITE, new Durability(2069)
-    );
-
-    @Unique
-    private static final HitThroughBuilder HIT_THROUGH_PLANTS = new HitThroughBuilder(VanillaSquared.MOD_ID, "hit_through");
-
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
-        GeneralWeapon swordAttributes = SWORD.get(material);
+        WeaponAttributeBuilder swordAttributes = VSQCombatPresets.swordAttributes(material);
         if (swordAttributes == null) {
             return;
         }
@@ -88,12 +60,12 @@ public abstract class ToolMaterialMixin {
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
     private void applyToolProperties(Item.Properties properties, TagKey<Block> tagKey, float attackDamage, float attackSpeed, float weaponDamage, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
-        Durability durability = DURABILITY.getOrDefault(material, Durability.DEFAULT);
+        Durability durability = VSQCombatPresets.toolDurability(material);
         cir.setReturnValue(buildToolProperties(properties, tagKey, attackDamage, attackSpeed, weaponDamage, durability));
     }
 
     @Unique
-    private Item.Properties buildSwordProperties(Item.Properties properties, GeneralWeapon swordAttributes) {
+    private Item.Properties buildSwordProperties(Item.Properties properties, WeaponAttributeBuilder swordAttributes) {
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         Tool toolComponent = new Tool(createSwordRules(holderGetter), 1.0F, 2, false);
 
@@ -101,7 +73,7 @@ public abstract class ToolMaterialMixin {
                 .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
                 .attributes(swordAttributes.build())
                 .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1))
-                .component(VSQDataComponents.HIT_THROUGH, HIT_THROUGH_PLANTS.build());
+                .component(VSQDataComponents.HIT_THROUGH, VSQCombatPresets.hitThroughPlants().build());
     }
 
     @Unique
