@@ -30,18 +30,18 @@ public class ItemAttributeModifiersDisplayDefaultMixin {
     @Unique
     private Player player_;
 
-    @ModifyVariable(method = "apply", at = @At(value = "STORE"), ordinal = 0)
-    private boolean modifyBl(boolean bl, Consumer<Component> consumer, @Nullable Player player, Holder<Attribute> holder, AttributeModifier attributeModifier) {
-        modifier = attributeModifier;
-        attributeHolder = holder;
+    @ModifyVariable(method = "apply", at = @At(value = "STORE"), name = "displayWithBase")
+    private boolean modifyBl(boolean displayWithBase, Consumer<Component> consumer, @Nullable Player player, Holder<Attribute> attribute, AttributeModifier modifier) {
+        this.modifier = modifier;
+        attributeHolder = attribute;
         player_ = player;
-        if (ModifierIds.SWORD.isItem(modifier, ItemType.SWORD)
-            || ModifierIds.AXE.isItem(modifier, ItemType.AXE)
-            || ModifierIds.TRIDENT.isItem(modifier, ItemType.TRIDENT)) {
-            return !modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_RANGE))
-                    && !modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_RANGE))
-                    && !modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_RANGE));
-        } return bl;
+        if (ModifierIds.SWORD.isItem(this.modifier, ItemType.SWORD)
+            || ModifierIds.AXE.isItem(this.modifier, ItemType.AXE)
+            || ModifierIds.TRIDENT.isItem(this.modifier, ItemType.TRIDENT)) {
+            return !this.modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_RANGE))
+                    && !this.modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_RANGE))
+                    && !this.modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_RANGE));
+        } return displayWithBase;
     }
 
     @ModifyArg(method = "apply", at = @At(value = "INVOKE", target = "Ljava/text/DecimalFormat;format(D)Ljava/lang/String;"), index = 0)
