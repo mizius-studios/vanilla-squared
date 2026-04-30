@@ -28,10 +28,9 @@ public record VSQSendChatMessageEffect(
 
     @Override
     public void apply(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity entity, Vec3 origin) {
-        Entity affectedResolved = entity;
         Entity enchantedResolved = item.owner() != null ? item.owner() : entity;
         Map<String, Component> replacements = Map.of(
-                "a", affectedResolved.getName(),
+                "a", entity.getName(),
                 "e", enchantedResolved.getName(),
                 "i", item.itemStack().getHoverName()
         );
@@ -52,7 +51,7 @@ public record VSQSendChatMessageEffect(
             return java.util.Optional.empty();
         }, Style.EMPTY);
 
-        if (affectedResolved instanceof ServerPlayer target) {
+        if (entity instanceof ServerPlayer target) {
             target.sendSystemMessage(text);
         } else if (enchantedResolved instanceof ServerPlayer player) {
             player.sendSystemMessage(text);

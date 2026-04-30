@@ -20,7 +20,7 @@ public abstract class PlayerMixin {
     }
 
     @Inject(method = "actuallyHurt", at = @At("TAIL"))
-    private void vsq$flushPendingVoidedRemoval(ServerLevel level, DamageSource source, float amount, CallbackInfo ci) {
+    private void vsq$flushPendingVoidedRemoval(ServerLevel level, DamageSource source, float dmg, CallbackInfo ci) {
         VoidedEffectState.flushPendingRemoval((Player) (Object) this);
     }
 }

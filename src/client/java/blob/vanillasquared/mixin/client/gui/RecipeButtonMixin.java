@@ -15,10 +15,10 @@ import java.util.List;
 @Mixin(RecipeButton.class)
 public abstract class RecipeButtonMixin {
     @Inject(method = "getTooltipText", at = @At("HEAD"), cancellable = true)
-    private void vsq$replaceEnchantingRecipeBookTooltip(ItemStack stack, CallbackInfoReturnable<List<Component>> cir) {
+    private void vsq$replaceEnchantingRecipeBookTooltip(ItemStack displayStack, CallbackInfoReturnable<List<Component>> cir) {
         if (!(Minecraft.getInstance().screen instanceof VSQEnchantmentScreen)) {
             return;
         }
-        cir.setReturnValue(List.of(stack.getHoverName()));
+        cir.setReturnValue(List.of(displayStack.getHoverName()));
     }
 }

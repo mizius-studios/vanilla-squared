@@ -155,54 +155,54 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
     }
 
     @Inject(method = "doPostPiercingAttack", at = @At("HEAD"), cancellable = true)
-    private void vsq$useSelectedProfilePostPiercingAttack(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity user, CallbackInfo ci) {
+    private void vsq$useSelectedProfilePostPiercingAttack(ServerLevel serverLevel, int enchantmentLevel, EnchantedItemInUse item, Entity user, CallbackInfo ci) {
         Optional<List<ConditionalEffect<EnchantmentEntityEffect>>> effects = this.vsq$profileEffects(item.itemStack(), EnchantmentEffectComponents.POST_PIERCING_ATTACK);
         if (effects.isEmpty()) {
             return;
         }
 
-        var context = Enchantment.entityContext(level, enchantmentLevel, user, user.position());
+        var context = Enchantment.entityContext(serverLevel, enchantmentLevel, user, user.position());
         List<ConditionalEffect<EnchantmentEntityEffect>> list = effects.get();
         for (int index = 0; index < list.size(); index++) {
             ConditionalEffect<EnchantmentEntityEffect> conditional = list.get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, item.itemStack(), EnchantmentEffectComponents.POST_PIERCING_ATTACK, index, item.owner())) {
-                conditional.effect().apply(level, enchantmentLevel, item, user, user.position());
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, item.itemStack(), EnchantmentEffectComponents.POST_PIERCING_ATTACK, index, item.owner())) {
+                conditional.effect().apply(serverLevel, enchantmentLevel, item, user, user.position());
             }
         }
         ci.cancel();
     }
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    private void vsq$useSelectedProfileTick(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, Entity entity, CallbackInfo ci) {
+    private void vsq$useSelectedProfileTick(ServerLevel serverLevel, int enchantmentLevel, EnchantedItemInUse item, Entity entity, CallbackInfo ci) {
         Optional<List<ConditionalEffect<EnchantmentEntityEffect>>> effects = this.vsq$profileEffects(item.itemStack(), EnchantmentEffectComponents.TICK);
         if (effects.isEmpty()) {
             return;
         }
 
-        var context = Enchantment.entityContext(level, enchantmentLevel, entity, entity.position());
+        var context = Enchantment.entityContext(serverLevel, enchantmentLevel, entity, entity.position());
         List<ConditionalEffect<EnchantmentEntityEffect>> list = effects.get();
         for (int index = 0; index < list.size(); index++) {
             ConditionalEffect<EnchantmentEntityEffect> conditional = list.get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, item.itemStack(), EnchantmentEffectComponents.TICK, index, item.owner())) {
-                conditional.effect().apply(level, enchantmentLevel, item, entity, entity.position());
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, item.itemStack(), EnchantmentEffectComponents.TICK, index, item.owner())) {
+                conditional.effect().apply(serverLevel, enchantmentLevel, item, entity, entity.position());
             }
         }
         ci.cancel();
     }
 
     @Inject(method = "onProjectileSpawned", at = @At("HEAD"), cancellable = true)
-    private void vsq$useSelectedProfileProjectileSpawned(ServerLevel level, int enchantmentLevel, EnchantedItemInUse weapon, Entity projectile, CallbackInfo ci) {
+    private void vsq$useSelectedProfileProjectileSpawned(ServerLevel serverLevel, int enchantmentLevel, EnchantedItemInUse weapon, Entity projectile, CallbackInfo ci) {
         Optional<List<ConditionalEffect<EnchantmentEntityEffect>>> effects = this.vsq$profileEffects(weapon.itemStack(), EnchantmentEffectComponents.PROJECTILE_SPAWNED);
         if (effects.isEmpty()) {
             return;
         }
 
-        var context = Enchantment.entityContext(level, enchantmentLevel, projectile, projectile.position());
+        var context = Enchantment.entityContext(serverLevel, enchantmentLevel, projectile, projectile.position());
         List<ConditionalEffect<EnchantmentEntityEffect>> list = effects.get();
         for (int index = 0; index < list.size(); index++) {
             ConditionalEffect<EnchantmentEntityEffect> conditional = list.get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, weapon.itemStack(), EnchantmentEffectComponents.PROJECTILE_SPAWNED, index, weapon.owner())) {
-                conditional.effect().apply(level, enchantmentLevel, weapon, projectile, projectile.position());
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, weapon.itemStack(), EnchantmentEffectComponents.PROJECTILE_SPAWNED, index, weapon.owner())) {
+                conditional.effect().apply(serverLevel, enchantmentLevel, weapon, projectile, projectile.position());
             }
         }
         ci.cancel();
@@ -210,7 +210,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
 
     @Inject(method = "onHitBlock", at = @At("HEAD"), cancellable = true)
     private void vsq$useSelectedProfileHitBlock(
-            ServerLevel level,
+            ServerLevel serverLevel,
             int enchantmentLevel,
             EnchantedItemInUse weapon,
             Entity projectile,
@@ -223,12 +223,12 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
             return;
         }
 
-        var context = Enchantment.blockHitContext(level, enchantmentLevel, projectile, position, hitBlock);
+        var context = Enchantment.blockHitContext(serverLevel, enchantmentLevel, projectile, position, hitBlock);
         List<ConditionalEffect<EnchantmentEntityEffect>> list = effects.get();
         for (int index = 0; index < list.size(); index++) {
             ConditionalEffect<EnchantmentEntityEffect> conditional = list.get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, weapon.itemStack(), EnchantmentEffectComponents.HIT_BLOCK, index, weapon.owner())) {
-                conditional.effect().apply(level, enchantmentLevel, weapon, projectile, position);
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, weapon.itemStack(), EnchantmentEffectComponents.HIT_BLOCK, index, weapon.owner())) {
+                conditional.effect().apply(serverLevel, enchantmentLevel, weapon, projectile, position);
             }
         }
         ci.cancel();
@@ -237,22 +237,22 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
     @Inject(method = "modifyItemFilteredCount", at = @At("HEAD"), cancellable = true)
     private void vsq$useSelectedProfileItemFilteredValue(
             DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> effectType,
-            ServerLevel level,
+            ServerLevel serverLevel,
             int enchantmentLevel,
-            ItemInstance item,
+            ItemInstance itemStack,
             MutableFloat value,
             CallbackInfo ci
     ) {
-        Optional<List<ConditionalEffect<EnchantmentValueEffect>>> effects = this.vsq$profileEffects(vsq$itemStack(item), effectType);
+        Optional<List<ConditionalEffect<EnchantmentValueEffect>>> effects = this.vsq$profileEffects(vsq$itemStack(itemStack), effectType);
         if (effects.isEmpty()) {
             return;
         }
 
-        var context = Enchantment.itemContext(level, enchantmentLevel, item);
+        var context = Enchantment.itemContext(serverLevel, enchantmentLevel, itemStack);
         for (int index = 0; index < effects.get().size(); index++) {
             ConditionalEffect<EnchantmentValueEffect> conditional = effects.get().get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, vsq$itemStack(item), effectType, index, null)) {
-                value.setValue(conditional.effect().process(enchantmentLevel, level.getRandom(), value.floatValue()));
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, vsq$itemStack(itemStack), effectType, index, null)) {
+                value.setValue(conditional.effect().process(enchantmentLevel, serverLevel.getRandom(), value.floatValue()));
             }
         }
         ci.cancel();
@@ -261,22 +261,22 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
     @Inject(method = "modifyEntityFilteredValue", at = @At("HEAD"), cancellable = true)
     private void vsq$useSelectedProfileEntityFilteredValue(
             DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> effectType,
-            ServerLevel level,
+            ServerLevel serverLevel,
             int enchantmentLevel,
-            ItemStack item,
+            ItemStack itemStack,
             Entity entity,
             MutableFloat value,
             CallbackInfo ci
     ) {
-        Optional<List<ConditionalEffect<EnchantmentValueEffect>>> effects = this.vsq$profileEffects(item, effectType);
+        Optional<List<ConditionalEffect<EnchantmentValueEffect>>> effects = this.vsq$profileEffects(itemStack, effectType);
         if (effects.isEmpty()) {
             return;
         }
 
-        var context = Enchantment.entityContext(level, enchantmentLevel, entity, entity.position());
+        var context = Enchantment.entityContext(serverLevel, enchantmentLevel, entity, entity.position());
         for (int index = 0; index < effects.get().size(); index++) {
             ConditionalEffect<EnchantmentValueEffect> conditional = effects.get().get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, item, effectType, index, entity)) {
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, itemStack, effectType, index, entity)) {
                 value.setValue(conditional.effect().process(enchantmentLevel, entity.getRandom(), value.floatValue()));
             }
         }
@@ -286,31 +286,31 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
     @Inject(method = "modifyDamageFilteredValue", at = @At("HEAD"), cancellable = true)
     private void vsq$useSelectedProfileDamageEffects(
             DataComponentType<List<ConditionalEffect<EnchantmentValueEffect>>> effectType,
-            ServerLevel level,
+            ServerLevel serverLevel,
             int enchantmentLevel,
-            ItemStack stack,
-            Entity entity,
+            ItemStack itemStack,
+            Entity victim,
             DamageSource damageSource,
             MutableFloat value,
             CallbackInfo ci
     ) {
-        Optional<List<ConditionalEffect<EnchantmentValueEffect>>> effects = this.vsq$profileEffects(stack, effectType);
+        Optional<List<ConditionalEffect<EnchantmentValueEffect>>> effects = this.vsq$profileEffects(itemStack, effectType);
         if (effects.isEmpty()) {
             return;
         }
 
-        var context = Enchantment.damageContext(level, enchantmentLevel, entity, damageSource);
+        var context = Enchantment.damageContext(serverLevel, enchantmentLevel, victim, damageSource);
         for (int index = 0; index < effects.get().size(); index++) {
             ConditionalEffect<EnchantmentValueEffect> conditional = effects.get().get(index);
-            if (conditional.matches(context) && vsq$allowSpecialEffect(level, stack, effectType, index, entity)) {
-                value.setValue(conditional.effect().process(enchantmentLevel, entity.getRandom(), value.floatValue()));
+            if (conditional.matches(context) && vsq$allowSpecialEffect(serverLevel, itemStack, effectType, index, victim)) {
+                value.setValue(conditional.effect().process(enchantmentLevel, victim.getRandom(), value.floatValue()));
             }
         }
         ci.cancel();
     }
 
     @Inject(method = "runLocationChangedEffects", at = @At("HEAD"), cancellable = true)
-    private void vsq$useSelectedProfileLocationChanged(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item, LivingEntity entity, CallbackInfo ci) {
+    private void vsq$useSelectedProfileLocationChanged(ServerLevel serverLevel, int enchantmentLevel, EnchantedItemInUse item, LivingEntity entity, CallbackInfo ci) {
         Optional<List<ConditionalEffect<EnchantmentLocationBasedEffect>>> effects = this.vsq$profileEffects(item.itemStack(), EnchantmentEffectComponents.LOCATION_CHANGED);
         if (effects.isEmpty()) {
             return;
@@ -333,8 +333,8 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
                     ConditionalEffect<EnchantmentLocationBasedEffect> filteredEffect = effects.get().get(index);
                     EnchantmentLocationBasedEffect effect = filteredEffect.effect();
                     boolean wasActive = activeEffects != null && activeEffects.contains(effect);
-                    if (filteredEffect.matches(Enchantment.locationContext(level, enchantmentLevel, entity, wasActive))
-                            && vsq$allowSpecialEffect(level, item.itemStack(), EnchantmentEffectComponents.LOCATION_CHANGED, index, item.owner())) {
+                    if (filteredEffect.matches(Enchantment.locationContext(serverLevel, enchantmentLevel, entity, wasActive))
+                            && vsq$allowSpecialEffect(serverLevel, item.itemStack(), EnchantmentEffectComponents.LOCATION_CHANGED, index, item.owner())) {
                         if (!wasActive) {
                             if (activeEffects == null) {
                                 activeEffects = new HashSet<>();
@@ -344,7 +344,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
                             activeEffects.add(effect);
                         }
 
-                        effect.onChangedBlock(level, enchantmentLevel, item, entity, entity.position(), !wasActive);
+                        effect.onChangedBlock(serverLevel, enchantmentLevel, item, entity, entity.position(), !wasActive);
                     } else if (activeEffects != null && activeEffects.remove(effect)) {
                         effect.onDeactivated(item, entity, entity.position(), enchantmentLevel);
                     }

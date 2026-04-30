@@ -136,8 +136,8 @@ public record VSQChannelingEffect(
         if (root.equals(target)) {
             return true;
         }
-        if (root instanceof AllOf.EntityEffects allOf) {
-            for (EnchantmentEntityEffect child : allOf.effects()) {
+        if (root instanceof AllOf.EntityEffects(List<EnchantmentEntityEffect> effects)) {
+            for (EnchantmentEntityEffect child : effects) {
                 if (containsEffect(child, target)) {
                     return true;
                 }
@@ -150,8 +150,8 @@ public record VSQChannelingEffect(
         if (root.equals(target)) {
             return Optional.empty();
         }
-        if (root instanceof AllOf.EntityEffects allOf) {
-            List<EnchantmentEntityEffect> stripped = allOf.effects().stream()
+        if (root instanceof AllOf.EntityEffects(List<EnchantmentEntityEffect> effects)) {
+            List<EnchantmentEntityEffect> stripped = effects.stream()
                     .map(effect -> stripCurrentEffect(effect, target))
                     .flatMap(Optional::stream)
                     .toList();

@@ -6,6 +6,7 @@ import blob.vanillasquared.util.api.combat.VSQCombatPresets;
 import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -41,12 +42,12 @@ public abstract class ToolMaterialMixin {
         throw new AssertionError();
     }
     @Shadow
-    private ItemAttributeModifiers createToolAttributes(float f, float g) {
+    private ItemAttributeModifiers createToolAttributes(float attackDamageBaseline, float attackSpeedBaseline) {
         throw new AssertionError();
     }
 
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
-    private void applySwordProperties(Item.Properties properties, float attackDamage, float attackSpeed, CallbackInfoReturnable<Item.Properties> cir) {
+    private void applySwordProperties(Item.Properties properties, float attackDamageBaseline, float attackSpeedBaseline, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         WeaponAttributeBuilder swordAttributes = VSQCombatPresets.swordAttributes(material);
         if (swordAttributes == null) {
@@ -57,10 +58,10 @@ public abstract class ToolMaterialMixin {
     }
 
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
-    private void applyToolProperties(Item.Properties properties, TagKey<Block> tagKey, float attackDamage, float attackSpeed, float weaponDamage, CallbackInfoReturnable<Item.Properties> cir) {
+    private void applyToolProperties(Item.Properties properties, TagKey<Block> minesEfficiently, float attackDamageBaseline, float attackSpeedBaseline, float disableBlockingSeconds, CallbackInfoReturnable<Item.Properties> cir) {
         ToolMaterial material = (ToolMaterial) (Object) this;
         Durability durability = VSQCombatPresets.toolDurability(material);
-        cir.setReturnValue(buildToolProperties(properties, tagKey, attackDamage, attackSpeed, weaponDamage, durability));
+        cir.setReturnValue(buildToolProperties(properties, minesEfficiently, attackDamageBaseline, attackSpeedBaseline, disableBlockingSeconds, durability));
     }
 
     @Unique
@@ -69,9 +70,9 @@ public abstract class ToolMaterialMixin {
         Tool toolComponent = new Tool(createSwordRules(holderGetter), 1.0F, 2, false);
 
         return this.applyCommonProperties(properties)
-                .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
+                .component(DataComponents.TOOL, toolComponent)
                 .attributes(swordAttributes.build())
-                .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(1))
+                .component(DataComponents.WEAPON, new Weapon(1))
                 .component(VSQDataComponents.HIT_THROUGH, VSQCombatPresets.hitThroughPlants().build());
     }
 
@@ -96,16 +97,16 @@ public abstract class ToolMaterialMixin {
         );
 
         return this.applyCommonProperties(properties)
-                .component(net.minecraft.core.component.DataComponents.TOOL, toolComponent)
+                .component(DataComponents.TOOL, toolComponent)
                 .attributes(this.createToolAttributes(attackDamage, attackSpeed))
-                .component(net.minecraft.core.component.DataComponents.WEAPON, new Weapon(2, weaponDamage))
+                .component(DataComponents.WEAPON, new Weapon(2, weaponDamage))
                 .durability(durability.durability());
     }
 
     @Unique
     private List<Tool.Rule> createSwordRules(HolderGetter<Block> holderGetter) {
         return List.of(
-                Tool.Rule.minesAndDrops(HolderSet.direct(Blocks.COBWEB.builtInRegistryHolder()), 15.0F),
+                Tool.Rule.minesAndDrops(HolderSet.direct(BuiltInRegistries.BLOCK.wrapAsHolder(Blocks.COBWEB)), 15.0F),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_INSTANTLY_MINES), Float.MAX_VALUE),
                 Tool.Rule.overrideSpeed(holderGetter.getOrThrow(BlockTags.SWORD_EFFICIENT), 1.5F)
         );

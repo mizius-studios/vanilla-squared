@@ -3,16 +3,19 @@ package blob.vanillasquared.main.world.recipe.enchanting;
 import blob.vanillasquared.main.world.recipe.VSQRecipeTypes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public record EnchantingRecipe(
@@ -36,24 +40,24 @@ public record EnchantingRecipe(
         int levelMultiplier,
         EnchantingRecipeEnchantment enchantment
 ) implements Recipe<EnchantingRecipeInput> {
-    private static final com.mojang.serialization.Codec<List<EnchantingIngredient>> INGREDIENTS_CODEC = net.minecraft.util.ExtraCodecs.JSON.flatXmap(
+    private static final Codec<List<EnchantingIngredient>> INGREDIENTS_CODEC = ExtraCodecs.JSON.flatXmap(
             EnchantingRecipe::vsq$decodeIngredients,
             EnchantingRecipe::vsq$encodeIngredients
     );
-    private static final com.mojang.serialization.Codec<List<EnchantingBlockRequirement>> BLOCKS_CODEC = net.minecraft.util.ExtraCodecs.JSON.flatXmap(
+    private static final Codec<List<EnchantingBlockRequirement>> BLOCKS_CODEC = ExtraCodecs.JSON.flatXmap(
             EnchantingRecipe::vsq$decodeBlocks,
             EnchantingRecipe::vsq$encodeBlocks
     );
 
     public static final MapCodec<EnchantingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             EnchantingRecipeCategory.CODEC.fieldOf("category").forGetter(EnchantingRecipe::category),
-            com.mojang.serialization.Codec.STRING.optionalFieldOf("group", "").forGetter(EnchantingRecipe::group),
+            Codec.STRING.optionalFieldOf("group", "").forGetter(EnchantingRecipe::group),
             ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
             ComponentSerialization.CODEC.fieldOf("description").forGetter(EnchantingRecipe::description),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
             INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
             BLOCKS_CODEC.optionalFieldOf("blocks", List.of()).forGetter(EnchantingRecipe::blocks),
-            com.mojang.serialization.Codec.INT.optionalFieldOf("level_multiplier", 1).forGetter(EnchantingRecipe::levelMultiplier),
+            Codec.INT.optionalFieldOf("level_multiplier", 1).forGetter(EnchantingRecipe::levelMultiplier),
             EnchantingRecipeEnchantment.CODEC.fieldOf("enchantment").forGetter(EnchantingRecipe::enchantment)
     ).apply(instance, EnchantingRecipe::vsq$create));
 
@@ -109,7 +113,7 @@ public record EnchantingRecipe(
         return input.input().copy();
     }
 
-    public ItemStack assemble(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public ItemStack assemble(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return this.enchantment.apply(input.input(), registries);
     }
 
@@ -143,7 +147,7 @@ public record EnchantingRecipe(
         return this.category.recipeBookCategory();
     }
 
-    public Optional<Match> findMatch(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public Optional<Match> findMatch(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         if (!this.inputIngredient(registries).test(input.input()) || !this.material.test(input.material())) {
             return Optional.empty();
         }
@@ -183,35 +187,35 @@ public record EnchantingRecipe(
         return Optional.of(new Match(matchedCrossSlots));
     }
 
-    public boolean canPlayerCraft(EnchantingRecipeInput input, int playerLevel, net.minecraft.core.HolderLookup.Provider registries) {
+    public boolean canPlayerCraft(EnchantingRecipeInput input, int playerLevel, HolderLookup.Provider registries) {
         return playerLevel >= this.xpCost(input, registries);
     }
 
-    public boolean wouldModifyInput(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public boolean wouldModifyInput(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return this.enchantment.modifies(input.input(), registries);
     }
 
-    public boolean isBelowMaximumEnchantmentLevel(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public boolean isBelowMaximumEnchantmentLevel(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return this.enchantment.isBelowMaximumLevel(input.input(), registries);
     }
 
-    public boolean respectsVanillaEnchantmentIncompatibilities(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public boolean respectsVanillaEnchantmentIncompatibilities(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return this.enchantment.respectsVanillaEnchantmentIncompatibilities(input.input(), registries);
     }
 
-    public int xpCost(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public int xpCost(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return this.enchantment.xpCost(input.input(), registries) * this.levelMultiplier;
     }
 
-    public Component displayName(EnchantingRecipeInput input, net.minecraft.core.HolderLookup.Provider registries) {
+    public Component displayName(EnchantingRecipeInput input, HolderLookup.Provider registries) {
         return this.enchantment.displayName(input.input(), registries);
     }
 
-    public Component previewName(net.minecraft.core.HolderLookup.Provider registries) {
+    public Component previewName(HolderLookup.Provider registries) {
         return this.enchantment.displayName(ItemStack.EMPTY, registries);
     }
 
-    public boolean hasRequiredBlocks(java.util.Map<net.minecraft.resources.Identifier, Integer> countedBlocks) {
+    public boolean hasRequiredBlocks(Map<Identifier, Integer> countedBlocks) {
         for (EnchantingBlockRequirement requirement : this.blocks) {
             if (!requirement.matches(countedBlocks)) {
                 return false;
@@ -220,7 +224,7 @@ public record EnchantingRecipe(
         return true;
     }
 
-    public List<BlockRequirementDisplay> blockRequirementDisplay(java.util.Map<net.minecraft.resources.Identifier, Integer> countedBlocks) {
+    public List<BlockRequirementDisplay> blockRequirementDisplay(Map<Identifier, Integer> countedBlocks) {
         List<BlockRequirementDisplay> display = new ArrayList<>(this.blocks.size());
         for (EnchantingBlockRequirement requirement : this.blocks) {
             display.add(new BlockRequirementDisplay(requirement.displayBlockId(), requirement.placedCount(countedBlocks), requirement.count()));
@@ -228,7 +232,7 @@ public record EnchantingRecipe(
         return display;
     }
 
-    public EnchantingIngredient inputIngredient(net.minecraft.core.HolderLookup.Provider registries) {
+    public EnchantingIngredient inputIngredient(HolderLookup.Provider registries) {
         return new EnchantingIngredient(this.enchantment.supportedItemsIngredient(registries), 1, null);
     }
 

@@ -20,18 +20,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class AxeMixin {
 
     @Shadow
-    public abstract Item.Properties tool(ToolMaterial material, TagKey<Block> tag, float attackDamage, float attackSpeed, float weaponDamage);
+    public abstract Item.Properties tool(ToolMaterial material, TagKey<Block> minesEfficiently, float attackDamageBaseline, float attackSpeedBaseline, float disableBlockingSeconds);
 
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
-    public void init(ToolMaterial toolMaterial, float attackDamage, float attackSpeed, CallbackInfoReturnable<Item.Properties> cir) {
-        BlockAttacksComponentBuilder blockComponent = VSQCombatPresets.axeBlockComponent(toolMaterial);
-        WeaponAttributeBuilder generalWeapon = VSQCombatPresets.axeAttributes(toolMaterial);
+    public void init(ToolMaterial material, float attackDamageBaseline, float attackSpeedBaseline, CallbackInfoReturnable<Item.Properties> cir) {
+        BlockAttacksComponentBuilder blockComponent = VSQCombatPresets.axeBlockComponent(material);
+        WeaponAttributeBuilder generalWeapon = VSQCombatPresets.axeAttributes(material);
         if (blockComponent == null || generalWeapon == null) {
             return;
         }
 
         cir.setReturnValue(
-                this.tool(toolMaterial, BlockTags.MINEABLE_WITH_AXE, attackDamage, attackSpeed, 5.0F)
+                this.tool(material, BlockTags.MINEABLE_WITH_AXE, attackDamageBaseline, attackSpeedBaseline, 5.0F)
                         .component(DataComponents.BLOCKS_ATTACKS, blockComponent.build())
                         .component(DataComponents.WEAPON, new Weapon(1, 5.0F))
                         .attributes(generalWeapon.build())

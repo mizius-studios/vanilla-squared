@@ -14,9 +14,7 @@ import java.util.Optional;
 
 public record VSQEnchantmentProfileRequirement(Type type, Optional<Identifier> item, Optional<Identifier> tag) {
     public static final Codec<VSQEnchantmentProfileRequirement> CODEC = Raw.CODEC.flatXmap(
-            raw -> {
-                return raw.decodeRequirement();
-            },
+            Raw::decodeRequirement,
             requirement -> DataResult.success(Raw.encodeRequirement(requirement))
     );
 
@@ -103,9 +101,6 @@ public record VSQEnchantmentProfileRequirement(Type type, Optional<Identifier> i
         if (stack == null || stack.isEmpty()) {
             return false;
         }
-        if (this.item.isPresent()) {
-            return BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(this.item.get());
-        }
-        return this.tag.map(identifier -> stack.is(TagKey.create(net.minecraft.core.registries.Registries.ITEM, identifier))).orElse(false);
+        return this.item.map(identifier -> BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(identifier)).orElseGet(() -> this.tag.map(identifier -> stack.is(TagKey.create(net.minecraft.core.registries.Registries.ITEM, identifier))).orElse(false));
     }
 }

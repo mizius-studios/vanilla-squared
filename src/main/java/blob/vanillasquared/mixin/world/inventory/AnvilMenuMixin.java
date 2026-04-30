@@ -3,10 +3,7 @@ package blob.vanillasquared.mixin.world.inventory;
 import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentComponent;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +20,7 @@ public abstract class AnvilMenuMixin extends AbstractContainerMenu {
     @Shadow
     private DataSlot cost;
 
-    protected AnvilMenuMixin(net.minecraft.world.inventory.MenuType<?> type, int containerId) {
+    protected AnvilMenuMixin(MenuType<?> type, int containerId) {
         super(type, containerId);
     }
 

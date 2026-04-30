@@ -35,8 +35,8 @@ public abstract class ParticleEngineMixin {
     }
 
     @Inject(method = "createParticleGroup", at = @At("HEAD"), cancellable = true)
-    private void vsq$createLightningParticleGroup(ParticleRenderType renderType, CallbackInfoReturnable<ParticleGroup<?>> cir) {
-        if (renderType == VSQParticleRenderTypes.LIGHTNING_BOLT) {
+    private void vsq$createLightningParticleGroup(ParticleRenderType type, CallbackInfoReturnable<ParticleGroup<?>> cir) {
+        if (type == VSQParticleRenderTypes.LIGHTNING_BOLT) {
             cir.setReturnValue(new LightningBoltParticleGroup((ParticleEngine) (Object) this));
         }
     }

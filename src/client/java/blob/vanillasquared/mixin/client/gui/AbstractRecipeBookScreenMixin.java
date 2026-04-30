@@ -5,6 +5,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +30,7 @@ public abstract class AbstractRecipeBookScreenMixin {
         }
     }
 
+    @Unique
     private static boolean vsq$isLeftAltHeld() {
         return Minecraft.getInstance().screen != null
                 && GLFW.glfwGetKey(Minecraft.getInstance().getWindow().handle(), GLFW.GLFW_KEY_LEFT_ALT) == GLFW.GLFW_PRESS;

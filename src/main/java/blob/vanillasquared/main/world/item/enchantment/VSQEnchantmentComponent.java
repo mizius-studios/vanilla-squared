@@ -91,7 +91,7 @@ public record VSQEnchantmentComponent(
         }
 
         private Optional<List<VSQEnchantmentSlotEntry>> decodeOptionalList(RegistryFriendlyByteBuf buf) {
-            return buf.readBoolean() ? Optional.of(Collections.unmodifiableList(new ArrayList<>(SLOT_LIST_STREAM_CODEC.decode(buf)))) : Optional.empty();
+            return buf.readBoolean() ? Optional.of(List.copyOf(SLOT_LIST_STREAM_CODEC.decode(buf))) : Optional.empty();
         }
 
         private void encodeOptionalList(RegistryFriendlyByteBuf buf, Optional<List<VSQEnchantmentSlotEntry>> value) {

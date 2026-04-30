@@ -72,7 +72,7 @@ public abstract class LootItemEntityPropertyConditionMixin {
         VSQ_DECODE_ALL_ENTITIES.remove();
     }
 
-    @Inject(method = "test", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "test*", at = @At("HEAD"), cancellable = true)
     private void vsq$testAllEntities(LootContext context, CallbackInfoReturnable<Boolean> cir) {
         if (!this.vsq$allEntities) {
             return;

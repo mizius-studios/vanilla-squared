@@ -86,25 +86,25 @@ public abstract class EnchantmentHelperMixin {
     }
 
     @Inject(method = "processAmmoUse", at = @At("HEAD"), cancellable = true)
-    private static void vsq$useSelectedProfileAmmoUse(ServerLevel level, ItemStack weapon, ItemStack ammo, int amount, CallbackInfoReturnable<Integer> cir) {
+    private static void vsq$useSelectedProfileAmmoUse(ServerLevel serverLevel, ItemStack weapon, ItemStack ammo, int amount, CallbackInfoReturnable<Integer> cir) {
         MutableFloat modifiedAmount = new MutableFloat(amount);
         EnchantmentHelper.runIterationOnItem(weapon, (enchantment, enchantmentLevel) -> Enchantment.applyEffects(
                 VSQEnchantments.profileEffects(weapon, enchantment, EnchantmentEffectComponents.AMMO_USE),
-                Enchantment.itemContext(level, enchantmentLevel, ammo),
+                Enchantment.itemContext(serverLevel, enchantmentLevel, ammo),
                 modifiedAmount,
-                (effect, currentValue) -> effect.process(enchantmentLevel, level.getRandom(), currentValue)
+                (effect, currentValue) -> effect.process(enchantmentLevel, serverLevel.getRandom(), currentValue)
         ));
         cir.setReturnValue(modifiedAmount.intValue());
     }
 
     @Inject(method = "getPiercingCount", at = @At("HEAD"), cancellable = true)
-    private static void vsq$useSelectedProfilePiercingCount(ServerLevel level, ItemStack weapon, ItemStack ammo, CallbackInfoReturnable<Integer> cir) {
+    private static void vsq$useSelectedProfilePiercingCount(ServerLevel serverLevel, ItemStack weapon, ItemStack ammo, CallbackInfoReturnable<Integer> cir) {
         MutableFloat modifiedAmount = new MutableFloat(0.0F);
         EnchantmentHelper.runIterationOnItem(weapon, (enchantment, enchantmentLevel) -> Enchantment.applyEffects(
                 VSQEnchantments.profileEffects(weapon, enchantment, EnchantmentEffectComponents.PROJECTILE_PIERCING),
-                Enchantment.itemContext(level, enchantmentLevel, ammo),
+                Enchantment.itemContext(serverLevel, enchantmentLevel, ammo),
                 modifiedAmount,
-                (effect, currentValue) -> effect.process(enchantmentLevel, level.getRandom(), currentValue)
+                (effect, currentValue) -> effect.process(enchantmentLevel, serverLevel.getRandom(), currentValue)
         ));
         cir.setReturnValue(Math.max(0, modifiedAmount.intValue()));
     }
@@ -201,75 +201,75 @@ public abstract class EnchantmentHelperMixin {
 
     @Inject(method = "modifyDamage", at = @At("RETURN"), cancellable = true)
     private static void vsq$applyProjectileTakeoverDamage(
-            ServerLevel level,
-            ItemStack sourceStack,
+            ServerLevel serverLevel,
+            ItemStack itemStack,
             Entity victim,
             DamageSource damageSource,
-            float baseDamage,
+            float damage,
             CallbackInfoReturnable<Float> cir
     ) {
         if (!(damageSource.getEntity() instanceof LivingEntity owner)) {
             return;
         }
-        cir.setReturnValue(EnchantmentProjectileTakeoverEffects.modifyDamage(level, owner, sourceStack, victim, damageSource, cir.getReturnValueF()));
+        cir.setReturnValue(EnchantmentProjectileTakeoverEffects.modifyDamage(serverLevel, owner, itemStack, victim, damageSource, cir.getReturnValueF()));
     }
 
     @Inject(method = "modifyKnockback", at = @At("RETURN"), cancellable = true)
     private static void vsq$applyProjectileTakeoverKnockback(
-            ServerLevel level,
-            ItemStack sourceStack,
+            ServerLevel serverLevel,
+            ItemStack itemStack,
             Entity victim,
             DamageSource damageSource,
-            float baseKnockback,
+            float knockback,
             CallbackInfoReturnable<Float> cir
     ) {
         if (!(damageSource.getEntity() instanceof LivingEntity owner)) {
             return;
         }
-        cir.setReturnValue(EnchantmentProjectileTakeoverEffects.modifyKnockback(level, owner, sourceStack, victim, damageSource, cir.getReturnValueF()));
+        cir.setReturnValue(EnchantmentProjectileTakeoverEffects.modifyKnockback(serverLevel, owner, itemStack, victim, damageSource, cir.getReturnValueF()));
     }
 
     @Inject(method = "doPostAttackEffectsWithItemSource", at = @At("RETURN"))
     private static void vsq$applyProjectileTakeoverPostAttack(
-            ServerLevel level,
+            ServerLevel serverLevel,
             Entity victim,
             DamageSource damageSource,
-            ItemStack sourceStack,
+            ItemStack source,
             CallbackInfo ci
     ) {
         if (!(damageSource.getEntity() instanceof LivingEntity owner)) {
             return;
         }
-        EnchantmentProjectileTakeoverEffects.runPostAttackEffects(level, owner, sourceStack, victim, damageSource);
+        EnchantmentProjectileTakeoverEffects.runPostAttackEffects(serverLevel, owner, source, victim, damageSource);
     }
 
     @Inject(method = "onProjectileSpawned", at = @At("RETURN"))
     private static void vsq$applyProjectileTakeoverProjectileSpawned(
-            ServerLevel level,
+            ServerLevel serverLevel,
             ItemStack sourceStack,
-            Projectile projectile,
+            Projectile projectileEntity,
             Consumer<ItemStack> onBreak,
             CallbackInfo ci
     ) {
-        if (!(projectile.getOwner() instanceof LivingEntity owner)) {
+        if (!(projectileEntity.getOwner() instanceof LivingEntity owner)) {
             return;
         }
-        EnchantmentProjectileTakeoverEffects.runProjectileSpawnedEffects(level, owner, sourceStack, projectile);
+        EnchantmentProjectileTakeoverEffects.runProjectileSpawnedEffects(serverLevel, owner, sourceStack, projectileEntity);
     }
 
     @Inject(method = "onHitBlock", at = @At("RETURN"))
     private static void vsq$applyProjectileTakeoverHitBlock(
-            ServerLevel level,
+            ServerLevel serverLevel,
             ItemStack sourceStack,
             LivingEntity owner,
-            Entity projectile,
+            Entity entity,
             EquipmentSlot slot,
-            Vec3 position,
+            Vec3 hitLocation,
             BlockState hitBlock,
             Consumer<ItemStack> onBreak,
             CallbackInfo ci
     ) {
-        EnchantmentProjectileTakeoverEffects.runHitBlockEffects(level, owner, sourceStack, projectile, position, hitBlock);
+        EnchantmentProjectileTakeoverEffects.runHitBlockEffects(serverLevel, owner, sourceStack, entity, hitLocation, hitBlock);
     }
 
     @Inject(method = "getTridentSpinAttackStrength", at = @At("HEAD"), cancellable = true)

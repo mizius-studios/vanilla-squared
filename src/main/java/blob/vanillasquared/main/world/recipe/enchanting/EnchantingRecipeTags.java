@@ -7,17 +7,14 @@ import blob.vanillasquared.util.api.modules.components.VSQItemComponents;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
+import net.fabricmc.fabric.api.resource.v1.DataResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.reloader.SimpleReloadListener;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -31,9 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 
 public final class EnchantingRecipeTags {
     public static final Identifier DEFAULT_LOOT_TAG = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "default");
@@ -75,7 +70,7 @@ public final class EnchantingRecipeTags {
     }
 
     public static void initialize() {
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(RELOAD_LISTENER_ID, ReloadListener::new);
+        DataResourceLoader.get().registerReloadListener(RELOAD_LISTENER_ID, registries -> new ReloadListener());
     }
 
     public static boolean isValidRecipe(ResourceKey<Recipe<?>> recipeKey) {
@@ -131,49 +126,39 @@ public final class EnchantingRecipeTags {
         };
     }
 
-    private static final class ReloadListener implements SimpleResourceReloadListener<Map<Identifier, List<ResourceKey<Recipe<?>>>>>, IdentifiableResourceReloadListener {
-        private ReloadListener(HolderLookup.Provider registries) {
-        }
-
+    private static final class ReloadListener extends SimpleReloadListener<Map<Identifier, List<ResourceKey<Recipe<?>>>>> {
         @Override
-        public Identifier getFabricId() {
-            return RELOAD_LISTENER_ID;
-        }
-
-        @Override
-        public CompletableFuture<Map<Identifier, List<ResourceKey<Recipe<?>>>>> load(ResourceManager resourceManager, Executor executor) {
-            return CompletableFuture.supplyAsync(() -> {
-                Map<Identifier, List<ResourceKey<Recipe<?>>>> loaded = new LinkedHashMap<>();
-                for (Identifier fileId : TAG_CONVERTER.listMatchingResources(resourceManager).keySet()) {
-                    Identifier tagId = TAG_CONVERTER.fileToId(fileId);
-                    List<Resource> stack;
-                    try {
-                        stack = resourceManager.getResourceStack(fileId);
-                    } catch (Exception exception) {
-                        VanillaSquared.LOGGER.error("Failed to resolve enchant recipe tag stack for {}", fileId, exception);
-                        continue;
-                    }
-
-                    List<ResourceKey<Recipe<?>>> mergedValues = new ArrayList<>();
-                    for (Resource resource : stack) {
-                        try (Reader reader = resource.openAsReader()) {
-                            JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-                            if (json.has("replace") && json.get("replace").isJsonPrimitive() && json.get("replace").getAsBoolean()) {
-                                mergedValues.clear();
-                            }
-                            if (!json.has("values") || !json.get("values").isJsonArray()) {
-                                continue;
-                            }
-                            mergedValues.addAll(vsq$parseValues(tagId, json.getAsJsonArray("values")));
-                        } catch (Exception exception) {
-                            VanillaSquared.LOGGER.error("Failed to load enchant recipe tag {} from {}", tagId, fileId, exception);
-                        }
-                    }
-
-                    loaded.put(tagId, mergedValues.stream().distinct().collect(Collectors.toUnmodifiableList()));
+        protected Map<Identifier, List<ResourceKey<Recipe<?>>>> prepare(PreparableReloadListener.SharedState store) {
+            Map<Identifier, List<ResourceKey<Recipe<?>>>> loaded = new LinkedHashMap<>();
+            for (Identifier fileId : TAG_CONVERTER.listMatchingResources(store.resourceManager()).keySet()) {
+                Identifier tagId = TAG_CONVERTER.fileToId(fileId);
+                List<Resource> stack;
+                try {
+                    stack = store.resourceManager().getResourceStack(fileId);
+                } catch (Exception exception) {
+                    VanillaSquared.LOGGER.error("Failed to resolve enchant recipe tag stack for {}", fileId, exception);
+                    continue;
                 }
-                return loaded;
-            }, executor);
+
+                List<ResourceKey<Recipe<?>>> mergedValues = new ArrayList<>();
+                for (Resource resource : stack) {
+                    try (Reader reader = resource.openAsReader()) {
+                        JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                        if (json.has("replace") && json.get("replace").isJsonPrimitive() && json.get("replace").getAsBoolean()) {
+                            mergedValues.clear();
+                        }
+                        if (!json.has("values") || !json.get("values").isJsonArray()) {
+                            continue;
+                        }
+                        mergedValues.addAll(vsq$parseValues(tagId, json.getAsJsonArray("values")));
+                    } catch (Exception exception) {
+                        VanillaSquared.LOGGER.error("Failed to load enchant recipe tag {} from {}", tagId, fileId, exception);
+                    }
+                }
+
+                loaded.put(tagId, mergedValues.stream().distinct().collect(Collectors.toUnmodifiableList()));
+            }
+            return loaded;
         }
 
         private static List<ResourceKey<Recipe<?>>> vsq$parseValues(Identifier tagId, com.google.gson.JsonArray values) {
@@ -205,13 +190,11 @@ public final class EnchantingRecipeTags {
         }
 
         @Override
-        public CompletableFuture<Void> apply(Map<Identifier, List<ResourceKey<Recipe<?>>>> data, ResourceManager resourceManager, Executor executor) {
-            return CompletableFuture.runAsync(() -> {
-                LootTableIdResolver.clearCache();
-                TAGS = Map.copyOf(data);
-                invalidateValidRecipeCache();
-                VanillaSquared.LOGGER.info("Loaded {} enchant recipe tags", TAGS.size());
-            }, executor);
+        protected void apply(Map<Identifier, List<ResourceKey<Recipe<?>>>> data, PreparableReloadListener.SharedState store) {
+            LootTableIdResolver.clearCache();
+            TAGS = Map.copyOf(data);
+            invalidateValidRecipeCache();
+            VanillaSquared.LOGGER.info("Loaded {} enchant recipe tags", TAGS.size());
         }
     }
 }

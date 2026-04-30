@@ -12,13 +12,16 @@ import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ExperienceBarRenderer.class)
 public class ExperienceBarRendererMixin {
+    @Unique
     private static final Identifier SPECIAL_COOLDOWN_BACKGROUND = Identifier.fromNamespaceAndPath("vsq", "hud/special_enchantment_cooldown_background");
+    @Unique
     private static final Identifier SPECIAL_COOLDOWN_PROGRESS = Identifier.fromNamespaceAndPath("vsq", "hud/special_enchantment_cooldown");
 
     @Shadow
@@ -26,20 +29,21 @@ public class ExperienceBarRendererMixin {
     private Minecraft minecraft;
 
     @Inject(method = "extractBackground", at = @At("HEAD"), cancellable = true)
-    private void vsq$extractSpecialEnchantmentCooldown(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void vsq$extractSpecialEnchantmentCooldown(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         SpecialEnchantmentCooldownClientState.visibleCooldown(this.minecraft.player).ifPresent(cooldown -> {
-            int left = (guiGraphics.guiWidth() - 182) / 2;
-            int top = guiGraphics.guiHeight() - 32 + 3;
-            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPECIAL_COOLDOWN_BACKGROUND, left, top, 182, 5);
+            int left = (graphics.guiWidth() - 182) / 2;
+            int top = graphics.guiHeight() - 32 + 3;
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPECIAL_COOLDOWN_BACKGROUND, left, top, 182, 5);
             int progressWidth = cooldown.progressWidth();
             if (progressWidth > 0) {
-                guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPECIAL_COOLDOWN_PROGRESS, 182, 5, 0, 0, left, top, progressWidth, 5);
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPECIAL_COOLDOWN_PROGRESS, 182, 5, 0, 0, left, top, progressWidth, 5);
             }
-            vsq$drawCooldownText(guiGraphics, cooldown);
+            vsq$drawCooldownText(graphics, cooldown);
             ci.cancel();
         });
     }
 
+    @Unique
     private void vsq$drawCooldownText(GuiGraphicsExtractor guiGraphics, SpecialEnchantmentCooldownClientState.VisibleCooldown cooldown) {
         Font font = this.minecraft.font;
         Component text = Component.literal(cooldown.displayText());

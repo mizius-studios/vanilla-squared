@@ -25,7 +25,7 @@ public abstract class GhostSlotsMixin {
     private SlotSelectTime slotSelectTime;
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
-    private void vsq$renderInputDecorations(GuiGraphicsExtractor guiGraphics, Minecraft minecraft, boolean highlightResultSlot, CallbackInfo ci) {
+    private void vsq$renderInputDecorations(GuiGraphicsExtractor graphics, Minecraft minecraft, boolean isResultSlotBig, CallbackInfo ci) {
         int currentIndex = this.slotSelectTime.currentIndex();
         this.ingredients.forEach((slot, ghostSlot) -> {
             GhostSlotAccessor accessor = (GhostSlotAccessor) ghostSlot;
@@ -38,7 +38,7 @@ public abstract class GhostSlotsMixin {
                 return;
             }
 
-            guiGraphics.itemDecorations(minecraft.font, stack, slot.x, slot.y);
+            graphics.itemDecorations(minecraft.font, stack, slot.x, slot.y);
         });
     }
 }

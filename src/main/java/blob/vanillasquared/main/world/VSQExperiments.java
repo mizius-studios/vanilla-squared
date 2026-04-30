@@ -2,8 +2,8 @@ package blob.vanillasquared.main.world;
 
 import blob.vanillasquared.main.VanillaSquared;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.network.chat.Component;
@@ -26,11 +26,11 @@ public final class VSQExperiments {
                 .getModContainer("vanilla-squared")
                 .orElseThrow(() -> new IllegalStateException("Missing mod container for vanilla-squared"));
 
-        if (!ResourceManagerHelper.registerBuiltinResourcePack(
+        if (!ResourceLoader.registerBuiltinPack(
                 BUILTIN_PACK_ID,
                 modContainer,
                 Component.translatable("vsq.gui.experiments.vsq"),
-                ResourcePackActivationType.NORMAL
+                PackActivationType.NORMAL
         )) {
             VanillaSquared.LOGGER.warn("Failed to register VSQ Preview builtin datapack {}", BUILTIN_PACK_ID);
         }

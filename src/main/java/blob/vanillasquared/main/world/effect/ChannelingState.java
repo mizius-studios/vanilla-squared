@@ -35,6 +35,7 @@ import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -42,6 +43,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -53,6 +55,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public final class ChannelingState {
+    private static final double LEGACY_SOLID_FULL_CUBE_THRESHOLD = 0.7291666666666666D;
     private static final WeakHashMap<ServerLevel, LevelState> STATES = new WeakHashMap<>();
     private static final AtomicLong NEXT_ID = new AtomicLong();
     private static final ThreadLocal<DamageSource> EXECUTION_DAMAGE_SOURCE = new ThreadLocal<>();
@@ -349,7 +352,7 @@ public final class ChannelingState {
         double searchRadius = activation.blockLimit;
         AABB searchBounds = sourceVictim.getBoundingBox().inflate(searchRadius);
         List<LivingEntity> candidates = new ArrayList<>(level.getEntitiesOfClass(LivingEntity.class, searchBounds, entity -> entity.isAlive() && entity != sourceVictim));
-        candidates.sort((left, right) -> Double.compare(left.distanceToSqr(sourceVictim), right.distanceToSqr(sourceVictim)));
+        candidates.sort(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(sourceVictim)));
         Candidate best = null;
         Vec3 sourceAnchor = channelAnchor(sourceVictim);
 
@@ -481,18 +484,18 @@ public final class ChannelingState {
             if (terminalBlock != null && terminalBlock.equals(pos)) {
                 continue;
             }
-            if (!canPassThrough(state, passThrough)) {
+            if (!canPassThrough(level, pos, state, passThrough)) {
                 return null;
             }
         }
         return List.copyOf(blocks);
     }
 
-    private static boolean canPassThrough(BlockState state, RegistryReference passThrough) {
+    private static boolean canPassThrough(ServerLevel level, BlockPos pos, BlockState state, RegistryReference passThrough) {
         if (state.isAir()) {
             return true;
         }
-        if (!state.getFluidState().isEmpty() && !state.blocksMotion()) {
+        if (!state.getFluidState().isEmpty() && !blocksMotionCompat(level, pos, state)) {
             return true;
         }
         if (passThrough.tag()) {
@@ -500,6 +503,21 @@ public final class ChannelingState {
         }
         Block block = BuiltInRegistries.BLOCK.getValue(passThrough.id());
         return state.is(block);
+    }
+
+    private static boolean blocksMotionCompat(ServerLevel level, BlockPos pos, BlockState state) {
+        Block block = state.getBlock();
+        if (block == Blocks.COBWEB || block == Blocks.BAMBOO_SAPLING) {
+            return false;
+        }
+
+        var collisionShape = state.getCollisionShape(level, pos);
+        if (collisionShape.isEmpty()) {
+            return false;
+        }
+
+        AABB bounds = collisionShape.bounds();
+        return bounds.getSize() >= LEGACY_SOLID_FULL_CUBE_THRESHOLD || bounds.getYsize() >= 1.0D;
     }
 
     private static List<LivingEntity> findIntersectingEntities(ServerLevel level, Segment segment) {

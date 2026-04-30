@@ -11,13 +11,16 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -95,16 +98,14 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
                 return builder.build(prefix);
             }
 
-            return Ingredient.CODEC.encodeStart(ops, input.ingredient).flatMap(encoded -> {
-                return ops.getMap(encoded).flatMap(map -> {
-                    var builder = ops.mapBuilder();
-                    map.entries().forEach(entry -> builder.add(entry.getFirst(), entry.getSecond()));
-                    if (input.count != 1) {
-                        builder.add(ops.createString("count"), ops.createInt(input.count));
-                    }
-                    return builder.build(prefix);
-                });
-            });
+            return Ingredient.CODEC.encodeStart(ops, input.ingredient).flatMap(encoded -> ops.getMap(encoded).flatMap(map -> {
+                var builder = ops.mapBuilder();
+                map.entries().forEach(entry -> builder.add(entry.getFirst(), entry.getSecond()));
+                if (input.count != 1) {
+                    builder.add(ops.createString("count"), ops.createInt(input.count));
+                }
+                return builder.build(prefix);
+            }));
         }
     };
 
@@ -149,7 +150,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
 
     public boolean matchesIgnoringCount(ItemStack stack) {
         if (this.tagId != null) {
-            return stack.is(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId));
+            return stack.is(TagKey.create(Registries.ITEM, this.tagId));
         }
         return this.ingredient.test(stack);
     }
@@ -170,7 +171,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
     }
 
     private static Optional<Ingredient> resolveTagIngredient(Identifier tagId) {
-        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, tagId);
+        TagKey<Item> tagKey = TagKey.create(Registries.ITEM, tagId);
         List<Holder<Item>> holders = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
                 .toList();
         if (holders.isEmpty()) {
@@ -198,7 +199,7 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
             return new SlotDisplay.Composite(displays);
         }
         if (this.tagId != null) {
-            return new SlotDisplay.TagSlotDisplay(TagKey.create(net.minecraft.core.registries.Registries.ITEM, this.tagId));
+            return new SlotDisplay.TagSlotDisplay(TagKey.create(Registries.ITEM, this.tagId));
         }
         return Empty.INSTANCE;
     }
@@ -209,16 +210,15 @@ public record EnchantingIngredient(Ingredient ingredient, int count, Identifier 
 
     private List<ItemStack> previewStacks() {
         if (this.ingredient != null) {
-            return this.ingredient.items()
-                    .map(holder -> new ItemStack(holder.value()))
-                    .toList();
+            return this.ingredient.display()
+                    .resolveForStacks(new ContextMap.Builder().create(SlotDisplayContext.CONTEXT));
         }
 
         return List.copyOf(TAG_PREVIEW_CACHE.computeIfAbsent(this.tagId, EnchantingIngredient::resolveTagPreview));
     }
 
     private static List<ItemStack> resolveTagPreview(Identifier tagId) {
-        TagKey<Item> tagKey = TagKey.create(net.minecraft.core.registries.Registries.ITEM, tagId);
+        TagKey<Item> tagKey = TagKey.create(Registries.ITEM, tagId);
         return StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).spliterator(), false)
                 .map(holder -> new ItemStack(holder.value()))
                 .toList();

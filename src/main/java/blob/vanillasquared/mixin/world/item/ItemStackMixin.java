@@ -3,6 +3,7 @@ package blob.vanillasquared.mixin.world.item;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,13 +23,13 @@ public abstract class ItemStackMixin {
         VSQEnchantments.syncDerivedEnchantments((ItemStack) (Object) this);
     }
 
-    @Inject(method = "set", at = @At("TAIL"))
+    @Inject(method = "set*", at = @At("TAIL"))
     private <T> void vsq$mirrorVanillaEnchantments(DataComponentType<T> type, @Nullable T value, CallbackInfoReturnable<T> cir) {
         if (VSQEnchantments.isDerivedSyncInProgress()) {
             return;
         }
 
-        if (type == net.minecraft.core.component.DataComponents.ENCHANTMENTS || type == net.minecraft.core.component.DataComponents.STORED_ENCHANTMENTS) {
+        if (type == DataComponents.ENCHANTMENTS || type == DataComponents.STORED_ENCHANTMENTS) {
             VSQEnchantments.onVanillaEnchantmentsChanged((ItemStack) (Object) this, (ItemEnchantments) value);
         }
     }

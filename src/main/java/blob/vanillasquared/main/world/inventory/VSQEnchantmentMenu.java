@@ -20,6 +20,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.RecipeBookMenu;
 import net.minecraft.world.inventory.RecipeBookType;
@@ -118,7 +119,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     }
 
     @Override
-    public void fillCraftSlotsStackedContents(net.minecraft.world.entity.player.StackedItemContents stackedItemContents) {
+    public void fillCraftSlotsStackedContents(StackedItemContents stackedItemContents) {
         for (int slotIndex = 0; slotIndex < this.enchantSlots.getContainerSize(); slotIndex++) {
             stackedItemContents.accountStack(this.enchantSlots.getItem(slotIndex));
         }

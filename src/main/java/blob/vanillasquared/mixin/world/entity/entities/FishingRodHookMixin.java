@@ -37,7 +37,7 @@ public abstract class FishingRodHookMixin extends Projectile {
     }
 
     @Inject(at = @At("TAIL"), method = "onHitEntity")
-    private void onHitEntityTail(EntityHitResult hit, CallbackInfo ci) {
+    private void onHitEntityTail(EntityHitResult hitResult, CallbackInfo ci) {
         if (!(this.level() instanceof ServerLevel serverLevel)) {
             return;
         }
@@ -49,7 +49,7 @@ public abstract class FishingRodHookMixin extends Projectile {
         ItemStack off = player.getOffhandItem();
         ItemStack fishingRod = resolveFishingRod(main, off);
 
-        Entity target = hit.getEntity();
+        Entity target = hitResult.getEntity();
         if (!(target instanceof LivingEntity living)) {
             return;
         }

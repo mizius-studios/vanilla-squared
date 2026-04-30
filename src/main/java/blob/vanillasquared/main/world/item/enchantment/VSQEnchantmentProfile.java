@@ -1,10 +1,7 @@
 package blob.vanillasquared.main.world.item.enchantment;
 
 import com.google.gson.JsonElement;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.DataResult;
+import com.mojang.serialization.*;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.component.DataComponentMap;
@@ -36,14 +33,14 @@ public record VSQEnchantmentProfile(
 
     private static final Codec<DataComponentMap> EFFECTS_CODEC = new Codec<>() {
         @Override
-        public <T> DataResult<Pair<DataComponentMap, T>> decode(com.mojang.serialization.DynamicOps<T> ops, T input) {
+        public <T> DataResult<Pair<DataComponentMap, T>> decode(DynamicOps<T> ops, T input) {
             JsonElement rawJson = ops.convertTo(JsonOps.INSTANCE, input);
             RAW_EFFECTS.set(Optional.of(new Dynamic<>(JsonOps.INSTANCE, rawJson)));
             return EnchantmentEffectComponents.CODEC.decode(ops, input);
         }
 
         @Override
-        public <T> DataResult<T> encode(DataComponentMap input, com.mojang.serialization.DynamicOps<T> ops, T prefix) {
+        public <T> DataResult<T> encode(DataComponentMap input, DynamicOps<T> ops, T prefix) {
             return EnchantmentEffectComponents.CODEC.encode(input, ops, prefix);
         }
     };
@@ -63,7 +60,7 @@ public record VSQEnchantmentProfile(
 
     public static final Codec<VSQEnchantmentProfile> CODEC = new Codec<>() {
         @Override
-        public <T> DataResult<Pair<VSQEnchantmentProfile, T>> decode(com.mojang.serialization.DynamicOps<T> ops, T input) {
+        public <T> DataResult<Pair<VSQEnchantmentProfile, T>> decode(DynamicOps<T> ops, T input) {
             try {
                 return BASE_CODEC.decode(ops, input);
             } finally {
@@ -72,7 +69,7 @@ public record VSQEnchantmentProfile(
         }
 
         @Override
-        public <T> DataResult<T> encode(VSQEnchantmentProfile input, com.mojang.serialization.DynamicOps<T> ops, T prefix) {
+        public <T> DataResult<T> encode(VSQEnchantmentProfile input, DynamicOps<T> ops, T prefix) {
             return BASE_CODEC.encode(input, ops, prefix);
         }
     };

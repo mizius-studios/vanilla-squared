@@ -36,32 +36,32 @@ public abstract class VillagerTradeMixin {
     @Shadow @Final private NumberProvider xp;
 
     @Inject(method = "getOffer", at = @At("HEAD"), cancellable = true)
-    private void vsq$replaceEnchantedBookTradeBeforeVanillaFilters(LootContext context, CallbackInfoReturnable<MerchantOffer> cir) {
+    private void vsq$replaceEnchantedBookTradeBeforeVanillaFilters(LootContext lootContext, CallbackInfoReturnable<MerchantOffer> cir) {
         if (!this.gives.create().is(Items.ENCHANTED_BOOK)) {
             return;
         }
 
-        if (this.merchantPredicate.isPresent() && !this.merchantPredicate.get().test(context)) {
+        if (this.merchantPredicate.isPresent() && !this.merchantPredicate.get().test(lootContext)) {
             cir.setReturnValue(null);
             return;
         }
 
-        Identifier tagId = vsq$resolveLibrarianTag(context);
-        ItemStack replacement = EnchantingRecipeTags.createRandomStack(tagId, context.getRandom());
+        Identifier tagId = vsq$resolveLibrarianTag(lootContext);
+        ItemStack replacement = EnchantingRecipeTags.createRandomStack(tagId, lootContext.getRandom());
         if (replacement.isEmpty()) {
             cir.setReturnValue(null);
             return;
         }
 
-        ItemCost itemCost = this.wants.toItemCost(context, 0);
+        ItemCost itemCost = this.wants.toItemCost(lootContext, 0);
         if (itemCost.count() < 1) {
             cir.setReturnValue(null);
             return;
         }
-        int additionalTradeCost = 5 + context.getRandom().nextInt(15);
-        itemCost = this.wants.toItemCost(context, additionalTradeCost);
+        int additionalTradeCost = 5 + lootContext.getRandom().nextInt(15);
+        itemCost = this.wants.toItemCost(lootContext, additionalTradeCost);
 
-        Optional<ItemCost> additionalItemCost = this.additionalWants.map(tradeCost -> tradeCost.toItemCost(context, 0));
+        Optional<ItemCost> additionalItemCost = this.additionalWants.map(tradeCost -> tradeCost.toItemCost(lootContext, 0));
         if (additionalItemCost.isPresent() && additionalItemCost.get().count() < 1) {
             cir.setReturnValue(null);
             return;
@@ -71,21 +71,21 @@ public abstract class VillagerTradeMixin {
                 itemCost,
                 additionalItemCost,
                 replacement,
-                Math.max(this.maxUses.getInt(context), 1),
-                Math.max(this.xp.getInt(context), 0),
-                Math.max(this.reputationDiscount.getFloat(context), 0.0F)
+                Math.max(this.maxUses.getInt(lootContext), 1),
+                Math.max(this.xp.getInt(lootContext), 0),
+                Math.max(this.reputationDiscount.getFloat(lootContext), 0.0F)
         ));
     }
 
     @Inject(method = "getOffer", at = @At("RETURN"), cancellable = true)
-    private void vsq$replaceEnchantedBookOffer(LootContext context, CallbackInfoReturnable<MerchantOffer> cir) {
+    private void vsq$replaceEnchantedBookOffer(LootContext lootContext, CallbackInfoReturnable<MerchantOffer> cir) {
         MerchantOffer offer = cir.getReturnValue();
         if (offer == null || !offer.getResult().is(Items.ENCHANTED_BOOK)) {
             return;
         }
 
-        Identifier tagId = vsq$resolveLibrarianTag(context);
-        ItemStack replacement = EnchantingRecipeTags.createRandomStack(tagId, context.getRandom());
+        Identifier tagId = vsq$resolveLibrarianTag(lootContext);
+        ItemStack replacement = EnchantingRecipeTags.createRandomStack(tagId, lootContext.getRandom());
         if (replacement.isEmpty()) {
             return;
         }

@@ -5,31 +5,23 @@ import blob.vanillasquared.main.world.recipe.VSQRecipeTypes;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
+import net.fabricmc.fabric.api.resource.v1.DataResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.reloader.SimpleReloadListener;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
 import java.io.Reader;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.TreeMap;
+import java.util.*;
 
 public final class EnchantingRecipeRegistry {
     private static final Identifier ENCHANTING_TYPE_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting");
@@ -43,7 +35,7 @@ public final class EnchantingRecipeRegistry {
     }
 
     public static void initialize() {
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(RELOAD_LISTENER_ID, ReloadListener::new);
+        DataResourceLoader.get().registerReloadListener(RELOAD_LISTENER_ID, registries -> new ReloadListener());
     }
 
     public static Collection<RecipeHolder<EnchantingRecipe>> recipes() {
@@ -107,63 +99,49 @@ public final class EnchantingRecipeRegistry {
                 && recipe.hasRequiredBlocks(countedBlocks);
     }
 
-    private static final class ReloadListener implements SimpleResourceReloadListener<Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>>>, IdentifiableResourceReloadListener {
-        private final HolderLookup.Provider registries;
-
-        private ReloadListener(HolderLookup.Provider registries) {
-            this.registries = registries;
-        }
-
+    private static final class ReloadListener extends SimpleReloadListener<Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>>> {
         @Override
-        public Identifier getFabricId() {
-            return RELOAD_LISTENER_ID;
-        }
+        protected Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> prepare(PreparableReloadListener.SharedState store) {
+            Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> loadedRecipes = new TreeMap<>(Comparator.comparing(ResourceKey::identifier));
+            HolderLookup.Provider registries = store.get(ResourceLoader.REGISTRY_LOOKUP_KEY);
+            RegistryOps<com.google.gson.JsonElement> ops = registries.createSerializationContext(JsonOps.INSTANCE);
 
-        @Override
-        public CompletableFuture<Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>>> load(ResourceManager resourceManager, Executor executor) {
-            return CompletableFuture.supplyAsync(() -> {
-                Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> loadedRecipes = new TreeMap<>((left, right) -> left.identifier().compareTo(right.identifier()));
-                RegistryOps<com.google.gson.JsonElement> ops = this.registries.createSerializationContext(JsonOps.INSTANCE);
+            for (Map.Entry<Identifier, Resource> entry : RECIPE_CONVERTER.listMatchingResources(store.resourceManager()).entrySet()) {
+                Identifier fileId = entry.getKey();
+                Identifier recipeId = RECIPE_CONVERTER.fileToId(fileId);
 
-                for (Map.Entry<Identifier, Resource> entry : RECIPE_CONVERTER.listMatchingResources(resourceManager).entrySet()) {
-                    Identifier fileId = entry.getKey();
-                    Identifier recipeId = RECIPE_CONVERTER.fileToId(fileId);
-
-                    try (Reader reader = entry.getValue().openAsReader()) {
-                        JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-                        if (!json.has("type")) {
-                            continue;
-                        }
-
-                        Identifier typeId = Identifier.tryParse(json.get("type").getAsString());
-                        if (!ENCHANTING_TYPE_ID.equals(typeId)) {
-                            continue;
-                        }
-
-                        ResourceKey<Recipe<?>> recipeKey = ResourceKey.create(Registries.RECIPE, recipeId);
-                        EnchantingRecipe recipe = VSQRecipeTypes.ENCHANTING_SERIALIZER.codec().codec()
-                                .parse(ops, json)
-                                .getOrThrow(message -> new IllegalArgumentException("Failed to parse Enchanting recipe " + recipeId + ": " + message));
-                        loadedRecipes.put(recipeKey, new RecipeHolder<>(recipeKey, recipe));
-                    } catch (Exception exception) {
-                        VanillaSquared.LOGGER.error("Failed to load Enchanting recipe {} from {}", recipeId, fileId, exception);
+                try (Reader reader = entry.getValue().openAsReader()) {
+                    JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                    if (!json.has("type")) {
+                        continue;
                     }
-                }
 
-                return loadedRecipes;
-            }, executor);
+                    Identifier typeId = Identifier.tryParse(json.get("type").getAsString());
+                    if (!ENCHANTING_TYPE_ID.equals(typeId)) {
+                        continue;
+                    }
+
+                    ResourceKey<Recipe<?>> recipeKey = ResourceKey.create(Registries.RECIPE, recipeId);
+                    EnchantingRecipe recipe = VSQRecipeTypes.ENCHANTING_SERIALIZER.codec().codec()
+                            .parse(ops, json)
+                            .getOrThrow(message -> new IllegalArgumentException("Failed to parse Enchanting recipe " + recipeId + ": " + message));
+                    loadedRecipes.put(recipeKey, new RecipeHolder<>(recipeKey, recipe));
+                } catch (Exception exception) {
+                    VanillaSquared.LOGGER.error("Failed to load Enchanting recipe {} from {}", recipeId, fileId, exception);
+                }
+            }
+
+            return loadedRecipes;
         }
 
         @Override
-        public CompletableFuture<Void> apply(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> data, ResourceManager resourceManager, Executor executor) {
-            return CompletableFuture.runAsync(() -> {
-                EnchantingIngredient.clearTagCache();
-                EnchantingRecipeTags.invalidateValidRecipeCache();
-                RECIPES = Map.copyOf(data);
-                RECIPE_DISPLAY_IDS = vsq$createDisplayIds(data);
-                RECIPE_GROUP_IDS = vsq$createGroupIds(data);
-                VanillaSquared.LOGGER.info("Loaded {} Enchanting recipes", RECIPES.size());
-            }, executor);
+        protected void apply(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> data, PreparableReloadListener.SharedState store) {
+            EnchantingIngredient.clearTagCache();
+            EnchantingRecipeTags.invalidateValidRecipeCache();
+            RECIPES = Map.copyOf(data);
+            RECIPE_DISPLAY_IDS = vsq$createDisplayIds(data);
+            RECIPE_GROUP_IDS = vsq$createGroupIds(data);
+            VanillaSquared.LOGGER.info("Loaded {} Enchanting recipes", RECIPES.size());
         }
 
         private static Map<ResourceKey<Recipe<?>>, Integer> vsq$createDisplayIds(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> recipes) {

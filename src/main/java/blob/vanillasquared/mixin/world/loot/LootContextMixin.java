@@ -2,6 +2,7 @@ package blob.vanillasquared.mixin.world.loot;
 
 import blob.vanillasquared.main.world.loot.LootContextBridge;
 import blob.vanillasquared.main.world.loot.LootTableIdResolver;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -22,16 +23,16 @@ public abstract class LootContextMixin implements LootContextBridge {
     private final Deque<LootTable> vsq$lootTableStack = new ArrayDeque<>();
 
     @Inject(method = "pushVisitedElement", at = @At("RETURN"))
-    private void vsq$trackLootTablePush(LootContext.VisitedEntry<?> visitedEntry, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue() && visitedEntry.type() == LootDataType.TABLE && visitedEntry.value() instanceof LootTable table) {
+    private void vsq$trackLootTablePush(LootContext.VisitedEntry<?> element, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue() && element.type() == LootDataType.TABLE && element.value() instanceof LootTable table) {
             this.vsq$lootTableStack.addLast(table);
         }
     }
 
     @Inject(method = "popVisitedElement", at = @At("HEAD"))
-    private void vsq$trackLootTablePop(LootContext.VisitedEntry<?> visitedEntry, CallbackInfo ci) {
-        if (visitedEntry.type() == LootDataType.TABLE
-                && visitedEntry.value() instanceof LootTable table
+    private void vsq$trackLootTablePop(LootContext.VisitedEntry<?> element, CallbackInfo ci) {
+        if (element.type() == LootDataType.TABLE
+                && element.value() instanceof LootTable table
                 && !this.vsq$lootTableStack.isEmpty()
                 && this.vsq$lootTableStack.peekLast() == table) {
             this.vsq$lootTableStack.removeLast();
@@ -39,7 +40,7 @@ public abstract class LootContextMixin implements LootContextBridge {
     }
 
     @Override
-    public Optional<net.minecraft.resources.Identifier> vsq$currentLootTableId() {
+    public Optional<Identifier> vsq$currentLootTableId() {
         LootTable table = this.vsq$lootTableStack.peekLast();
         if (table == null) {
             return Optional.empty();
