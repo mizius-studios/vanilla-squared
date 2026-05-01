@@ -33,7 +33,7 @@ loom {
 			programArg("--username")
 			programArg("PainterFlow11")
 		}
-
+	}
 }
 
 fabricApi {

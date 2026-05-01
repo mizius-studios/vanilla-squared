@@ -46,7 +46,7 @@ public abstract class ApplyEntityImpulseMixin {
                 Vec3.CODEC.fieldOf("direction").forGetter(ApplyEntityImpulse::direction),
                 Vec3.CODEC.fieldOf("coordinate_scale").forGetter(ApplyEntityImpulse::coordinateScale),
                 LevelBasedValue.CODEC.fieldOf("magnitude").forGetter(ApplyEntityImpulse::magnitude),
-                com.mojang.serialization.Codec.DOUBLE.optionalFieldOf("speed", 1.0D).forGetter(effect -> ApplyImpulseSpeedState.speed(effect))
+                com.mojang.serialization.Codec.DOUBLE.optionalFieldOf("speed", 1.0D).forGetter(ApplyImpulseSpeedState::speed)
         ).apply(instance, (direction, coordinateScale, magnitude, speed) ->
                 ApplyImpulseSpeedState.remember(new ApplyEntityImpulse(direction, coordinateScale, magnitude), speed)
         ));

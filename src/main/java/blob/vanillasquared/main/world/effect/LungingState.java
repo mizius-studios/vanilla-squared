@@ -1,9 +1,7 @@
 package blob.vanillasquared.main.world.effect;
 
-import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.network.VSQNetworking;
 import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldowns;
-import blob.vanillasquared.main.world.item.enchantment.VSQEnchantmentProfile;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import net.minecraft.core.Holder;
@@ -29,7 +27,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.WeakHashMap;
