@@ -50,7 +50,7 @@
         "item": "#vsq:enchantable/ranged_weapon"
       },
       "enchantment_slot": "secondary",
-      "max_level": 1,
+      "max_level": 2,
       "effects": {
         "minecraft:projectile_spawned": [
           {
