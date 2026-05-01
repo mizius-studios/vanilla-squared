@@ -13,13 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 public final class BlockAttacksComponentBuilder {
+    private static final float AXE_BLOCKING_ANGLE = 90.0F;
     private final BlocksAttacks component;
 
-    public BlockAttacksComponentBuilder(float blockDelay, float shieldBreakCooldown, float damageReduction, float durabilityDamage) {
+    public BlockAttacksComponentBuilder(float blockDelay, float shieldBreakCooldown, float blockedDamageFraction, float durabilityDamage) {
         this.component = new BlocksAttacks(
                 blockDelay,
                 shieldBreakCooldown,
-                List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, damageReduction)),
+                List.of(blockedDamageFraction(blockedDamageFraction)),
                 new BlocksAttacks.ItemDamageFunction(1.0F, 1.0F, durabilityDamage),
                 bypassesShieldTag(),
                 Optional.of(SoundEvents.SHIELD_BLOCK),
@@ -29,6 +30,11 @@ public final class BlockAttacksComponentBuilder {
 
     public BlocksAttacks build() {
         return component;
+    }
+
+    private static BlocksAttacks.DamageReduction blockedDamageFraction(float blockedDamageFraction) {
+        // BlocksAttacks resolves blocked damage as base + factor * incomingDamage.
+        return new BlocksAttacks.DamageReduction(AXE_BLOCKING_ANGLE, Optional.empty(), 0.0F, blockedDamageFraction);
     }
 
     private static Optional<HolderSet<DamageType>> bypassesShieldTag() {
