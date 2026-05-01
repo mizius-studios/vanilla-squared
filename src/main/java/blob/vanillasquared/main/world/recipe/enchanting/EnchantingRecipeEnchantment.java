@@ -4,6 +4,7 @@ import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.Item;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.ItemStackTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 public record EnchantingRecipeEnchantment(Identifier enchantment) {
     public static final Codec<EnchantingRecipeEnchantment> CODEC = Identifier.CODEC.xmap(
@@ -54,10 +57,25 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     }
 
     public ItemStack previewInputStack(HolderLookup.Provider registries) {
-        return this.vsq$enchantmentHolder(registries).value().definition().supportedItems().stream()
-                .findFirst()
-                .map(holder -> new ItemStack(holder.value()))
-                .orElse(ItemStack.EMPTY);
+        Iterator<Holder<Item>> iterator = this.vsq$previewItems(registries).iterator();
+        return iterator.hasNext() ? new ItemStack(iterator.next().value()) : ItemStack.EMPTY;
+    }
+
+    public SlotDisplay previewInputDisplay(HolderLookup.Provider registries, int displayCount) {
+        List<SlotDisplay> displays = new ArrayList<>();
+        for (Holder<Item> holder : this.vsq$previewItems(registries)) {
+            ItemStack stack = new ItemStack(holder.value());
+            stack.setCount(displayCount);
+            displays.add(new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack)));
+        }
+
+        if (displays.isEmpty()) {
+            return Empty.INSTANCE;
+        }
+        if (displays.size() == 1) {
+            return displays.getFirst();
+        }
+        return new SlotDisplay.Composite(List.copyOf(displays));
     }
 
     public SlotDisplay iconDisplay(Component name, HolderLookup.Provider registries) {
@@ -142,6 +160,17 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     private Holder.Reference<Enchantment> vsq$enchantmentHolder(HolderLookup.Provider registries) {
         return registries.lookupOrThrow(Registries.ENCHANTMENT)
                 .getOrThrow(ResourceKey.create(Registries.ENCHANTMENT, this.enchantment));
+    }
+
+    private Iterable<Holder<Item>> vsq$previewItems(HolderLookup.Provider registries) {
+        Enchantment.EnchantmentDefinition definition = this.vsq$enchantmentHolder(registries).value().definition();
+        if (definition.primaryItems().isPresent()) {
+            HolderSet<Item> primaryItems = definition.primaryItems().get();
+            if (primaryItems.iterator().hasNext()) {
+                return primaryItems;
+            }
+        }
+        return definition.supportedItems();
     }
 
 }

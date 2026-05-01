@@ -74,7 +74,7 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
 
     public static RecipeDisplay createGhostDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, EnchantingRecipeInput missingInput) {
         List<SlotDisplay> ingredients = new ArrayList<>(6);
-        ingredients.add(vsq$missingDisplay(recipe.inputIngredient(registries), missingInput.input()));
+        ingredients.add(vsq$missingInputDisplay(recipe, registries, missingInput.input()));
         ingredients.add(vsq$missingDisplay(recipe.material(), missingInput.material()));
         for (int index = 0; index < recipe.ingredients().size(); index++) {
             ingredients.add(vsq$missingDisplay(recipe.ingredients().get(index), missingInput.ingredients().get(index)));
@@ -96,7 +96,7 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
                 ingredients.add(vsq$stackDisplay(stack));
             }
         } else {
-            ingredients.add(recipe.inputIngredient(registries).display());
+            ingredients.add(recipe.enchantment().previewInputDisplay(registries, recipe.inputIngredient(registries).count()));
             ingredients.add(recipe.material().display());
             for (EnchantingIngredient ingredient : recipe.ingredients()) {
                 ingredients.add(ingredient.display());
@@ -145,6 +145,13 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
 
     private static SlotDisplay vsq$stackDisplay(ItemStack stack) {
         return stack.isEmpty() ? Empty.INSTANCE : new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack));
+    }
+
+    private static SlotDisplay vsq$missingInputDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, ItemStack missingStack) {
+        if (missingStack.isEmpty()) {
+            return Empty.INSTANCE;
+        }
+        return recipe.enchantment().previewInputDisplay(registries, missingStack.getCount());
     }
 
     private static SlotDisplay vsq$missingDisplay(EnchantingIngredient ingredient, ItemStack missingStack) {

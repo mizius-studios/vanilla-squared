@@ -8,10 +8,12 @@ import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookPage;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
 import net.minecraft.client.gui.screens.recipebook.RecipeCollection;
+import net.minecraft.client.gui.screens.recipebook.GhostSlots;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.inventory.RecipeBookMenu;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import org.lwjgl.glfw.GLFW;
@@ -41,9 +43,14 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
     @Shadow private int height;
     @Final
     @Shadow private RecipeBookPage recipeBookPage;
+    @Shadow @Final
+    private GhostSlots ghostSlots;
     @Shadow private RecipeBookTabButton selectedTab;
     @Shadow private EditBox searchBox;
     @Shadow @Final private List<RecipeBookTabButton> tabButtons;
+
+    @Shadow
+    protected abstract void fillGhostRecipe(GhostSlots ghostSlots, RecipeDisplay recipeDisplay, ContextMap contextMap);
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void vsq$ignoreVerticalArrowsOnSearchBox(KeyEvent event, CallbackInfoReturnable<Boolean> cir) {
@@ -82,6 +89,16 @@ public abstract class RecipeBookComponentMixin<T extends RecipeBookMenu> {
         }
 
         this.recipeBookPage.updateCollections(collections, resetPage, isFiltering);
+        ci.cancel();
+    }
+
+    @Inject(method = "fillGhostRecipe(Lnet/minecraft/world/item/crafting/display/RecipeDisplay;)V", at = @At("HEAD"), cancellable = true)
+    private void vsq$fillEnchantingGhostRecipe(RecipeDisplay recipe, CallbackInfo ci) {
+        if (!(this.menu instanceof VSQEnchantmentMenu) || this.minecraft.level == null) {
+            return;
+        }
+
+        this.fillGhostRecipe(this.ghostSlots, recipe, SlotDisplayContext.fromLevel(this.minecraft.level));
         ci.cancel();
     }
 
