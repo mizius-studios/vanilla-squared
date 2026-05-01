@@ -219,7 +219,11 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
             CallbackInfo ci
     ) {
         Optional<List<ConditionalEffect<EnchantmentEntityEffect>>> effects = this.vsq$profileEffects(weapon.itemStack(), EnchantmentEffectComponents.HIT_BLOCK);
-        if (effects.isEmpty() || hitBlock.isAir()) {
+        if (effects.isEmpty()) {
+            return;
+        }
+        if (hitBlock.isAir()) {
+            ci.cancel();
             return;
         }
 
