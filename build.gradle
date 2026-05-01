@@ -27,6 +27,12 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
+	// this allows you to offline login to my account - PainterFlow11, you can replace PainterFlow11 with your own username
+	runs {
+		client {
+			programArg("--username")
+			programArg("PainterFlow11")
+		}
 
 }
 

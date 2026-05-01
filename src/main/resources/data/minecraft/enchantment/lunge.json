@@ -42,7 +42,8 @@
                     "type": "minecraft:linear",
                     "base": 0.458,
                     "per_level_above_first": 0.458
-                  }
+                  },
+                  "speed": 1.0
                 },
                 {
                   "type": "minecraft:play_sound",

@@ -55,3 +55,10 @@ mc-source/
 # codex
 
 .codex/
+
+# local skins
+
+src/client/resources/assets/vsq/textures/entity/skin_*.png
+src/client/resources/assets/vsq/textures/entity/steve.png
+src/client/resources/assets/vsq/textures/entity/alex.png
+src/client/resources/assets/vsq/textures/entity/cape_*.png

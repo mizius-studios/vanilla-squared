@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.jspecify.annotations.Nullable;
 
@@ -29,6 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public final class SpecialEnchantmentCooldowns {
+    private static final long HIT_BLOCK_REUSE_DELAY_TICKS = 5L;
     private static final Map<UUID, Map<Identifier, ActivationState>> STATES = new HashMap<>();
 
     private SpecialEnchantmentCooldowns() {
@@ -51,7 +53,7 @@ public final class SpecialEnchantmentCooldowns {
             return created;
         });
 
-        state.activatedByHotkey = true;
+        state.activated = true;
         startCooldownIfEligible(player.level().getGameTime(), use.profile(), state);
 
         if (shouldClearState(use.profile(), state)) {
@@ -158,7 +160,15 @@ public final class SpecialEnchantmentCooldowns {
                 profile.get().special().orElseThrow()
         );
 
-        boolean allowed = consumeLimitIfNeeded(use, state, metadata.orElse(null));
+        SpecialEffectMetadata resolvedMetadata = metadata.orElse(null);
+        if (isHitBlockReuseDelayBlocked(level, componentType, state, resolvedMetadata)) {
+            return false;
+        }
+
+        boolean allowed = consumeLimitIfNeeded(use, state, resolvedMetadata);
+        if (allowed) {
+            markHitBlockReuseDelay(level, componentType, state, resolvedMetadata);
+        }
         startCooldownIfEligible(level.getGameTime(), profile.get(), state);
         if (shouldClearState(profile.get(), state)) {
             removeState(player, enchantmentId);
@@ -199,6 +209,31 @@ public final class SpecialEnchantmentCooldowns {
 
     private static int resolvedLimit(SpecialEnchantmentUse use, SpecialEffectSettings settings) {
         return Mth.floor(settings.limit().calculate(use.level()));
+    }
+
+    private static boolean isHitBlockReuseDelayBlocked(
+            ServerLevel level,
+            DataComponentType<?> componentType,
+            ActivationState state,
+            @Nullable SpecialEffectMetadata metadata
+    ) {
+        if (metadata == null || componentType != EnchantmentEffectComponents.HIT_BLOCK) {
+            return false;
+        }
+        long nextAllowedTick = state.nextAllowedActivationTicks.getOrDefault(metadata.effectId(), 0L);
+        return level.getGameTime() < nextAllowedTick;
+    }
+
+    private static void markHitBlockReuseDelay(
+            ServerLevel level,
+            DataComponentType<?> componentType,
+            ActivationState state,
+            @Nullable SpecialEffectMetadata metadata
+    ) {
+        if (metadata == null || componentType != EnchantmentEffectComponents.HIT_BLOCK) {
+            return;
+        }
+        state.nextAllowedActivationTicks.put(metadata.effectId(), level.getGameTime() + HIT_BLOCK_REUSE_DELAY_TICKS);
     }
 
     private static Optional<ServerPlayer> findPlayerContext(@Nullable Entity entity) {
@@ -271,7 +306,7 @@ public final class SpecialEnchantmentCooldowns {
     }
 
     private static boolean isActivationWindowOpen(ActivationState state, VSQEnchantmentProfile profile) {
-        if (!state.activatedByHotkey) {
+        if (!state.activated) {
             return false;
         }
         return state.cooldownStarted || isPreCooldownPhaseActive(profile, state);
@@ -461,7 +496,8 @@ public final class SpecialEnchantmentCooldowns {
         private final long cooldownTotalTicks;
         private final Map<String, Integer> remainingLimits = new HashMap<>();
         private final Map<String, Integer> totalLimits = new HashMap<>();
-        private boolean activatedByHotkey;
+        private final Map<String, Long> nextAllowedActivationTicks = new HashMap<>();
+        private boolean activated;
         private boolean cooldownStarted;
         private boolean displayedNone;
         private long cooldownEndTick;
