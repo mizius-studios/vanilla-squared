@@ -54,28 +54,6 @@
             }
           }
         ],
-        "minecraft:location_changed": [
-          {
-            "effect": {
-              "type": "minecraft:attribute",
-              "amount": -0.5,
-              "attribute": "minecraft:armor",
-              "id": "vsq:dash_lunging_armor",
-              "operation": "add_multiplied_total"
-            },
-            "requirements": {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "effects": {
-                  "vsq:lunging": {}
-                }
-              }
-            },
-            "effect_id": "vsq_dash_lunging_armor",
-            "id": "vsq_dash_lunging_armor"
-          }
-        ],
         "vsq:in_lunging": [
           {
             "affected": "victim",

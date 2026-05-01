@@ -118,7 +118,7 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
         ci.cancel();
     }
 
-    @Inject(method = "doPostAttack*", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "doPostAttack", at = @At("HEAD"), cancellable = true)
     private void vsq$useSelectedProfilePostAttack(
             ServerLevel serverLevel,
             int enchantmentLevel,

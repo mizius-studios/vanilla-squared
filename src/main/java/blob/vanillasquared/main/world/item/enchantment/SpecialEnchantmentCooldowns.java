@@ -1,5 +1,6 @@
 package blob.vanillasquared.main.world.item.enchantment;
 
+import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 
 import blob.vanillasquared.main.VanillaSquared;
@@ -143,6 +144,10 @@ public final class SpecialEnchantmentCooldowns {
             return true;
         }
         ActivationState state = state(player, enchantmentId).orElse(null);
+        if (componentType == VSQEnchantmentEffects.IN_LUNGING
+                && metadata.map(SpecialEffectMetadata::special).orElse(Optional.empty()).isEmpty()) {
+            return true;
+        }
         if (state == null || !isActivationWindowOpen(state, profile.get())) {
             return false;
         }

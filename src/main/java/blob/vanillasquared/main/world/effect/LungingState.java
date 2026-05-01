@@ -5,6 +5,8 @@ import blob.vanillasquared.main.world.item.enchantment.SpecialEnchantmentCooldow
 import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
 import net.minecraft.world.item.enchantment.TargetedConditionalEffect;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.level.ClipContext;
@@ -33,8 +36,8 @@ import java.util.WeakHashMap;
 
 public final class LungingState {
     private static final WeakHashMap<ServerLevel, Map<UUID, Activation>> STATES = new WeakHashMap<>();
-    private static final double INTERSECTION_STEP = 0.35D;
     private static final double COLLISION_EPSILON = 0.05D;
+    private static final Identifier DASH_ENCHANTMENT_ID = Identifier.fromNamespaceAndPath("vsq", "dash");
 
     private LungingState() {
     }
@@ -57,8 +60,8 @@ public final class LungingState {
 
         Activation activation = new Activation(
                 owner.getUUID(),
-                enchantment,
                 enchantmentLevel,
+                enchantment.unwrapKey().map(ResourceKey::identifier).orElse(null),
                 item.itemStack().copy(),
                 item.inSlot(),
                 direction,
@@ -115,7 +118,7 @@ public final class LungingState {
                 activation.applyEntityHits(level, owner, start, end);
             }
 
-            boolean blocked = hitBlock || owner.horizontalCollision || owner.verticalCollision;
+            boolean blocked = hitBlock || owner.horizontalCollision || (owner.verticalCollision && !owner.onGround());
             if (blocked) {
                 owner.setDeltaMovement(Vec3.ZERO);
                 activation.deactivate(level);
@@ -159,7 +162,7 @@ public final class LungingState {
             return amount;
         }
         Activation activation = activation(level, entity.getUUID());
-        if (activation == null || amount <= 0.0F) {
+        if (activation == null || amount <= 0.0F || !activation.isDash()) {
             return amount;
         }
         return amount * (1.0F + activation.enchantmentLevel);
@@ -185,8 +188,8 @@ public final class LungingState {
 
     private static final class Activation {
         private final UUID ownerId;
-        private final Holder<Enchantment> enchantment;
         private final int enchantmentLevel;
+        private final Identifier enchantmentId;
         private final ItemStack stackSnapshot;
         private final EquipmentSlot slot;
         private final Vec3 direction;
@@ -200,8 +203,8 @@ public final class LungingState {
 
         private Activation(
                 UUID ownerId,
-                Holder<Enchantment> enchantment,
                 int enchantmentLevel,
+                Identifier enchantmentId,
                 ItemStack stackSnapshot,
                 EquipmentSlot slot,
                 Vec3 direction,
@@ -213,8 +216,8 @@ public final class LungingState {
                 float xRot
         ) {
             this.ownerId = ownerId;
-            this.enchantment = enchantment;
             this.enchantmentLevel = enchantmentLevel;
+            this.enchantmentId = enchantmentId;
             this.stackSnapshot = stackSnapshot;
             this.slot = slot;
             this.direction = direction;
@@ -231,21 +234,34 @@ public final class LungingState {
             return entity instanceof LivingEntity living ? living : null;
         }
 
+        private boolean isDash() {
+            return DASH_ENCHANTMENT_ID.equals(this.enchantmentId);
+        }
+
+        private Holder<Enchantment> resolveEnchantment(ServerLevel level) {
+            if (this.enchantmentId == null) {
+                throw new IllegalStateException("Active lunge is missing enchantment id");
+            }
+            return level.registryAccess()
+                    .lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
+                    .getOrThrow(ResourceKey.create(net.minecraft.core.registries.Registries.ENCHANTMENT, this.enchantmentId));
+        }
+
         private EnchantedItemInUse itemInUse(ServerLevel level) {
             return new EnchantedItemInUse(this.stackSnapshot.copy(), this.slot, this.resolveOwner(level), ignored -> {});
         }
 
         private void applyEntityHits(ServerLevel level, LivingEntity owner, Vec3 start, Vec3 end) {
-            AABB bounds = new AABB(start, end).inflate(1.0D);
+            AABB bounds = sweptBounds(owner.getBoundingBox(), start, end);
             List<LivingEntity> touched = level.getEntitiesOfClass(LivingEntity.class, bounds, entity ->
-                    entity.isAlive() && entity != owner && intersectsSegment(entity.getBoundingBox(), start, end)
+                    entity.isAlive() && entity != owner && entity.getBoundingBox().intersects(bounds)
             );
             if (touched.isEmpty()) {
                 return;
             }
 
             List<TargetedConditionalEffect<EnchantmentEntityEffect>> effects =
-                    VSQEnchantments.profileEffects(this.stackSnapshot, this.enchantment, VSQEnchantmentEffects.IN_LUNGING);
+                    VSQEnchantments.profileEffects(this.stackSnapshot, resolveEnchantment(level), VSQEnchantmentEffects.IN_LUNGING);
             for (LivingEntity target : touched) {
                 if (!this.impactedEntities.add(target.getUUID())) {
                     continue;
@@ -257,13 +273,14 @@ public final class LungingState {
                 var context = Enchantment.damageContext(level, this.enchantmentLevel, target, damageSource);
                 for (int index = 0; index < effects.size(); index++) {
                     TargetedConditionalEffect<EnchantmentEntityEffect> effect = effects.get(index);
-                    if (!effect.matches(context)
-                            || !SpecialEnchantmentCooldowns.shouldRunSpecialEffect(level, this.stackSnapshot, this.enchantment.value(), VSQEnchantmentEffects.IN_LUNGING, index, owner)) {
+                    if (!shouldApplyToEnchantedTarget(effect.enchanted())
+                            || !effect.matches(context)
+                            || !SpecialEnchantmentCooldowns.shouldRunSpecialEffect(level, this.stackSnapshot, resolveEnchantment(level).value(), VSQEnchantmentEffects.IN_LUNGING, index, owner)) {
                         continue;
                     }
 
                     Entity affected = resolveAffectedEntity(effect, owner, target);
-                    if (affected == null || affected == owner) {
+                    if (!shouldApplyEffectTo(affected)) {
                         continue;
                     }
                     ChannelingState.pushExecutionDamageSource(damageSource);
@@ -287,28 +304,32 @@ public final class LungingState {
         }
 
         private static Entity resolveAffectedEntity(TargetedConditionalEffect<EnchantmentEntityEffect> effect, LivingEntity owner, LivingEntity target) {
-            return switch (effect.affected()) {
-                case ATTACKER, DAMAGING_ENTITY -> owner;
-                case VICTIM -> target;
-            };
+            return LungingState.resolveAffectedEntity(effect.affected(), owner, target);
         }
 
-        private static boolean intersectsSegment(AABB box, Vec3 start, Vec3 end) {
-            Vec3 delta = end.subtract(start);
-            double distance = delta.length();
-            if (distance <= 1.0E-6D) {
-                return box.contains(start);
-            }
-
-            int steps = Math.max(1, (int) Math.ceil(distance / INTERSECTION_STEP));
-            AABB expanded = box.inflate(0.2D);
-            for (int step = 0; step <= steps; step++) {
-                double t = (double) step / (double) steps;
-                if (expanded.contains(start.add(delta.scale(t)))) {
-                    return true;
-                }
-            }
-            return false;
+        private static AABB sweptBounds(AABB currentBounds, Vec3 start, Vec3 end) {
+            Vec3 movement = end.subtract(start);
+            AABB previousBounds = currentBounds.move(movement.reverse());
+            return currentBounds.minmax(previousBounds).inflate(0.2D);
         }
+    }
+
+    static Entity resolveAffectedEntity(EnchantmentTarget target, Entity owner, Entity victim) {
+        return shouldAffectOwner(target) ? owner : victim;
+    }
+
+    static boolean shouldAffectOwner(EnchantmentTarget target) {
+        return switch (target) {
+            case ATTACKER, DAMAGING_ENTITY -> true;
+            case VICTIM -> false;
+        };
+    }
+
+    static boolean shouldApplyEffectTo(Entity affected) {
+        return affected != null;
+    }
+
+    static boolean shouldApplyToEnchantedTarget(EnchantmentTarget target) {
+        return target == EnchantmentTarget.ATTACKER;
     }
 }
