@@ -27,7 +27,15 @@ loom {
 			sourceSet sourceSets.client
 		}
 	}
-
+	// this allows you to offline login to my account - PainterFlow11, you can replace PainterFlow11 with your own username
+	runs {
+		client {
+			programArg("--username")
+			programArg("PainterFlow11") // usernameVSQ
+			programArg("--model")
+			programArg("slim") // modelVSQ
+		}
+	}
 }
 
 fabricApi {
@@ -43,7 +51,12 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	
+	testImplementation "org.junit.jupiter:junit-jupiter:5.12.2"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:1.12.2"
+}
+
+tasks.named("test") {
+	useJUnitPlatform()
 }
 
 processResources {

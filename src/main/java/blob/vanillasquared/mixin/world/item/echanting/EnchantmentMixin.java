@@ -222,6 +222,10 @@ public abstract class EnchantmentMixin implements VSQEnchantmentAccess {
         if (effects.isEmpty()) {
             return;
         }
+        if (hitBlock.isAir()) {
+            ci.cancel();
+            return;
+        }
 
         var context = Enchantment.blockHitContext(serverLevel, enchantmentLevel, projectile, position, hitBlock);
         List<ConditionalEffect<EnchantmentEntityEffect>> list = effects.get();
