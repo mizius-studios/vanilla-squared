@@ -32,6 +32,8 @@ loom {
 		client {
 			programArg("--username")
 			programArg("PainterFlow11")
+			programArg("--model")
+			programArg("slim")
 		}
 	}
 }
