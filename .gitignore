@@ -58,14 +58,14 @@ mc-source/
 
 # local skins
 
-src/client/resources/assets/vsq/textures/entity/skin_*.png
-src/client/resources/assets/vsq/textures/entity/steve.png
-src/client/resources/assets/vsq/textures/entity/alex.png
-src/client/resources/assets/vsq/textures/entity/cape_*.png
-/src/client/resources/assets/vsq/textures/entity/sunny.png
-/src/client/resources/assets/vsq/textures/entity/zuri.png
-/src/client/resources/assets/vsq/textures/entity/noor.png
-/src/client/resources/assets/vsq/textures/entity/makena.png
-/src/client/resources/assets/vsq/textures/entity/kai.png
-/src/client/resources/assets/vsq/textures/entity/efe.png
-/src/client/resources/assets/vsq/textures/entity/ari.png
+src/client/resources/assets/minecraft/textures/entity/skin_*.png
+src/client/resources/assets/minecraft/textures/entity/steve.png
+src/client/resources/assets/minecraft/textures/entity/alex.png
+src/client/resources/assets/minecraft/textures/entity/cape_*.png
+src/client/resources/assets/minecraft/textures/entity/sunny.png
+src/client/resources/assets/minecraft/textures/entity/zuri.png
+src/client/resources/assets/minecraft/textures/entity/noor.png
+src/client/resources/assets/minecraft/textures/entity/makena.png
+src/client/resources/assets/minecraft/textures/entity/kai.png
+src/client/resources/assets/minecraft/textures/entity/efe.png
+src/client/resources/assets/minecraft/textures/entity/ari.png
