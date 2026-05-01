@@ -58,14 +58,14 @@ mc-source/
 
 # local skins
 
-src/client/resources/assets/minecraft/textures/entity/skin_*.png
-src/client/resources/assets/minecraft/textures/entity/steve.png
-src/client/resources/assets/minecraft/textures/entity/alex.png
-src/client/resources/assets/minecraft/textures/entity/cape_*.png
-src/client/resources/assets/minecraft/textures/entity/sunny.png
-src/client/resources/assets/minecraft/textures/entity/zuri.png
-src/client/resources/assets/minecraft/textures/entity/noor.png
-src/client/resources/assets/minecraft/textures/entity/makena.png
-src/client/resources/assets/minecraft/textures/entity/kai.png
-src/client/resources/assets/minecraft/textures/entity/efe.png
-src/client/resources/assets/minecraft/textures/entity/ari.png
+src/client/resources/assets/minecraft/textures/entity/player/skin_*.png
+src/client/resources/assets/minecraft/textures/entity/player/steve.png
+src/client/resources/assets/minecraft/textures/entity/player/alex.png
+src/client/resources/assets/minecraft/textures/entity/player/cape_*.png
+src/client/resources/assets/minecraft/textures/entity/player/sunny.png
+src/client/resources/assets/minecraft/textures/entity/player/zuri.png
+src/client/resources/assets/minecraft/textures/entity/player/noor.png
+src/client/resources/assets/minecraft/textures/entity/player/makena.png
+src/client/resources/assets/minecraft/textures/entity/player/kai.png
+src/client/resources/assets/minecraft/textures/entity/player/efe.png
+src/client/resources/assets/minecraft/textures/entity/player/ari.png
