@@ -8,6 +8,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -129,8 +130,12 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
     }
 
     public Component displayName(ItemStack originalStack, HolderLookup.Provider registries) {
+        MutableComponent name = this.vsq$enchantmentHolder(registries).value().description().copy();
+        if (this.maxLevel(originalStack, registries) == 1) {
+            return name;
+        }
         int level = this.nextLevel(originalStack, registries);
-        return this.vsq$enchantmentHolder(registries).value().description().copy()
+        return name
                 .append(Component.literal(" "))
                 .append(Component.translatable("enchantment.level." + level));
     }
