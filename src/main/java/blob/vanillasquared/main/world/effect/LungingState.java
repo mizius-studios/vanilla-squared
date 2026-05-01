@@ -47,6 +47,9 @@ public final class LungingState {
             return;
         }
 
+        Identifier enchantmentId = enchantment.unwrapKey()
+                .map(ResourceKey::identifier)
+                .orElseThrow(() -> new IllegalStateException("Cannot start lunge for enchantment holder without a registry key"));
         double speedPerTick = Math.max(0.25D, owner.getDeltaMovement().length());
         Activation previous = levelState(level).remove(owner.getUUID());
         if (previous != null) {
@@ -61,7 +64,7 @@ public final class LungingState {
         Activation activation = new Activation(
                 owner.getUUID(),
                 enchantmentLevel,
-                enchantment.unwrapKey().map(ResourceKey::identifier).orElse(null),
+                enchantmentId,
                 item.itemStack().copy(),
                 item.inSlot(),
                 direction,
@@ -239,9 +242,6 @@ public final class LungingState {
         }
 
         private Holder<Enchantment> resolveEnchantment(ServerLevel level) {
-            if (this.enchantmentId == null) {
-                throw new IllegalStateException("Active lunge is missing enchantment id");
-            }
             return level.registryAccess()
                     .lookupOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT)
                     .getOrThrow(ResourceKey.create(net.minecraft.core.registries.Registries.ENCHANTMENT, this.enchantmentId));

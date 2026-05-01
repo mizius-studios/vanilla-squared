@@ -31,9 +31,9 @@ loom {
 	runs {
 		client {
 			programArg("--username")
-			programArg("PainterFlow11")
+			programArg("PainterFlow11") // usernameVSQ
 			programArg("--model")
-			programArg("slim")
+			programArg("slim") // modelVSQ
 		}
 	}
 }

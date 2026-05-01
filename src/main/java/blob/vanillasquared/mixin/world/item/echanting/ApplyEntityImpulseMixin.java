@@ -29,6 +29,10 @@ public abstract class ApplyEntityImpulseMixin {
     @Inject(method = "apply", at = @At("HEAD"), cancellable = true)
     private void vsq$applySpeedScaledImpulse(ServerLevel serverLevel, int enchantmentLevel, EnchantedItemInUse item, Entity entity, Vec3 position, CallbackInfo ci) {
         ApplyEntityImpulse self = (ApplyEntityImpulse) (Object) this;
+        if (!ApplyImpulseSpeedState.hasCustomSpeed(self)) {
+            return;
+        }
+
         Vec3 look = entity.getLookAngle();
         double speed = ApplyImpulseSpeedState.speed(self);
         Vec3 direction = look.addLocalCoordinates(self.direction()).multiply(self.coordinateScale()).scale(self.magnitude().calculate(enchantmentLevel) * speed);
