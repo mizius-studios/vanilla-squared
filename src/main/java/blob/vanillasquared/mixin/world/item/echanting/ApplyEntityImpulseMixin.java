@@ -1,6 +1,7 @@
 package blob.vanillasquared.mixin.world.item.echanting;
 
 import blob.vanillasquared.main.world.item.enchantment.effects.ApplyImpulseSpeedState;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
@@ -46,7 +47,7 @@ public abstract class ApplyEntityImpulseMixin {
                 Vec3.CODEC.fieldOf("direction").forGetter(ApplyEntityImpulse::direction),
                 Vec3.CODEC.fieldOf("coordinate_scale").forGetter(ApplyEntityImpulse::coordinateScale),
                 LevelBasedValue.CODEC.fieldOf("magnitude").forGetter(ApplyEntityImpulse::magnitude),
-                com.mojang.serialization.Codec.DOUBLE.optionalFieldOf("speed", 1.0D).forGetter(ApplyImpulseSpeedState::speed)
+                Codec.DOUBLE.optionalFieldOf("speed", 1.0D).forGetter(effect -> ApplyImpulseSpeedState.speed(effect))
         ).apply(instance, (direction, coordinateScale, magnitude, speed) ->
                 ApplyImpulseSpeedState.remember(new ApplyEntityImpulse(direction, coordinateScale, magnitude), speed)
         ));
