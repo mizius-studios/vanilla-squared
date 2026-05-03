@@ -59,8 +59,6 @@ mc-source/
 
 # local skins
 
-src/client/resources/assets/minecraft/textures/entity/player/skin_*.png
-src/client/resources/assets/minecraft/textures/entity/player/cape_*.png
 src/client/resources/assets/minecraft/textures/entity/player/wide/steve.png
 src/client/resources/assets/minecraft/textures/entity/player/wide/alex.png
 src/client/resources/assets/minecraft/textures/entity/player/wide/sunny.png
