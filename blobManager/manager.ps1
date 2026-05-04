@@ -62,6 +62,21 @@ switch ($Command) {
 
         exit 0
     }
+    "anytype" {
+        $isAnytypeVersionCommand = $Rest.Count -gt 0 -and $Rest[0] -eq "-v"
+        if (-not $isAnytypeVersionCommand) {
+            & $Cmd.WriteWarnings -State $state
+        }
+
+        $scriptPath = Join-Path $PSScriptRoot "packages/scripts/anytype.ps1"
+        & $scriptPath @Rest
+
+        if ($LASTEXITCODE -ne $null) {
+            exit $LASTEXITCODE
+        }
+
+        exit 0
+    }
     "-v" {
         & $Cmd.CommandVersion -PackageName $PackageName -Version $Version -ConfigVersion $versionStatus.ConfigVersion -WarningMessage $versionStatus.WarningMessage
         exit 0
@@ -69,7 +84,7 @@ switch ($Command) {
 
     "-?" {
         & $Cmd.WriteWarnings -State $state
-        & $Cmd.CommandHelp -PackageName $PackageName -Commands @("mc -?", "modrinth -?", "-v", "-?")
+        & $Cmd.CommandHelp -PackageName $PackageName -Commands @("mc -?", "modrinth -?", "anytype -?", "-v", "-?")
         exit 0
     }
 
