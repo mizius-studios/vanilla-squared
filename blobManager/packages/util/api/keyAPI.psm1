@@ -121,7 +121,8 @@ function Command-GetKey {
         [string]$PackageName,
         [string]$KeyFilePath,
         [string]$KeyName,
-        [string]$EnvVarName
+        [string]$EnvVarName,
+        [string]$ExpectedFormatExample = "mrp_..."
     )
 
     if (-not (Test-InteractiveSession)) {
@@ -138,7 +139,7 @@ function Command-GetKey {
     if ([string]::IsNullOrWhiteSpace([string]$value)) {
         Write-Host "No local key named '$KeyName' was found for package '$PackageName'." -ForegroundColor Red
         Write-Host "Expected file: $KeyFilePath" -ForegroundColor Red
-        Write-Host "Expected format: $KeyName=mrp_..." -ForegroundColor DarkYellow
+        Write-Host "Expected format: $KeyName=$ExpectedFormatExample" -ForegroundColor DarkYellow
         Write-Host "Fallback env var for automation: $EnvVarName" -ForegroundColor DarkYellow
         return @{
             Success = $false
