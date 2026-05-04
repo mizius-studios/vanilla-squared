@@ -13,7 +13,7 @@
     }
   },
   "auth": {
-    "keyFile": "blobManager/packages/config/keys/keys.txt",
+    "keyFile": "blobManager/packages/config/keys/personal.txt",
     "keyName": "ModrinthPATKey",
     "envVar": "MODRINTH_PAT"
   }
