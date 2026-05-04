@@ -1,0 +1,4 @@
+# DO NOT SHARE THESE KEYS
+
+ModrinthPATKey=NONE
+AnytypeAPIKey=NONE
