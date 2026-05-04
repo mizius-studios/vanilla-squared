@@ -32,9 +32,9 @@
   "enchantment": "vsq:dash",
   "blocks": [
     {
-      "count": 6,
+      "count": 16,
       "block": "#vsq:enchantment_blocks"
     }
   ],
-  "level_multiplier": 3
+  "level_multiplier": 2
 }
