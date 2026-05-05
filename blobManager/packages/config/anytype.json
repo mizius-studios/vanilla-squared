@@ -19,8 +19,8 @@
   },
   "release": {
     "channels": {
-      "test": {
-        "spaceId": "YOURSPACEIDHERE"
+      "default": {
+        "spaceIdKeyName": "AnytypeChannelID"
       }
     },
     "updateTypeName": "Update",

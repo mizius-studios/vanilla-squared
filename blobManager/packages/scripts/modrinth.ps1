@@ -15,6 +15,8 @@ $projectModule = Import-Module (Join-Path $PSScriptRoot "..\util\modrinth\projec
 $releaseModule = Import-Module (Join-Path $PSScriptRoot "..\util\modrinth\release.psm1") -Force -DisableNameChecking -PassThru
 $anytypeCommonModule = Import-Module (Join-Path $PSScriptRoot "..\util\anytype\common.psm1") -Force -DisableNameChecking -PassThru
 $anytypeReleaseModule = Import-Module (Join-Path $PSScriptRoot "..\util\anytype\release.psm1") -Force -DisableNameChecking -PassThru
+$mcBuildModule = Import-Module (Join-Path $PSScriptRoot "..\util\mc\build.psm1") -Force -DisableNameChecking -PassThru
+$mcConfigPath = Join-Path $PSScriptRoot "..\config\mc.json"
 
 $Cmd = @{
     NewMessageState    = $errorApiModule.ExportedCommands["New-MessageState"]
@@ -56,6 +58,7 @@ $Cmd = @{
     FindAnytypeChildObjectByName = $anytypeReleaseModule.ExportedCommands["Find-AnytypeChildObjectByName"]
     ResolveAnytypeLinkedObjectByName = $anytypeReleaseModule.ExportedCommands["Resolve-AnytypeLinkedObjectByName"]
     GetAnytypeObjectMarkdownBody = $anytypeReleaseModule.ExportedCommands["Get-AnytypeObjectMarkdownBody"]
+    InvokeMcBuildAndStageArtifacts = $mcBuildModule.ExportedCommands["Invoke-McBuildAndStageArtifacts"]
 }
 
 foreach ($entry in $Cmd.GetEnumerator()) {
@@ -66,6 +69,7 @@ foreach ($entry in $Cmd.GetEnumerator()) {
 
 $configPath = Join-Path $PSScriptRoot "..\config\modrinth.json"
 $config = & $Cmd.GetJsonConfig -Path $configPath -Fallback @{}
+$mcConfig = & $Cmd.GetJsonConfig -Path $mcConfigPath -Fallback @{}
 $networkConfig = & $Cmd.GetConfigValue -Config $config -Key "network" -DefaultValue @{}
 $headers = & $Cmd.GetConfigValue -Config $networkConfig -Key "headers" -DefaultValue @{}
 $baseUrl = & $Cmd.GetConfigValue -Config $networkConfig -Key "baseUrl" -DefaultValue "https://api.modrinth.com"
@@ -101,6 +105,10 @@ $anytypeChannels = & $Cmd.GetConfigValue -Config $anytypeReleaseConfig -Key "cha
 $updateTypeName = & $Cmd.GetConfigValue -Config $anytypeReleaseConfig -Key "updateTypeName" -DefaultValue "Updates"
 $updateMatchStrategy = & $Cmd.GetConfigValue -Config $anytypeReleaseConfig -Key "updateMatchStrategy" -DefaultValue "exact-name"
 $changelogChildName = & $Cmd.GetConfigValue -Config $anytypeReleaseConfig -Key "changelogChildName" -DefaultValue "Changelogs"
+$mcPaths = & $Cmd.GetConfigValue -Config $mcConfig -Key "paths" -DefaultValue @{}
+$mcGradleWrapperPath = & $Cmd.GetConfigValue -Config $mcPaths -Key "gradleWrapper" -DefaultValue ".\gradlew.bat"
+$mcBuildLibsPath = & $Cmd.GetConfigValue -Config $mcPaths -Key "buildLibs" -DefaultValue "build/libs"
+$mcFabricModJsonPath = & $Cmd.GetConfigValue -Config $mcPaths -Key "fabricModJson" -DefaultValue "src/main/resources/fabric.mod.json"
 
 $state = & $Cmd.NewMessageState
 $versionStatus = & $Cmd.TestConfigVersion -PackageName $PackageName -ScriptVersion $Version -Config $config -State $state
@@ -317,6 +325,8 @@ switch ($Command) {
         & $Cmd.AddRequiredConfigError -Value $anytypeAuthEnvVar -ConfigKey "auth.envVar" -PackageName "anytype" -ConfigPath "blobManager\\packages\\config\\anytype.json" -AddErrorMessage $Cmd.AddErrorMessage -State $state
         & $Cmd.ThrowIfErrors -State $state
 
+        $anytypeKeyFilePath = & $Cmd.ResolveAnytypeLocalPath -PathValue $anytypeAuthKeyFile
+
         $channelConfig = $null
         if ($anytypeChannels -is [hashtable]) {
             if ($anytypeChannels.ContainsKey($anytypeChannel)) {
@@ -332,18 +342,54 @@ switch ($Command) {
             exit 1
         }
         $spaceId = $null
+        $spaceIdKeyName = $null
+        $spaceIdEnvVar = $null
         if ($channelConfig -is [hashtable]) {
             $spaceId = [string](& $Cmd.GetConfigValue -Config $channelConfig -Key "spaceId" -DefaultValue $null)
+            $spaceIdKeyName = [string](& $Cmd.GetConfigValue -Config $channelConfig -Key "spaceIdKeyName" -DefaultValue $null)
+            $spaceIdEnvVar = [string](& $Cmd.GetConfigValue -Config $channelConfig -Key "spaceIdEnvVar" -DefaultValue $null)
         }
-        elseif ($null -ne $channelConfig -and $channelConfig.PSObject.Properties.Name -contains "spaceId") {
-            $spaceId = [string]$channelConfig.spaceId
+        elseif ($null -ne $channelConfig) {
+            if ($channelConfig.PSObject.Properties.Name -contains "spaceId") {
+                $spaceId = [string]$channelConfig.spaceId
+            }
+            if ($channelConfig.PSObject.Properties.Name -contains "spaceIdKeyName") {
+                $spaceIdKeyName = [string]$channelConfig.spaceIdKeyName
+            }
+            if ($channelConfig.PSObject.Properties.Name -contains "spaceIdEnvVar") {
+                $spaceIdEnvVar = [string]$channelConfig.spaceIdEnvVar
+            }
         }
+
+        if ([string]::IsNullOrWhiteSpace($spaceId) -and -not [string]::IsNullOrWhiteSpace($spaceIdKeyName)) {
+            $spaceIdResolution = & $Cmd.ResolveKeyValue -KeyFilePath $anytypeKeyFilePath -KeyName $spaceIdKeyName -EnvVarName $spaceIdEnvVar
+            if (-not $spaceIdResolution.Success) {
+                Write-Host "Anytype channel '$anytypeChannel' could not resolve spaceId from key '$spaceIdKeyName'." -ForegroundColor Red
+                Write-Host "Expected local file: $anytypeKeyFilePath" -ForegroundColor Red
+                Write-Host "Expected file format: $spaceIdKeyName=<your_anytype_space_id>" -ForegroundColor DarkYellow
+                if (-not [string]::IsNullOrWhiteSpace($spaceIdEnvVar)) {
+                    Write-Host "Fallback env var: $spaceIdEnvVar" -ForegroundColor DarkYellow
+                }
+                exit 1
+            }
+
+            $spaceId = [string]$spaceIdResolution.Value
+        }
+
         if ([string]::IsNullOrWhiteSpace($spaceId)) {
-            Write-Host "Anytype channel '$anytypeChannel' is missing spaceId." -ForegroundColor Red
+            Write-Host "Anytype channel '$anytypeChannel' is missing spaceId or spaceIdKeyName." -ForegroundColor Red
             exit 1
         }
 
-        $fabricModJsonPath = & $Cmd.ResolveLocalPath -PathValue "src/main/resources/fabric.mod.json"
+        try {
+            $buildResult = & $Cmd.InvokeMcBuildAndStageArtifacts -GradleWrapperPath $mcGradleWrapperPath -FabricModJsonPath $mcFabricModJsonPath -BuildLibsPath $mcBuildLibsPath -ArtifactRoot $artifactRootValue
+        }
+        catch {
+            Write-Host $_.Exception.Message -ForegroundColor Red
+            exit 1
+        }
+
+        $fabricModJsonPath = & $Cmd.ResolveLocalPath -PathValue $mcFabricModJsonPath
         try {
             $modMetadata = & $Cmd.GetModMetadata -FabricModJsonPath $fabricModJsonPath
         }
@@ -352,7 +398,7 @@ switch ($Command) {
             exit 1
         }
 
-        $artifactRoot = & $Cmd.ResolveLocalPath -PathValue $artifactRootValue
+        $artifactRoot = [string]$buildResult.ArtifactRoot
         try {
             $artifacts = & $Cmd.GetModrinthReleaseArtifacts -ArtifactRoot $artifactRoot -Version $modMetadata.Version -ReleaseConfig $releaseConfig
         }
@@ -374,7 +420,7 @@ switch ($Command) {
         }
 
         $projectLookupUri = & $Cmd.JoinApiUri -BaseUrl $baseUrl -ApiVersion $apiVersion -Endpoint "/project/$projectRef"
-        $projectLookupResult = & $Cmd.InvokeNetworkRequest -Uri $projectLookupUri -Method "GET" -Headers $headers -TimeoutSeconds $timeoutSeconds
+        $projectLookupResult = & $Cmd.InvokeNetworkRequest -Uri $projectLookupUri -Method "GET" -Headers $modrinthAuth.Headers -TimeoutSeconds $timeoutSeconds
         if (-not $projectLookupResult.Success -or $null -eq $projectLookupResult.Data) {
             $errorMessage = & $Cmd.GetProjectErrorMessage -Result $projectLookupResult -ProjectRef $projectRef
             Write-Host $errorMessage -ForegroundColor Red
@@ -390,7 +436,6 @@ switch ($Command) {
             exit 1
         }
 
-        $anytypeKeyFilePath = & $Cmd.ResolveAnytypeLocalPath -PathValue $anytypeAuthKeyFile
         $anytypeAuth = & $Cmd.GetAnytypeAuthorizationHeaders -Headers $anytypeHeaders -KeyFilePath $anytypeKeyFilePath -KeyName $anytypeAuthKeyName -EnvVarName $anytypeAuthEnvVar -ResolveKeyValue $Cmd.ResolveKeyValue -MergeAuthorizationHeader $Cmd.MergeAuthorizationHeader
         if (-not $anytypeAuth.Success) {
             Write-Host $anytypeAuth.Error -ForegroundColor Red

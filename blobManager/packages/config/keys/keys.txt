@@ -2,3 +2,6 @@
 
 ModrinthPATKey=NONE
 AnytypeAPIKey=NONE
+
+
+AnytypeChannelID=YOUR_CHANNEL_ID

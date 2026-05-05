@@ -3,6 +3,8 @@
   "paths": {
     "gradleProperties": "gradle.properties",
     "buildGradle": "build.gradle",
+    "gradleWrapper": ".\\gradlew.bat",
+    "buildLibs": "build\\libs",
     "fabricModJson": "src/main/resources/fabric.mod.json",
     "texturesRoot": "blobManager/textures/skins",
     "skinPacksRoot": "blobManager/skinPacks",

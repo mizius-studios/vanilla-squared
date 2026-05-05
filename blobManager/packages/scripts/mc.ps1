@@ -10,6 +10,8 @@ $intellijModule = Import-Module (Join-Path $PSScriptRoot "..\util\mc\intellij.ps
 $setnameModule = Import-Module (Join-Path $PSScriptRoot "..\util\mc\setname.psm1") -Force -DisableNameChecking -PassThru
 $skinModule = Import-Module (Join-Path $PSScriptRoot "..\util\mc\skinmanager.psm1") -Force -DisableNameChecking -PassThru
 $modversionModule = Import-Module (Join-Path $PSScriptRoot "..\util\mc\setmodversion.psm1") -Force -DisableNameChecking -PassThru
+$buildModule = Import-Module (Join-Path $PSScriptRoot "..\util\mc\build.psm1") -Force -DisableNameChecking -PassThru
+$modrinthConfigPath = Join-Path $PSScriptRoot "..\config\modrinth.json"
 
 $Cmd = @{
     NewMessageState     = $errorApiModule.ExportedCommands["New-MessageState"]
@@ -31,6 +33,7 @@ $Cmd = @{
     TestConfigVersion   = $configApiModule.ExportedCommands["Test-ConfigVersion"]
     CommandVersion      = $versionModule.ExportedCommands["Command-Version"]
     CommandHelp         = $helpModule.ExportedCommands["Command-Help"]
+    InvokeMcBuildAndStageArtifacts = $buildModule.ExportedCommands["Invoke-McBuildAndStageArtifacts"]
 }
 
 foreach ($entry in $Cmd.GetEnumerator()) {
@@ -46,20 +49,25 @@ $configPath = Join-Path $PSScriptRoot "..\config\mc.json"
 $config = & $Cmd.GetJsonConfig -Path $configPath -Fallback @{}
 $globalConfigPath = Join-Path $PSScriptRoot "..\config\global.json"
 $globalConfig = & $Cmd.GetJsonConfig -Path $globalConfigPath -Fallback @{}
+$modrinthConfig = & $Cmd.GetJsonConfig -Path $modrinthConfigPath -Fallback @{}
 
 $paths = & $Cmd.GetConfigValue -Config $config -Key "paths" -DefaultValue @{}
 $markers = & $Cmd.GetConfigValue -Config $config -Key "markers" -DefaultValue @{}
 $defaults = & $Cmd.GetConfigValue -Config $config -Key "defaults" -DefaultValue @{}
 $skins = & $Cmd.GetConfigValue -Config $config -Key "skins" -DefaultValue @{}
 $intellij = & $Cmd.GetConfigValue -Config $config -Key "intellij" -DefaultValue @{}
+$modrinthReleaseConfig = & $Cmd.GetConfigValue -Config $modrinthConfig -Key "release" -DefaultValue @{}
 
 $GradlePropertiesPath = & $Cmd.GetConfigValue -Config $paths -Key "gradleProperties" -DefaultValue "gradle.properties"
 $BuildGradlePath = & $Cmd.GetConfigValue -Config $paths -Key "buildGradle" -DefaultValue "build.gradle"
 $FabricModJsonPath = & $Cmd.GetConfigValue -Config $paths -Key "fabricModJson" -DefaultValue "src/main/resources/fabric.mod.json"
+$GradleWrapperPath = & $Cmd.GetConfigValue -Config $paths -Key "gradleWrapper" -DefaultValue ".\gradlew.bat"
+$BuildLibsPath = & $Cmd.GetConfigValue -Config $paths -Key "buildLibs" -DefaultValue "build/libs"
 $TextureRoot = & $Cmd.GetConfigValue -Config $paths -Key "texturesRoot" -DefaultValue "blobManager/textures/skins"
 $SkinPackRoot = & $Cmd.GetConfigValue -Config $paths -Key "skinPacksRoot" -DefaultValue "blobManager/skinPacks"
 $DefaultSkinsRoot = & $Cmd.GetConfigValue -Config $paths -Key "defaultSkinsRoot" -DefaultValue "src/client/resources/assets/minecraft/textures/entity/player"
 $RunConfigRoot = & $Cmd.GetConfigValue -Config $paths -Key "runConfig" -DefaultValue ".idea/runConfigurations"
+$ModrinthArtifactRoot = & $Cmd.GetConfigValue -Config $modrinthReleaseConfig -Key "artifactRoot" -DefaultValue "blobManager/packages/data/modrinth/version"
 
 $UsernameMarker = & $Cmd.GetConfigValue -Config $markers -Key "username" -DefaultValue "usernameVSQ"
 $ModelMarker = & $Cmd.GetConfigValue -Config $markers -Key "model" -DefaultValue "modelVSQ"
@@ -301,10 +309,27 @@ switch ($Command) {
         }
     }
 
+    "build" {
+        try {
+            $buildResult = & $Cmd.InvokeMcBuildAndStageArtifacts -GradleWrapperPath $GradleWrapperPath -FabricModJsonPath $FabricModJsonPath -BuildLibsPath $BuildLibsPath -ArtifactRoot $ModrinthArtifactRoot
+        }
+        catch {
+            Write-Host $_.Exception.Message -ForegroundColor Red
+            exit 1
+        }
+
+        Write-Host "Build complete for version $($buildResult.Version)."
+        Write-Host "Staged artifacts:"
+        foreach ($artifact in $buildResult.Artifacts) {
+            Write-Host " - $artifact"
+        }
+        exit 0
+    }
+
     "-?" {
         & $Cmd.WriteWarnings -State $state
         & $Cmd.CommandHelp -PackageName $PackageName -Commands @(
-            "setname USERNAME", "setversion --version VERSION_NUMBER --arg VERSION_COMMENT --release alpha|beta|release", "skinmanager -?", "-?"
+            "setname USERNAME", "setversion --version VERSION_NUMBER --arg VERSION_COMMENT --release alpha|beta|release", "skinmanager -?", "build", "-?"
         )
         exit 0
     }
