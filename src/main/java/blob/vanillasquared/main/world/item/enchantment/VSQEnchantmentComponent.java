@@ -1,11 +1,8 @@
 package blob.vanillasquared.main.world.item.enchantment;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -23,40 +20,8 @@ public record VSQEnchantmentComponent(
         Optional<List<VSQEnchantmentSlotEntry>> util,
         Optional<List<VSQEnchantmentSlotEntry>> curse
 ) {
-    private static final Codec<List<VSQEnchantmentSlotEntry>> SLOT_LIST_CODEC = new Codec<>() {
-        @Override
-        public <T> DataResult<Pair<List<VSQEnchantmentSlotEntry>, T>> decode(DynamicOps<T> ops, T input) {
-            return ops.getList(input).setLifecycle(com.mojang.serialization.Lifecycle.stable()).flatMap(listInput -> {
-                List<T> rawEntries = new ArrayList<>();
-                listInput.accept(rawEntries::add);
-                List<VSQEnchantmentSlotEntry> entries = new ArrayList<>();
-                for (T element : rawEntries) {
-                    DataResult<Pair<VSQEnchantmentSlotEntry, T>> decoded = VSQEnchantmentSlotEntry.CODEC.decode(ops, element);
-                    var result = decoded.result();
-                    if (result.isEmpty()) {
-                        String message = decoded.error().map(DataResult.Error::message).orElse("Failed to decode slotted enchantment entry");
-                        return DataResult.error(() -> message);
-                    }
-                    entries.add(result.get().getFirst());
-                }
-                return DataResult.success(Pair.of(entries, input));
-            });
-        }
+    private static final Codec<List<VSQEnchantmentSlotEntry>> SLOT_LIST_CODEC = VSQEnchantmentSlotEntry.CODEC.listOf();
 
-        @Override
-        public <T> DataResult<T> encode(List<VSQEnchantmentSlotEntry> input, DynamicOps<T> ops, T prefix) {
-            List<T> encoded = new ArrayList<>(input.size());
-            for (VSQEnchantmentSlotEntry entry : input) {
-                DataResult<T> entryResult = VSQEnchantmentSlotEntry.CODEC.encodeStart(ops, entry);
-                var result = entryResult.result();
-                if (result.isEmpty()) {
-                    return entryResult;
-                }
-                encoded.add(result.get());
-            }
-            return ops.mergeToList(prefix, encoded);
-        }
-    };
     public static final MapCodec<VSQEnchantmentComponent> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             SLOT_LIST_CODEC.optionalFieldOf("special").forGetter(VSQEnchantmentComponent::special),
             SLOT_LIST_CODEC.optionalFieldOf("damage").forGetter(VSQEnchantmentComponent::damage),
