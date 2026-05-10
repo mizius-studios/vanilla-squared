@@ -43,7 +43,7 @@ public abstract class GuiMixin {
         if (!vsq$isContextualInfo(current, "EMPTY")) {
             return;
         }
-        if (SpecialEnchantmentCooldownClientState.hasVisibleCooldown(this.minecraft.player)) {
+        if (SpecialEnchantmentCooldownClientState.shouldReserveContextualBar()) {
             Object experience = vsq$contextualInfo(current, "EXPERIENCE");
             if (experience != null) {
                 cir.setReturnValue(experience);

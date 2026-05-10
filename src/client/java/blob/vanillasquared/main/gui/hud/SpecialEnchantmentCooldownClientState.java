@@ -60,6 +60,13 @@ public final class SpecialEnchantmentCooldownClientState {
         return visibleCooldown(player).isPresent();
     }
 
+    public static boolean shouldReserveContextualBar() {
+        if (clientTick > swapGraceExpiryTick) {
+            clearBridgeState();
+        }
+        return !ENTRIES.isEmpty() || (clientTick <= swapGraceExpiryTick && lastVisibleCooldown.isPresent());
+    }
+
     static Optional<VisibleCooldown> visibleCooldown(Optional<Identifier> mainhand, Optional<Identifier> offhand) {
         Optional<VisibleCooldown> currentMainhand = mainhand.flatMap(SpecialEnchantmentCooldownClientState::visibleCooldown);
         if (currentMainhand.isPresent()) {
@@ -73,11 +80,7 @@ public final class SpecialEnchantmentCooldownClientState {
             return currentOffhand;
         }
 
-        if (mainhand.isEmpty() && offhand.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return bridgedVisibleCooldown();
+        return bridgedVisibleCooldown(mainhand, offhand);
     }
 
     private static Optional<VisibleCooldown> visibleCooldown(Identifier enchantmentId) {
@@ -124,7 +127,7 @@ public final class SpecialEnchantmentCooldownClientState {
         clientTick++;
         ENTRIES.entrySet().removeIf(entry -> entry.getValue().ticksDown() && entry.getValue().barRemaining <= 1L);
         ENTRIES.replaceAll((_, entry) -> entry.ticksDown() ? entry.tick() : entry);
-        if (client.player == null || clientTick > swapGraceExpiryTick || lastVisibleEnchantmentId.flatMap(SpecialEnchantmentCooldownClientState::visibleCooldown).isEmpty()) {
+        if (client.player == null || clientTick > swapGraceExpiryTick || lastVisibleCooldown.isEmpty()) {
             clearBridgeState();
         }
     }
@@ -135,12 +138,12 @@ public final class SpecialEnchantmentCooldownClientState {
             clearBridgeState();
             return;
         }
-        if (clientTick > swapGraceExpiryTick || lastVisibleEnchantmentId.flatMap(SpecialEnchantmentCooldownClientState::visibleCooldown).isEmpty()) {
+        if (clientTick > swapGraceExpiryTick || lastVisibleCooldown.isEmpty()) {
             clearBridgeState();
         }
     }
 
-    private static Optional<VisibleCooldown> bridgedVisibleCooldown() {
+    private static Optional<VisibleCooldown> bridgedVisibleCooldown(Optional<Identifier> mainhand, Optional<Identifier> offhand) {
         if (clientTick > swapGraceExpiryTick) {
             clearBridgeState();
             return Optional.empty();
@@ -153,6 +156,9 @@ public final class SpecialEnchantmentCooldownClientState {
 
         Optional<VisibleCooldown> current = visibleCooldown(cachedEnchantmentId.get());
         if (current.isEmpty()) {
+            if (isSwitchingAwayFromCachedSpecial(cachedEnchantmentId.get(), mainhand, offhand) && lastVisibleCooldown.isPresent()) {
+                return lastVisibleCooldown;
+            }
             clearBridgeState();
             return Optional.empty();
         }
@@ -160,6 +166,14 @@ public final class SpecialEnchantmentCooldownClientState {
         VisibleCooldown cooldown = current.get();
         lastVisibleCooldown = Optional.of(cooldown);
         return lastVisibleCooldown;
+    }
+
+    private static boolean isSwitchingAwayFromCachedSpecial(Identifier cachedEnchantmentId, Optional<Identifier> mainhand, Optional<Identifier> offhand) {
+        if (mainhand.isEmpty() && offhand.isEmpty()) {
+            return true;
+        }
+        return mainhand.filter(id -> !id.equals(cachedEnchantmentId)).isPresent()
+                || offhand.filter(id -> !id.equals(cachedEnchantmentId)).isPresent();
     }
 
     private static void cacheVisibleCooldown(Identifier enchantmentId, VisibleCooldown cooldown) {

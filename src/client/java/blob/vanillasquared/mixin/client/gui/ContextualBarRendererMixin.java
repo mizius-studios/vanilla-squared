@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public interface ContextualBarRendererMixin {
     @Inject(method = "extractExperienceLevel", at = @At("HEAD"), cancellable = true)
     private static void vsq$hideExperienceLevelForSpecialCooldown(GuiGraphicsExtractor graphics, Font font, int experienceLevel, CallbackInfo ci) {
-        if (SpecialEnchantmentCooldownClientState.hasVisibleCooldown(Minecraft.getInstance().player)) {
+        if (SpecialEnchantmentCooldownClientState.shouldReserveContextualBar()) {
             ci.cancel();
         }
     }
