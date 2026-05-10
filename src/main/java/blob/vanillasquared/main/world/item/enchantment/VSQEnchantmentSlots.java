@@ -94,6 +94,15 @@ public final class VSQEnchantmentSlots {
         }
     }
 
+    public static void restoreVanillaEnchantmentDefaults(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        restorePrototypeComponent(stack, DataComponents.ENCHANTMENTS);
+        restorePrototypeComponent(stack, DataComponents.STORED_ENCHANTMENTS);
+    }
+
     public static ItemEnchantments aggregate(ItemStack stack) {
         VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
@@ -541,5 +550,14 @@ public final class VSQEnchantmentSlots {
             return DataComponents.STORED_ENCHANTMENTS;
         }
         return DataComponents.ENCHANTMENTS;
+    }
+
+    private static <T> void restorePrototypeComponent(ItemStack stack, DataComponentType<T> type) {
+        T defaultValue = stack.getPrototype().get(type);
+        if (defaultValue != null) {
+            stack.set(type, defaultValue);
+        } else {
+            stack.remove(type);
+        }
     }
 }

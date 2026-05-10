@@ -38,6 +38,10 @@ public final class VSQEnchantments {
         VSQEnchantmentSlots.syncDerivedEnchantments(stack);
     }
 
+    public static void restoreVanillaEnchantmentDefaults(ItemStack stack) {
+        VSQEnchantmentSlots.restoreVanillaEnchantmentDefaults(stack);
+    }
+
     public static ItemEnchantments aggregate(ItemStack stack) {
         return VSQEnchantmentSlots.aggregate(stack);
     }
