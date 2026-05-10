@@ -25,6 +25,7 @@ class SpecialEnchantmentCooldownClientStateTest {
     void switchingBetweenSpecialItemsBridgesPreviousCooldownForOneFrame() {
         applyCooldown(SPECIAL_A, 40L);
 
+        assertTrue(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar());
         assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()));
         assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_B), Optional.empty()));
 
@@ -38,7 +39,14 @@ class SpecialEnchantmentCooldownClientStateTest {
         applyCooldown(SPECIAL_A, 40L);
 
         assertTrue(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()).isPresent());
+        assertTrue(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.empty(), Optional.empty()).isPresent());
+
+        SpecialEnchantmentCooldownClientState.advanceTickForTest(true);
+        SpecialEnchantmentCooldownClientState.advanceTickForTest(true);
+
         assertFalse(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.empty(), Optional.empty()).isPresent());
+        SpecialEnchantmentCooldownClientState.apply(SPECIAL_A, 0L, 0L, 0, SpecialEnchantmentCooldownPayload.DISPLAY_NONE, false, true);
+        assertFalse(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar());
     }
 
     @Test
@@ -63,7 +71,40 @@ class SpecialEnchantmentCooldownClientStateTest {
 
         SpecialEnchantmentCooldownClientState.apply(SPECIAL_A, 0L, 0L, 0, SpecialEnchantmentCooldownPayload.DISPLAY_NONE, false, true);
 
-        assertFalse(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_B), Optional.empty()).isPresent());
+        assertFalse(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()).isPresent());
+    }
+
+    @Test
+    void bridgedFallbackSurvivesOldEntryRemovalWhileSwitchingToDifferentSpecialItem() {
+        applyCooldown(SPECIAL_A, 40L);
+
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()));
+
+        SpecialEnchantmentCooldownClientState.apply(SPECIAL_A, 0L, 0L, 0, SpecialEnchantmentCooldownPayload.DISPLAY_NONE, false, true);
+
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_B), Optional.empty()));
+    }
+
+    @Test
+    void bridgedFallbackSurvivesOldEntryRemovalAndClientTickBeforeRender() {
+        applyCooldown(SPECIAL_A, 40L);
+
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()));
+
+        SpecialEnchantmentCooldownClientState.apply(SPECIAL_A, 0L, 0L, 0, SpecialEnchantmentCooldownPayload.DISPLAY_NONE, false, true);
+        SpecialEnchantmentCooldownClientState.advanceTickForTest(true);
+
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_B), Optional.empty()));
+    }
+
+    @Test
+    void bridgedFallbackCoversTransientEmptyHeldSpecialDuringSwap() {
+        applyCooldown(SPECIAL_A, 40L);
+
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()));
+
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.empty(), Optional.empty()));
+        assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_B), Optional.empty()));
     }
 
     @Test
