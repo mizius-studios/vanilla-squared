@@ -1,5 +1,6 @@
 package blob.vanillasquared.mixin.world.item.items;
 
+import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -37,7 +38,7 @@ public abstract class EnchantedBookEliminatorMixin {
         if (this.item == null) return;
         ItemStack stack = (ItemStack) (Object) this;
         if (stack.is(Items.ENCHANTED_BOOK) && stack.has(DataComponents.STORED_ENCHANTMENTS)) {
-            stack.remove(DataComponents.STORED_ENCHANTMENTS);
+            VSQEnchantments.restoreVanillaEnchantmentDefaults(stack);
         }
     }
 }

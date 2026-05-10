@@ -4,7 +4,6 @@ import blob.vanillasquared.main.world.loot.RandomizeEnchantmentSlotsFunction;
 import blob.vanillasquared.main.world.loot.LootContextBridge;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeTags;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,8 +31,7 @@ public abstract class LootPoolMixin {
                 return;
             }
             stack = RandomizeEnchantmentSlotsFunction.DEFAULT_LOOT_RANDOMIZATION.apply(stack, context);
-            stack.remove(DataComponents.ENCHANTMENTS);
-            stack.remove(DataComponents.STORED_ENCHANTMENTS);
+            VSQEnchantments.restoreVanillaEnchantmentDefaults(stack);
             VSQEnchantments.syncDerivedEnchantments(stack);
             original.accept(stack);
         };
