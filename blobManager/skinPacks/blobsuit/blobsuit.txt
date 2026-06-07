@@ -1,2 +1,0 @@
-model=slim
-username=PainterFlow11

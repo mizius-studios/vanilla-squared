@@ -1,9 +1,0 @@
-{
-  "content": "Something went wrong.",
-  "embed": {
-    "title": "Bot Error",
-    "description": "The bot could not render the configured response.",
-    "color": 15158332
-  },
-  "ephemeral": true
-}

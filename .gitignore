@@ -57,10 +57,6 @@ mc-source/
 
 .codex/
 
-# blobManager keys
-
-blobManager/config/keys/*.txt
-
 # local skins
 
 src/client/resources/assets/minecraft/textures/entity/player/wide/steve.png
@@ -81,9 +77,3 @@ src/client/resources/assets/minecraft/textures/entity/player/slim/makena.png
 src/client/resources/assets/minecraft/textures/entity/player/slim/kai.png
 src/client/resources/assets/minecraft/textures/entity/player/slim/efe.png
 src/client/resources/assets/minecraft/textures/entity/player/slim/ari.png
-
-# keys
-blobManager/packages/config/keys/keys.txt
-
-# blobManager runtime
-blobManager/packages/data/dc/memory/
