@@ -1,6 +1,5 @@
 package blob.vanillasquared.mixin.world.item.items;
 
-import blob.vanillasquared.util.api.builder.components.BlockAttacksComponentBuilder;
 import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder;
 import blob.vanillasquared.util.api.combat.VSQCombatPresets;
 import net.minecraft.core.component.DataComponents;
@@ -24,15 +23,13 @@ public abstract class AxeMixin {
 
     @Inject(at = @At("HEAD"), method = "axe", cancellable = true)
     public void init(ToolMaterial material, float attackDamageBaseline, float attackSpeedBaseline, CallbackInfoReturnable<Item.Properties> cir) {
-        BlockAttacksComponentBuilder blockComponent = VSQCombatPresets.axeBlockComponent(material);
         WeaponAttributeBuilder generalWeapon = VSQCombatPresets.axeAttributes(material);
-        if (blockComponent == null || generalWeapon == null) {
+        if (generalWeapon == null) {
             return;
         }
 
         cir.setReturnValue(
                 this.tool(material, BlockTags.MINEABLE_WITH_AXE, attackDamageBaseline, attackSpeedBaseline, 5.0F)
-                        .component(DataComponents.BLOCKS_ATTACKS, blockComponent.build())
                         .component(DataComponents.WEAPON, new Weapon(1, 5.0F))
                         .attributes(generalWeapon.build())
         );

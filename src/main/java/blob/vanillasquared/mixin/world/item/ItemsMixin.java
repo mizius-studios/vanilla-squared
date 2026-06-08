@@ -18,7 +18,6 @@ public class ItemsMixin {
             case "fishing_rod" -> properties.durability(250);
             case "potion" -> properties.stacksTo(16);
             case "splash_potion", "lingering_potion" -> properties.stacksTo(8);
-            // case "shield" -> properties.component(DataComponents.BLOCKS_ATTACKS, SHIELD_BLOCK_COMPONENT.build());
             default -> {
             }
         }

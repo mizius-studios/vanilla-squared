@@ -38,7 +38,7 @@ Restart your server.
 ### ✨ Client side combat quality of life
 
 - Lets sword targeting pass through grass and flowers so nearby entities are easier to hit
-- Improves offhand interaction priority for fishing rod and shield related combat cases
+- Improves offhand interaction priority for fishing rod combat cases
 - Extends armor HUD rendering to display armor values above 20 with extra rows
 
 ## 🔎 Technological Information 

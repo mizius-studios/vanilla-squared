@@ -1,7 +1,6 @@
 package blob.vanillasquared.util.api.combat;
 
 import blob.vanillasquared.main.VanillaSquared;
-import blob.vanillasquared.util.api.builder.components.BlockAttacksComponentBuilder;
 import blob.vanillasquared.util.api.builder.components.HitThroughComponentBuilder;
 import blob.vanillasquared.util.api.builder.durability.Durability;
 import blob.vanillasquared.util.api.builder.general.ArmorAttributeBuilder;
@@ -21,16 +20,6 @@ public final class VSQCombatPresets {
             ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -2.9D, 0.0D),
             ToolMaterial.DIAMOND, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 11.0D, -3.0D, -0.5D),
             ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 12.0D, -3.0D, -0.5D)
-    );
-
-    private static final Map<ToolMaterial, BlockAttacksComponentBuilder> AXE_BLOCKS = Map.of(
-            ToolMaterial.WOOD, new BlockAttacksComponentBuilder(0.25F, 0.25F, 0.2F, 2.0F),
-            ToolMaterial.STONE, new BlockAttacksComponentBuilder(0.4F, 0.3F, 0.2F, 1.0F),
-            ToolMaterial.COPPER, new BlockAttacksComponentBuilder(0.5F, 0.25F, 0.25F, 2.0F),
-            ToolMaterial.IRON, new BlockAttacksComponentBuilder(0.6F, 0.4F, 0.4F, 2.0F),
-            ToolMaterial.GOLD, new BlockAttacksComponentBuilder(0F, 0.0F, 1.0F, 0.5F),
-            ToolMaterial.DIAMOND, new BlockAttacksComponentBuilder(0.65F, 0.5F, 0.5F, 1.0F),
-            ToolMaterial.NETHERITE, new BlockAttacksComponentBuilder(0.7F, 0.55F, 0.55F, 1.0F)
     );
 
     private static final Map<ToolMaterial, Durability> TOOL_DURABILITY = Map.of(
@@ -86,10 +75,6 @@ public final class VSQCombatPresets {
 
     public static WeaponAttributeBuilder axeAttributes(ToolMaterial material) {
         return AXE_ATTRIBUTES.get(material);
-    }
-
-    public static BlockAttacksComponentBuilder axeBlockComponent(ToolMaterial material) {
-        return AXE_BLOCKS.get(material);
     }
 
     public static Durability toolDurability(ToolMaterial material) {
