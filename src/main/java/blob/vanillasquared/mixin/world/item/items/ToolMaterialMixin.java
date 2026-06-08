@@ -1,7 +1,6 @@
 package blob.vanillasquared.mixin.world.item.items;
 
 import blob.vanillasquared.util.api.builder.durability.Durability;
-import blob.vanillasquared.util.api.builder.general.WeaponAttributeBuilder;
 import blob.vanillasquared.util.api.combat.VSQCombatPresets;
 import blob.vanillasquared.util.api.modules.components.VSQDataComponents;
 import net.minecraft.core.HolderGetter;
@@ -48,13 +47,7 @@ public abstract class ToolMaterialMixin {
 
     @Inject(method = "applySwordProperties", at = @At("HEAD"), cancellable = true)
     private void applySwordProperties(Item.Properties properties, float attackDamageBaseline, float attackSpeedBaseline, CallbackInfoReturnable<Item.Properties> cir) {
-        ToolMaterial material = (ToolMaterial) (Object) this;
-        WeaponAttributeBuilder swordAttributes = VSQCombatPresets.swordAttributes(material);
-        if (swordAttributes == null) {
-            return;
-        }
-
-        cir.setReturnValue(buildSwordProperties(properties, swordAttributes));
+        cir.setReturnValue(buildSwordProperties(properties, attackDamageBaseline, attackSpeedBaseline));
     }
 
     @Inject(method = "applyToolProperties", at = @At("HEAD"), cancellable = true)
@@ -65,13 +58,13 @@ public abstract class ToolMaterialMixin {
     }
 
     @Unique
-    private Item.Properties buildSwordProperties(Item.Properties properties, WeaponAttributeBuilder swordAttributes) {
+    private Item.Properties buildSwordProperties(Item.Properties properties, float attackDamageBaseline, float attackSpeedBaseline) {
         HolderGetter<Block> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.BLOCK);
         Tool toolComponent = new Tool(createSwordRules(holderGetter), 1.0F, 2, false);
 
         return this.applyCommonProperties(properties)
                 .component(DataComponents.TOOL, toolComponent)
-                .attributes(swordAttributes.build())
+                .attributes(this.createToolAttributes(attackDamageBaseline, attackSpeedBaseline))
                 .component(DataComponents.WEAPON, new Weapon(1))
                 .component(VSQDataComponents.HIT_THROUGH, VSQCombatPresets.hitThroughPlants().build());
     }

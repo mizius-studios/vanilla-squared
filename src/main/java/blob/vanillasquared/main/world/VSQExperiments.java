@@ -20,8 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class VSQExperiments {
     public static final Identifier PREVIEW_FEATURE_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "preview");
     public static final Identifier PREVIEW_BUILTIN_PACK_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "vsq_preview");
-    public static final Identifier COMBAT_REBALANCE_V2_FEATURE_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "combat_rebalance_v2");
-    public static final Identifier COMBAT_REBALANCE_V2_BUILTIN_PACK_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "combat_rebalance_v2");
 
     private static final List<BuiltinExperiment> BUILTIN_EXPERIMENTS = List.of(
             new BuiltinExperiment(
@@ -29,12 +27,6 @@ public final class VSQExperiments {
                     PREVIEW_BUILTIN_PACK_ID,
                     "vsq.gui.experiments.vsq",
                     "vsq.gui.experiments.vsq.description"
-            ),
-            new BuiltinExperiment(
-                    COMBAT_REBALANCE_V2_FEATURE_ID,
-                    COMBAT_REBALANCE_V2_BUILTIN_PACK_ID,
-                    "vsq.gui.experiments.combat_rebalance_v2",
-                    "vsq.gui.experiments.combat_rebalance_v2.description"
             )
     );
 

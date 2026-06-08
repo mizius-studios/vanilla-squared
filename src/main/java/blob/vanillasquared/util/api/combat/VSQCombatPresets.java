@@ -13,16 +13,6 @@ import net.minecraft.world.item.ToolMaterial;
 import java.util.Map;
 
 public final class VSQCombatPresets {
-    private static final Map<ToolMaterial, WeaponAttributeBuilder> SWORD_ATTRIBUTES = Map.of(
-            ToolMaterial.WOOD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 4.0D, -2.4D, 0.0D),
-            ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
-            ToolMaterial.COPPER, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 5.0D, -2.4D, 0.0D),
-            ToolMaterial.IRON, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
-            ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 6.0D, -2.4D, 0.0D),
-            ToolMaterial.DIAMOND, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 7.0D, -2.4D, 0.0D),
-            ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SWORD, EquipmentSlotGroup.MAINHAND, 10.0D, -2.4D, 0.0D)
-    );
-
     private static final Map<ToolMaterial, WeaponAttributeBuilder> AXE_ATTRIBUTES = Map.of(
             ToolMaterial.WOOD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 6.0D, -3.2D, -0.5D),
             ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -3.3D, -0.5D),
@@ -92,10 +82,6 @@ public final class VSQCombatPresets {
             new HitThroughComponentBuilder(VanillaSquared.MOD_ID, "hit_through");
 
     private VSQCombatPresets() {
-    }
-
-    public static WeaponAttributeBuilder swordAttributes(ToolMaterial material) {
-        return SWORD_ATTRIBUTES.get(material);
     }
 
     public static WeaponAttributeBuilder axeAttributes(ToolMaterial material) {

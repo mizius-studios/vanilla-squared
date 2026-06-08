@@ -49,7 +49,6 @@
     "world.loot.LootItemEntityPropertyConditionMixin",
     "world.entity.entities.TradeOffersEnchantBookMixin",
     "world.entity.entities.FishingRodHookMixin",
-    "world.entity.entities.PlayerAttributesMixin",
     "world.entity.entities.PlayerMixin"
   ],
   "injectors": {
