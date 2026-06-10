@@ -43,6 +43,11 @@ public final class WeaponAttributeBuilder {
                 Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "trident_attack_damage"),
                 Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "trident_attack_speed"),
                 Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "trident_attack_range")
+        ),
+        SPEAR(
+                Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "spear_attack_damage"),
+                Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "spear_attack_speed"),
+                Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "spear_attack_range")
         );
 
         private final Identifier attackDamage;
@@ -72,6 +77,7 @@ public final class WeaponAttributeBuilder {
                 case SWORD -> SWORD.is(modifier);
                 case AXE -> AXE.is(modifier);
                 case TRIDENT -> TRIDENT.is(modifier);
+                case SPEAR -> SPEAR.is(modifier);
             };
         }
     }
@@ -85,6 +91,7 @@ public final class WeaponAttributeBuilder {
     public enum ItemType {
         SWORD,
         AXE,
-        TRIDENT
+        TRIDENT,
+        SPEAR
     }
 }

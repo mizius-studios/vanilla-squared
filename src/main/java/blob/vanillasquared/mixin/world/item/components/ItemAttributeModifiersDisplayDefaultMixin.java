@@ -37,10 +37,12 @@ public class ItemAttributeModifiersDisplayDefaultMixin {
         player_ = player;
         if (ModifierIds.SWORD.isItem(this.modifier, ItemType.SWORD)
             || ModifierIds.AXE.isItem(this.modifier, ItemType.AXE)
-            || ModifierIds.TRIDENT.isItem(this.modifier, ItemType.TRIDENT)) {
+            || ModifierIds.TRIDENT.isItem(this.modifier, ItemType.TRIDENT)
+            || ModifierIds.SPEAR.isItem(this.modifier, ItemType.SPEAR)) {
             return !this.modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_RANGE))
                     && !this.modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_RANGE))
-                    && !this.modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_RANGE));
+                    && !this.modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_RANGE))
+                    && !this.modifier.is(ModifierIds.SPEAR.get(ModifierType.ATTACK_RANGE));
         } return displayWithBase;
     }
 
@@ -57,11 +59,13 @@ public class ItemAttributeModifiersDisplayDefaultMixin {
                 return value * 10;
             } else if (modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_DAMAGE))
                     || modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_DAMAGE))
-                    || modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_DAMAGE))) {
+                    || modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_DAMAGE))
+                    || modifier.is(ModifierIds.SPEAR.get(ModifierType.ATTACK_DAMAGE))) {
                 return value + playerBaseAttackDMG;
             } else if (modifier.is(ModifierIds.SWORD.get(ModifierType.ATTACK_SPEED))
                     || modifier.is(ModifierIds.AXE.get(ModifierType.ATTACK_SPEED))
-                    || modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_SPEED))) {
+                    || modifier.is(ModifierIds.TRIDENT.get(ModifierType.ATTACK_SPEED))
+                    || modifier.is(ModifierIds.SPEAR.get(ModifierType.ATTACK_SPEED))) {
                 return playerBaseAttackSpeed + value;
             }
         }

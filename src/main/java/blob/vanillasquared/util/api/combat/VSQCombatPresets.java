@@ -22,6 +22,16 @@ public final class VSQCombatPresets {
             ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 10.0D, -3.0D, -0.5D)
     );
 
+    private static final Map<ToolMaterial, WeaponAttributeBuilder> SPEAR_ATTRIBUTES = Map.of(
+            ToolMaterial.WOOD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 1.0D, -1.1425, 0.0D),
+            ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 2.0D, -1.435D, 0.0D),
+            ToolMaterial.COPPER, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 2.0D, -1.45D, 0.0D),
+            ToolMaterial.IRON, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 3.0D, -1.5D, 0.0D),
+            ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 1.0D, -1.3D, 0.0D),
+            ToolMaterial.DIAMOND, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 4.0D, -1.55D, 0.0D),
+            ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 5.0D, -1.6D, 0.0D)
+    );
+
     private static final Map<ToolMaterial, Durability> TOOL_DURABILITY = Map.of(
             ToolMaterial.WOOD, new Durability(75),
             ToolMaterial.STONE, new Durability(150),
@@ -75,6 +85,10 @@ public final class VSQCombatPresets {
 
     public static WeaponAttributeBuilder axeAttributes(ToolMaterial material) {
         return AXE_ATTRIBUTES.get(material);
+    }
+
+    public static WeaponAttributeBuilder spearAttributes(ToolMaterial material) {
+        return SPEAR_ATTRIBUTES.get(material);
     }
 
     public static Durability toolDurability(ToolMaterial material) {
