@@ -23,11 +23,11 @@ public final class VSQCombatPresets {
     );
 
     private static final Map<ToolMaterial, WeaponAttributeBuilder> SPEAR_ATTRIBUTES = Map.of(
-            ToolMaterial.WOOD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 1.0D, -1.1425, 0.0D),
-            ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 2.0D, -1.435D, 0.0D),
-            ToolMaterial.COPPER, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 2.0D, -1.45D, 0.0D),
-            ToolMaterial.IRON, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 3.0D, -1.5D, 0.0D),
-            ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 1.0D, -1.3D, 0.0D),
+            ToolMaterial.WOOD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 1.0D, -1.1435, 0.0D),
+            ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 2.0D, -1.4455D, 0.0D),
+            ToolMaterial.COPPER, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 2.0D, -1.453D, 0.0D),
+            ToolMaterial.IRON, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 3.0D, -1.5325D, 0.0D),
+            ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 1.0D, -1.535D, 0.0D),
             ToolMaterial.DIAMOND, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 4.0D, -1.55D, 0.0D),
             ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.SPEAR, EquipmentSlotGroup.MAINHAND, 5.0D, -1.6D, 0.0D)
     );
