@@ -14,12 +14,12 @@ import java.util.Map;
 public final class VSQCombatPresets {
     private static final Map<ToolMaterial, WeaponAttributeBuilder> AXE_ATTRIBUTES = Map.of(
             ToolMaterial.WOOD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 6.0D, -3.2D, -0.5D),
-            ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -3.3D, -0.5D),
-            ToolMaterial.COPPER, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -3.0D, -0.5D),
-            ToolMaterial.IRON, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 8.0D, -3.0D, -0.5D),
-            ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -2.9D, 0.0D),
-            ToolMaterial.DIAMOND, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 11.0D, -3.0D, -0.5D),
-            ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 12.0D, -3.0D, -0.5D)
+            ToolMaterial.STONE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -3.2D, -0.5D),
+            ToolMaterial.COPPER, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 7.0D, -3.2D, -0.5D),
+            ToolMaterial.IRON, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 8.0D, -3.2D, -0.5D),
+            ToolMaterial.GOLD, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 6.0D, -3.2D, 0.0D),
+            ToolMaterial.DIAMOND, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 9.0D, -3.0D, -0.5D),
+            ToolMaterial.NETHERITE, new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.AXE, EquipmentSlotGroup.MAINHAND, 10.0D, -3.0D, -0.5D)
     );
 
     private static final Map<ToolMaterial, Durability> TOOL_DURABILITY = Map.of(
@@ -58,14 +58,14 @@ public final class VSQCombatPresets {
             Map.entry(Armor.DIAMOND_LEGGINGS, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.LEGGINGS, EquipmentSlotGroup.LEGS, 6.0D, 2.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D)),
             Map.entry(Armor.DIAMOND_BOOTS, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.BOOTS, EquipmentSlotGroup.FEET, 3.0D, 2.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D)),
             Map.entry(Armor.NETHERITE_HELMET, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.HELMET, EquipmentSlotGroup.HEAD, 5.0D, 3.0D, 0.1D, 0.0D, 0.0D, 0.0D, 0.0D)),
-            Map.entry(Armor.NETHERITE_CHESTPLATE, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.CHESTPLATE, EquipmentSlotGroup.CHEST, 8.0D, 3.0D, 0.1D, 0.0D, 0.0D, 0.0D, 0.0D)),
-            Map.entry(Armor.NETHERITE_LEGGINGS, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.LEGGINGS, EquipmentSlotGroup.LEGS, 7.0D, 3.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D)),
+            Map.entry(Armor.NETHERITE_CHESTPLATE, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.CHESTPLATE, EquipmentSlotGroup.CHEST, 7.0D, 3.0D, 0.1D, 0.0D, 0.0D, 0.0D, 0.0D)),
+            Map.entry(Armor.NETHERITE_LEGGINGS, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.LEGGINGS, EquipmentSlotGroup.LEGS, 6.0D, 3.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D)),
             Map.entry(Armor.NETHERITE_BOOTS, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.BOOTS, EquipmentSlotGroup.FEET, 4.0D, 3.0D, 0.1D, 0.0D, 0.0D, 0.0D, 0.0D)),
             Map.entry(Armor.TURTLE_HELMET, new ArmorAttributeBuilder(ArmorAttributeBuilder.ModifierIds.HELMET, EquipmentSlotGroup.HEAD, 4.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D))
     );
 
     private static final WeaponAttributeBuilder TRIDENT_ATTRIBUTES =
-            new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.TRIDENT, EquipmentSlotGroup.MAINHAND, 10.0D, -2.875D, 0.5D);
+            new WeaponAttributeBuilder(WeaponAttributeBuilder.ModifierIds.TRIDENT, EquipmentSlotGroup.MAINHAND, 8.0D, -2.875D, 0.5D);
 
     private static final HitThroughComponentBuilder HIT_THROUGH_PLANTS =
             new HitThroughComponentBuilder(VanillaSquared.MOD_ID, "hit_through");
