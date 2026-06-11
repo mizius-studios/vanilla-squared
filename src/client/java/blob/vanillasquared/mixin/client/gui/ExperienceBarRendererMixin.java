@@ -17,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Optional;
+
 @Mixin(ExperienceBarRenderer.class)
 public class ExperienceBarRendererMixin {
     @Unique
@@ -30,7 +32,9 @@ public class ExperienceBarRendererMixin {
 
     @Inject(method = "extractBackground", at = @At("HEAD"), cancellable = true)
     private void vsq$extractSpecialEnchantmentCooldown(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-        SpecialEnchantmentCooldownClientState.visibleCooldown(this.minecraft.player).ifPresent(cooldown -> {
+        Optional<SpecialEnchantmentCooldownClientState.VisibleCooldown> visibleCooldown =
+                SpecialEnchantmentCooldownClientState.visibleCooldown(this.minecraft.player);
+        visibleCooldown.ifPresent(cooldown -> {
             int left = (graphics.guiWidth() - 182) / 2;
             int top = graphics.guiHeight() - 32 + 3;
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SPECIAL_COOLDOWN_BACKGROUND, left, top, 182, 5);
@@ -41,6 +45,17 @@ public class ExperienceBarRendererMixin {
             vsq$drawCooldownText(graphics, cooldown);
             ci.cancel();
         });
+        if (vsq$shouldSuppressVanillaExperienceBar(
+                this.minecraft.player != null && this.minecraft.player.isCreative(),
+                visibleCooldown.isPresent()
+        )) {
+            ci.cancel();
+        }
+    }
+
+    @Unique
+    private static boolean vsq$shouldSuppressVanillaExperienceBar(boolean creativeMode, boolean hasVisibleCooldown) {
+        return creativeMode && !hasVisibleCooldown;
     }
 
     @Unique

@@ -125,11 +125,19 @@ public final class SpecialEnchantmentCooldownClientState {
             return;
         }
         clientTick++;
-        ENTRIES.entrySet().removeIf(entry -> entry.getValue().ticksDown() && entry.getValue().barRemaining <= 1L);
-        ENTRIES.replaceAll((_, entry) -> entry.ticksDown() ? entry.tick() : entry);
+        advanceCooldowns();
         if (client.player == null || clientTick > swapGraceExpiryTick || lastVisibleCooldown.isEmpty()) {
             clearBridgeState();
         }
+    }
+
+    private static void advanceCooldowns() {
+        ENTRIES.entrySet().removeIf(entry -> entry.getValue().ticksDown() && entry.getValue().barRemaining <= 1L);
+        ENTRIES.replaceAll((_, entry) -> entry.ticksDown() ? entry.tick() : entry);
+    }
+
+    static void advanceCooldownsForTest() {
+        advanceCooldowns();
     }
 
     static void advanceTickForTest(boolean hasPlayer) {

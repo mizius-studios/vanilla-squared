@@ -116,6 +116,18 @@ class SpecialEnchantmentCooldownClientStateTest {
         assertEquals(Optional.of(visibleCooldown(30L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_C), Optional.of(SPECIAL_B)));
     }
 
+    @Test
+    void cooldownWithOneTickRemainingExpiresBeforeNextRender() {
+        applyCooldown(SPECIAL_A, 1L);
+
+        assertEquals(Optional.of(visibleCooldown(1L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()));
+
+        SpecialEnchantmentCooldownClientState.advanceCooldownsForTest();
+
+        assertFalse(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()).isPresent());
+        assertFalse(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar());
+    }
+
     private static void applyCooldown(Identifier enchantmentId, long remaining) {
         SpecialEnchantmentCooldownClientState.apply(enchantmentId, remaining, 40L, (int) Math.max(1L, (remaining + 19L) / 20L), SpecialEnchantmentCooldownPayload.DISPLAY_COOLDOWN, false, true);
     }
