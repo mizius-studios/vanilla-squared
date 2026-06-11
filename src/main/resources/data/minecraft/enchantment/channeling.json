@@ -27,7 +27,7 @@
                 {
                   "type": "minecraft:damage_entity",
                   "damage_type": "minecraft:lightning_bolt",
-                  "max_damage": 5,
+                  "max_damage": 7,
                   "min_damage": 5
                 }
               ]
@@ -42,9 +42,9 @@
             "affected": "victim",
             "effect": {
               "type": "minecraft:damage_entity",
-              "damage_type": "minecraft:player_attack",
-              "max_damage": 3,
-              "min_damage": 3
+              "damage_type": "minecraft:lightning_bolt",
+              "max_damage": 5,
+              "min_damage": 4
             },
             "enchanted": "attacker",
             "id": "vsq_channeling_path_0",
@@ -91,8 +91,8 @@
                 {
                   "type": "minecraft:damage_entity",
                   "damage_type": "minecraft:lightning_bolt",
-                  "max_damage": 5,
-                  "min_damage": 5
+                  "max_damage": 6,
+                  "min_damage": 4
                 }
               ]
             },
@@ -154,7 +154,7 @@
                 {
                   "type": "minecraft:damage_entity",
                   "damage_type": "minecraft:lightning_bolt",
-                  "max_damage": 4,
+                  "max_damage": 5,
                   "min_damage": 4
                 }
               ]
@@ -169,7 +169,7 @@
             "affected": "victim",
             "effect": {
               "type": "minecraft:damage_entity",
-              "damage_type": "minecraft:player_attack",
+              "damage_type": "minecraft:lightning_bolt",
               "max_damage": 3,
               "min_damage": 3
             },
