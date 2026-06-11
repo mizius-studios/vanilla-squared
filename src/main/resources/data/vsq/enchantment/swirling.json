@@ -21,7 +21,7 @@
               "hit_interval": 4,
               "damage": {
                 "damage_type": "vsq:swirled",
-                "amount": 3
+                "amount": 6.5
               }
             },
             "effect_id": "vsq_swirling_use",

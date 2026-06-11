@@ -16,8 +16,8 @@
               "type": "minecraft:add",
               "value": {
                 "type": "minecraft:linear",
-                "base": -0.15,
-                "per_level_above_first": -0.15
+                "base": -0.05,
+                "per_level_above_first": -0.1
               }
             },
             "id": "minecraft_armor_effectiveness_0",

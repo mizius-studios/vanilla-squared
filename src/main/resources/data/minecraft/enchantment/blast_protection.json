@@ -9,19 +9,6 @@
       "enchantment_slot": "defense",
       "max_level": 4,
       "effects": {
-        "minecraft:attributes": [
-          {
-            "amount": {
-              "type": "minecraft:linear",
-              "base": 0.15,
-              "per_level_above_first": 0.15
-            },
-            "attribute": "minecraft:explosion_knockback_resistance",
-            "id": "minecraft:enchantment.blast_protection",
-            "operation": "add_value",
-            "effect_id": "minecraft:enchantment.blast_protection"
-          }
-        ],
         "minecraft:damage_protection": [
           {
             "effect": {

@@ -24,12 +24,12 @@
                   "type": "vsq:begin_lunging",
                   "coordinate_scale": [
                     1,
-                    0,
+                    0.25,
                     1
                   ],
                   "direction": [
                     0,
-                    0,
+                    0.5,
                     1
                   ],
                   "magnitude": {
@@ -147,13 +147,13 @@
               "damage_type": "vsq:eviscerate",
               "max_damage": {
                 "type": "minecraft:linear",
-                "base": 3,
-                "per_level_above_first": 1
+                "base": 4,
+                "per_level_above_first": 2
               },
               "min_damage": {
                 "type": "minecraft:linear",
-                "base": 3,
-                "per_level_above_first": 1
+                "base": 4,
+                "per_level_above_first": 2
               }
             },
             "requirements": {
