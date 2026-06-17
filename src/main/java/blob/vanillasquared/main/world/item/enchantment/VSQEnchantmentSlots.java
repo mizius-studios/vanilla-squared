@@ -34,6 +34,10 @@ public final class VSQEnchantmentSlots {
     }
 
     public static void ensureSeeded(ItemStack stack) {
+        if (isPlainBook(stack)) {
+            VSQItemComponents.removeEnchantmentComponent(stack);
+            return;
+        }
         if (stack.isEmpty() || VSQItemComponents.hasEnchantmentComponent(stack) || !supportsSlotComponent(stack)) {
             return;
         }
@@ -425,8 +429,15 @@ public final class VSQEnchantmentSlots {
     }
 
     private static boolean supportsSlotComponent(ItemStack stack) {
+        if (isPlainBook(stack)) {
+            return false;
+        }
         Item item = stack.getItem();
         return stack.has(DataComponents.ENCHANTABLE) || item instanceof ShieldItem || BuiltInRegistries.ITEM.getKey(item).getPath().equals("shield");
+    }
+
+    private static boolean isPlainBook(ItemStack stack) {
+        return stack.is(Items.BOOK);
     }
 
     public static VSQEnchantmentComponent createSeededComponent(ItemStack stack) {

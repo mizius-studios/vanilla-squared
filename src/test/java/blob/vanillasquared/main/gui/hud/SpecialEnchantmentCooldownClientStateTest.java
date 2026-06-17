@@ -25,7 +25,7 @@ class SpecialEnchantmentCooldownClientStateTest {
     void switchingBetweenSpecialItemsBridgesPreviousCooldownForOneFrame() {
         applyCooldown(SPECIAL_A, 40L);
 
-        assertTrue(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar());
+        assertTrue(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar(Optional.of(SPECIAL_A), Optional.empty()));
         assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()));
         assertEquals(Optional.of(visibleCooldown(40L)), SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_B), Optional.empty()));
 
@@ -46,7 +46,7 @@ class SpecialEnchantmentCooldownClientStateTest {
 
         assertFalse(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.empty(), Optional.empty()).isPresent());
         SpecialEnchantmentCooldownClientState.apply(SPECIAL_A, 0L, 0L, 0, SpecialEnchantmentCooldownPayload.DISPLAY_NONE, false, true);
-        assertFalse(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar());
+        assertFalse(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar(Optional.empty(), Optional.empty()));
     }
 
     @Test
@@ -125,7 +125,7 @@ class SpecialEnchantmentCooldownClientStateTest {
         SpecialEnchantmentCooldownClientState.advanceCooldownsForTest();
 
         assertFalse(SpecialEnchantmentCooldownClientState.visibleCooldown(Optional.of(SPECIAL_A), Optional.empty()).isPresent());
-        assertFalse(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar());
+        assertFalse(SpecialEnchantmentCooldownClientState.shouldReserveContextualBar(Optional.of(SPECIAL_A), Optional.empty()));
     }
 
     private static void applyCooldown(Identifier enchantmentId, long remaining) {

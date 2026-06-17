@@ -137,10 +137,10 @@ public final class EnchantingRecipeRegistry {
         @Override
         protected void apply(Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> data, PreparableReloadListener.SharedState store) {
             EnchantingIngredient.clearTagCache();
-            EnchantingRecipeTags.invalidateValidRecipeCache();
             RECIPES = Map.copyOf(data);
             RECIPE_DISPLAY_IDS = vsq$createDisplayIds(data);
             RECIPE_GROUP_IDS = vsq$createGroupIds(data);
+            EnchantingRecipeTags.invalidateValidRecipeCache();
             VanillaSquared.LOGGER.info("Loaded {} Enchanting recipes", RECIPES.size());
         }
 

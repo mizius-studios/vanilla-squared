@@ -64,7 +64,15 @@ public final class SpecialEnchantmentCooldownClientState {
         if (clientTick > swapGraceExpiryTick) {
             clearBridgeState();
         }
-        return !ENTRIES.isEmpty() || (clientTick <= swapGraceExpiryTick && lastVisibleCooldown.isPresent());
+        Minecraft client = Minecraft.getInstance();
+        return client != null && visibleCooldown(client.player).isPresent();
+    }
+
+    static boolean shouldReserveContextualBar(Optional<Identifier> mainhand, Optional<Identifier> offhand) {
+        if (clientTick > swapGraceExpiryTick) {
+            clearBridgeState();
+        }
+        return visibleCooldown(mainhand, offhand).isPresent();
     }
 
     static Optional<VisibleCooldown> visibleCooldown(Optional<Identifier> mainhand, Optional<Identifier> offhand) {
@@ -194,7 +202,6 @@ public final class SpecialEnchantmentCooldownClientState {
         lastVisibleCooldown = Optional.empty();
         lastVisibleEnchantmentId = Optional.empty();
         swapGraceExpiryTick = -1L;
-        clientTick = 0L;
     }
 
     private record HudEntry(long barRemaining, long barTotal, int displayValue, int displayKind, boolean frozen, boolean ticksDown) {

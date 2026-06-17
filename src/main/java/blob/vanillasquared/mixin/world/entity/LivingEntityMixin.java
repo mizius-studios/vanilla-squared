@@ -40,6 +40,13 @@ public abstract class LivingEntityMixin {
         VoidedEffectState.flushPendingRemoval((LivingEntity) (Object) this);
     }
 
+    @Inject(method = "hurtServer", at = @At("RETURN"))
+    private void vsq$flushPendingVoidedRemovalAfterSuccessfulDamage(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValueZ()) {
+            VoidedEffectState.flushPendingRemoval((LivingEntity) (Object) this);
+        }
+    }
+
     @Inject(method = "onEffectAdded", at = @At("TAIL"))
     private void vsq$trackVoidedAdded(MobEffectInstance effect, Entity source, CallbackInfo ci) {
         if (effect.is(VSQMobEffects.VOIDED)) {

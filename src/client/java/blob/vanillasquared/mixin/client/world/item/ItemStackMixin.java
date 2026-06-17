@@ -14,6 +14,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.resources.ResourceKey;
@@ -45,6 +46,10 @@ public abstract class ItemStackMixin {
     @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true)
     private void vsq$replaceVanillaEnchantTooltip(Item.TooltipContext context, Player player, TooltipFlag tooltipFlag, CallbackInfoReturnable<List<Component>> cir) {
         ItemStack stack = (ItemStack) (Object) this;
+        if (stack.is(Items.BOOK)) {
+            return;
+        }
+
         VSQEnchantmentComponent component = VSQItemComponents.getEnchantmentComponent(stack);
         if (component == null) {
             return;
