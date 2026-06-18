@@ -2,7 +2,6 @@ package blob.vanillasquared.main.world.inventory;
 
 import blob.vanillasquared.main.network.payload.EnchantingRecipeBookSyncPayload;
 import blob.vanillasquared.main.network.payload.EnchantingRecipeStatePayload;
-import blob.vanillasquared.main.world.recipe.enchanting.EnchantingBlockRequirement;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingIngredient;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipe;
 import blob.vanillasquared.main.world.recipe.enchanting.EnchantingRecipeInput;
