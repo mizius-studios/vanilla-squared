@@ -4,6 +4,7 @@ import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 
 import blob.vanillasquared.main.VanillaSquared;
 import blob.vanillasquared.main.network.payload.SpecialEnchantmentCooldownPayload;
+import blob.vanillasquared.main.world.VSQStats;
 import blob.vanillasquared.main.world.item.enchantment.effects.VSQBeginSwirlingEffect;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantmentEffects;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -63,6 +64,7 @@ public final class SpecialEnchantmentCooldowns {
         });
 
         state.activated = true;
+        player.awardStat(VSQStats.SPECIAL_ENCHANTMENTS_USED);
         startCooldownIfEligible(player.level().getGameTime(), use, state);
         runSwirlingEffects(player, use);
 
