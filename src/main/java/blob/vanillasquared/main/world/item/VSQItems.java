@@ -10,11 +10,13 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 
 import java.util.function.Function;
 
 public final class VSQItems {
     public static final Item ENCHANT_RECIPE = register("enchant_recipe", EnchantRecipeItem::new, new Item.Properties().stacksTo(16).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final Item SULFUR_GOO = register("sulfur_goo", Item::new, new Item.Properties());
 
     private VSQItems() {
     }
@@ -27,6 +29,7 @@ public final class VSQItems {
     }
 
     public static void initialize() {
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> entries.accept(ENCHANT_RECIPE));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> entries.insertAfter(Items.WRITABLE_BOOK, ENCHANT_RECIPE));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS).register(entries -> entries.insertAfter(Items.SLIME_BALL, SULFUR_GOO));
     }
 }
