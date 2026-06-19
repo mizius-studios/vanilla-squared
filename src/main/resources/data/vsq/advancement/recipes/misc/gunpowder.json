@@ -3,7 +3,11 @@
   "criteria": {
     "has_sulfur_goo": {
       "conditions": {
-        "items": "vsq:sulfur_goo"
+        "items": [
+          {
+            "items": "vsq:sulfur_goo"
+          }
+        ]
       },
       "trigger": "minecraft:inventory_changed"
     }
