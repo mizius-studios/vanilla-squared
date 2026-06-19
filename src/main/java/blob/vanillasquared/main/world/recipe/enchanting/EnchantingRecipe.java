@@ -125,6 +125,11 @@ public record EnchantingRecipe(
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public boolean showNotification() {
         return false;
     }

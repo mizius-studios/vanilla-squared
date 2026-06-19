@@ -74,6 +74,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     private int selectedDisplayId = -1;
     private ResourceKey<net.minecraft.world.item.crafting.Recipe<?>> selectedRecipeId;
     private boolean selectionCleared;
+    private boolean suppressSlotRefresh;
     private final Map<Integer, RecipeHolder<EnchantingRecipe>> displayRecipes = new LinkedHashMap<>();
 
     public VSQEnchantmentMenu(int containerId, Inventory playerInventory) {
@@ -140,7 +141,7 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
     @Override
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
-        if (this.player instanceof ServerPlayer serverPlayer) {
+        if (!this.suppressSlotRefresh && this.player instanceof ServerPlayer serverPlayer) {
             this.vsq$refresh(serverPlayer);
         }
     }
@@ -296,18 +297,24 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
             return false;
         }
 
-        this.getSlot(EnchantingSlotLayout.MATERIAL_SLOT).remove(recipe.materialCount(input, player.registryAccess()));
-        for (int ingredientIndex = 0; ingredientIndex < recipe.ingredients().size(); ingredientIndex++) {
-            int matchedSlotIndex = match.get().matchedCrossSlots().get(ingredientIndex);
-            this.getSlot(EnchantingSlotLayout.FIRST_CROSS_SLOT + matchedSlotIndex).remove(recipe.ingredientCount(recipe.ingredients().get(ingredientIndex), input, player.registryAccess()));
-        }
-        int xpCost = recipe.xpCost(input, player.registryAccess());
-        if (xpCost > 0) {
-            player.giveExperienceLevels(-xpCost);
+        int xpCost;
+        this.suppressSlotRefresh = true;
+        try {
+            this.getSlot(EnchantingSlotLayout.MATERIAL_SLOT).remove(recipe.materialCount(input, player.registryAccess()));
+            for (int ingredientIndex = 0; ingredientIndex < recipe.ingredients().size(); ingredientIndex++) {
+                int matchedSlotIndex = match.get().matchedCrossSlots().get(ingredientIndex);
+                this.getSlot(EnchantingSlotLayout.FIRST_CROSS_SLOT + matchedSlotIndex).remove(recipe.ingredientCount(recipe.ingredients().get(ingredientIndex), input, player.registryAccess()));
+            }
+            xpCost = recipe.xpCost(input, player.registryAccess());
+            if (xpCost > 0) {
+                player.giveExperienceLevels(-xpCost);
+            }
+            this.getSlot(EnchantingSlotLayout.INPUT_SLOT).set(result);
+        } finally {
+            this.suppressSlotRefresh = false;
         }
         player.awardStat(Stats.ENCHANT_ITEM);
         CriteriaTriggers.ENCHANTED_ITEM.trigger(player, result, xpCost);
-        this.getSlot(EnchantingSlotLayout.INPUT_SLOT).set(result);
         this.access.execute((level, tablePos) ->
                 level.playSound(null, tablePos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F)
         );
@@ -336,25 +343,33 @@ public class VSQEnchantmentMenu extends RecipeBookMenu implements VSQEnchantment
             return PlacementOutcome.none();
         }
 
-        ReturnInputsResult returnResult = this.vsq$returnInputsToInventory();
-        if (!returnResult.success()) {
-            return PlacementOutcome.none();
-        }
-
-        PlannedRecipePlacement plannedPlacement = this.vsq$planRecipePlacement(recipeHolder.value(), player.registryAccess());
-        ApplyPlacementResult applyResult = this.vsq$applyPlannedPlacement(plannedPlacement);
-        if (!applyResult.success()) {
-            ReturnInputsResult failedReturnResult = this.vsq$returnInputsToInventory();
-            if (returnResult.offhandTouched() || applyResult.offhandTouched() || failedReturnResult.offhandTouched()) {
-                this.vsq$syncPlayerInventory(player);
+        ReturnInputsResult returnResult;
+        PlannedRecipePlacement plannedPlacement;
+        ApplyPlacementResult applyResult;
+        this.suppressSlotRefresh = true;
+        try {
+            returnResult = this.vsq$returnInputsToInventory();
+            if (!returnResult.success()) {
+                return PlacementOutcome.none();
             }
-            return PlacementOutcome.none();
+
+            plannedPlacement = this.vsq$planRecipePlacement(recipeHolder.value(), player.registryAccess());
+            applyResult = this.vsq$applyPlannedPlacement(plannedPlacement);
+            if (!applyResult.success()) {
+                ReturnInputsResult failedReturnResult = this.vsq$returnInputsToInventory();
+                if (returnResult.offhandTouched() || applyResult.offhandTouched() || failedReturnResult.offhandTouched()) {
+                    this.vsq$syncPlayerInventory(player);
+                }
+                return PlacementOutcome.none();
+            }
+        } finally {
+            this.suppressSlotRefresh = false;
         }
 
-        this.broadcastChanges();
         if (returnResult.offhandTouched() || applyResult.offhandTouched()) {
             this.vsq$syncPlayerInventory(player);
         }
+        this.broadcastChanges();
         this.vsq$refresh(player);
         return new PlacementOutcome(plannedPlacement.fullyPlaced(), Optional.of(recipeHolder), plannedPlacement.missingInput());
     }

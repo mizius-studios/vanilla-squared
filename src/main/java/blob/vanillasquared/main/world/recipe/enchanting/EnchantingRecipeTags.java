@@ -61,7 +61,7 @@ public final class EnchantingRecipeTags {
             Map.entry("chests/end_city_treasure", tag("end_city_treasure_chest"))
     );
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_tag_loader");
-    private static final FileToIdConverter TAG_CONVERTER = FileToIdConverter.json("tags/recipes");
+    private static final FileToIdConverter TAG_CONVERTER = FileToIdConverter.json("tags/recipe");
     private static volatile Map<Identifier, List<ResourceKey<Recipe<?>>>> TAGS = Map.of();
     private static final Map<Identifier, List<ResourceKey<Recipe<?>>>> VALID_RECIPE_CACHE = new ConcurrentHashMap<>();
     private static final Set<Identifier> WARNED_EMPTY_TAGS = Collections.newSetFromMap(new ConcurrentHashMap<>());

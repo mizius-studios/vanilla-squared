@@ -14,6 +14,7 @@
     "world.attributes.RangedAttributeMixin",
     "world.dmgsources.CombatRulesMixin",
     "world.entity.EntityFlagsPredicateMixin",
+    "world.entity.CubeMobMoveControlAccessor",
     "world.entity.LivingEntityAccessor",
     "world.entity.LivingEntityAttributesMixin",
     "world.entity.LivingEntityMixin",
@@ -50,7 +51,8 @@
     "world.item.trading.VillagerTradeMixin",
     "world.loot.LootItemEntityPropertyConditionMixin",
     "world.entity.entities.FishingRodHookMixin",
-    "world.entity.entities.PlayerMixin"
+    "world.entity.entities.PlayerMixin",
+    "world.entity.entities.SulfurCubeMixin"
   ],
   "injectors": {
     "defaultRequire": 1

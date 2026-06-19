@@ -26,7 +26,7 @@ import java.util.*;
 public final class EnchantingRecipeRegistry {
     private static final Identifier ENCHANTING_TYPE_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting");
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(VanillaSquared.MOD_ID, "enchanting_recipe_loader");
-    private static final FileToIdConverter RECIPE_CONVERTER = FileToIdConverter.json("recipes");
+    private static final FileToIdConverter RECIPE_CONVERTER = FileToIdConverter.json("recipe");
     private static volatile Map<ResourceKey<Recipe<?>>, RecipeHolder<EnchantingRecipe>> RECIPES = Map.of();
     private static volatile Map<ResourceKey<Recipe<?>>, Integer> RECIPE_DISPLAY_IDS = Map.of();
     private static volatile Map<String, Integer> RECIPE_GROUP_IDS = Map.of();
