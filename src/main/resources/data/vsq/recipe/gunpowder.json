@@ -9,17 +9,5 @@
   "result": {
     "id": "minecraft:gunpowder",
     "count": 2
-  },
-  "criteria": {
-    "has_sulfur_goo": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "vsq:sulfur_goo"
-          }
-        ]
-      }
-    }
   }
 }
