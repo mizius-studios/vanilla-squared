@@ -6,7 +6,7 @@
   },
   "group": "trident",
   "icon": {
-    "id": "minecraft:drowned_spawn_egg",
+    "id": "minecraft:nautilus_shell",
     "components": {
       "minecraft:custom_name": {
         "translate": "enchantment.minecraft.impaling",
