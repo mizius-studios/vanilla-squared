@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "infinity",
-  "name": {
-    "translate": "enchantment.minecraft.infinity"
-  },
-  "description": {
-    "translate": "vsq.enchantment.infinity.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.infinity"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.infinity.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "multishot",
-  "name": {
-    "translate": "enchantment.minecraft.multishot"
-  },
-  "description": {
-    "translate": "vsq.enchantment.multishot.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.multishot"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.multishot.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

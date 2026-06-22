@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "riptide",
-  "name": {
-    "translate": "enchantment.vsq.ruthless"
-  },
-  "description": {
-    "translate": "vsq.enchantment.ruthless.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.vsq.ruthless"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.ruthless.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "tools",
   "group": "efficiency",
-  "name": {
-    "translate": "enchantment.minecraft.efficiency"
-  },
-  "description": {
-    "translate": "vsq.enchantment.efficiency.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.efficiency"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.efficiency.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

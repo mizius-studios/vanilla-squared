@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "depth_strider",
-  "name": {
-    "translate": "enchantment.minecraft.depth_strider"
-  },
-  "description": {
-    "translate": "vsq.enchantment.depth_strider.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.depth_strider"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.depth_strider.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

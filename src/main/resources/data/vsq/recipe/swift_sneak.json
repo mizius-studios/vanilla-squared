@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "swift_sneak",
-  "name": {
-    "translate": "enchantment.minecraft.swift_sneak"
-  },
-  "description": {
-    "translate": "vsq.enchantment.swift_sneak.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.swift_sneak"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.swift_sneak.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

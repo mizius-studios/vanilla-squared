@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "tools",
   "group": "silk_touch",
-  "name": {
-    "translate": "enchantment.minecraft.silk_touch"
-  },
-  "description": {
-    "translate": "vsq.enchantment.silk_touch.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.silk_touch"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.silk_touch.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

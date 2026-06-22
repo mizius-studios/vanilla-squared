@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "looting",
-  "name": {
-    "translate": "enchantment.minecraft.looting"
-  },
-  "description": {
-    "translate": "vsq.enchantment.looting.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.looting"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.looting.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

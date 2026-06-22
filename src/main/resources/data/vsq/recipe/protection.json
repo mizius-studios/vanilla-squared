@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "protection",
-  "name": {
-    "translate": "enchantment.minecraft.protection"
-  },
-  "description": {
-    "translate": "vsq.enchantment.protection.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.protection"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.protection.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

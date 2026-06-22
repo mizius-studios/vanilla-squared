@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "lunge",
-  "name": {
-    "translate": "enchantment.minecraft.lunge"
-  },
-  "description": {
-    "translate": "vsq.enchantment.lunge.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.lunge"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.lunge.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

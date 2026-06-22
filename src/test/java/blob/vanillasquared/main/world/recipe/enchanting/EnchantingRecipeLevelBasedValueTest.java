@@ -158,8 +158,15 @@ class EnchantingRecipeLevelBasedValueTest {
                 {
                   "type": "vsq:enchanting",
                   "category": "weapons",
-                  "name": "Sharpness",
-                  "description": "Sharpness test",
+                  "icon": {
+                    "id": "minecraft:enchanted_book",
+                    "components": {
+                      "minecraft:item_name": "Sharpness",
+                      "minecraft:lore": [
+                        "Sharpness test"
+                      ]
+                    }
+                  },
                   "material": {
                     "item": "minecraft:lapis_lazuli",
                     %s

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "frost_walker",
-  "name": {
-    "translate": "enchantment.minecraft.frost_walker"
-  },
-  "description": {
-    "translate": "vsq.enchantment.frost_walker.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.frost_walker"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.frost_walker.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

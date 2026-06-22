@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "fire_aspect",
-  "name": {
-    "translate": "enchantment.minecraft.fire_aspect"
-  },
-  "description": {
-    "translate": "vsq.enchantment.fire_aspect.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.fire_aspect"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.fire_aspect.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

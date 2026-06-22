@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "tools",
   "group": "lure",
-  "name": {
-    "translate": "enchantment.minecraft.lure"
-  },
-  "description": {
-    "translate": "vsq.enchantment.lure.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.lure"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.lure.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

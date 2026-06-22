@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "fractured",
-  "name": {
-    "translate": "enchantment.vsq.fractured"
-  },
-  "description": {
-    "translate": "vsq.enchantment.fractured.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.vsq.fractured"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.fractured.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

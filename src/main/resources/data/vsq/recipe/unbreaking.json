@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "util",
   "group": "unbreaking",
-  "name": {
-    "translate": "enchantment.minecraft.unbreaking"
-  },
-  "description": {
-    "translate": "vsq.enchantment.unbreaking.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.unbreaking"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.unbreaking.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",
