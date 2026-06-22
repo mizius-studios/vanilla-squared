@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:spider_eye",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.bane_of_arthropods"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.bane_of_arthropods",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

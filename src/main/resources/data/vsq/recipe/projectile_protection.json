@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:tipped_arrow",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.projectile_protection"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.projectile_protection",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true,
       "minecraft:tooltip_display": {

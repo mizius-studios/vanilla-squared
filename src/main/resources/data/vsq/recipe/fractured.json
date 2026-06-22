@@ -7,8 +7,10 @@
   "icon": {
     "id": "vsq:sulfur_goo",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.vsq.fractured"
+      "minecraft:custom_name": {
+        "translate": "enchantment.vsq.fractured",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

@@ -7,14 +7,12 @@
   "icon": {
     "id": "minecraft:end_crystal",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.vsq.void_strike"
+      "minecraft:custom_name": {
+        "translate": "enchantment.vsq.void_strike",
+        "color": "white",
+        "italic": false
       },
-      "minecraft:lore": [
-        {
-          "translate": "vsq.enchantment.void_strike.description"
-        }
-      ]
+      "minecraft:enchantment_glint_override": true
     }
   },
   "material": {

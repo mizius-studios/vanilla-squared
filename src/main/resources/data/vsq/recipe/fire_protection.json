@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:lava_bucket",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.fire_protection"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.fire_protection",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

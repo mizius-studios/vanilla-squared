@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:feather",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.feather_falling"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.feather_falling",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

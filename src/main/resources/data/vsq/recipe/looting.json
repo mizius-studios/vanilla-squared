@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:chest",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.looting"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.looting",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

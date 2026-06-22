@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:bone",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.smite"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.smite",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

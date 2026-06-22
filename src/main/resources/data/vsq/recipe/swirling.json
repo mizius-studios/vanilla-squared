@@ -7,8 +7,10 @@
   "icon": {
     "id": "minecraft:mace",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.vsq.swirling"
+      "minecraft:custom_name": {
+        "translate": "enchantment.vsq.swirling",
+        "color": "gold",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true,
       "minecraft:tooltip_display": {

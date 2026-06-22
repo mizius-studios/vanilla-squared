@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:salmon",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.lure"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.lure",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

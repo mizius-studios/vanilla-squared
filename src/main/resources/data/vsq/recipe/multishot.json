@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:arrow",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.multishot"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.multishot",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true,
       "minecraft:tooltip_display": {

@@ -7,8 +7,10 @@
   "icon": {
     "id": "minecraft:stick",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.punch"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.punch",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

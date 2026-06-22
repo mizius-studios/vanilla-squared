@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:white_stained_glass_pane",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.vanishing_curse"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.vanishing_curse",
+        "color": "red",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

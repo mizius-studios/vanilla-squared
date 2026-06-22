@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:netherite_block",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.unbreaking"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.unbreaking",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:trident",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.riptide"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.riptide",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true,
       "minecraft:tooltip_display": {

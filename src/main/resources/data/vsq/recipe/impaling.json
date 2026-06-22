@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:drowned_spawn_egg",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.impaling"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.impaling",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

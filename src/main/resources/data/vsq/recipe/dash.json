@@ -7,8 +7,10 @@
   "icon": {
     "id": "minecraft:iron_sword",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.vsq.dash"
+      "minecraft:custom_name": {
+        "translate": "enchantment.vsq.dash",
+        "color": "gold",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true,
       "minecraft:tooltip_display": {

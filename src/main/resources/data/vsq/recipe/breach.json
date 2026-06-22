@@ -9,7 +9,9 @@
     "id": "minecraft:heavy_core",
     "components": {
       "minecraft:item_name": {
-        "translate": "enchantment.minecraft.breach"
+        "translate": "enchantment.minecraft.breach",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

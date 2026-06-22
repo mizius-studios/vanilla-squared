@@ -7,8 +7,10 @@
   "icon": {
     "id": "minecraft:fire_charge",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.fire_aspect"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.fire_aspect",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true
     }

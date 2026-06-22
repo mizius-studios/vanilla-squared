@@ -8,8 +8,10 @@
   "icon": {
     "id": "minecraft:turtle_helmet",
     "components": {
-      "minecraft:item_name": {
-        "translate": "enchantment.minecraft.respiration"
+      "minecraft:custom_name": {
+        "translate": "enchantment.minecraft.respiration",
+        "color": "white",
+        "italic": false
       },
       "minecraft:enchantment_glint_override": true,
       "minecraft:tooltip_display": {
