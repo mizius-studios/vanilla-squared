@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "soul_speed",
-  "name": {
-    "translate": "enchantment.minecraft.soul_speed"
-  },
-  "description": {
-    "translate": "vsq.enchantment.soul_speed.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.soul_speed"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.soul_speed.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "util",
   "group": "mending",
-  "name": {
-    "translate": "enchantment.minecraft.mending"
-  },
-  "description": {
-    "translate": "vsq.enchantment.mending.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.mending"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.mending.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

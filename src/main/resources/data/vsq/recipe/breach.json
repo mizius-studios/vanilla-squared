@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "breach",
-  "name": {
-    "translate": "enchantment.minecraft.breach"
-  },
-  "description": {
-    "translate": "vsq.enchantment.breach.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.breach"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.breach.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

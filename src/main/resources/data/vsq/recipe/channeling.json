@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "channeling",
-  "name": {
-    "translate": "enchantment.minecraft.channeling"
-  },
-  "description": {
-    "translate": "vsq.enchantment.channeling.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.channeling"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.channeling.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

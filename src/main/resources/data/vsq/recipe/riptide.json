@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "riptide",
-  "name": {
-    "translate": "enchantment.minecraft.riptide"
-  },
-  "description": {
-    "translate": "vsq.enchantment.riptide.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.riptide"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.riptide.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

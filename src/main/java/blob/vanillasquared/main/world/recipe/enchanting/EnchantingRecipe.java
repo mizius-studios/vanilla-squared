@@ -10,7 +10,6 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -33,8 +32,7 @@ import java.util.Optional;
 public record EnchantingRecipe(
         EnchantingRecipeCategory category,
         String group,
-        Component name,
-        Component description,
+        EnchantingRecipeIcon icon,
         EnchantingIngredient material,
         List<EnchantingIngredient> ingredients,
         List<EnchantingBlockRequirement> blocks,
@@ -53,8 +51,7 @@ public record EnchantingRecipe(
     public static final MapCodec<EnchantingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             EnchantingRecipeCategory.CODEC.fieldOf("category").forGetter(EnchantingRecipe::category),
             Codec.STRING.optionalFieldOf("group", "").forGetter(EnchantingRecipe::group),
-            ComponentSerialization.CODEC.fieldOf("name").forGetter(EnchantingRecipe::name),
-            ComponentSerialization.CODEC.fieldOf("description").forGetter(EnchantingRecipe::description),
+            EnchantingRecipeIcon.CODEC.fieldOf("icon").forGetter(EnchantingRecipe::icon),
             EnchantingIngredient.CODEC.fieldOf("material").forGetter(EnchantingRecipe::material),
             INGREDIENTS_CODEC.fieldOf("ingredients").forGetter(EnchantingRecipe::ingredients),
             BLOCKS_CODEC.optionalFieldOf("blocks", List.of()).forGetter(EnchantingRecipe::blocks),
@@ -72,8 +69,7 @@ public record EnchantingRecipe(
             return EnchantingRecipe.vsq$create(
                     EnchantingRecipeCategory.fromSerializedName(ByteBufCodecs.stringUtf8(16).decode(buf)),
                     ByteBufCodecs.STRING_UTF8.decode(buf),
-                    ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf),
-                    ComponentSerialization.TRUSTED_STREAM_CODEC.decode(buf),
+                    EnchantingRecipeIcon.STREAM_CODEC.decode(buf),
                     EnchantingIngredient.STREAM_CODEC.decode(buf),
                     EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
                     EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buf),
@@ -86,8 +82,7 @@ public record EnchantingRecipe(
         public void encode(RegistryFriendlyByteBuf buf, EnchantingRecipe value) {
             ByteBufCodecs.stringUtf8(16).encode(buf, value.category().serializedName());
             ByteBufCodecs.STRING_UTF8.encode(buf, value.group());
-            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, value.name());
-            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, value.description());
+            EnchantingRecipeIcon.STREAM_CODEC.encode(buf, value.icon());
             EnchantingIngredient.STREAM_CODEC.encode(buf, value.material());
             EnchantingIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.ingredients());
             EnchantingBlockRequirement.STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buf, value.blocks());
@@ -100,8 +95,6 @@ public record EnchantingRecipe(
         group = group == null ? "" : group;
         ingredients = List.copyOf(ingredients);
         blocks = List.copyOf(blocks);
-        name = name.copy();
-        description = description.copy();
         if (level == null) {
             throw new IllegalArgumentException("Enchanting recipe level must be defined");
         }
@@ -231,6 +224,14 @@ public record EnchantingRecipe(
         return this.enchantment.displayName(ItemStack.EMPTY, registries);
     }
 
+    public Component iconName() {
+        return this.icon.name();
+    }
+
+    public Component iconDescription() {
+        return this.icon.description();
+    }
+
     public boolean hasRequiredBlocks(EnchantingRecipeInput input, Map<Identifier, Integer> countedBlocks, HolderLookup.Provider registries) {
         int nextLevel = this.nextLevel(input, registries);
         for (EnchantingBlockRequirement requirement : this.blocks) {
@@ -270,12 +271,12 @@ public record EnchantingRecipe(
         return this.enchantment.nextLevel(input.input(), registries);
     }
 
-    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, Component name, Component description, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, LevelBasedValue level, Optional<Integer> ignoredLevelMultiplier, EnchantingRecipeEnchantment enchantment) {
-        return new EnchantingRecipe(category, group, name, description, material, ingredients, blocks, level, enchantment);
+    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, EnchantingRecipeIcon icon, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, LevelBasedValue level, Optional<Integer> ignoredLevelMultiplier, EnchantingRecipeEnchantment enchantment) {
+        return new EnchantingRecipe(category, group, icon, material, ingredients, blocks, level, enchantment);
     }
 
-    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, Component name, Component description, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, LevelBasedValue level, EnchantingRecipeEnchantment enchantment) {
-        return new EnchantingRecipe(category, group, name, description, material, ingredients, blocks, level, enchantment);
+    private static EnchantingRecipe vsq$create(EnchantingRecipeCategory category, String group, EnchantingRecipeIcon icon, EnchantingIngredient material, List<EnchantingIngredient> ingredients, List<EnchantingBlockRequirement> blocks, LevelBasedValue level, EnchantingRecipeEnchantment enchantment) {
+        return new EnchantingRecipe(category, group, icon, material, ingredients, blocks, level, enchantment);
     }
 
     private static DataResult<List<EnchantingIngredient>> vsq$decodeIngredients(JsonElement json) {

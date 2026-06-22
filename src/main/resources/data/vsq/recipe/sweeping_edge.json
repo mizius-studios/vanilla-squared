@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "sweeping_edge",
-  "name": {
-    "translate": "enchantment.minecraft.sweeping_edge"
-  },
-  "description": {
-    "translate": "vsq.enchantment.sweeping_edge.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.sweeping_edge"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.sweeping_edge.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

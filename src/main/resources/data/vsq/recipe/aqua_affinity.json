@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "aqua_affinity",
-  "name": {
-    "translate": "enchantment.minecraft.aqua_affinity"
-  },
-  "description": {
-    "translate": "vsq.enchantment.aqua_affinity.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.aqua_affinity"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.aqua_affinity.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "util",
   "group": "binding_curse",
-  "name": {
-    "translate": "enchantment.minecraft.binding_curse"
-  },
-  "description": {
-    "translate": "vsq.enchantment.binding_curse.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.binding_curse"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.binding_curse.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

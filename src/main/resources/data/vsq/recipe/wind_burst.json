@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "wind_burst",
-  "name": {
-    "translate": "enchantment.minecraft.wind_burst"
-  },
-  "description": {
-    "translate": "vsq.enchantment.wind_burst.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.wind_burst"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.wind_burst.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

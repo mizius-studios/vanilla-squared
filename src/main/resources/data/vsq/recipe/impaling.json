@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "impaling",
-  "name": {
-    "translate": "enchantment.minecraft.impaling"
-  },
-  "description": {
-    "translate": "vsq.enchantment.impaling.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.impaling"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.impaling.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "quick_charge",
-  "name": {
-    "translate": "enchantment.minecraft.quick_charge"
-  },
-  "description": {
-    "translate": "vsq.enchantment.quick_charge.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.quick_charge"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.quick_charge.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

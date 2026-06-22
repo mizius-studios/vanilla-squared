@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "feather_falling",
-  "name": {
-    "translate": "enchantment.minecraft.feather_falling"
-  },
-  "description": {
-    "translate": "vsq.enchantment.feather_falling.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.feather_falling"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.feather_falling.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

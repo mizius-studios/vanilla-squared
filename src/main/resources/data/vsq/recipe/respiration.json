@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "armor",
   "group": "respiration",
-  "name": {
-    "translate": "enchantment.minecraft.respiration"
-  },
-  "description": {
-    "translate": "vsq.enchantment.respiration.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.respiration"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.respiration.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

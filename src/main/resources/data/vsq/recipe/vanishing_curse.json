@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "util",
   "group": "vanishing_curse",
-  "name": {
-    "translate": "enchantment.minecraft.vanishing_curse"
-  },
-  "description": {
-    "translate": "vsq.enchantment.vanishing_curse.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.vanishing_curse"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.vanishing_curse.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

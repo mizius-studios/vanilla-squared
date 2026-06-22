@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "swirling",
-  "name": {
-    "translate": "enchantment.vsq.swirling"
-  },
-  "description": {
-    "translate": "vsq.enchantment.swirling.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.vsq.swirling"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.swirling.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

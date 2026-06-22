@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "punch",
-  "name": {
-    "translate": "enchantment.minecraft.punch"
-  },
-  "description": {
-    "translate": "vsq.enchantment.punch.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.punch"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.punch.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "piercing",
-  "name": {
-    "translate": "enchantment.minecraft.piercing"
-  },
-  "description": {
-    "translate": "vsq.enchantment.piercing.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.piercing"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.piercing.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

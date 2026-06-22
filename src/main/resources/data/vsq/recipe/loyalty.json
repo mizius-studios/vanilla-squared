@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "loyalty",
-  "name": {
-    "translate": "enchantment.minecraft.loyalty"
-  },
-  "description": {
-    "translate": "vsq.enchantment.loyalty.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.loyalty"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.loyalty.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

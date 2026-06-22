@@ -81,7 +81,7 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
         }
         return new ShapelessCraftingRecipeDisplay(
                 ingredients,
-                vsq$resultDisplay(recipe, registries, Optional.empty()),
+                recipe.icon().display(),
                 new SlotDisplay.ItemSlotDisplay(Items.ENCHANTING_TABLE)
         );
     }
@@ -105,15 +105,8 @@ public record EnchantingRecipeBookSyncPayload(int containerId, boolean replace, 
         }
         return new ShapelessCraftingRecipeDisplay(
                 ingredients,
-                vsq$resultDisplay(recipe, registries, previewInput),
+                recipe.icon().display(),
                 new SlotDisplay.ItemSlotDisplay(Items.ENCHANTING_TABLE)
-        );
-    }
-
-    private static SlotDisplay vsq$resultDisplay(EnchantingRecipe recipe, HolderLookup.Provider registries, Optional<EnchantingRecipeInput> previewInput) {
-        return recipe.enchantment().iconDisplay(
-                previewInput.map(input -> recipe.displayName(input, registries)).orElseGet(recipe::name),
-                registries
         );
     }
 

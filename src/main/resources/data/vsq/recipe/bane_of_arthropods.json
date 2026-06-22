@@ -2,11 +2,18 @@
   "type": "vsq:enchanting",
   "category": "weapons",
   "group": "bane_of_arthropods",
-  "name": {
-    "translate": "enchantment.minecraft.bane_of_arthropods"
-  },
-  "description": {
-    "translate": "vsq.enchantment.bane_of_arthropods.description"
+  "icon": {
+    "id": "minecraft:enchanted_book",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "enchantment.minecraft.bane_of_arthropods"
+      },
+      "minecraft:lore": [
+        {
+          "translate": "vsq.enchantment.bane_of_arthropods.description"
+        }
+      ]
+    }
   },
   "material": {
     "item": "minecraft:lapis_lazuli",

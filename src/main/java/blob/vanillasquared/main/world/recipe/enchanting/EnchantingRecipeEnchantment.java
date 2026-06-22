@@ -2,7 +2,6 @@ package blob.vanillasquared.main.world.recipe.enchanting;
 
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.HolderLookup;
@@ -18,7 +17,6 @@ import net.minecraft.world.item.crafting.display.SlotDisplay.Empty;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 
@@ -72,27 +70,6 @@ public record EnchantingRecipeEnchantment(Identifier enchantment) {
 
         if (displays.isEmpty()) {
             return Empty.INSTANCE;
-        }
-        if (displays.size() == 1) {
-            return displays.getFirst();
-        }
-        return new SlotDisplay.Composite(List.copyOf(displays));
-    }
-
-    public SlotDisplay iconDisplay(Component name, HolderLookup.Provider registries) {
-        List<SlotDisplay> displays = new ArrayList<>();
-        for (Holder<Item> holder : this.vsq$enchantmentHolder(registries).value().definition().supportedItems()) {
-            ItemStack stack = new ItemStack(holder.value());
-            stack.set(DataComponents.ITEM_NAME, name.copy());
-            stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
-            displays.add(new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack)));
-        }
-
-        if (displays.isEmpty()) {
-            ItemStack fallback = new ItemStack(Items.ENCHANTED_BOOK);
-            fallback.set(DataComponents.ITEM_NAME, name.copy());
-            fallback.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
-            return new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(fallback));
         }
         if (displays.size() == 1) {
             return displays.getFirst();
