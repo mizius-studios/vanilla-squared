@@ -31,6 +31,7 @@ import java.util.Optional;
 public final class SulfurSpikeDripstoneUtil {
     public static final float WATER_TRANSFER_PROBABILITY_PER_RANDOM_TICK = 0.17578125F;
     public static final float LAVA_TRANSFER_PROBABILITY_PER_RANDOM_TICK = 0.05859375F;
+    public static final float COPPER_OXIDATION_PROBABILITY_PER_RANDOM_TICK = 0.84F;
     private static final int MAX_SEARCH_LENGTH = 11;
     private static final double STALACTITE_DRIP_START_PIXEL = 0.6875D;
     private static final VoxelShape REQUIRED_SPACE_TO_DRIP_THROUGH_NON_SOLID_BLOCK = Block.column(6.0D, 0.0D, 16.0D);
@@ -39,7 +40,9 @@ public final class SulfurSpikeDripstoneUtil {
     }
 
     public static void maybeTransferFluid(BlockState state, ServerLevel level, BlockPos pos, float chance) {
-        if (chance > WATER_TRANSFER_PROBABILITY_PER_RANDOM_TICK && chance > LAVA_TRANSFER_PROBABILITY_PER_RANDOM_TICK) {
+        if (chance > WATER_TRANSFER_PROBABILITY_PER_RANDOM_TICK
+                && chance > LAVA_TRANSFER_PROBABILITY_PER_RANDOM_TICK
+                && chance > COPPER_OXIDATION_PROBABILITY_PER_RANDOM_TICK) {
             return;
         }
         if (!isStalactiteStartPos(state, level, pos)) {
@@ -60,7 +63,9 @@ public final class SulfurSpikeDripstoneUtil {
         } else {
             return;
         }
-        if (chance >= transferProbability) {
+        boolean canTransferFluid = chance < transferProbability;
+        boolean canOxidizeCopper = fluid == Fluids.WATER && chance < COPPER_OXIDATION_PROBABILITY_PER_RANDOM_TICK;
+        if (!canTransferFluid && !canOxidizeCopper) {
             return;
         }
 
@@ -69,8 +74,12 @@ public final class SulfurSpikeDripstoneUtil {
             return;
         }
 
-        if (fluid == Fluids.WATER && oxidizeCopper(level, fluidInfo.get())) {
+        if (canOxidizeCopper && oxidizeCopperBelowStalactiteTip(level, tipPos)) {
             level.levelEvent(1504, tipPos, 0);
+            return;
+        }
+
+        if (!canTransferFluid) {
             return;
         }
 
@@ -181,18 +190,26 @@ public final class SulfurSpikeDripstoneUtil {
         return null;
     }
 
-    private static boolean oxidizeCopper(ServerLevel level, FluidInfo fluidInfo) {
-        Optional<BlockState> oxidized = WeatheringCopper.getNext(fluidInfo.sourceState().getBlock())
-                .map(block -> block.withPropertiesOf(fluidInfo.sourceState()));
-        if (oxidized.isEmpty()) {
-            return false;
+    private static boolean oxidizeCopperBelowStalactiteTip(ServerLevel level, BlockPos tipPos) {
+        BlockPos.MutableBlockPos mutable = tipPos.mutable();
+        for (int i = 1; i <= MAX_SEARCH_LENGTH; i++) {
+            mutable.move(Direction.DOWN);
+            BlockState state = level.getBlockState(mutable);
+            Optional<BlockState> oxidized = WeatheringCopper.getNext(state.getBlock())
+                    .map(block -> block.withPropertiesOf(state));
+            if (oxidized.isPresent()) {
+                BlockState oxidizedState = copyProperties(state, oxidized.get());
+                BlockPos oxidizedPos = mutable.immutable();
+                level.setBlockAndUpdate(oxidizedPos, oxidizedState);
+                Block.pushEntitiesUp(state, oxidizedState, level, oxidizedPos);
+                level.gameEvent(GameEvent.BLOCK_CHANGE, oxidizedPos, GameEvent.Context.of(oxidizedState));
+                return true;
+            }
+            if (!canDripThrough(level, mutable, state)) {
+                return false;
+            }
         }
-
-        BlockState oxidizedState = copyProperties(fluidInfo.sourceState(), oxidized.get());
-        level.setBlockAndUpdate(fluidInfo.pos(), oxidizedState);
-        Block.pushEntitiesUp(fluidInfo.sourceState(), oxidizedState, level, fluidInfo.pos());
-        level.gameEvent(GameEvent.BLOCK_CHANGE, fluidInfo.pos(), GameEvent.Context.of(oxidizedState));
-        return true;
+        return false;
     }
 
     private static BlockState copyProperties(BlockState from, BlockState to) {
