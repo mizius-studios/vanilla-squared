@@ -138,6 +138,7 @@ public final class SpecialEnchantmentCooldownClientState {
     private static void tick(Minecraft client) {
         if (client.player == null) {
             clearBridgeState();
+            return;
         }
         if (client.isPaused()) {
             return;

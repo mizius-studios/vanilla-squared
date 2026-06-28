@@ -38,7 +38,6 @@ public class VanillaSquared implements ModInitializer {
         VSQParticleTypes.initialize();
         VSQDataComponents.initialize();
         VSQEnchantmentEffects.initialize();
-        VSQEnchantmentEffects.initialize();
         VSQNetworking.initialize();
         VSQAttributes.initialize();
         VSQLootFunctions.initialize();

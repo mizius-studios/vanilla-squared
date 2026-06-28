@@ -1,7 +1,9 @@
 package blob.vanillasquared.main.world.effect;
 
 import blob.vanillasquared.main.network.VSQNetworking;
+import blob.vanillasquared.main.network.payload.SwirlingStatePayload;
 import blob.vanillasquared.util.api.enchantment.VSQEnchantments;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -136,7 +138,10 @@ public final class SwirlingState {
         if (activation == null || activation.ticksRemaining <= 0) {
             return;
         }
-        VSQNetworking.sendSwirlingState(trackingPlayer, entity.getId(), true, activation.ticksRemaining, activation.totalTicks, activation.warmupTicks, activation.paused);
+        ServerPlayNetworking.send(
+                trackingPlayer,
+                new SwirlingStatePayload(entity.getId(), true, activation.ticksRemaining, activation.totalTicks, activation.warmupTicks, activation.paused)
+        );
     }
 
     private static Map<UUID, Activation> levelState(ServerLevel level) {

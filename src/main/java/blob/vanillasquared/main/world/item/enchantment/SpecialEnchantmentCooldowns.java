@@ -230,7 +230,7 @@ public final class SpecialEnchantmentCooldowns {
         if (state == null || !isActivationWindowOpen(state, profile.get())) {
             return false;
         }
-        EquipmentSlot slot = player.getOffhandItem() == stack ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND;
+        EquipmentSlot slot = resolveHeldSlot(player, stack);
         SpecialEnchantmentUse use = new SpecialEnchantmentUse(
                 enchantmentId,
                 enchantmentHolder,
@@ -506,6 +506,13 @@ public final class SpecialEnchantmentCooldowns {
 
     private static ActivationKey key(SpecialEnchantmentUse use) {
         return key(use.enchantmentId(), use.level());
+    }
+
+    private static EquipmentSlot resolveHeldSlot(ServerPlayer player, ItemStack stack) {
+        if (player.getOffhandItem() == stack || ItemStack.isSameItemSameComponents(player.getOffhandItem(), stack)) {
+            return EquipmentSlot.OFFHAND;
+        }
+        return EquipmentSlot.MAINHAND;
     }
 
     private static ActivationKey key(Identifier enchantmentId, int level) {
