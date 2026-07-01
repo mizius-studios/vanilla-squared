@@ -77,7 +77,7 @@ public abstract class EntityRedstonePowerMixin implements VSQEntityRedstonePower
         this.vsq$previousRedstonePower = currentPower;
     }
 
-    @Inject(method = "remove", at = @At("HEAD"))
+    @Inject(method = "onRemoval", at = @At("TAIL"))
     private void vsq$removeEntityRedstonePower(Entity.RemovalReason reason, CallbackInfo ci) {
         Entity entity = (Entity) (Object) this;
         if (!(entity.level() instanceof ServerLevel level)) {

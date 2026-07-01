@@ -22,7 +22,8 @@ public final class VSQEntityRedstonePower {
     public static int getSignal(ServerLevel level, BlockPos pos) {
         AABB blockBounds = new AABB(pos);
         int signal = 0;
-        for (Entity entity : level.getEntities((Entity) null, blockBounds, entity -> entity.getBoundingBox().intersects(blockBounds))) {
+        for (Entity entity : level.getEntities((Entity) null, blockBounds,
+                entity -> !entity.isRemoved() && entity.getBoundingBox().intersects(blockBounds))) {
             signal = Math.max(signal, getPower(entity));
             if (signal >= 15) {
                 return 15;
