@@ -33,8 +33,6 @@ loom {
 		client {
 			programArgs("--username", "PainterFlow11") // usernameVSQ
 			programArgs("--model", "slim") // modelVSQ
-			vmArgs("-DMC_DEBUG_ENABLED=true")
-			vmArgs("-DMC_DEBUG_NEIGHBORSUPDATE=true")
 		}
 	}
 }
