@@ -144,6 +144,8 @@
   "death.attack.swirled.item": "%s was swirled by %s using %s",
   "tag.entity_type.minecraft.aquatic": "Aquatic Mobs",
   "tag.item.minecraft.sulfur_cube_food": "Sulfur Cube Food",
+  "tag.item.minecraft.sulfur_cube_swallowable": "Sulfur Cube Swallowable",
+  "tag.item.minecraft.sulfur_cube_archetype.fast_flat": "Sulfur Cube Fast Flat Archetype",
   "tag.item.vsq.enchantable.melee_weapon": "Melee Weapons",
   "tag.item.vsq.enchantable.all_weapons": "All Weapons",
   "tag.item.vsq.enchantable.sharpness": "Sharpness Items",
